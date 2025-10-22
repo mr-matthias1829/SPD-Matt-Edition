@@ -33,9 +33,10 @@ public class Rat extends Mob {
 	{
 		spriteClass = RatSprite.class;
 		
-		HP = HT = 8;
+		HP = HT = 10; // 8
 		defenseSkill = 2;
 
+        EXP = 1; //???
 		maxLvl = 5;
 	}
 

@@ -35,10 +35,10 @@ public class Slime extends Mob {
 	{
 		spriteClass = SlimeSprite.class;
 		
-		HP = HT = 20;
+		HP = HT = 32; //20
 		defenseSkill = 5;
 		
-		EXP = 4;
+		EXP = 3; //4
 		maxLvl = 9;
 		
 		lootChance = 0.2f; //by default, see lootChance()
@@ -56,12 +56,23 @@ public class Slime extends Mob {
 	
 	@Override
 	public void damage(int dmg, Object src) {
+        int DMGRDC = 2;
+
 		float scaleFactor = AscensionChallenge.statModifier(this);
 		int scaledDmg = Math.round(dmg/scaleFactor);
+
+        if (scaledDmg >= DMGRDC+1){
+            //takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
+            scaledDmg = DMGRDC + (int)(Math.sqrt((DMGRDC*2)*(scaledDmg - DMGRDC) + 1) - 1)/2;
+        }
+
+        /*
 		if (scaledDmg >= 5){
 			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
 			scaledDmg = 4 + (int)(Math.sqrt(8*(scaledDmg - 4) + 1) - 1)/2;
 		}
+
+         */
 		dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
 		super.damage(dmg, src);
 	}

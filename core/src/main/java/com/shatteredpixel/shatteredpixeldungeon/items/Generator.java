@@ -358,7 +358,7 @@ public class Generator {
 			SEED.probs = SEED.defaultProbs.clone();
 			
 			SCROLL.classes = new Class<?>[]{
-					ScrollOfUpgrade.class, //3 drop every chapter, see Dungeon.souNeeded()
+					ScrollOfUpgrade.class, //3 drop every chapter, see Dungeon.souNeeded() (5!)
 					ScrollOfIdentify.class,
 					ScrollOfRemoveCurse.class,
 					ScrollOfMirrorImage.class,
@@ -371,8 +371,8 @@ public class Generator {
 					ScrollOfTerror.class,
 					ScrollOfTransmutation.class
 			};
-			SCROLL.defaultProbs  = new float[]{ 0, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1 };
-			SCROLL.defaultProbs2 = new float[]{ 0, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
+			SCROLL.defaultProbs  = new float[]{ 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1 };
+			SCROLL.defaultProbs2 = new float[]{ 0, 2, 0, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
 			SCROLL.probs = SCROLL.defaultProbs.clone();
 			
 			STONE.classes = new Class<?>[]{
@@ -607,11 +607,20 @@ public class Generator {
 	}
 
 	private static final float[][] floorSetTierProbs = new float[][] {
+
+            {0, 75, 20,  4,  1},
+            {0, 50, 35, 12,  3},
+            {0, 40, 40, 15, 5},
+            {0, 30, 40, 23, 7},
+            {0, 70, 15, 10, 5}
+
+            /* OLD
 			{0, 75, 20,  4,  1},
 			{0, 25, 50, 20,  5},
 			{0,  0, 40, 50, 10},
 			{0,  0, 20, 40, 40},
 			{0,  0,  0, 20, 80}
+			*/
 	};
 
 	private static boolean usingFirstDeck = false;

@@ -42,7 +42,7 @@ public class Swarm extends Mob {
 	{
 		spriteClass = SwarmSprite.class;
 		
-		HP = HT = 50;
+		HP = HT = 30; //50
 		defenseSkill = 5;
 
 		EXP = 3;

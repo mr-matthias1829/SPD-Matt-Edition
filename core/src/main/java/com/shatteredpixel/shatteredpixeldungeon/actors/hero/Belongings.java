@@ -388,8 +388,29 @@ public class Belongings implements Iterable<Item> {
 
 		return Random.element( backpack.items );
 	}
-	
-	public int charge( float charge ) {
+
+    public Item randomEquipped() {
+        // Create a list of all currently equipped items
+        ArrayList<Item> equippedItems = new ArrayList<>();
+
+        // Add each equipped slot if it contains an item
+        if (weapon() != null)      equippedItems.add(weapon());
+        if (armor() != null)       equippedItems.add(armor());
+        if (artifact() != null)    equippedItems.add(artifact());
+        if (misc() != null)        equippedItems.add(misc());
+        if (ring() != null)        equippedItems.add(ring());
+        if (secondWep() != null)   equippedItems.add(secondWep());
+
+        // Return random equipped item, or null if nothing is equipped
+        if (equippedItems.isEmpty()) {
+            return null;
+        } else {
+            return Random.element(equippedItems);
+        }
+    }
+
+
+    public int charge( float charge ) {
 		
 		int count = 0;
 		

@@ -31,11 +31,11 @@ public class Gnoll extends Mob {
 	{
 		spriteClass = GnollSprite.class;
 		
-		HP = HT = 12;
-		defenseSkill = 4;
+		HP = HT = 10; //12
+		defenseSkill = 10; //4
 		
 		EXP = 2;
-		maxLvl = 8;
+		maxLvl = 4; //8
 		
 		loot = Gold.class;
 		lootChance = 0.5f;

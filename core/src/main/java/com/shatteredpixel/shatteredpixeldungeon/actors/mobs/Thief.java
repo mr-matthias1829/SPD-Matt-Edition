@@ -45,8 +45,9 @@ public class Thief extends Mob {
 		
 		HP = HT = 20;
 		defenseSkill = 12;
+        baseSpeed = 0.8f;
 		
-		EXP = 5;
+		EXP = 1; //5
 		maxLvl = 11;
 
 		loot = Random.oneOf(Generator.Category.RING, Generator.Category.ARTIFACT);
@@ -143,30 +144,55 @@ public class Thief extends Mob {
 		return super.defenseProc(enemy, damage);
 	}
 
-	protected boolean steal( Hero hero ) {
+    protected boolean steal( Hero hero ) {
 
-		Item toSteal = hero.belongings.randomUnequipped();
+        Item toSteal = hero.belongings.randomEquipped();
+        if (toSteal == null || toSteal.unique || toSteal.visiblyUpgraded() > 4) {
+            toSteal = hero.belongings.randomUnequipped();
+        }
 
-		if (toSteal != null && !toSteal.unique && toSteal.level() < 1 ) {
+        if (toSteal != null && !toSteal.unique && toSteal.visiblyUpgraded() <= 4) {
 
-			GLog.w( Messages.get(Thief.class, "stole", toSteal.name()) );
-			if (!toSteal.stackable) {
-				Dungeon.quickslot.convertToPlaceholder(toSteal);
-			}
-			Item.updateQuickslot();
+            GLog.w( Messages.get(Thief.class, "stole", toSteal.name()) );
 
-			item = toSteal.detach( hero.belongings.backpack );
-			if (item instanceof Honeypot){
-				item = ((Honeypot)item).shatter(this, this.pos);
-			} else if (item instanceof Honeypot.ShatteredPot) {
-				((Honeypot.ShatteredPot)item).pickupPot(this);
-			}
+            // FIX: Check if the item is equipped and unequip it first
+            if (hero.belongings.armor == toSteal) {
+                hero.belongings.armor = null;
+            } else if (hero.belongings.weapon == toSteal) {
+                hero.belongings.weapon = null;
+            } else if (hero.belongings.artifact == toSteal) {
+                hero.belongings.artifact = null;
+            } else if (hero.belongings.misc == toSteal) {
+                hero.belongings.misc = null;
+            } else if (hero.belongings.ring == toSteal) {
+                hero.belongings.ring = null;
+            }
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+            // Now detach from wherever it actually is
+            if (toSteal.stackable) {
+                // For stackable items, just take one
+                item = toSteal.detach(hero.belongings.backpack);
+            } else {
+                // For non-stackable, take the whole item
+                item = toSteal.detachAll(hero.belongings.backpack);
+            }
+
+            if (!toSteal.stackable) {
+                Dungeon.quickslot.convertToPlaceholder(toSteal);
+            }
+            Item.updateQuickslot();
+
+            if (item instanceof Honeypot){
+                item = ((Honeypot)item).shatter(this, this.pos);
+            } else if (item instanceof Honeypot.ShatteredPot) {
+                ((Honeypot.ShatteredPot)item).pickupPot(this);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	@Override
 	public String description() {

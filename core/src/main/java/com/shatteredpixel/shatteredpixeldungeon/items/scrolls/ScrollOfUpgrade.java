@@ -86,11 +86,12 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			boolean hadGoodEnchant = w.hasGoodEnchant();
 
 			item = w.upgrade();
-            int uncurseChance = 3 + w.visiblyUpgraded();
+            int uncurseChance = 4 + w.visiblyUpgraded();
+            int weakenChance = 2 + w.visiblyUpgraded();
 
-			if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()&& Random.Int(uncurseChance) == 0){
+			if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant() && Random.Int(uncurseChance) == 0){
 				removeCurse( Dungeon.hero );
-			} else if (w.cursedKnown && wasCursed && !w.cursed){
+			} else if (w.cursedKnown && wasCursed && !w.cursed && Random.Int(weakenChance) == 0){
 				weakenCurse( Dungeon.hero );
 			}
 			if (wasHardened && !w.enchantHardened){
@@ -108,9 +109,12 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 			item = a.upgrade();
 
-			if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
+            int uncurseChance = 4 + a.visiblyUpgraded();
+            int weakenChance = 2 + a.visiblyUpgraded();
+
+			if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph() && Random.Int(uncurseChance) == 0){
 				removeCurse( Dungeon.hero );
-			} else if (a.cursedKnown && wasCursed && !a.cursed){
+			} else if (a.cursedKnown && wasCursed && !a.cursed && Random.Int(weakenChance) == 0){
 				weakenCurse( Dungeon.hero );
 			}
 			if (wasHardened && !a.glyphHardened){

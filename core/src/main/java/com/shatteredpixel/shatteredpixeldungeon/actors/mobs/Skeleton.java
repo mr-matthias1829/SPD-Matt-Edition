@@ -47,13 +47,13 @@ public class Skeleton extends Mob {
 		spriteClass = SkeletonSprite.class;
 		
 		HP = HT = 25;
-		defenseSkill = 9;
+		defenseSkill = 16; //9
 		
-		EXP = 5;
+		EXP = 3; //5
 		maxLvl = 10;
 
 		loot = Generator.Category.WEAPON;
-		lootChance = 0.1667f; //by default, see lootChance()
+		lootChance = 0.05f;       //0.1667f; //by default, see lootChance()
 
 		properties.add(Property.UNDEAD);
 		properties.add(Property.INORGANIC);
@@ -61,8 +61,8 @@ public class Skeleton extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 10 );
-	}
+		return Random.NormalIntRange( 3, 7 );
+	} // 2,10
 	
 	@Override
 	public void die( Object cause ) {

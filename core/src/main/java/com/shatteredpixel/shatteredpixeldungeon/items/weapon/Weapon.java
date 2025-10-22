@@ -429,10 +429,10 @@ abstract public class Weapon extends KindOfWeapon {
 		//does not affect levelgen
 		Random.pushGenerator(Random.Long());
 
-			//30% chance to be cursed
+			//30% chance to be cursed (now 75%)
 			//10% chance to be enchanted
 			float effectRoll = Random.Float();
-			if (effectRoll < 0.3f * ParchmentScrap.curseChanceMultiplier()) {
+			if (effectRoll < 0.75f * ParchmentScrap.curseChanceMultiplier()) {
 				enchant(Enchantment.randomCurse());
 				cursed = true;
 			} else if (effectRoll >= 1f - (0.1f * ParchmentScrap.enchantChanceMultiplier())){

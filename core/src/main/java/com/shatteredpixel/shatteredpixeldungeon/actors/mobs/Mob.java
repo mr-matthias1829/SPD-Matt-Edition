@@ -673,7 +673,7 @@ public abstract class Mob extends Char {
 		spend( attackDelay() );
 		super.onAttackComplete();
 	}
-	
+
 	@Override
 	public int defenseSkill( Char enemy ) {
 		if (buff(GuidingLight.Illuminated.class) != null && Dungeon.hero.heroClass == HeroClass.CLERIC){

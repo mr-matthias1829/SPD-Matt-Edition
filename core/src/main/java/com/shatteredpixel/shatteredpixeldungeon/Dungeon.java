@@ -537,8 +537,10 @@ public class Dungeon {
 	
 	public static boolean souNeeded() {
 		int souLeftThisSet;
-		//3 SOU each floor set
-		souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
+		//3 SOU each floor set (now 5)
+        int totalSOU = 5; //yes i added this myself --matt
+
+		souLeftThisSet = totalSOU - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * totalSOU);
 		if (souLeftThisSet <= 0) return false;
 
 		int floorThisSet = (depth % 5);

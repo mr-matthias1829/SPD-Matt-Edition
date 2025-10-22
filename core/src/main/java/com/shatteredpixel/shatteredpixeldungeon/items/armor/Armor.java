@@ -668,13 +668,13 @@ public class Armor extends EquipableItem {
 		//does not affect levelgen
 		Random.pushGenerator(Random.Long());
 
-			//30% chance to be cursed
-			//15% chance to be inscribed
+			//30% chance to be cursed (now 75%)
+			//15% chance to be inscribed (now 5%)
 			float effectRoll = Random.Float();
-			if (effectRoll < 0.3f * ParchmentScrap.curseChanceMultiplier()) {
+			if (effectRoll < 0.75f * ParchmentScrap.curseChanceMultiplier()) {
 				inscribe(Glyph.randomCurse());
 				cursed = true;
-			} else if (effectRoll >= 1f - (0.15f * ParchmentScrap.enchantChanceMultiplier())){
+			} else if (effectRoll >= 1f - (0.05f * ParchmentScrap.enchantChanceMultiplier())){
 				inscribe();
 			}
 

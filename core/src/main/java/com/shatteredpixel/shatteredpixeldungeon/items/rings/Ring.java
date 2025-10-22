@@ -269,8 +269,8 @@ public class Ring extends KindofMisc {
 		}
 		level(n);
 		
-		//30% chance to be cursed
-		if (Random.Float() < 0.3f) {
+		//90% chance to be cursed (used to be 30%)
+		if (Random.Float() < 0.9f) {
 			cursed = true;
 		}
 		
