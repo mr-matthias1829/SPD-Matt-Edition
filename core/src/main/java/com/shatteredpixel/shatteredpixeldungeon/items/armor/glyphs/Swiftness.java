@@ -63,7 +63,8 @@ public class Swiftness extends Armor.Glyph {
 		if (enemyNear){
 			return 1;
 		} else {
-			return (1.2f + 0.04f * level) * genericProcChanceMultiplier(owner);
+			//return (1.2f + 0.04f * level) * genericProcChanceMultiplier(owner);
+            return (1.2f + 0.075f * level) * genericProcChanceMultiplier(owner);
 		}
 	}
 

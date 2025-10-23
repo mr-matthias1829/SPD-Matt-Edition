@@ -62,13 +62,13 @@ public class Wraith extends Mob {
 
     @Override
     public void damage(int dmg, Object src) {
-        int DMGRDC = 0;
+        int DMGRDC = 1;
 
         float scaleFactor = AscensionChallenge.statModifier(this);
         int scaledDmg = Math.round(dmg/scaleFactor);
 
         if (scaledDmg >= DMGRDC+1){
-            //hard to deal 1+ damage?
+            //hard to deal 1+ damage
             scaledDmg = DMGRDC + (int)(Math.sqrt((DMGRDC*2)*(scaledDmg - DMGRDC) + 1) - 1)/2;
         }
 

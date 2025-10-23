@@ -45,7 +45,7 @@ public class GnollTrickster extends Gnoll {
 	{
 		spriteClass = GnollTricksterSprite.class;
 
-		HP = HT = 36; //20
+		HP = HT = 24; //36  //20
 		defenseSkill = 5;
         baseSpeed = 1.2f; // 1f
 
@@ -88,7 +88,7 @@ public class GnollTrickster extends Gnoll {
 		combo++;
 		int effect = Random.Int(4)+combo;
 
-		if (effect > 2) {
+		if (effect > 3) { //2
 
 			if (effect >=6 && enemy.buff(Burning.class) == null){
 
