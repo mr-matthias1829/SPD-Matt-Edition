@@ -39,10 +39,10 @@ public class FetidRat extends Rat {
 	{
 		spriteClass = FetidRatSprite.class;
 
-		HP = HT = 20;
-		defenseSkill = 5;
+		HP = HT = 36; //20
+		defenseSkill = 8; //5
 
-		EXP = 4;
+		EXP = 6; //4
 
 		WANDERING = new Wandering();
 		state = WANDERING;
@@ -63,7 +63,8 @@ public class FetidRat extends Rat {
 
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
+		//damage = super.attackProc( enemy, damage );
+        damage = Random.NormalIntRange( 2, 5 ); // inherited before, was 1,4
 		if (Random.Int(3) == 0) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 			//score loss is on-hit instead of on-attack because it's tied to ooze

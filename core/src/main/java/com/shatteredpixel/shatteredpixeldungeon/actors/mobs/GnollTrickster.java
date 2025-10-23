@@ -45,10 +45,11 @@ public class GnollTrickster extends Gnoll {
 	{
 		spriteClass = GnollTricksterSprite.class;
 
-		HP = HT = 20;
+		HP = HT = 36; //20
 		defenseSkill = 5;
+        baseSpeed = 1.2f; // 1f
 
-		EXP = 5;
+		EXP = 7; //5
 
 		WANDERING = new Wandering();
 		state = WANDERING;
@@ -75,7 +76,8 @@ public class GnollTrickster extends Gnoll {
 
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
+		//damage = super.attackProc( enemy, damage );
+        damage = Random.NormalIntRange( 2, 7 ); // 1,6
 
 		if (combo >= 1){
 			//score loss is on-hit instead of on-attack as it's tied to combo

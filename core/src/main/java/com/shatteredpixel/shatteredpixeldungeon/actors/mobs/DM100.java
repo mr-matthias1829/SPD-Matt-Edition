@@ -68,8 +68,8 @@ public class DM100 extends Mob implements Callback {
             return getFurther(target);
         }
 
-        // Don't get too close - stop 2 tiles away
-        if (Dungeon.level.distance(pos, target) <= 2) {
+        // Don't get too close - stop 2 tiles away (1 now)
+        if (Dungeon.level.distance(pos, target) <= 1) {
             return false;
         }
 

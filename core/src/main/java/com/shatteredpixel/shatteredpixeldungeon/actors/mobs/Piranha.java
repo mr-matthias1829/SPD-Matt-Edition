@@ -44,12 +44,12 @@ public class Piranha extends Mob {
 	{
 		spriteClass = PiranhaSprite.class;
 
-		baseSpeed = 2f;
+		baseSpeed = 3f; //2f
 		
 		EXP = 0;
 		
 		loot = MysteryMeat.class;
-		lootChance = 1f;
+		lootChance = 0.7f; //1f
 		
 		SLEEPING = new Sleeping();
 		WANDERING = new Wandering();
@@ -62,7 +62,8 @@ public class Piranha extends Mob {
 	public Piranha() {
 		super();
 		
-		HP = HT = 10 + Dungeon.depth * 5;
+		//HP = HT = 10 + Dungeon.depth * 5;
+        HP = HT = 4 + Dungeon.depth * 4;
 		defenseSkill = 10 + Dungeon.depth * 2;
 	}
 	

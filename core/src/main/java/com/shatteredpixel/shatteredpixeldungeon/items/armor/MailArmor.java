@@ -30,7 +30,7 @@ public class MailArmor extends Armor {
 	}
 	
 	public MailArmor() {
-		super( 2 );
+		super( 3 );
 	}
 
 }

@@ -62,7 +62,7 @@ public class Slime extends Mob {
 		int scaledDmg = Math.round(dmg/scaleFactor);
 
         if (scaledDmg >= DMGRDC+1){
-            //takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
+            //hard to deal 3+ damage instead of 6+
             scaledDmg = DMGRDC + (int)(Math.sqrt((DMGRDC*2)*(scaledDmg - DMGRDC) + 1) - 1)/2;
         }
 

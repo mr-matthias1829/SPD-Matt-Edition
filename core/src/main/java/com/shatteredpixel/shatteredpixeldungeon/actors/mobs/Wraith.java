@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ChallengeParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
@@ -46,7 +47,7 @@ public class Wraith extends Mob {
 	{
 		spriteClass = WraithSprite.class;
 		
-		HP = HT = 1;
+		HP = HT = 3; //1
 		EXP = 0;
 
 		maxLvl = -2;
@@ -58,6 +59,29 @@ public class Wraith extends Mob {
 	}
 	
 	private static final String LEVEL = "level";
+
+    @Override
+    public void damage(int dmg, Object src) {
+        int DMGRDC = 0;
+
+        float scaleFactor = AscensionChallenge.statModifier(this);
+        int scaledDmg = Math.round(dmg/scaleFactor);
+
+        if (scaledDmg >= DMGRDC+1){
+            //hard to deal 1+ damage?
+            scaledDmg = DMGRDC + (int)(Math.sqrt((DMGRDC*2)*(scaledDmg - DMGRDC) + 1) - 1)/2;
+        }
+
+        /*
+		if (scaledDmg >= 5){
+			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
+			scaledDmg = 4 + (int)(Math.sqrt(8*(scaledDmg - 4) + 1) - 1)/2;
+		}
+
+         */
+        dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
+        super.damage(dmg, src);
+    }
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -74,8 +98,8 @@ public class Wraith extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1 + level/2, 2 + level );
-	}
+		return Random.NormalIntRange( 1 + level/2, 4 + level );
+	} // 1+... , 2+...
 	
 	@Override
 	public int attackSkill( Char target ) {

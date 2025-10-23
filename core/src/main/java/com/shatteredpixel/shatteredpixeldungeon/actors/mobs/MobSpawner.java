@@ -90,27 +90,28 @@ public class MobSpawner extends Actor {
 						Swarm.class,
 						Crab.class));
 			case 4: case 5:
-				//1x gnoll, 1x swarm, 2x crab, 2x slime + 1x thief
+				//1x gnoll, 1x swarm, 2x crab, 2x slime + 1x snake and 1x thief
 				return new ArrayList<>(Arrays.asList(Gnoll.class,
 						Swarm.class,
 						Crab.class, Crab.class,
 						Slime.class, Slime.class,
+                        Snake.class,
                         Thief.class));
 
 			// Prison
 			case 6:
-				//3x skeleton, 1x thief, 1x swarm + 1x crab and x1 slime
+				//3x skeleton, 1x thief, 1x swarm + 1x crab, 1x snake and x1 slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
 						Thief.class,
 						Swarm.class,
-                        Crab.class, Slime.class));
+                        Crab.class, Snake.class, Slime.class));
 			case 7:
-				//3x skeleton, 1x thief, 1x DM-100, 1x guard + 1x crab and x1 slime
+				//3x skeleton, 1x thief, 1x DM-100, 1x guard + 1x crab, 1x snake and x1 slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
 						Thief.class,
 						DM100.class,
 						Guard.class,
-                        Crab.class, Slime.class));
+                        Crab.class, Snake.class, Slime.class));
 			case 8:
 				//2x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 1x slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class,

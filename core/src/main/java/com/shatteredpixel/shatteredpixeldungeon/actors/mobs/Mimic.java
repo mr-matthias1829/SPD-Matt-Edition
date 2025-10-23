@@ -57,7 +57,7 @@ public class Mimic extends Mob {
 
 		properties.add(Property.DEMONIC);
 
-		EXP = 0;
+		EXP = 0; //0
 		
 		//mimics are neutral when hidden
 		alignment = Alignment.NEUTRAL;
@@ -261,8 +261,11 @@ public class Mimic extends Mob {
 	}
 	
 	public void adjustStats( int level ) {
-		HP = HT = (1 + level) * 6;
+		HP = HT = (1 + level) * 8; // .. *6
 		defenseSkill = 2 + level/2;
+
+        baseSpeed = 1.5f; //1f
+        EXP = 1 + Math.round((float) level /2); //0
 		
 		enemySeen = true;
 	}
