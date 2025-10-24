@@ -348,7 +348,7 @@ public class Necromancer extends Mob {
                         Dungeon.hero.interrupt();
                     }
 
-                    spend( firstSummon ? TICK : 7*TICK );
+                    spend( firstSummon ? TICK : 5*TICK );
                 } else {
                     //wait for a turn
                     spend(TICK);

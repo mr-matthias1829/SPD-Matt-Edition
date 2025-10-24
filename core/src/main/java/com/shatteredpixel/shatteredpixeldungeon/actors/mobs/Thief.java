@@ -43,7 +43,7 @@ public class Thief extends Mob {
 	{
 		spriteClass = ThiefSprite.class;
 		
-		HP = HT = 25; //20
+		HP = HT = 32; //25 //20
 		defenseSkill = 12;
         baseSpeed = 0.75f;
 		
@@ -144,10 +144,24 @@ public class Thief extends Mob {
 		return super.defenseProc(enemy, damage);
 	}
 
+    private int stealAttempts = 0;
     protected boolean steal( Hero hero ) {
 
-        Item toSteal = hero.belongings.randomEquipped();
-        if (toSteal == null || toSteal.unique || toSteal.visiblyUpgraded() > 4) {
+        if (Random.Int(8) < stealAttempts+2) {
+            stealAttempts++;
+            return false;
+        }
+
+        stealAttempts = 0; // Succeeded, reset counter
+
+        Item toSteal;
+        if (Random.Int(10) > 6) { // 40%
+            toSteal = hero.belongings.randomEquipped();
+            if (toSteal == null || toSteal.unique || toSteal.visiblyUpgraded() > 4) {
+                toSteal = hero.belongings.randomUnequipped();
+            }
+        } else
+        {
             toSteal = hero.belongings.randomUnequipped();
         }
 

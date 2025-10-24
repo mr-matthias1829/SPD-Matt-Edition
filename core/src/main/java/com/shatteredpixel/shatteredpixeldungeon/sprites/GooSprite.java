@@ -191,18 +191,22 @@ public class GooSprite extends MobSprite {
 		}
 	}
 
-	@Override
-	public void onComplete( Animation anim ) {
-		super.onComplete(anim);
+    @Override
+    public void onComplete( Animation anim ) {
+        super.onComplete(anim);
 
-		if (anim == pumpAttack) {
+        if (anim == pumpAttack) {
 
-			triggerEmitters();
+            triggerEmitters();
 
-			idle();
-			ch.onAttackComplete();
-		} else if (anim == die) {
-			spray.killAndErase();
-		}
-	}
+            idle();
+            // Call the Goo's specific method for pump attack completion
+            if (ch instanceof com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo) {
+                ((com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo)ch).onPumpAttackComplete();
+            }
+            ch.onAttackComplete();
+        } else if (anim == die) {
+            spray.killAndErase();
+        }
+    }
 }

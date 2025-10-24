@@ -27,26 +27,24 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.SlimeSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GooplingSprite;
 import com.watabou.utils.Random;
 
-public class Slime extends Mob {
+public class Goopling extends Mob {
 	
 	{
-		spriteClass = SlimeSprite.class;
+		spriteClass = GooplingSprite.class;
 		
-		HP = HT = 20; //32 //20
+		HP = HT = 12;
 		defenseSkill = 5;
 		
-		EXP = 3; //4
-		maxLvl = 9;
-		
-		lootChance = 0.2f; //by default, see lootChance()
+		EXP = 0;
+		maxLvl = 1;
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 5 );
+		return Random.NormalIntRange( 1, 3 );
 	}
 	
 	@Override
@@ -56,13 +54,12 @@ public class Slime extends Mob {
 	
 	@Override
 	public void damage(int dmg, Object src) {
-        int DMGRDC = 2;
+        int DMGRDC = 3;
 
 		float scaleFactor = AscensionChallenge.statModifier(this);
 		int scaledDmg = Math.round(dmg/scaleFactor);
 
         if (scaledDmg >= DMGRDC+1){
-            //hard to deal 3+ damage instead of 6+
             scaledDmg = DMGRDC + (int)(Math.sqrt((DMGRDC*2)*(scaledDmg - DMGRDC) + 1) - 1)/2;
         }
 
@@ -75,21 +72,5 @@ public class Slime extends Mob {
          */
 		dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
 		super.damage(dmg, src);
-	}
-
-	@Override
-	public float lootChance(){
-		//each drop makes future drops 1/4 as likely
-		// so loot chance looks like: 1/5, 1/20, 1/80, 1/320, etc.
-		return super.lootChance() * (float)Math.pow(1/4f, Dungeon.LimitedDrops.SLIME_WEP.count);
-	}
-	
-	@Override
-	public Item createLoot() {
-		Dungeon.LimitedDrops.SLIME_WEP.count++;
-		Generator.Category c = Generator.Category.WEP_T2;
-		MeleeWeapon w = (MeleeWeapon)Generator.randomUsingDefaults(Generator.Category.WEP_T2);
-		w.level(0);
-		return w;
 	}
 }

@@ -32,25 +32,29 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.DM100Sprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.DM151Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class DM100 extends Mob implements Callback {
+public class DM151 extends DM100 implements Callback {
 
-    private static final float TIME_TO_ZAP	= 0.75f; //1f
+    private static final float TIME_TO_ZAP	= 1f/5; //1f
 
     {
-        spriteClass = DM100Sprite.class;
+        spriteClass = DM151Sprite.class;
 
-        baseSpeed = 1f;
+        flying = true;
+        baseSpeed = 1.2f;
 
-        HP = HT = 15;
+        HP = HT = 40;
         defenseSkill = 8;
 
         EXP = 6;
-        maxLvl = 13;
+        maxLvl = 25;
+
+        WANDERING = new DM151.Wandering();
+        state = WANDERING;
 
         loot = Generator.Category.SCROLL;
         lootChance = 0.4f; //0.25f
@@ -58,8 +62,6 @@ public class DM100 extends Mob implements Callback {
         properties.add(Property.ELECTRIC);
         properties.add(Property.INORGANIC);
     }
-
-    // SIMPLER APPROACH: Just modify the existing behavior
     @Override
     protected boolean getCloser(int target) {
         // If adjacent to target, move away instead
@@ -136,7 +138,7 @@ public class DM100 extends Mob implements Callback {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 3, 10 );
+        return Random.NormalIntRange( 2, 5 );
     }
 
     @Override

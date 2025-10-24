@@ -177,14 +177,17 @@ public class Tengu extends Mob {
 		}
 
 		//phase 1 of the fight is over
-		if (state == PrisonBossLevel.State.FIGHT_START && HP <= HT/2){
-			HP = (HT/2);
-			yell(Messages.get(this, "interesting"));
-			((PrisonBossLevel)Dungeon.level).progress();
-			BossHealthBar.bleed(true);
+        if (state == PrisonBossLevel.State.FIGHT_START && HP <= HT * 65/100) { // triggers earlier at 65% HP
+            HP = HT; // heal to full
+            yell(Messages.get(this, "interesting"));
+            ((PrisonBossLevel)Dungeon.level).progress();
+            BossHealthBar.bleed(true);
 
-		//if tengu has lost a certain amount of hp, jump
-		} else if (newBracket != curbracket) {
+            // Optional: reset ability tracking so he starts Phase 2 abilities properly
+            abilitiesUsed = 0;
+            arenaJumps = 0;
+            abilityCooldown = 2;
+        } else if (newBracket != curbracket) {
 			//let full attack action complete first
 			Actor.add(new Actor() {
 

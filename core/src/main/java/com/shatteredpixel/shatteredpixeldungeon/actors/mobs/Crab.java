@@ -31,8 +31,8 @@ public class Crab extends Mob {
 	{
 		spriteClass = CrabSprite.class;
 		
-		HP = HT = 18; //15
-		defenseSkill = 9;  //5
+		HP = HT = 26; //18 //15
+		defenseSkill = 3; //9  //5
 		baseSpeed = 1f; // 2f
 		
 		EXP = 2; //3  // 4

@@ -50,301 +50,376 @@ import com.watabou.utils.Random;
 
 public class Goo extends Mob {
 
-	{
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 120 : 100;
-		EXP = 10;
-		defenseSkill = 8;
-		spriteClass = GooSprite.class;
+    {
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 150 : 125;
+        EXP = 10;
+        defenseSkill = 8;
+        spriteClass = GooSprite.class;
 
-		properties.add(Property.BOSS);
-		properties.add(Property.DEMONIC);
-		properties.add(Property.ACIDIC);
-	}
+        properties.add(Property.BOSS);
+        properties.add(Property.DEMONIC);
+        properties.add(Property.ACIDIC);
+    }
 
-	private int pumpedUp = 0;
-	private int healInc = 1;
+    private int pumpedUp = 0;
+    private int healInc = 1;
+    private boolean gooplingsSpawnedThisAttack = false;
+    private int turnsUntilSpawn = 0;
+    private static final int SPAWN_COOLDOWN = 8; // Spawn gooplings every 5 turns
 
-	@Override
-	public int damageRoll() {
-		int min = 1;
-		int max = (HP*2 <= HT) ? 12 : 8;
-		if (pumpedUp > 0) {
-			pumpedUp = 0;
-			if (enemy == Dungeon.hero) {
-				Statistics.qualifiedForBossChallengeBadge = false;
-				Statistics.bossScores[0] -= 100;
-			}
-			return Random.NormalIntRange( min*3, max*3 );
-		} else {
-			return Random.NormalIntRange( min, max );
-		}
-	}
+    @Override
+    public boolean act() {
 
-	@Override
-	public int attackSkill( Char target ) {
-		int attack = 10;
-		if (HP*2 <= HT) attack = 15;
-		if (pumpedUp > 0) attack *= 2;
-		return attack;
-	}
+        if (state != HUNTING && pumpedUp > 0){
+            pumpedUp = 0;
+            sprite.idle();
+        }
 
-	@Override
-	public int defenseSkill(Char enemy) {
-		return (int)(super.defenseSkill(enemy) * ((HP*2 <= HT)? 1.5 : 1));
-	}
+        if (!flying && Dungeon.level.water[pos] && HP < HT) {
+            HP += healInc;
+            Statistics.qualifiedForBossChallengeBadge = false;
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 2);
-	}
+            LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
+            if (lock != null){
+                if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.removeTime(healInc);
+                else                                                    lock.removeTime(healInc*1.5f);
+            }
 
-	@Override
-	public boolean act() {
+            if (Dungeon.level.heroFOV[pos] ){
+                sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healInc), FloatingText.HEALING );
+            }
+            if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && healInc < 3) {
+                healInc++;
+            }
+            if (HP*2 > HT) {
+                BossHealthBar.bleed(false);
+                ((GooSprite)sprite).spray(false);
+                HP = Math.min(HP, HT);
+            }
+        } else {
+            healInc = 1;
+        }
 
-		if (state != HUNTING && pumpedUp > 0){
-			pumpedUp = 0;
-			sprite.idle();
-		}
+        if (state != SLEEPING){
+            Dungeon.level.seal();
+        }
 
-		if (!flying && Dungeon.level.water[pos] && HP < HT) {
-			HP += healInc;
-			Statistics.qualifiedForBossChallengeBadge = false;
+        // Periodic goopling spawning
+        if (state == HUNTING) {
+            if (turnsUntilSpawn <= 0) {
+                spawnGooplingsPeriodically();
+                turnsUntilSpawn = SPAWN_COOLDOWN;
+            } else {
+                turnsUntilSpawn--;
+            }
+        }
 
-			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-			if (lock != null){
-				if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.removeTime(healInc);
-				else                                                    lock.removeTime(healInc*1.5f);
-			}
+        return super.act();
+    }
 
-			if (Dungeon.level.heroFOV[pos] ){
-				sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healInc), FloatingText.HEALING );
-			}
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && healInc < 3) {
-				healInc++;
-			}
-			if (HP*2 > HT) {
-				BossHealthBar.bleed(false);
-				((GooSprite)sprite).spray(false);
-				HP = Math.min(HP, HT);
-			}
-		} else {
-			healInc = 1;
-		}
-		
-		if (state != SLEEPING){
-			Dungeon.level.seal();
-		}
+    @Override
+    public int damageRoll() {
+        int min = 1;
+        int max = (HP*2 <= HT) ? 12 : 8;
+        if (pumpedUp > 0) {
+            //pumpedUp = 0;
+            if (enemy == Dungeon.hero) {
+                Statistics.qualifiedForBossChallengeBadge = false;
+                Statistics.bossScores[0] -= 100;
+            }
+            return Random.NormalIntRange( min*3, max*3 );
+        } else {
+            return Random.NormalIntRange( min, max );
+        }
+    }
 
-		return super.act();
-	}
+    @Override
+    public int attackSkill( Char target ) {
+        int attack = 10;
+        if (HP*2 <= HT) attack = 15;
+        if (pumpedUp > 0) attack *= 2;
+        return attack;
+    }
 
-	@Override
-	protected boolean canAttack( Char enemy ) {
-		if (pumpedUp > 0){
-			//we check both from and to in this case as projectile logic isn't always symmetrical.
-			//this helps trim out BS edge-cases
-			return Dungeon.level.distance(enemy.pos, pos) <= 2
-						&& new Ballistica( pos, enemy.pos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID).collisionPos == enemy.pos
-						&& new Ballistica( enemy.pos, pos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID).collisionPos == pos;
-		} else {
-			return super.canAttack(enemy);
-		}
-	}
+    @Override
+    public int defenseSkill(Char enemy) {
+        return (int)(super.defenseSkill(enemy) * ((HP*2 <= HT)? 1.5 : 1));
+    }
 
-	@Override
-	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
-		if (Random.Int( 3 ) == 0) {
-			Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
-			enemy.sprite.burst( 0x000000, 5 );
-		}
+    @Override
+    public int drRoll() {
+        return super.drRoll() + Random.NormalIntRange(0, 2);
+    }
 
-		if (pumpedUp > 0) {
-			PixelScene.shake( 3, 0.2f );
-		}
+    @Override
+    protected boolean canAttack( Char enemy ) {
+        if (pumpedUp > 0){
+            //we check both from and to in this case as projectile logic isn't always symmetrical.
+            //this helps trim out BS edge-cases
+            return Dungeon.level.distance(enemy.pos, pos) <= 2
+                    && new Ballistica( pos, enemy.pos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID).collisionPos == enemy.pos
+                    && new Ballistica( enemy.pos, pos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID).collisionPos == pos;
+        } else {
+            return super.canAttack(enemy);
+        }
+    }
 
-		return damage;
-	}
+    @Override
+    public int attackProc( Char enemy, int damage ) {
+        damage = super.attackProc( enemy, damage );
 
-	@Override
-	public void updateSpriteState() {
-		super.updateSpriteState();
+        if (Random.Int( 3 ) == 0) {
+            Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
+            enemy.sprite.burst( 0x000000, 5 );
+        }
 
-		if (pumpedUp > 0){
-			((GooSprite)sprite).pumpUp( pumpedUp );
-		}
-	}
+        if (pumpedUp > 0) {
+            PixelScene.shake( 3, 0.2f );
+        }
 
-	@Override
-	protected boolean doAttack( Char enemy ) {
-		if (pumpedUp == 1) {
-			pumpedUp++;
-			((GooSprite)sprite).pumpUp( pumpedUp );
+        return damage;
+    }
 
-			spend( attackDelay() );
+    @Override
+    public void updateSpriteState() {
+        super.updateSpriteState();
 
-			return true;
-		} else if (pumpedUp >= 2 || Random.Int( (HP*2 <= HT) ? 2 : 5 ) > 0) {
+        if (pumpedUp > 0){
+            ((GooSprite)sprite).pumpUp( pumpedUp );
+        }
+    }
 
-			boolean visible = Dungeon.level.heroFOV[pos];
+    @Override
+    protected boolean doAttack( Char enemy ) {
 
-			if (visible) {
-				if (pumpedUp >= 2) {
-					((GooSprite) sprite).pumpAttack();
-				} else {
-					sprite.attack(enemy.pos);
-				}
-			} else {
-				if (pumpedUp >= 2){
-					((GooSprite)sprite).triggerEmitters();
-				}
-				attack( enemy );
-				Invisibility.dispel(this);
-				spend( attackDelay() );
-			}
+        // Reset the per-slam spawn flag when Goo begins charging a slam
+        if (pumpedUp == 1) {
+            gooplingsSpawnedThisAttack = false;
+        }
 
-			return !visible;
+        if (pumpedUp == 1) {
+            pumpedUp++;
+            ((GooSprite)sprite).pumpUp( pumpedUp );
+            spend( attackDelay() );
+            return true;
 
-		} else {
+        } else if (pumpedUp >= 2 || Random.Int( (HP*2 <= HT) ? 2 : 5 ) > 0) {
 
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
-				pumpedUp += 2;
-				//don't want to overly punish players with slow move or attack speed
-				spend(GameMath.gate(attackDelay(), (int)Math.ceil(enemy.cooldown()), 3*attackDelay()));
-			} else {
-				pumpedUp++;
-				spend( attackDelay() );
-			}
+            boolean visible = Dungeon.level.heroFOV[pos];
 
-			((GooSprite)sprite).pumpUp( pumpedUp );
+            if (visible) {
+                if (pumpedUp >= 2) {
+                    ((GooSprite) sprite).pumpAttack();
+                } else {
+                    sprite.attack(enemy.pos);
+                }
+            } else {
+                if (pumpedUp >= 2){
+                    ((GooSprite)sprite).triggerEmitters();
+                    // For invisible pump attacks, spawn gooplings immediately
+                    if (!gooplingsSpawnedThisAttack) {
+                        spawnGooplingsOnSlam();
+                        gooplingsSpawnedThisAttack = true;
+                    }
+                }
+                attack( enemy );
+                Invisibility.dispel(this);
+                spend( attackDelay() );
+            }
 
-			if (Dungeon.level.heroFOV[pos]) {
-				sprite.showStatus( CharSprite.WARNING, Messages.get(this, "!!!") );
-				GLog.n( Messages.get(this, "pumpup") );
-			}
+            return !visible;
 
-			return true;
-		}
-	}
+        } else {
 
-	@Override
-	public boolean attack( Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
-		boolean result = super.attack( enemy, dmgMulti, dmgBonus, accMulti );
-		if (pumpedUp > 0) {
-			pumpedUp = 0;
-			if (enemy == Dungeon.hero) {
-				Statistics.qualifiedForBossChallengeBadge = false;
-				Statistics.bossScores[0] -= 100;
-			}
-		}
-		return result;
-	}
+            if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+                pumpedUp += 2;
+                spend(GameMath.gate(attackDelay(), (int)Math.ceil(enemy.cooldown()), 3*attackDelay()));
+            } else {
+                pumpedUp++;
+                spend( attackDelay() );
+            }
 
-	@Override
-	protected boolean getCloser( int target ) {
-		if (pumpedUp != 0) {
-			pumpedUp = 0;
-			sprite.idle();
-		}
-		return super.getCloser( target );
-	}
+            ((GooSprite)sprite).pumpUp( pumpedUp );
 
-	@Override
-	protected boolean getFurther(int target) {
-		if (pumpedUp != 0) {
-			pumpedUp = 0;
-			sprite.idle();
-		}
-		return super.getFurther( target );
-	}
+            if (Dungeon.level.heroFOV[pos]) {
+                sprite.showStatus( CharSprite.WARNING, Messages.get(this, "!!!") );
+                GLog.n( Messages.get(this, "pumpup") );
+            }
 
-	@Override
-	public void damage(int dmg, Object src) {
-		if (!BossHealthBar.isAssigned()){
-			BossHealthBar.assignBoss( this );
-			Dungeon.level.seal();
-		}
-		boolean bleeding = (HP*2 <= HT);
-		super.damage(dmg, src);
-		if ((HP*2 <= HT) && !bleeding){
-			BossHealthBar.bleed(true);
-			sprite.showStatus(CharSprite.WARNING, Messages.get(this, "enraged"));
-			((GooSprite)sprite).spray(true);
-			yell(Messages.get(this, "gluuurp"));
-		}
-		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
-			else                                                    lock.addTime(dmg*1.5f);
-		}
-	}
+            return true;
+        }
+    }
 
-	@Override
-	public void die( Object cause ) {
-		
-		super.die( cause );
-		
-		Dungeon.level.unseal();
-		
-		GameScene.bossSlain();
-		Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
-		
-		//60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
-		int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
-		for (int i = 0; i < blobs; i++){
-			int ofs;
-			do {
-				ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
-			} while (!Dungeon.level.passable[pos + ofs]);
-			Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop( pos );
-		}
-		
-		Badges.validateBossSlain();
-		if (Statistics.qualifiedForBossChallengeBadge){
-			Badges.validateBossChallengeCompleted();
-		}
-		Statistics.bossScores[0] += 1000;
-		
-		yell( Messages.get(this, "defeated") );
-	}
-	
-	@Override
-	public void notice() {
-		super.notice();
-		if (!BossHealthBar.isAssigned()) {
-			BossHealthBar.assignBoss(this);
-			Dungeon.level.seal();
-			yell(Messages.get(this, "notice"));
-			for (Char ch : Actor.chars()){
-				if (ch instanceof DriedRose.GhostHero){
-					((DriedRose.GhostHero) ch).sayBoss();
-				}
-			}
-		}
-	}
+    @Override
+    public boolean attack( Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
+        boolean result = super.attack( enemy, dmgMulti, dmgBonus, accMulti );
 
-	private final String PUMPEDUP = "pumpedup";
-	private final String HEALINC = "healinc";
+        // Spawn gooplings after pump up attack hits
+        if (pumpedUp > 0 && !gooplingsSpawnedThisAttack) {
+            spawnGooplingsOnSlam();
+            gooplingsSpawnedThisAttack = true;
+        }
 
-	@Override
-	public void storeInBundle( Bundle bundle ) {
+        if (pumpedUp > 0) {
+            pumpedUp = 0;
+            if (enemy == Dungeon.hero) {
+                Statistics.qualifiedForBossChallengeBadge = false;
+                Statistics.bossScores[0] -= 100;
+            }
+        }
+        return result;
+    }
 
-		super.storeInBundle( bundle );
+    // This method is called from GooSprite when the pump attack animation completes
+    public void onPumpAttackComplete() {
+        if (pumpedUp >= 2 && !gooplingsSpawnedThisAttack) {
+            spawnGooplingsOnSlam();
+            gooplingsSpawnedThisAttack = true;
+        }
+    }
 
-		bundle.put( PUMPEDUP , pumpedUp );
-		bundle.put( HEALINC, healInc );
-	}
+    private void spawnGooplingsOnSlam() {
+        spawnGooplings(Random.Int(2) + 1); // 1 or 2 gooplings
+    }
 
-	@Override
-	public void restoreFromBundle( Bundle bundle ) {
+    private void spawnGooplingsPeriodically() {
+        spawnGooplings(1); // 1 goopling for periodic spawns
+        if (Dungeon.level.heroFOV[pos]) {
+            GLog.w(Messages.get(this, "gooplings"));
+        }
+    }
 
-		super.restoreFromBundle( bundle );
+    private void spawnGooplings(int count) {
+        for (int i = 0; i < count; i++) {
+            int ofs;
+            int attempts = 0;
 
-		pumpedUp = bundle.getInt( PUMPEDUP );
-		if (state != SLEEPING) BossHealthBar.assignBoss(this);
-		if ((HP*2 <= HT)) BossHealthBar.bleed(true);
+            // try a few times to find a valid tile
+            do {
+                ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
+                attempts++;
+            } while (attempts < 10 && (!Dungeon.level.passable[pos + ofs] || Actor.findChar(pos + ofs) != null));
 
-		healInc = bundle.getInt(HEALINC);
-	}
-	
+            // final validation
+            if (!Dungeon.level.passable[pos + ofs] || Actor.findChar(pos + ofs) != null) {
+                // couldn't find a free tile for this spawn, skip it
+                continue;
+            }
+
+            Goopling g = new Goopling();
+            g.pos = pos + ofs;
+
+            // add the mob to the scene / actor list
+            GameScene.add(g);
+        }
+    }
+
+    @Override
+    protected boolean getCloser( int target ) {
+        if (pumpedUp != 0) {
+            pumpedUp = 0;
+            sprite.idle();
+        }
+        return super.getCloser( target );
+    }
+
+    @Override
+    protected boolean getFurther(int target) {
+        if (pumpedUp != 0) {
+            pumpedUp = 0;
+            sprite.idle();
+        }
+        return super.getFurther( target );
+    }
+
+    @Override
+    public void damage(int dmg, Object src) {
+        if (!BossHealthBar.isAssigned()){
+            BossHealthBar.assignBoss( this );
+            Dungeon.level.seal();
+        }
+        boolean bleeding = (HP*2 <= HT);
+        super.damage(dmg, src);
+        if ((HP*2 <= HT) && !bleeding){
+            BossHealthBar.bleed(true);
+            sprite.showStatus(CharSprite.WARNING, Messages.get(this, "enraged"));
+            ((GooSprite)sprite).spray(true);
+            yell(Messages.get(this, "gluuurp"));
+        }
+        LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
+        if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
+            if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
+            else                                                    lock.addTime(dmg*1.5f);
+        }
+    }
+
+    @Override
+    public void die( Object cause ) {
+
+        super.die( cause );
+
+        Dungeon.level.unseal();
+
+        GameScene.bossSlain();
+        Dungeon.level.drop( new SkeletonKey( Dungeon.depth ), pos ).sprite.drop();
+
+        //60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
+        int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
+        for (int i = 0; i < blobs; i++){
+            int ofs;
+            do {
+                ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
+            } while (!Dungeon.level.passable[pos + ofs]);
+            Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop( pos );
+        }
+
+        Badges.validateBossSlain();
+        if (Statistics.qualifiedForBossChallengeBadge){
+            Badges.validateBossChallengeCompleted();
+        }
+        Statistics.bossScores[0] += 1000;
+
+        yell( Messages.get(this, "defeated") );
+
+        spawnGooplings(3); // Spawn a few gooplings on death
+    }
+
+    @Override
+    public void notice() {
+        super.notice();
+        if (!BossHealthBar.isAssigned()) {
+            BossHealthBar.assignBoss(this);
+            Dungeon.level.seal();
+            yell(Messages.get(this, "notice"));
+            for (Char ch : Actor.chars()){
+                if (ch instanceof DriedRose.GhostHero){
+                    ((DriedRose.GhostHero) ch).sayBoss();
+                }
+            }
+        }
+    }
+
+    private final String PUMPEDUP = "pumpedup";
+    private final String HEALINC = "healinc";
+    private final String TURNS_UNTIL_SPAWN = "turns_until_spawn";
+
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( PUMPEDUP , pumpedUp );
+        bundle.put( HEALINC, healInc );
+        bundle.put( TURNS_UNTIL_SPAWN, turnsUntilSpawn );
+    }
+
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        super.restoreFromBundle( bundle );
+        pumpedUp = bundle.getInt( PUMPEDUP );
+        healInc = bundle.getInt( HEALINC );
+        turnsUntilSpawn = bundle.getInt( TURNS_UNTIL_SPAWN );
+
+        if (state != SLEEPING) BossHealthBar.assignBoss(this);
+        if ((HP*2 <= HT)) BossHealthBar.bleed(true);
+    }
+
 }
