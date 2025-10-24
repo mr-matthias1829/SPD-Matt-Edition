@@ -104,43 +104,53 @@ public class MobSpawner extends Actor {
 						Swarm.class,
                         Crab.class, Snake.class, Slime.class));
 			case 7:
-				//3x skeleton, 1x thief, 1x DM-100, 1x guard + 1x snake and x1 slime
-				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
-						Thief.class,
+				// WAS 3x skeleton, 1x thief, 1x DM-100, 1x guard + 1x snake and x1 slime
+                // IS 2x skeleton, 2x thief, 1x DM-100, 1x guard + 1x snake and x2 slime
+				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class,
+						Thief.class, Thief.class,
 						DM100.class,
 						Guard.class,
-                        Snake.class, Slime.class));
+                        Snake.class, Slime.class, Slime.class));
 			case 8:
-				//2x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 1x slime
-				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class,
-						Thief.class,
+				// WAS 2x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 1x slime
+                // IS 1x skeleton, 2x thief, 2x DM-100, 2x guard, 1x necromancer + 2x slime
+				return new ArrayList<>(Arrays.asList(Skeleton.class,
+						Thief.class, Thief.class,
 						DM100.class, DM100.class,
 						Guard.class, Guard.class,
 						Necromancer.class,
-                        Slime.class));
+                        Slime.class, Slime.class));
 			case 9: case 10:
-				//1x skeleton, 1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x DM100
-				return new ArrayList<>(Arrays.asList(Skeleton.class,
+				// WAS 1x skeleton, 1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x DM100
+                // IS 1x thief, 4x DM-100, 2x guard, 2x necromancer + 1x slime
+				return new ArrayList<>(Arrays.asList(
 						Thief.class,
-						DM100.class, DM100.class,
+						DM100.class, DM100.class, DM100.class, DM100.class,
 						Guard.class, Guard.class,
 						Necromancer.class, Necromancer.class,
-                        DM100.class));
+                        Slime.class));
+
+
 
 			// Caves
 			case 11:
-				//3x bat, 1x brute, 1x shaman
+				//3x bat, 1x brute, 1x shaman + 1x fetid rat, 1x DM-100 and 1x necromancer
 				return new ArrayList<>(Arrays.asList(
 						Bat.class, Bat.class, Bat.class,
 						Brute.class,
-						Shaman.random()));
+						Shaman.random(),
+                        FetidRat.class,
+                        DM100.class,
+                        Necromancer.class));
 			case 12:
-				//2x bat, 2x brute, 1x shaman, 1x spinner
+				//2x bat, 2x brute, 1x shaman, 1x spinner + 1x fetid rat and 1x necromancer
 				return new ArrayList<>(Arrays.asList(
 						Bat.class, Bat.class,
 						Brute.class, Brute.class,
 						Shaman.random(),
-						Spinner.class));
+						Spinner.class,
+                        FetidRat.class,
+                        Necromancer.class));
 			case 13:
 				//1x bat, 2x brute, 2x shaman, 2x spinner, 1x DM-200
 				return new ArrayList<>(Arrays.asList(

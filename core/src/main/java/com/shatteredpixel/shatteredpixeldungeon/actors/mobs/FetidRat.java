@@ -34,22 +34,43 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.FetidRatSprite;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
+import static java.lang.Math.round;
+
 public class FetidRat extends Rat {
+
+    private int level;
 
 	{
 		spriteClass = FetidRatSprite.class;
 
-		HP = HT = 24; //36 //20
-		defenseSkill = 8; //5
-
-		EXP = 6; //4
-
 		WANDERING = new Wandering();
 		state = WANDERING;
 
-		properties.add(Property.MINIBOSS);
-		properties.add(Property.DEMONIC);
+        setLevel( Dungeon.scalingDepth() );
 	}
+
+    public void setLevel( int depth ){
+        if (depth < 5) {
+            level = 0;
+        } else if (depth < 15){
+            level = 1;
+        } else {
+            level = 2;
+        }
+        this.level = level;
+        adjustStats(level);
+    }
+    public void adjustStats( int level ) {
+        HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
+        defenseSkill = 8 * (1+level); //5
+
+        EXP = (int) (6 * (1+level*0.25)); //4
+        properties.add(Property.DEMONIC);
+
+        if (level == 0) {
+            properties.add(Property.MINIBOSS);
+        }
+    }
 
 	@Override
 	public int attackSkill( Char target ) {
