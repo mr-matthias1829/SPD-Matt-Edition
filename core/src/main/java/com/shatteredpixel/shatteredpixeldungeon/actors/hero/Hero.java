@@ -231,6 +231,7 @@ public class Hero extends Char {
 	public int exp = 0;
 	
 	public int HTBoost = 0;
+    public boolean cheating = false;
 	
 	private ArrayList<Mob> visibleEnemies;
 
@@ -241,8 +242,16 @@ public class Hero extends Char {
 	public Hero() {
 		super();
 
-		HP = HT = 30; //20
-		STR = STARTING_STR;
+        if (SPDSettings.cheatMode()){
+            HT = HP = 999030;
+            STR = 50;
+            cheating = true;
+        }
+        else {
+            HP = HT = 30; //20
+            STR = STARTING_STR;
+            cheating = false;
+        }
 		
 		belongings = new Belongings( this );
 		
@@ -251,10 +260,14 @@ public class Hero extends Char {
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
-		
-		HT = 30 + 5*(lvl-1) + HTBoost; //20 + 5*(lvl-1)
-		float multiplier = RingOfMight.HTMultiplier(this);
-		HT = Math.round(multiplier * HT);
+
+        if (cheating){
+            HT = 999030 + 5 * (lvl - 1) + HTBoost;
+        } else {
+            HT = 30 + 5 * (lvl - 1) + HTBoost; //20 + 5*(lvl-1)
+            float multiplier = RingOfMight.HTMultiplier(this);
+            HT = Math.round(multiplier * HT);
+        }
 		
 		if (buff(ElixirOfMight.HTBoost.class) != null){
 			HT += buff(ElixirOfMight.HTBoost.class).boost();

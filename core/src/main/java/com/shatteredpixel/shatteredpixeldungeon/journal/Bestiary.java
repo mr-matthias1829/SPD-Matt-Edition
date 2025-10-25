@@ -99,10 +99,12 @@ import java.util.LinkedHashMap;
 //contains all the game's various entities, mostly enemies, NPCS, and allies, but also traps and plants
 public enum Bestiary {
 
+    SPECIAL,
 	REGIONAL,
 	BOSSES,
 	UNIVERSAL,
 	RARE,
+    RECURRING,
 	QUEST,
 	NEUTRAL,
 	ALLY,
@@ -143,11 +145,14 @@ public enum Bestiary {
 	}
 
 	static {
+        SPECIAL.addEntities(
+                Goopling.class, DM151.class, DM166.class
+        );
 
-		REGIONAL.addEntities(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Goopling.class, Slime.class,
+		REGIONAL.addEntities(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class,
 				Skeleton.class, Thief.class, DM100.class, Guard.class, Necromancer.class,
 				Bat.class, Brute.class, Shaman.RedShaman.class, Shaman.BlueShaman.class, Shaman.PurpleShaman.class, Spinner.class, DM200.class,
-				Ghoul.class, Elemental.FireElemental.class, Elemental.FrostElemental.class, Elemental.ShockElemental.class, Warlock.class, Monk.class, Golem.class,
+				Ghoul.class, Bandit.class, Elemental.FireElemental.class, Elemental.FrostElemental.class, Elemental.ShockElemental.class, Warlock.class, Monk.class, Golem.class,
 				RipperDemon.class, DemonSpawner.class, Succubus.class, Eye.class, Scorpio.class);
 
 		BOSSES.addEntities(Goo.class,
@@ -159,13 +164,16 @@ public enum Bestiary {
 		UNIVERSAL.addEntities(Wraith.class, Piranha.class, Mimic.class, GoldenMimic.class, EbonyMimic.class, Statue.class, GuardianTrap.Guardian.class, SentryRoom.Sentry.class);
 
 		RARE.addEntities(Albino.class, GnollExile.class, HermitCrab.class, CausticSlime.class,
-				Bandit.class, SpectralNecromancer.class,
+				SpectralNecromancer.class,
 				ArmoredBrute.class, DM201.class,
 				Elemental.ChaosElemental.class, Senior.class,
 				Acidic.class,
 				TormentedSpirit.class, PhantomPiranha.class, CrystalMimic.class, ArmoredStatue.class);
 
-		QUEST.addEntities(FetidRat.class, GnollTrickster.class, GreatCrab.class,
+        RECURRING.addEntities(
+                FetidRat.class, GnollTrickster.class);
+
+		QUEST.addEntities(GreatCrab.class,
 				Elemental.NewbornFireElemental.class, RotLasher.class, RotHeart.class,
 				CrystalWisp.class, CrystalGuardian.class, CrystalSpire.class, GnollGuard.class, GnollSapper.class, GnollGeomancer.class);
 
@@ -324,5 +332,14 @@ public enum Bestiary {
 		}
 
 	}
+
+
+    public static void unlockAllBestiary() {
+        for (Bestiary cat : Bestiary.values()) {
+            for (Class<?> entity : cat.entities()) {
+                Bestiary.setSeen(entity);
+            }
+        }
+    }
 
 }

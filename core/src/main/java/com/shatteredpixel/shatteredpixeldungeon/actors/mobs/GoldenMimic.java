@@ -83,8 +83,8 @@ public class GoldenMimic extends Mimic {
 
 	@Override
 	public void setLevel(int level) {
-		super.setLevel(Math.round(level*1.33f));
-	}
+		super.setLevel(Math.round(level*1.4f));
+	} //1.33
 
 	@Override
 	protected void generatePrize( boolean useDecks ) {

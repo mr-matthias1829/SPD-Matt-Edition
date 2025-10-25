@@ -1,24 +1,3 @@
-/*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
- *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
- */
-
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
@@ -27,83 +6,41 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM151Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
-import com.watabou.utils.Random;
 
 public class DM151 extends DM100 implements Callback {
 
-    private static final float TIME_TO_ZAP	= 1f/5; //1f
-
     {
         spriteClass = DM151Sprite.class;
-
-        flying = true;
         baseSpeed = 1.2f;
-
-        HP = HT = 40;
-        defenseSkill = 8;
-
-        EXP = 6;
-        maxLvl = 25;
 
         WANDERING = new DM151.Wandering();
         state = WANDERING;
-
-        loot = Generator.Category.SCROLL;
-        lootChance = 0.4f; //0.25f
-
-        properties.add(Property.ELECTRIC);
-        properties.add(Property.INORGANIC);
-    }
-    @Override
-    protected boolean getCloser(int target) {
-        // If adjacent to target, move away instead
-        if (Dungeon.level.adjacent(pos, target)) {
-            return getFurther(target);
-        }
-
-        // Don't get too close - stop 2 tiles away (1 now)
-        if (Dungeon.level.distance(pos, target) <= 1) {
-            return false;
-        }
-
-        return super.getCloser(target);
     }
 
-    @Override
-    protected boolean canAttack(Char enemy) {
-        // Only allow zap attacks when not adjacent and in line of sight
-        if (Dungeon.level.adjacent(pos, enemy.pos)) {
-            return false; // Never attack when adjacent
-        }
-
-        Ballistica attack = new Ballistica(pos, enemy.pos, Ballistica.MAGIC_BOLT);
-        return attack.collisionPos == enemy.pos;
-    }
+    // custom zap delay (instance-based, not static)
+    protected float TIME_TO_ZAP_151 = 1f / 3f;
 
     @Override
     protected boolean doAttack(Char enemy) {
-        // If adjacent, just move away instead of attacking
+        // If adjacent, try to move away
         if (Dungeon.level.adjacent(pos, enemy.pos)) {
             if (getFurther(enemy.pos)) {
                 spend(1 / speed());
                 return true;
             } else {
-                // If can't move away, just wait
                 spend(TICK);
                 return true;
             }
         }
 
-        // Otherwise use zap attack
-        spend(TIME_TO_ZAP);
+        // Otherwise, zap
+        spend(TIME_TO_ZAP_151);
         Invisibility.dispel(this);
 
         if (hit(this, enemy, true)) {
@@ -135,28 +72,4 @@ public class DM151 extends DM100 implements Callback {
             return true;
         }
     }
-
-    @Override
-    public int damageRoll() {
-        return Random.NormalIntRange( 2, 5 );
-    }
-
-    @Override
-    public int attackSkill( Char target ) {
-        return 11;
-    }
-
-    @Override
-    public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 4);
-    }
-
-    //used so resistances can differentiate between melee and magical attacks
-    public static class LightningBolt{}
-
-    @Override
-    public void call() {
-        next();
-    }
-
 }

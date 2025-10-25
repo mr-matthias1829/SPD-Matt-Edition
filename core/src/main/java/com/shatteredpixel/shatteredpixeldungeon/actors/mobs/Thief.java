@@ -147,7 +147,7 @@ public class Thief extends Mob {
     private int stealAttempts = 0;
     protected boolean steal( Hero hero ) {
 
-        if (Random.Int(8) < stealAttempts+2) {
+        if (Random.Int(8) < stealAttempts+1) {
             stealAttempts++;
             return false;
         }

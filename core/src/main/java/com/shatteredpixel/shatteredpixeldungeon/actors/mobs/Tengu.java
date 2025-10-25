@@ -87,7 +87,7 @@ public class Tengu extends Mob {
     {
         spriteClass = TenguSprite.class;
 
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 400 : 300;
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 450 : 300;
         EXP = 20;
         defenseSkill = 15;
 
@@ -481,7 +481,7 @@ public class Tengu extends Mob {
                 baseCooldown = 7; // early phase 2
             } else if (hpPercent > 0.35f) {
                 baseCooldown = 5; // mid phase 2
-            } else if (hpPercent > 0.2f) {
+            } else if (hpPercent > 0.15f) {
                 baseCooldown = 4; // late phase 2
             } else {
                 baseCooldown = 3; // critical HP

@@ -42,6 +42,8 @@ import com.watabou.utils.Random;
 
 public class GnollTrickster extends Gnoll {
 
+    private int level;
+
 	{
 		spriteClass = GnollTricksterSprite.class;
 
@@ -54,12 +56,35 @@ public class GnollTrickster extends Gnoll {
 		WANDERING = new Wandering();
 		state = WANDERING;
 
-		//at quantity of 1 and no upgrades
-		loot = Generator.Category.MISSILE;
-		lootChance = 1f;
-
 		properties.add(Property.MINIBOSS);
 	}
+    public void setLevel( int depth ){
+        int lvl = 0;
+        if (depth < 5) {
+            lvl = 0;
+        } else if (depth < 15){
+            lvl = 1;
+        } else {
+            lvl = 2;
+        }
+        this.level = lvl;
+        adjustStats(level);
+    }
+    public void adjustStats( int level ) {
+        HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
+        defenseSkill = 5 * (1+level);
+        baseSpeed = 1.2f; // 1f
+
+        EXP = (int) (7 * (1+level*0.25)); //5
+
+        loot = Generator.Category.MISSILE; // only loot when killed as quest
+        if (level == 0) {
+            properties.add(Property.MINIBOSS);
+            lootChance = 1f; // only loot guaranteed when killed as quest
+        } else {
+            lootChance = 0.18f;
+        }
+    }
 
 	private int combo = 0;
 
@@ -77,7 +102,8 @@ public class GnollTrickster extends Gnoll {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
-        damage = Random.NormalIntRange( 2, 7 ); // 1,6
+        //damage = Random.NormalIntRange( 2, 7 ); // 1,6
+        damage = Random.NormalIntRange(2 * (1+level), (int) (7 * (1+level * 1.2)));
 
 		if (combo >= 1){
 			//score loss is on-hit instead of on-attack as it's tied to combo

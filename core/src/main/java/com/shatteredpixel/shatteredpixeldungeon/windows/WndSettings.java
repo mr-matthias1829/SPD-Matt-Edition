@@ -668,6 +668,8 @@ public class WndSettings extends WndTabbed {
 		OptionSlider optControlSens;
 		OptionSlider optHoldMoveSens;
 
+        CheckBox cheatMode;
+
 		@Override
 		protected void createChildren() {
 			title = PixelScene.renderTextBlock(Messages.get(this, "title"), 9);
@@ -704,6 +706,18 @@ public class WndSettings extends WndTabbed {
 
 			sep2 = new ColorBlock(1, 1, 0xFF000000);
 			add(sep2);
+
+            // Add your checkbox here
+            cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
+                @Override
+                protected void onClick() {
+                    super.onClick();
+                    SPDSettings.cheatMode(checked());
+                    // Add any immediate effects here if needed
+                }
+            };
+            cheatMode.checked(SPDSettings.cheatMode());
+            add(cheatMode);
 
 
 			optControlSens = new OptionSlider(
@@ -761,8 +775,9 @@ public class WndSettings extends WndTabbed {
 				}
 			}
 
-			sep2.size(width, 1);
-			sep2.y = height+ GAP;
+            sep2.size(width, 1);
+            sep2.y = height + GAP;
+            height = sep2.y + 1;
 
 			if (width > 200){
 				optControlSens.setRect(0, sep2.y + 1 + GAP, width/2-1, SLIDER_HEIGHT);
@@ -773,7 +788,8 @@ public class WndSettings extends WndTabbed {
 			}
 
 			height = optHoldMoveSens.bottom();
-
+            cheatMode.setRect(0, height + GAP, width, BTN_HEIGHT);
+            height = cheatMode.bottom();
 		}
 	}
 

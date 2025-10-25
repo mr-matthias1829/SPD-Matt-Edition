@@ -22,11 +22,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BanditSprite;
 import com.watabou.utils.Random;
@@ -39,8 +41,32 @@ public class Bandit extends Thief {
 		spriteClass = BanditSprite.class;
 
 		//guaranteed first drop, then 1/3, 1/9, etc.
-		lootChance = 1f;
+		//lootChance = 1f;
+
+
+
+        HP = HT = 45;
+        defenseSkill = 22;
+        baseSpeed = 0.85f;
+
+        EXP = 3;
+        maxLvl = 19;
+
+        loot = Random.oneOf(Generator.Category.RING, Generator.Category.ARTIFACT);
+        lootChance = 0.03f; //initially, see lootChance()
+
+        properties.add(Property.UNDEAD);
 	}
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 6, 12 );
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 20;
+    }
 	
 	@Override
 	protected boolean steal( Hero hero ) {
@@ -48,7 +74,7 @@ public class Bandit extends Thief {
 			
 			Buff.prolong( hero, Blindness.class, Blindness.DURATION/2f );
 			Buff.affect( hero, Poison.class ).set(Random.IntRange(5, 6) );
-			Buff.prolong( hero, Cripple.class, Cripple.DURATION/2f );
+			//Buff.prolong( hero, Cripple.class, Cripple.DURATION/2f );
 			Dungeon.observe();
 			
 			return true;
@@ -56,5 +82,13 @@ public class Bandit extends Thief {
 			return false;
 		}
 	}
+
+
+    @Override
+    public float lootChance() {
+        //each drop makes future drops 1/3 as likely
+        // so loot chance looks like: 1/33, 1/100, 1/300, 1/900, etc.
+        return super.lootChance() * (float)Math.pow(1/3f, Dungeon.LimitedDrops.THEIF_MISC.count);
+    }
 	
 }

@@ -134,62 +134,64 @@ public class MobSpawner extends Actor {
 
 			// Caves
 			case 11:
-				//3x bat, 1x brute, 1x shaman + 1x fetid rat, 1x DM-100 and 1x necromancer
+				//3x bat, 1x brute, 1x shaman + 1x necromancer
 				return new ArrayList<>(Arrays.asList(
 						Bat.class, Bat.class, Bat.class,
 						Brute.class,
 						Shaman.random(),
-                        FetidRat.class,
-                        DM100.class,
                         Necromancer.class));
 			case 12:
-				//2x bat, 2x brute, 1x shaman, 1x spinner + 1x fetid rat and 1x necromancer
+				//2x bat, 2x brute, 1x shaman, 1x spinner + 1x fetid rat
 				return new ArrayList<>(Arrays.asList(
 						Bat.class, Bat.class,
 						Brute.class, Brute.class,
 						Shaman.random(),
 						Spinner.class,
-                        FetidRat.class,
-                        Necromancer.class));
+                        FetidRat.class));
 			case 13:
-				//1x bat, 2x brute, 2x shaman, 2x spinner, 1x DM-200
+				//1x bat, 2x brute, 2x shaman, 2x spinner, 1x DM-200 + 1x fetid rat
 				return new ArrayList<>(Arrays.asList(
 						Bat.class,
 						Brute.class, Brute.class,
 						Shaman.random(), Shaman.random(),
 						Spinner.class, Spinner.class,
-						DM200.class));
+						DM200.class,
+                        FetidRat.class));
 			case 14: case 15:
-				//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300
+				//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300 + 1x gnoll trickster
 				return new ArrayList<>(Arrays.asList(
 						Bat.class,
 						Brute.class,
 						Shaman.random(), Shaman.random(),
 						Spinner.class, Spinner.class,
-						DM200.class, DM200.class));
+						DM200.class, DM200.class,
+                        GnollTrickster.class));
 
 			// City
 			case 16:
-				//3x ghoul, 1x elemental, 1x warlock
+				//3x ghoul, 1x elemental, 1x warlock + 1x bandit
 				return new ArrayList<>(Arrays.asList(
 						Ghoul.class, Ghoul.class, Ghoul.class,
 						Elemental.random(),
-						Warlock.class));
+						Warlock.class,
+                        Bandit.class));
 			case 17:
-				//1x ghoul, 2x elemental, 1x warlock, 1x monk
+				//1x ghoul, 2x elemental, 1x warlock, 1x monk + 1x bandit
 				return new ArrayList<>(Arrays.asList(
 						Ghoul.class,
 						Elemental.random(), Elemental.random(),
 						Warlock.class,
-						Monk.class));
+						Monk.class,
+                        Bandit.class));
 			case 18:
-				//1x ghoul, 1x elemental, 2x warlock, 2x monk, 1x golem
+				//1x ghoul, 1x elemental, 2x warlock, 2x monk, 1x golem + 1x bandit
 				return new ArrayList<>(Arrays.asList(
 						Ghoul.class,
 						Elemental.random(),
 						Warlock.class, Warlock.class,
 						Monk.class, Monk.class,
-						Golem.class));
+						Golem.class,
+                        Bandit.class));
 			case 19: case 20:
 				//1x elemental, 2x warlock, 2x monk, 3x golem
 				return new ArrayList<>(Arrays.asList(
@@ -256,7 +258,8 @@ public class MobSpawner extends Actor {
 
 	//switches out regular mobs for their alt versions when appropriate
 	private static void swapMobAlts(ArrayList<Class<?extends Mob>> rotation) {
-		float altChance = 1 / 50f * RatSkull.exoticChanceMultiplier();
+		//float altChance = 1 / 50f * RatSkull.exoticChanceMultiplier();
+        float altChance = 1 / 20f * RatSkull.exoticChanceMultiplier();
 		for (int i = 0; i < rotation.size(); i++) {
 			if (Random.Float() < altChance) {
 				Class<? extends Mob> cl = rotation.get(i);
@@ -265,7 +268,8 @@ public class MobSpawner extends Actor {
 				else if (cl == Crab.class)          cl = HermitCrab.class;
 				else if (cl == Slime.class)         cl = CausticSlime.class;
 
-				else if (cl == Thief.class)         cl = Bandit.class;
+				//else if (cl == Thief.class)         cl = Bandit.class;
+                else if (cl == DM100.class)         cl = DM151.class;
 				else if (cl == Necromancer.class)   cl = SpectralNecromancer.class;
 
 				else if (cl == Brute.class)         cl = ArmoredBrute.class;

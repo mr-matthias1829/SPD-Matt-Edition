@@ -39,9 +39,9 @@ import java.util.ArrayList;
 // back layers are dark, which works well on desktop but may be hard to see on mobile
 public class TitleBackground extends Component {
 
-	public static float SCROLL_SPEED	= 15f;
+	public static float SCROLL_SPEED	= 8f; //15f
 
-	private float density = 1f;
+	private float density = 8f; //1f
 
 	//Arch back layer
 	private static final TextureFilm ARCH_FILM = new TextureFilm(Assets.Splashes.Title.ARCHS, 333, 100);

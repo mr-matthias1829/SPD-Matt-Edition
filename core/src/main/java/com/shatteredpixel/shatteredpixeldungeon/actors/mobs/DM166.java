@@ -33,45 +33,44 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM100Sprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.DM166Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class DM100 extends Mob implements Callback {
+public class DM166 extends DM100 implements Callback {
 
-    protected static float TIME_TO_ZAP	= 0.75f; //1f
+    protected static float TIME_TO_ZAP	= (float) (1f/3.7); //0.75f
 
     {
-        spriteClass = DM100Sprite.class;
+        spriteClass = DM166Sprite.class;
 
         baseSpeed = 1f;
 
-        HP = HT = 15;
-        defenseSkill = 8;
+        HP = HT = 50;
+        defenseSkill = 20;
 
-        EXP = 6;
-        maxLvl = 13;
-
-        loot = Generator.Category.SCROLL;
-        lootChance = 0.4f; //0.25f
+        EXP = 10;
+        maxLvl = 24;
 
         properties.add(Property.ELECTRIC);
         properties.add(Property.INORGANIC);
     }
-
-    // SIMPLER APPROACH: Just modify the existing behavior
     @Override
     protected boolean getCloser(int target) {
-        // If adjacent to target, move away instead
-        if (Dungeon.level.adjacent(pos, target)) {
+        int dist = Dungeon.level.distance(pos, target);
+
+        // Too close? (adjacent or 1 tile apart) → move away
+        if (dist <= 1) {
             return getFurther(target);
         }
 
-        // Don't get too close - stop 2 tiles away (1 now)
-        if (Dungeon.level.distance(pos, target) <= 1) {
+        // Perfect range (exactly 2 tiles) → stop moving
+        if (dist == 2) {
             return false;
         }
 
+        // Too far (3+ tiles) → move closer
         return super.getCloser(target);
     }
 
@@ -136,17 +135,17 @@ public class DM100 extends Mob implements Callback {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 3, 10 );
+        return Random.NormalIntRange( 4, 8 );
     }
 
     @Override
     public int attackSkill( Char target ) {
-        return 11;
-    }
+        return 36;
+    } //11
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 4);
+        return super.drRoll() + Random.NormalIntRange(2, 7);
     }
 
     //used so resistances can differentiate between melee and magical attacks

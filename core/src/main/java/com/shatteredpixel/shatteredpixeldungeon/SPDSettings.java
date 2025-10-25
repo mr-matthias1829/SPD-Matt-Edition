@@ -304,6 +304,14 @@ public class SPDSettings extends GameSettings {
 		return getInt(KEY_MOVE_SENS, 3, 0, 4);
 	}
 
+    public static final String KEY_CHEAT_MODE = "cheat_mode";
+    public static void cheatMode( boolean value ) {
+        put( KEY_CHEAT_MODE, value );
+    }
+    public static boolean cheatMode() {
+        return getBoolean( KEY_CHEAT_MODE, false ); // true is the default value
+    }
+
 	//Connectivity
 
 	public static final String KEY_NEWS     = "news";

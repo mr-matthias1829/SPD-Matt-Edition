@@ -50,14 +50,15 @@ public class FetidRat extends Rat {
 	}
 
     public void setLevel( int depth ){
+        int lvl = 0;
         if (depth < 5) {
-            level = 0;
+            lvl = 0;
         } else if (depth < 15){
-            level = 1;
+            lvl = 1;
         } else {
-            level = 2;
+            lvl = 2;
         }
-        this.level = level;
+        this.level = lvl;
         adjustStats(level);
     }
     public void adjustStats( int level ) {
@@ -74,7 +75,7 @@ public class FetidRat extends Rat {
 
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return 12 * (1+level);
 	}
 
 	@Override
@@ -85,7 +86,8 @@ public class FetidRat extends Rat {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
-        damage = Random.NormalIntRange( 2, 5 ); // inherited before, was 1,4
+        //damage = Random.NormalIntRange( 2, 5 ); // inherited before, was 1,4
+        damage = Random.NormalIntRange(2 * (1+level), (int) (5 * (1+level * 1.2)));
 		if (Random.Int(3) == 0) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 			//score loss is on-hit instead of on-attack because it's tied to ooze

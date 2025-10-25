@@ -50,15 +50,15 @@ public class GnollExile extends Gnoll {
 		state = PASSIVE;
 
 		defenseSkill = 6;
-		HP = HT = 24;
+		HP = HT = 25; //24
 
 		lootChance = 0f; //see rollToDropLoot
 	}
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 10 );
-	}
+		return Random.NormalIntRange( 3, 10 );
+	} //1,10
 
 	@Override
 	public int attackSkill( Char target ) {
@@ -67,8 +67,8 @@ public class GnollExile extends Gnoll {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 1);
-	}
+		return super.drRoll() + Random.NormalIntRange(1, 2);
+	} //0,1
 
 	@Override
 	protected boolean canAttack( Char enemy ) {
