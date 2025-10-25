@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -39,6 +40,20 @@ public class Hunger extends Buff implements Hero.Doom {
 	public static final float HUNGRY	= 500f; //300
 	public static final float STARVING	= 700f; //450
 
+    public float hungryThreshold() {
+        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
+            return 300f;
+        }
+        return HUNGRY;
+    }
+
+    public float starvingThreshold() {
+        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
+            return STARVING * 450f;
+        }
+        return STARVING;
+    }
+
 	private float level;
 	private float partialDamage;
 
@@ -47,6 +62,7 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
+
 		super.storeInBundle(bundle);
 		bundle.put( LEVEL, level );
 		bundle.put( PARTIALDAMAGE, partialDamage );
@@ -92,15 +108,15 @@ public class Hunger extends Buff implements Hero.Doom {
 				hungerDelay /= SaltCube.hungerGainMultiplier();
 
 				float newLevel = level + (1f/hungerDelay);
-				if (newLevel >= STARVING) {
+				if (newLevel >= starvingThreshold()) {
 
 					GLog.n( Messages.get(this, "onstarving") );
 					hero.damage( 1, this );
 
 					hero.interrupt();
-					newLevel = STARVING;
+					newLevel = starvingThreshold();
 
-				} else if (newLevel >= HUNGRY && level < HUNGRY) {
+				} else if (newLevel >= hungryThreshold() && level < hungryThreshold()) {
 
 					GLog.w( Messages.get(this, "onhungry") );
 
@@ -127,64 +143,68 @@ public class Hunger extends Buff implements Hero.Doom {
 	public void satisfy( float energy ) {
 
         //affectHunger( energy, false ); // old one
-        level -= energy * 1.6f;
+        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
+            level -= energy;
+        } else {
+            level -= energy * 1.6f;
+        }
 	}
 
 	public void affectHunger(float energy ){
 		affectHunger( energy, false );
 	}
 
-	public void affectHunger(float energy, boolean overrideLimits ) {
+    public void affectHunger(float energy, boolean overrideLimits ) {
+        if (energy < 0 && target.buff(WellFed.class) != null){
+            target.buff(WellFed.class).left += energy;
+            BuffIndicator.refreshHero();
+            return;
+        }
 
-		if (energy < 0 && target.buff(WellFed.class) != null){
-			target.buff(WellFed.class).left += energy;
-			BuffIndicator.refreshHero();
-			return;
-		}
+        float oldLevel = level;
+        level -= energy;
 
-		float oldLevel = level;
+        if (level < 0 && !overrideLimits) {
+            level = 0;
+        } else if (level > starvingThreshold()) {
+            float excess = level - starvingThreshold(); // Use dynamic threshold
+            level = starvingThreshold();
+            partialDamage += excess * (target.HT/1000f);
+            if (partialDamage > 1f){
+                target.damage( (int)partialDamage, this );
+                partialDamage -= (int)partialDamage;
+            }
+        }
 
-		level -= energy;
-		if (level < 0 && !overrideLimits) {
-			level = 0;
-		} else if (level > STARVING) {
-			float excess = level - STARVING;
-			level = STARVING;
-			partialDamage += excess * (target.HT/1000f);
-			if (partialDamage > 1f){
-				target.damage( (int)partialDamage, this );
-				partialDamage -= (int)partialDamage;
-			}
-		}
+        // Use dynamic thresholds for state changes
+        if (oldLevel < hungryThreshold() && level >= hungryThreshold()){
+            GLog.w( Messages.get(this, "onhungry") );
+        } else if (oldLevel < starvingThreshold() && level >= starvingThreshold()){
+            GLog.n( Messages.get(this, "onstarving") );
+            target.damage( 1, this );
+        }
 
-		if (oldLevel < HUNGRY && level >= HUNGRY){
-			GLog.w( Messages.get(this, "onhungry") );
-		} else if (oldLevel < STARVING && level >= STARVING){
-			GLog.n( Messages.get(this, "onstarving") );
-			target.damage( 1, this );
-		}
+        BuffIndicator.refreshHero();
+    }
 
-		BuffIndicator.refreshHero();
-	}
-
-	public boolean isStarving() {
-		return level >= STARVING;
-	}
+    public boolean isStarving() {
+        return level >= starvingThreshold(); // Use dynamic threshold
+    }
 
 	public int hunger() {
 		return (int)Math.ceil(level);
 	}
 
-	@Override
-	public int icon() {
-		if (level < HUNGRY) {
-			return BuffIndicator.NONE;
-		} else if (level < STARVING) {
-			return BuffIndicator.HUNGER;
-		} else {
-			return BuffIndicator.STARVATION;
-		}
-	}
+    @Override
+    public int icon() {
+        if (level < hungryThreshold()) { // Use dynamic threshold
+            return BuffIndicator.NONE;
+        } else if (level < starvingThreshold()) { // Use dynamic threshold
+            return BuffIndicator.HUNGER;
+        } else {
+            return BuffIndicator.STARVATION;
+        }
+    }
 
 	@Override
 	public String name() {

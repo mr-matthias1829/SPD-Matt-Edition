@@ -671,12 +671,22 @@ public class Armor extends EquipableItem {
 			//30% chance to be cursed (now 40%)
 			//15% chance to be inscribed (now 5%)
 			float effectRoll = Random.Float();
-			if (effectRoll < 0.4f * ParchmentScrap.curseChanceMultiplier()) {
-				inscribe(Glyph.randomCurse());
-				cursed = true;
-			} else if (effectRoll >= 1f - (0.05f * ParchmentScrap.enchantChanceMultiplier())){
-				inscribe();
-			}
+
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
+            if (effectRoll < 0.99f * ParchmentScrap.curseChanceMultiplier()) {
+                inscribe(Glyph.randomCurse());
+                cursed = true;
+            } else if (effectRoll >= 1f - (0.01f * ParchmentScrap.enchantChanceMultiplier())) {
+                inscribe();
+            }
+        } else {
+            if (effectRoll < 0.4f * ParchmentScrap.curseChanceMultiplier()) {
+                inscribe(Glyph.randomCurse());
+                cursed = true;
+            } else if (effectRoll >= 1f - (0.05f * ParchmentScrap.enchantChanceMultiplier())) {
+                inscribe();
+            }
+        }
 
 		Random.popGenerator();
 

@@ -23,6 +23,9 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 
 public class Challenges {
 
@@ -37,7 +40,10 @@ public class Challenges {
 	public static final int CHAMPION_ENEMIES	= 128;
 	public static final int STRONGER_BOSSES 	= 256;
 
-	public static final int MAX_VALUE           = 511;
+    public static final int BACK_TO_ORIGINS    = 512; // Next power of 2
+    public static final int I_HATE_MYSELF           = 1024;
+
+	public static final int MAX_VALUE           = 2047;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -48,11 +54,17 @@ public class Challenges {
 			"no_herbalism",
 			"swarm_intelligence",
 			"darkness",
-			"no_scrolls"
+			"no_scrolls",
+            "back_to_origins",
+            "i_hate_myself"
 	};
 
 	public static final int[] MASKS = {
-			CHAMPION_ENEMIES, STRONGER_BOSSES, NO_FOOD, NO_ARMOR, NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS, NO_SCROLLS
+			CHAMPION_ENEMIES, STRONGER_BOSSES, NO_FOOD, NO_ARMOR,
+            NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS,
+            NO_SCROLLS,
+
+            BACK_TO_ORIGINS, I_HATE_MYSELF
 	};
 
 	public static int activeChallenges(){
@@ -68,6 +80,19 @@ public class Challenges {
 		if (Dungeon.isChallenged(NO_HERBALISM) && item instanceof Dewdrop){
 			return true;
 		}
+
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof Dewdrop) {
+            return true;
+        }
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof Stylus) {
+            return true;
+        }
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && (item instanceof ScrollOfIdentify)) {
+            return true;
+        }
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof Pasty) {
+            return true;
+        }
 
 		return false;
 

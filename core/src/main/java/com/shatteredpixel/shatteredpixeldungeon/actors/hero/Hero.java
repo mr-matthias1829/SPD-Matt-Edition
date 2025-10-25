@@ -21,14 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -232,6 +225,7 @@ public class Hero extends Char {
 	
 	public int HTBoost = 0;
     public boolean cheating = false;
+    public int baseHP = 30;
 	
 	private ArrayList<Mob> visibleEnemies;
 
@@ -244,15 +238,23 @@ public class Hero extends Char {
 
         if (SPDSettings.cheatMode()){
             HT = HP = 999030;
+            baseHP = HT;
             STR = 50;
             cheating = true;
         }
-        else {
-            HP = HT = 30; //20
+        else if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)){
+            HP = HT = 20;
+            baseHP = 20;
             STR = STARTING_STR;
             cheating = false;
         }
-		
+        else {
+            HP = HT = 30; //20
+            baseHP = 30;
+            STR = STARTING_STR;
+            cheating = false;
+        }
+
 		belongings = new Belongings( this );
 		
 		visibleEnemies = new ArrayList<>();
@@ -261,13 +263,9 @@ public class Hero extends Char {
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
 
-        if (cheating){
-            HT = 999030 + 5 * (lvl - 1) + HTBoost;
-        } else {
-            HT = 30 + 5 * (lvl - 1) + HTBoost; //20 + 5*(lvl-1)
+            HT = baseHP + 5 * (lvl - 1) + HTBoost; //20 + 5*(lvl-1)
             float multiplier = RingOfMight.HTMultiplier(this);
             HT = Math.round(multiplier * HT);
-        }
 		
 		if (buff(ElixirOfMight.HTBoost.class) != null){
 			HT += buff(ElixirOfMight.HTBoost.class).boost();

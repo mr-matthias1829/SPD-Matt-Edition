@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -270,11 +271,19 @@ public class Ring extends KindofMisc {
 		level(n);
 		
 		//50% chance to be cursed (used to be 30%)
-		if (Random.Float() < 0.5f) {
-			cursed = true;
-		}
-		
-		return this;
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
+            if (Random.Float() < 0.99f) {
+                cursed = true;
+            }
+
+            return this;
+        } else {
+            if (Random.Float() < 0.5f) {
+                cursed = true;
+            }
+
+            return this;
+        }
 	}
 	
 	public static HashSet<Class<? extends Ring>> getKnown() {

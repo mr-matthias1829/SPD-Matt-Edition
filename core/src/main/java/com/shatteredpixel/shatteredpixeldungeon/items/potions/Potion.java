@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -367,9 +368,11 @@ public class Potion extends Item {
 	public Item identify( boolean byHero ) {
 		super.identify(byHero);
 
-		if (!isKnown()) {
-			setKnown();
-		}
+        if (!Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && byHero) {
+            if (!isKnown()) {
+                setKnown();
+            }
+        }
 		return this;
 	}
 	
