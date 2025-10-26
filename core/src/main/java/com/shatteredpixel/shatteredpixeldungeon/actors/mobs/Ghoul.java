@@ -104,7 +104,7 @@ public class Ghoul extends Mob {
 	@Override
 	protected boolean act() {
 		//create a child
-		if (partnerID == -1){
+        if (partnerID == -1 && !(this instanceof SpiritualNecromancer.GhoulFromNecro)) {
 			
 			ArrayList<Integer> candidates = new ArrayList<>();
 			
@@ -374,4 +374,8 @@ public class Ghoul extends Mob {
 			return null;
 		}
 	}
+
+    protected void teleportSpend(){
+        spend(TICK);
+    }
 }

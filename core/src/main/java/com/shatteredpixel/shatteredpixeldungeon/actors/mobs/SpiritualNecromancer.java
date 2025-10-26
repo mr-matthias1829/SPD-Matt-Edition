@@ -36,30 +36,31 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.NecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.SpiritualNecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.watabou.utils.BArray;
 
 import java.util.ArrayList;
 
-public class Necromancer extends Mob {
+public class SpiritualNecromancer extends Mob {
 
     {
-        spriteClass = NecromancerSprite.class;
+        spriteClass = SpiritualNecromancerSprite.class;
 
-        HP = HT = 20; //40
-        defenseSkill = 14;
+        HP = HT = 35;
+        defenseSkill = 22;
 
-        EXP = 7;
-        maxLvl = 14;
+        EXP = 3;
+        maxLvl = 20;
 
         loot = PotionOfHealing.class;
-        lootChance = 0.2f; //see lootChance()
+        lootChance = 0.15f;
 
+        properties.add(Property.INORGANIC);
         properties.add(Property.UNDEAD);
 
         HUNTING = new Hunting();
@@ -70,7 +71,7 @@ public class Necromancer extends Mob {
 
     protected boolean firstSummon = true;
 
-    protected ArrayList<NecroSkeleton> mySkeletons = new ArrayList<>();
+    protected ArrayList<Ghoul> mySkeletons = new ArrayList<>();
     protected ArrayList<Integer> storedSkeletonIDs = new ArrayList<>();
     private int maxSkeletons = 4; // Change this number for more skeletons!
 
@@ -78,7 +79,7 @@ public class Necromancer extends Mob {
     protected boolean act() {
         if (summoning && state != HUNTING){
             summoning = false;
-            if (sprite instanceof NecromancerSprite) ((NecromancerSprite) sprite).cancelSummoning();
+            if (sprite instanceof SpiritualNecromancerSprite) ((SpiritualNecromancerSprite) sprite).cancelSummoning();
         }
         return super.act();
     }
@@ -87,7 +88,7 @@ public class Necromancer extends Mob {
     public void aggro(Char ch) {
         super.aggro(ch);
         // Update for multiple skeletons
-        for (NecroSkeleton skeleton : mySkeletons) {
+        for (Ghoul skeleton : mySkeletons) {
             if (skeleton != null && skeleton.isAlive()
                     && Dungeon.level.mobs.contains(skeleton)
                     && skeleton.alignment == alignment){
@@ -115,7 +116,7 @@ public class Necromancer extends Mob {
     @Override
     public void die(Object cause) {
         // Kill all skeletons when necromancer dies
-        for (NecroSkeleton skeleton : mySkeletons) {
+        for (Ghoul skeleton : mySkeletons) {
             if (skeleton != null && skeleton.isAlive()) {
                 skeleton.die(null);
             }
@@ -147,7 +148,7 @@ public class Necromancer extends Mob {
 
         // Store skeleton IDs
         ArrayList<Integer> skeletonIDs = new ArrayList<>();
-        for (NecroSkeleton skeleton : mySkeletons) {
+        for (Ghoul skeleton : mySkeletons) {
             if (skeleton != null) {
                 skeletonIDs.add(skeleton.id());
             }
@@ -185,8 +186,8 @@ public class Necromancer extends Mob {
 
     public void onZapComplete(){
         // Heal/buff the most damaged skeleton
-        NecroSkeleton targetSkeleton = null;
-        for (NecroSkeleton skeleton : mySkeletons) {
+        Ghoul targetSkeleton = null;
+        for (Ghoul skeleton : mySkeletons) {
             if (skeleton != null && skeleton.isAlive() && skeleton.sprite != null) {
                 if (targetSkeleton == null || skeleton.HP < targetSkeleton.HP) {
                     targetSkeleton = skeleton;
@@ -249,7 +250,7 @@ public class Necromancer extends Mob {
             } else {
                 Char blocker = Actor.findChar(summoningPos);
                 if (blocker.alignment != alignment){
-                    blocker.damage( Random.NormalIntRange(2, 10), new SummoningBlockDamage() );
+                    blocker.damage( Random.NormalIntRange(2, 10), new Necromancer.SummoningBlockDamage() );
                     if (blocker == Dungeon.hero && !blocker.isAlive()){
                         Badges.validateDeathFromEnemyMagic();
                         Dungeon.fail(this);
@@ -263,12 +264,12 @@ public class Necromancer extends Mob {
 
         summoning = firstSummon = false;
 
-        NecroSkeleton newSkeleton = new NecroSkeleton();
+        Ghoul newSkeleton = new GhoulFromNecro();
         newSkeleton.pos = summoningPos;
         GameScene.add( newSkeleton );
         Dungeon.level.occupyCell( newSkeleton );
         mySkeletons.add(newSkeleton);
-        ((NecromancerSprite)sprite).finishSummoning();
+        ((SpiritualNecromancerSprite)sprite).finishSummoning();
 
         for (Buff b : buffs()){
             if (b.revivePersists) {
@@ -294,8 +295,8 @@ public class Necromancer extends Mob {
                 ArrayList<Integer> toRemove = new ArrayList<>();
                 for (int id : storedSkeletonIDs) {
                     Actor ch = Actor.findById(id);
-                    if (ch instanceof NecroSkeleton) {
-                        mySkeletons.add((NecroSkeleton) ch);
+                    if (ch instanceof Ghoul) {
+                        mySkeletons.add((Ghoul) ch);
                         toRemove.add(id);
                     }
                 }
@@ -308,8 +309,8 @@ public class Necromancer extends Mob {
             }
 
             // Clean up dead skeletons
-            ArrayList<NecroSkeleton> toRemove = new ArrayList<>();
-            for (NecroSkeleton skeleton : mySkeletons) {
+            ArrayList<Ghoul> toRemove = new ArrayList<>();
+            for (Ghoul skeleton : mySkeletons) {
                 if (skeleton == null || !skeleton.isAlive()
                         || !Dungeon.level.mobs.contains(skeleton)
                         || skeleton.alignment != alignment) {
@@ -332,7 +333,7 @@ public class Necromancer extends Mob {
                     if (Actor.findChar(enemy.pos+c) == null
                             && PathFinder.distance[enemy.pos+c] != Integer.MAX_VALUE
                             && Dungeon.level.passable[enemy.pos+c]
-                            && (!hasProp(Necromancer.this, Property.LARGE) || Dungeon.level.openSpace[enemy.pos+c])
+                            && (!hasProp(SpiritualNecromancer.this, Property.LARGE) || Dungeon.level.openSpace[enemy.pos+c])
                             && fieldOfView[enemy.pos+c]
                             && Dungeon.level.trueDistance(pos, enemy.pos+c) < Dungeon.level.trueDistance(pos, summoningPos)){
                         summoningPos = enemy.pos+c;
@@ -361,8 +362,8 @@ public class Necromancer extends Mob {
                 spend(TICK);
 
                 // Find a skeleton that needs healing/buffing
-                NecroSkeleton targetSkeleton = null;
-                for (NecroSkeleton skeleton : mySkeletons) {
+                Ghoul targetSkeleton = null;
+                for (Ghoul skeleton : mySkeletons) {
                     if (skeleton != null && skeleton.isAlive()) {
                         if (skeleton.HP < skeleton.HT || skeleton.buff(Adrenaline.class) == null) {
                             targetSkeleton = skeleton;
@@ -422,42 +423,12 @@ public class Necromancer extends Mob {
         }
     }
 
-    public static class NecroSkeleton extends Skeleton {
-
-        {
-            state = WANDERING;
-
-            spriteClass = NecroSkeletonSprite.class;
-
-            //no loot or exp
-            maxLvl = -5;
-
-            //20/25 health to start
-            HP = 20;
-        }
+    public class GhoulFromNecro extends Ghoul {
 
         @Override
-        public float spawningWeight() {
-            return 0;
+        protected boolean act() {
+            // disable automatic child spawning
+            return super.act(); // will still do normal Ghoul behavior except spawning children
         }
-
-        private void teleportSpend(){
-            spend(TICK);
-        }
-
-        public static class NecroSkeletonSprite extends SkeletonSprite{
-
-            public NecroSkeletonSprite(){
-                super();
-                brightness(0.75f);
-            }
-
-            @Override
-            public void resetColor() {
-                super.resetColor();
-                brightness(0.75f);
-            }
-        }
-
     }
 }
