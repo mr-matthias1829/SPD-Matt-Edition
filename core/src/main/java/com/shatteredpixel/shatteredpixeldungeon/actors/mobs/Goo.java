@@ -65,7 +65,10 @@ public class Goo extends Mob {
     private int healInc = 1;
     private boolean gooplingsSpawnedThisAttack = false;
     private int turnsUntilSpawn = 0;
-    private static final int SPAWN_COOLDOWN = 8; // Spawn gooplings every 5 turns
+
+
+    private static final int SPAWN_COOLDOWN = 10; //8
+    private static final int MAX_GOOPLINGS = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 12 : 8;
 
     @Override
     public boolean act() {
@@ -290,7 +293,27 @@ public class Goo extends Mob {
     }
 
     private void spawnGooplings(int count) {
-        for (int i = 0; i < count; i++) {
+
+        // Count existing gooplings on the map
+        int existing = 0;
+        for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+            if (mob instanceof Goopling) existing++;
+        }
+
+        // If already at max, stop spawning
+        if (existing >= MAX_GOOPLINGS) {
+            if (Dungeon.level.heroFOV[pos]) {
+                GLog.i(Messages.get(this, "too_many_gooplings"));
+            }
+            return;
+        }
+
+        // Calculate how many we can still spawn
+        int allowed = Math.min(count, MAX_GOOPLINGS - existing);
+
+
+
+        for (int i = 0; i < allowed; i++) {
             int ofs;
             int attempts = 0;
 
@@ -300,16 +323,12 @@ public class Goo extends Mob {
                 attempts++;
             } while (attempts < 10 && (!Dungeon.level.passable[pos + ofs] || Actor.findChar(pos + ofs) != null));
 
-            // final validation
             if (!Dungeon.level.passable[pos + ofs] || Actor.findChar(pos + ofs) != null) {
-                // couldn't find a free tile for this spawn, skip it
                 continue;
             }
 
             Goopling g = new Goopling();
             g.pos = pos + ofs;
-
-            // add the mob to the scene / actor list
             GameScene.add(g);
         }
     }

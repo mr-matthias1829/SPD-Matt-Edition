@@ -21,12 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooplingSprite;
 import com.watabou.utils.Random;
 
@@ -35,8 +35,10 @@ public class Goopling extends Mob {
 	{
 		spriteClass = GooplingSprite.class;
 		
-		HP = HT = 12;
+		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 12 : 9; //12
 		defenseSkill = 5;
+
+        properties.add(Property.ACIDIC);
 		
 		EXP = 0;
 		maxLvl = 1;
@@ -44,17 +46,30 @@ public class Goopling extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 3 );
+        if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+            return Random.NormalIntRange( 2, 5 );
+        }
+        return Random.NormalIntRange( 2, 4 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
 		return 12;
 	}
+
+    @Override
+    public int attackProc( Char enemy, int damage ) {
+        if (Random.Int( 10 ) == 0) {
+            Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
+            enemy.sprite.burst( 0x000000, 5 );
+        }
+
+        return super.attackProc( enemy, damage );
+    }
 	
 	@Override
 	public void damage(int dmg, Object src) {
-        int DMGRDC = 3;
+        int DMGRDC = 2;
 
 		float scaleFactor = AscensionChallenge.statModifier(this);
 		int scaledDmg = Math.round(dmg/scaleFactor);

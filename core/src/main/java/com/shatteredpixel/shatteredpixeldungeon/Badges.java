@@ -248,6 +248,16 @@ public class Badges {
 	
 	private static boolean saveNeeded = false;
 
+
+    private static boolean badgesDisabled = false;
+    public static boolean badgesDisabled() {
+        return badgesDisabled;
+    }
+
+    public static void setBadgesDisabled(boolean disabled) {
+        badgesDisabled = disabled;
+    }
+
 	public static void reset() {
 		local.clear();
 		loadGlobal();
@@ -1160,6 +1170,8 @@ public class Badges {
 	
 	private static void displayBadge( Badge badge ) {
 
+        if (badgesDisabled) return;
+
 		if (badge == null || (badge.type != BadgeType.JOURNAL && !Dungeon.customSeedText.isEmpty())) {
 			return;
 		}
@@ -1197,6 +1209,8 @@ public class Badges {
 	}
 	
 	public static void unlock( Badge badge ){
+        if (badgesDisabled) return;
+
 		if (!isUnlocked(badge) && (badge.type == BadgeType.JOURNAL || Dungeon.customSeedText.isEmpty())){
 			global.add( badge );
 			saveNeeded = true;

@@ -158,7 +158,7 @@ public class MobSpawner extends Actor {
 						DM200.class,
                         FetidRat.class));
 			case 14: case 15:
-				//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-300 + 1x gnoll trickster
+				//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-200 + 1x gnoll trickster
 				return new ArrayList<>(Arrays.asList(
 						Bat.class,
 						Brute.class,
@@ -235,23 +235,30 @@ public class MobSpawner extends Actor {
 			// Sewers
 			default:
 				return;
-			case 4:
-				if (Random.Float() < 0.025f) rotation.add(Thief.class);
-				return;
+            case 2:
+            case 3:
+                if (Random.Float() < 0.02f) rotation.add(GnollMyth.class);
+                return;
+            case 4:
+                if (Random.Float() < 0.1f) { // 0.025f
+                    rotation.add(DM100.class);
+                }
+                if (Random.Float() < 0.02f)  rotation.add(GnollMyth.class); // 0.025f
+                return;
 
 			// Prison
 			case 9:
-				if (Random.Float() < 0.025f) rotation.add(Bat.class);
+				if (Random.Float() < 0.1f) rotation.add(Bat.class); // 0.025f
 				return;
 
 			// Caves
 			case 14:
-				if (Random.Float() < 0.025f) rotation.add(Ghoul.class);
+				if (Random.Float() < 0.1f) rotation.add(Ghoul.class); // 0.025f
 				return;
 
 			// City
 			case 19:
-				if (Random.Float() < 0.025f) rotation.add(Succubus.class);
+				if (Random.Float() < 0.1f) rotation.add(Succubus.class); // 0.025f
 				return;
 		}
 	}

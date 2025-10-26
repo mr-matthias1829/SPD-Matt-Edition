@@ -239,8 +239,10 @@ public class Hero extends Char {
         if (SPDSettings.cheatMode()){
             HT = HP = 999030;
             baseHP = HT;
-            STR = 50;
+            STR = 12;
             cheating = true;
+            Badges.setBadgesDisabled(true);
+            Dungeon.rankable = false;
         }
         else if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)){
             HP = HT = 20;

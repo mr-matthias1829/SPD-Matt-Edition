@@ -107,24 +107,37 @@ public class DemonSpawner extends Mob {
 			}
 
 			if (!candidates.isEmpty()) {
-				RipperDemon spawn = new RipperDemon();
+                Mob spawn = null; // declare it first
 
-				spawn.pos = Random.element( candidates );
-				spawn.state = spawn.HUNTING;
+                int types = Math.max(1, Math.min(4, Dungeon.depth - 20)); // clamp 1..4
+                int random = Random.Int(types);
 
-				GameScene.add( spawn, 1 );
-				Dungeon.level.occupyCell(spawn);
+                switch (random) {
+                    case 0: spawn = new RipperDemon(); break;
+                    case 1: spawn = new Succubus();    break;
+                    case 2: spawn = new Eye();         break;
+                    case 3: spawn = new Scorpio();    break;
+                    default: spawn = new RipperDemon(); break; // fallback
+                }
 
-				if (sprite.visible) {
-					Actor.add(new Pushing(spawn, pos, spawn.pos));
-				}
+                // now spawn is guaranteed to exist here
+                if (spawn != null) {
+                    spawn.pos = Random.element(candidates);
+                    spawn.state = spawn.HUNTING;
 
-				spawnCooldown += 60;
-				if (Dungeon.depth > 21){
-					//60/53.33/46.67/40 turns to spawn on floor 21/22/23/24
-					spawnCooldown -= Math.min(20, (Dungeon.depth-21)*6.67);
-				}
-			}
+                    GameScene.add(spawn, 1);
+                    Dungeon.level.occupyCell(spawn);
+
+                    if (sprite.visible) {
+                        Actor.add(new Pushing(spawn, pos, spawn.pos));
+                    }
+
+                    spawnCooldown += 60;
+                    if (Dungeon.depth > 21) {
+                        spawnCooldown -= Math.min(20, (Dungeon.depth - 21) * 6.67);
+                    }
+                }
+            }
 		}
 		alerted = false;
 		return super.act();

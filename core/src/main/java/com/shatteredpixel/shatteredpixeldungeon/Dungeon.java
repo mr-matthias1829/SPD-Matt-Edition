@@ -208,6 +208,8 @@ public class Dungeon {
 
 	public static boolean daily;
 	public static boolean dailyReplay;
+
+    public static boolean rankable;
 	public static String customSeedText = "";
 	public static long seed;
 	public static long lastPlayed;
@@ -265,6 +267,8 @@ public class Dungeon {
 
 		gold = 0;
 		energy = 0;
+
+        rankable = true;
 
 		droppedItems = new SparseArray<>();
 
@@ -615,6 +619,8 @@ public class Dungeon {
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
+
+    private static final String RANKABLE = "rankable";
 	
 	public static void saveGame( int save ) {
 		try {
@@ -684,6 +690,9 @@ public class Dungeon {
 			bundle.put( BADGES, badges );
 			
 			FileUtils.bundleToFile( GamesInProgress.gameFile(save), bundle);
+
+            bundle.put("badgesDisabled", Badges.badgesDisabled());
+            bundle.put(RANKABLE, rankable);
 			
 		} catch (IOException e) {
 			GamesInProgress.setUnknown( save );
@@ -816,7 +825,10 @@ public class Dungeon {
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
 
-	}
+        Badges.setBadgesDisabled(bundle.getBoolean("badgesDisabled"));
+        rankable = bundle.getBoolean(RANKABLE);
+
+    }
 	
 	public static Level loadLevel( int save ) throws IOException {
 		
@@ -867,19 +879,21 @@ public class Dungeon {
 	public static void fail( Object cause ) {
 		if (WndResurrect.instance == null) {
 			updateLevelExplored();
-			Statistics.gameWon = false;
-			Rankings.INSTANCE.submit( false, cause );
+            if (rankable) {
+                Statistics.gameWon = false;
+                Rankings.INSTANCE.submit(false, cause);
+            }
 		}
 	}
 	
 	public static void win( Object cause ) {
 
 		updateLevelExplored();
-		Statistics.gameWon = true;
-
 		hero.belongings.identify();
-
-		Rankings.INSTANCE.submit( true, cause );
+        if (rankable) {
+            Statistics.gameWon = true;
+            Rankings.INSTANCE.submit(true, cause);
+        }
 	}
 
 	public static void updateLevelExplored(){
