@@ -53,7 +53,7 @@ public class DM100 extends Mob implements Callback {
         maxLvl = 13;
 
         loot = Generator.Category.SCROLL;
-        lootChance = 0.4f; //0.25f
+        lootChance = 0.1f; //0.4f //0.25f
 
         properties.add(Property.ELECTRIC);
         properties.add(Property.INORGANIC);
@@ -136,7 +136,7 @@ public class DM100 extends Mob implements Callback {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 3, 10 );
+        return Random.NormalIntRange( 3, 7 ); //3,10
     }
 
     @Override

@@ -55,7 +55,7 @@ public class Guard extends Mob {
 		maxLvl = 14;
 
 		loot = Generator.Category.ARMOR;
-		lootChance = 0.2f; //by default, see lootChance()
+		lootChance = 0.06f; //0.2f //by default, see lootChance()
 
 		properties.add(Property.UNDEAD);
 		
@@ -64,8 +64,8 @@ public class Guard extends Mob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange(4, 12);
-	}
+		return Random.NormalIntRange(5, 14);
+	} //4,12
 
 	private boolean chain(int target){
 		if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE))

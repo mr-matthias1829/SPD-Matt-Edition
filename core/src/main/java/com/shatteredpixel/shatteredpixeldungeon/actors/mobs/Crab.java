@@ -39,13 +39,13 @@ public class Crab extends Mob {
 		maxLvl = 5; //9
 		
 		loot = MysteryMeat.class;
-		lootChance = 0.167f;
+		lootChance = 0.08f; //0.167f;
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 6 );
-	} // 4,10 //1,7
+		return Random.NormalIntRange( 4, 8 ); //2,6 // 4,10 //1,7
+	}
 	
 	@Override
 	public int attackSkill( Char target ) {

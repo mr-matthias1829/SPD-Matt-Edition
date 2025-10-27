@@ -51,7 +51,7 @@ public class Swarm extends Mob {
 		flying = true;
 
 		loot = PotionOfHealing.class;
-		lootChance = 0.1667f; //by default, see lootChance()
+		lootChance = 0.05f; //0.1667f; //by default, see lootChance()
 	}
 	
 	private static final float SPLIT_DELAY	= 1f;

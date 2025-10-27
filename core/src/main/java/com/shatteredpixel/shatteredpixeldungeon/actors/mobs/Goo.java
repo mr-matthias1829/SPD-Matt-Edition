@@ -122,7 +122,7 @@ public class Goo extends Mob {
 
     @Override
     public int damageRoll() {
-        int min = 1;
+        int min = 1; //1
         int max = (HP*2 <= HT) ? 12 : 8;
         if (pumpedUp > 0) {
             //pumpedUp = 0;
@@ -171,7 +171,7 @@ public class Goo extends Mob {
     public int attackProc( Char enemy, int damage ) {
         damage = super.attackProc( enemy, damage );
 
-        if (Random.Int( 3 ) == 0) {
+        if (Random.Int( 4 ) == 0) {
             Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
             enemy.sprite.burst( 0x000000, 5 );
         }

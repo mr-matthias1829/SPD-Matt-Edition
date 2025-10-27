@@ -47,7 +47,7 @@ public class Bandit extends Thief {
 
         HP = HT = 45;
         defenseSkill = 22;
-        baseSpeed = 0.85f;
+        baseSpeed = 1f; // 0.85f
 
         EXP = 3;
         maxLvl = 19;

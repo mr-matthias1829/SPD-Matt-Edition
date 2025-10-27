@@ -263,8 +263,8 @@ public class Mimic extends Mob {
 	}
 	//6 to 12
 	public void adjustStats( int level ) {
-		HP = HT = (1 + level) * 5;// ... *8 // ... *6
-		defenseSkill = 2 + level/2;
+		HP = HT = (5 + level) * 5;// ... *8 // ... *6
+		defenseSkill = 5 + level/2;
 
         baseSpeed = 1.2f; //1.5f //1f
         EXP = 1 + Math.round((float) level /2); //0

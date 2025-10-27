@@ -29,16 +29,20 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StenchGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FetidRatSprite;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static java.lang.Math.round;
 
 public class FetidRat extends Rat {
 
-    private int level;
 
 	{
 		spriteClass = FetidRatSprite.class;
@@ -62,10 +66,10 @@ public class FetidRat extends Rat {
         adjustStats(level);
     }
     public void adjustStats( int level ) {
-        HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
+        HP = HT = (int) (30 * (1+level * 0.65));// was a set value before //36 //20
         defenseSkill = 8 * (1+level); //5
 
-        EXP = (int) (6 * (1+level*0.25)); //4
+        EXP = (int) (3 * (1+level*0.25)); //4
         properties.add(Property.DEMONIC);
 
         if (level == 0) {
@@ -87,7 +91,7 @@ public class FetidRat extends Rat {
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
         //damage = Random.NormalIntRange( 2, 5 ); // inherited before, was 1,4
-        damage = Random.NormalIntRange(2 * (1+level), (int) (5 * (1+level * 1.2)));
+        damage = Random.NormalIntRange(3 * (1+level), (int) (7 * (1+level * 1.2)));
 		if (Random.Int(3) == 0) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 			//score loss is on-hit instead of on-attack because it's tied to ooze
@@ -132,4 +136,20 @@ public class FetidRat extends Rat {
 	{
 		immunities.add( StenchGas.class );
 	}
+
+
+    private int level;
+    private static final String LEVEL	= "level";
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( LEVEL, level );
+    }
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        level = bundle.getInt( LEVEL );
+        adjustStats(level);
+        super.restoreFromBundle(bundle);
+    }
+
 }

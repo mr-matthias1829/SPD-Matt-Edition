@@ -51,10 +51,10 @@ public class Necromancer extends Mob {
     {
         spriteClass = NecromancerSprite.class;
 
-        HP = HT = 20; //40
+        HP = HT = 32;//20 //40
         defenseSkill = 14;
 
-        EXP = 7;
+        EXP = 5; //7
         maxLvl = 14;
 
         loot = PotionOfHealing.class;
@@ -111,6 +111,7 @@ public class Necromancer extends Mob {
         Dungeon.LimitedDrops.NECRO_HP.count++;
         return super.createLoot();
     }
+
 
     @Override
     public void die(Object cause) {
@@ -432,8 +433,15 @@ public class Necromancer extends Mob {
             //no loot or exp
             maxLvl = -5;
 
-            //20/25 health to start
-            HP = 20;
+            //20/25/30 health to start
+            if (Random.Int(2) == 0){
+                HP = HT = 25;
+                if (Random.Int(3) == 0) {
+                    HP = HT = 30;
+                }
+            } else {
+                HP = HT = 20;
+            }
         }
 
         @Override

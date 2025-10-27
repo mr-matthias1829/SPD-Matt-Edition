@@ -45,7 +45,6 @@ public class Thief extends Mob {
 		
 		HP = HT = 32; //25 //20
 		defenseSkill = 12;
-        baseSpeed = 0.75f;
 		
 		EXP = 1; //5
 		maxLvl = 11;
@@ -55,22 +54,50 @@ public class Thief extends Mob {
 
 		WANDERING = new Wandering();
 		FLEEING = new Fleeing();
+        setLevel(Dungeon.scalingDepth());
 
 		properties.add(Property.UNDEAD);
 	}
 
 	private static final String ITEM = "item";
+    private int stealAttempts = 0;
+    private static final String STEALATTEMPTS = "stealattempts";
+    public void setLevel( int depth ){
+        int lvl = 0;
+        if (depth < 5) {
+            lvl = 0;
+        } else {
+            lvl = 2;
+        }
+        this.level = lvl;
+        adjustStats(level);
+    }
+    public void adjustStats( int level ) {
+        if (level >= 5){
+            baseSpeed = 0.9f;
+        }
+        else{
+            baseSpeed = 0.8f; //0.75
+        }
+    }
 
+    private int level;
+    private static final String LEVEL	= "level";
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		bundle.put( ITEM, item );
+        bundle.put( STEALATTEMPTS, stealAttempts );
+        bundle.put( LEVEL, level );
 	}
 
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		item = (Item)bundle.get( ITEM );
+        stealAttempts = bundle.getInt( STEALATTEMPTS );
+        level = bundle.getInt( LEVEL );
+        adjustStats(level);
 	}
 
 	@Override
@@ -81,8 +108,8 @@ public class Thief extends Mob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 10 );
-	}
+		return Random.NormalIntRange( 4, 12 );
+	} //1,10
 
 	@Override
 	public float attackDelay() {
@@ -144,7 +171,6 @@ public class Thief extends Mob {
 		return super.defenseProc(enemy, damage);
 	}
 
-    private int stealAttempts = 0;
     protected boolean steal( Hero hero ) {
 
         if (Random.Int(8) < stealAttempts+1) {

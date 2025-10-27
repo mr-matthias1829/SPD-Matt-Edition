@@ -41,9 +41,6 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class GnollTrickster extends Gnoll {
-
-    private int level;
-
 	{
 		spriteClass = GnollTricksterSprite.class;
 
@@ -188,17 +185,20 @@ public class GnollTrickster extends Gnoll {
 	}
 
 	private static final String COMBO = "combo";
-
-	@Override
-	public void storeInBundle( Bundle bundle ) {
-		super.storeInBundle(bundle);
-		bundle.put(COMBO, combo);
-	}
-
-	@Override
-	public void restoreFromBundle( Bundle bundle ) {
-		super.restoreFromBundle( bundle );
-		combo = bundle.getInt( COMBO );
-	}
+    private int level;
+    private static final String LEVEL	= "level";
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( LEVEL, level );
+        bundle.put(COMBO, combo);
+    }
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        level = bundle.getInt( LEVEL );
+        adjustStats(level);
+        combo = bundle.getInt( COMBO );
+        super.restoreFromBundle(bundle);
+    }
 
 }

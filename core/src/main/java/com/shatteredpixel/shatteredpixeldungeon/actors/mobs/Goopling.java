@@ -59,7 +59,7 @@ public class Goopling extends Mob {
 
     @Override
     public int attackProc( Char enemy, int damage ) {
-        if (Random.Int( 10 ) == 0) {
+        if (Random.Int( 20 ) == 0) {
             Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
             enemy.sprite.burst( 0x000000, 5 );
         }

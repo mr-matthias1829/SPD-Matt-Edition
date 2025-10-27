@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SlimeSprite;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class Slime extends Mob {
@@ -40,14 +41,34 @@ public class Slime extends Mob {
 		
 		EXP = 3; //4
 		maxLvl = 9;
+        level = Dungeon.scalingDepth();
 		
-		lootChance = 0.2f; //by default, see lootChance()
+		lootChance = 0.08f; //0.2f; //by default, see lootChance()
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 5 );
+        int depth = Dungeon.scalingDepth();
+        if (level >= 5){
+            return Random.NormalIntRange(5, 8);
+        } else {
+            return Random.NormalIntRange( 4, 6 ); //2,5
+        }
 	}
+
+    private int level;
+    private static final String LEVEL	= "level";
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( LEVEL, level );
+    }
+
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        super.restoreFromBundle( bundle );
+        level = bundle.getInt( LEVEL );
+    }
 	
 	@Override
 	public int attackSkill( Char target ) {

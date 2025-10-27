@@ -29,11 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -262,8 +258,9 @@ public abstract class Elemental extends Mob {
 			spriteClass = ElementalSprite.NewbornFire.class;
 
 			defenseSkill = 12;
-			
+			HT = HP = 60;
 			properties.add(Property.MINIBOSS);
+            properties.add( Property.FIERY );
 		}
 
 		private int targetingPos = -1;
@@ -360,14 +357,19 @@ public abstract class Elemental extends Mob {
 					if (!Dungeon.level.solid[targetingPos + i]) {
 						CellEmitter.get(targetingPos + i).burst(ElmoParticle.FACTORY, 5);
 						if (Dungeon.level.water[targetingPos + i]) {
-							GameScene.add(Blob.seed(targetingPos + i, 2, Fire.class));
+							GameScene.add(Blob.seed(targetingPos + i, 4, Fire.class)); //2
 						} else {
-							GameScene.add(Blob.seed(targetingPos + i, 8, Fire.class));
+							GameScene.add(Blob.seed(targetingPos + i, 16, Fire.class)); //8
 						}
 
 						Char target = Actor.findChar(targetingPos + i);
 						if (target != null && target != this) {
 							Buff.affect(target, Burning.class).reignite(target);
+
+                            int dmg = damageRoll();
+                            dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
+                            enemy.damage(dmg, new DM100.LightningBolt());
+
 							if (target == Dungeon.hero){
 								Statistics.questScores[1] -= 200;
 							}

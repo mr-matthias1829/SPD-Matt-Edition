@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HermitCrabSprite;
 
@@ -30,7 +31,7 @@ public class HermitCrab extends Crab {
 	{
 		spriteClass = HermitCrabSprite.class;
 
-		HP = HT = 31; // 25
+		HP = HT = 45; //31 // 25
 		baseSpeed = 0.9f; //1
 
 		//3x more likely to drop meat, and drops a guaranteed armor
@@ -50,5 +51,20 @@ public class HermitCrab extends Crab {
 	public int drRoll() {
 		return super.drRoll() + 2; //2-6 DR total, up from 0-4
 	}
+
+    @Override
+    public void damage(int dmg, Object src) {
+        int DMGRDC = 5;
+
+        float scaleFactor = AscensionChallenge.statModifier(this);
+        int scaledDmg = Math.round(dmg/scaleFactor);
+
+        if (scaledDmg >= DMGRDC+1){
+            scaledDmg = DMGRDC + (int)(Math.sqrt((DMGRDC*2)*(scaledDmg - DMGRDC) + 1) - 1)/2;
+        }
+
+        dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
+        super.damage(dmg, src);
+    }
 
 }
