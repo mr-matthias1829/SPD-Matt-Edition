@@ -23,15 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
@@ -43,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -77,8 +70,10 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -95,6 +90,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.List;
 
 public class Dungeon {
 
@@ -178,6 +174,8 @@ public class Dungeon {
 
 	}
 
+    private static int lastEnteredDepth = 1;
+
 	public static int challenges;
 	public static int mobsToChampion;
 
@@ -208,6 +206,9 @@ public class Dungeon {
 
 	public static boolean daily;
 	public static boolean dailyReplay;
+
+
+    public static boolean justEnteredFloor = false;
 
     public static boolean rankable;
 	public static String customSeedText = "";
@@ -262,6 +263,7 @@ public class Dungeon {
 		Toolbar.swappedQuickslots = false;
 		
 		depth = 1;
+        lastEnteredDepth = depth;
 		branch = 0;
 		generatedLevels.clear();
 
@@ -457,62 +459,67 @@ public class Dungeon {
 		}
 		return true;
 	}
-	
-	public static void switchLevel( final Level level, int pos ) {
 
-		//Position of -2 specifically means trying to place the hero the exit
-		if (pos == -2){
-			LevelTransition t = level.getTransition(LevelTransition.Type.REGULAR_EXIT);
-			if (t != null) pos = t.cell();
-		}
 
-		//Place hero at the entrance if they are out of the map (often used for pos = -1)
-		// or if they are in invalid terrain terrain (except in the mining level, where that happens normally)
-		if (pos < 0 || pos >= level.length() || level.invalidHeroPos(pos)){
-			pos = level.getTransition(null).cell();
-		}
-		
-		PathFinder.setMapSize(level.width(), level.height());
-		
-		Dungeon.level = level;
-		hero.pos = pos;
+    public static void switchLevel( final Level level, int pos ) {
 
-		if (hero.buff(AscensionChallenge.class) != null){
-			hero.buff(AscensionChallenge.class).onLevelSwitch();
-		}
+        //Position of -2 specifically means trying to place the hero the exit
+        if (pos == -2){
+            LevelTransition t = level.getTransition(LevelTransition.Type.REGULAR_EXIT);
+            if (t != null) pos = t.cell();
+        }
 
-		Mob.restoreAllies( level, pos );
+        //Place hero at the entrance if they are out of the map (often used for pos = -1)
+        // or if they are in invalid terrain terrain (except in the mining level, where that happens normally)
+        if (pos < 0 || pos >= level.length() || level.invalidHeroPos(pos)){
+            pos = level.getTransition(null).cell();
+        }
 
-		Actor.init();
+        PathFinder.setMapSize(level.width(), level.height());
 
-		level.addRespawner();
-		
-		for(Mob m : level.mobs){
-			if (m.pos == hero.pos && !Char.hasProp(m, Char.Property.IMMOVABLE)){
-				//displace mob
-				for(int i : PathFinder.NEIGHBOURS8){
-					if (Actor.findChar(m.pos+i) == null && level.passable[m.pos + i]){
-						m.pos += i;
-						break;
-					}
-				}
-			}
-		}
-		
-		Light light = hero.buff( Light.class );
-		hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
-		
-		hero.curAction = hero.lastAction = null;
+        Dungeon.level = level;
+        hero.pos = pos;
 
-		observe();
-		try {
-			saveAll();
-		} catch (IOException e) {
-			ShatteredPixelDungeon.reportException(e);
-			/*This only catches IO errors. Yes, this means things can go wrong, and they can go wrong catastrophically.
-			But when they do the user will get a nice 'report this issue' dialogue, and I can fix the bug.*/
-		}
-	}
+        if (hero.buff(AscensionChallenge.class) != null){
+            hero.buff(AscensionChallenge.class).onLevelSwitch();
+        }
+
+        Mob.restoreAllies( level, pos );
+
+        Actor.init();
+
+        level.addRespawner();
+
+        for(Mob m : level.mobs){
+            if (m.pos == hero.pos && !Char.hasProp(m, Char.Property.IMMOVABLE)){
+                //displace mob
+                for(int i : PathFinder.NEIGHBOURS8){
+                    if (Actor.findChar(m.pos+i) == null && level.passable[m.pos + i]){
+                        m.pos += i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        Light light = hero.buff( Light.class );
+        hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
+
+        hero.curAction = hero.lastAction = null;
+
+        // SET THE FLAG - this floor was just entered
+        justEnteredFloor = true;
+
+        observe();
+
+        try {
+            saveAll();
+        } catch (IOException e) {
+            ShatteredPixelDungeon.reportException(e);
+        /*This only catches IO errors. Yes, this means things can go wrong, and they can go wrong catastrophically.
+        But when they do the user will get a nice 'report this issue' dialogue, and I can fix the bug.*/
+        }
+    }
 
 	public static void dropToChasm( Item item ) {
 		int depth = Dungeon.depth + 1;
@@ -585,19 +592,20 @@ public class Dungeon {
 		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(4-depth) == 0;
 	}
 
-	public static boolean labRoomNeeded(){
-		//one laboratory each floor set, in floor 3 or 4, 1/2 chance each floor
-		int region = 1+depth/5;
-		if (region > LimitedDrops.LAB_ROOM.count){
-			int floorThisRegion = depth%5;
-			if (floorThisRegion >= 4 || (floorThisRegion == 3 && Random.Int(2) == 0)){
-				return true;
-			}
-		}
-		return false;
-	}
+	public static boolean labRoomNeeded() {
+        //one laboratory each floor set, in floor 3 or 4, 1/2 chance each floor
+        int region = 1 + depth / 5;
+        if (region > LimitedDrops.LAB_ROOM.count) {
+            int floorThisRegion = depth % 5;
+            if (floorThisRegion >= 4 || (floorThisRegion == 3 && Random.Int(2) == 0)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private static final String INIT_VER	= "init_ver";
+
+    private static final String INIT_VER	= "init_ver";
 	public  static final String VERSION		= "version";
 	private static final String SEED		= "seed";
 	private static final String CUSTOM_SEED	= "custom_seed";
@@ -818,6 +826,7 @@ public class Dungeon {
 		
 		depth = bundle.getInt( DEPTH );
 		branch = bundle.getInt( BRANCH );
+        lastEnteredDepth = depth;
 
 		gold = bundle.getInt( GOLD );
 		energy = bundle.getInt( ENERGY );
@@ -1098,5 +1107,4 @@ public class Dungeon {
 		return step;
 
 	}
-
 }

@@ -153,4 +153,7 @@ public class LevelTransition extends Rect implements Bundlable {
 		destBranch = bundle.getInt(DEST_BRANCH);
 		if (bundle.contains(DEST_TYPE)) destType = bundle.getEnum(DEST_TYPE, Type.class);
 	}
+
+
+
 }

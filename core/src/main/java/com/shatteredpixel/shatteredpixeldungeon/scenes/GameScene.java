@@ -44,13 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Ghoul;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
-import com.shatteredpixel.shatteredpixeldungeon.effects.BannerSprites;
-import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Ripple;
-import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
@@ -1432,26 +1426,51 @@ public class GameScene extends PixelScene {
 			scene.wallBlocking.updateArea( cell, radius );
 		}
 	}
-	
-	public static void afterObserve() {
-		if (scene != null) {
-			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-				if (mob.sprite != null) {
-					if (mob instanceof Mimic && mob.state == mob.PASSIVE && ((Mimic) mob).stealthy() && Dungeon.level.visited[mob.pos]){
-						//mimics stay visible in fog of war after being first seen
-						mob.sprite.visible = true;
-					} else {
-						mob.sprite.visible = Dungeon.level.heroFOV[mob.pos];
-					}
-				}
-				if (mob instanceof Ghoul){
-					for (Ghoul.GhoulLifeLink link : mob.buffs(Ghoul.GhoulLifeLink.class)){
-						link.updateVisibility();
-					}
-				}
-			}
-		}
-	}
+
+    public static void afterObserve() {
+        if (scene != null) {
+            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+                if (mob.sprite != null) {
+                    if (mob instanceof Mimic && mob.state == mob.PASSIVE && ((Mimic) mob).stealthy() && Dungeon.level.visited[mob.pos]){
+                        //mimics stay visible in fog of war after being first seen
+                        mob.sprite.visible = true;
+                    } else {
+                        mob.sprite.visible = Dungeon.level.heroFOV[mob.pos];
+                    }
+                }
+                if (mob instanceof Ghoul){
+                    for (Ghoul.GhoulLifeLink link : mob.buffs(Ghoul.GhoulLifeLink.class)){
+                        link.updateVisibility();
+                    }
+                }
+            }
+
+            // Trigger GUNS_BLAZING challenge effect - ONLY when just entered floor
+            if (Dungeon.justEnteredFloor && Dungeon.isChallenged(Challenges.GUNS_BLAZING)) {
+
+                // Alert all mobs - they have sprites now
+                for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+                    if (mob.sprite != null) {
+                        mob.beckon(Dungeon.hero.pos);
+                    }
+                }
+
+                // Show warning message
+                GLog.w("Enemies are alerted by your noisy arrival!");
+
+                // Play alert sound
+                Sample.INSTANCE.play(Assets.Sounds.ALERT);
+
+                // Visual effect on hero
+                if (Dungeon.hero != null && Dungeon.hero.sprite != null) {
+                    Dungeon.hero.sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.3f, 3);
+                }
+            }
+
+            // Clear the flag so this doesn't trigger again
+            Dungeon.justEnteredFloor = false;
+        }
+    }
 
 	public static void flash( int color ) {
 		flash( color, true);

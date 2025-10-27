@@ -40,10 +40,11 @@ public class Challenges {
 	public static final int CHAMPION_ENEMIES	= 128;
 	public static final int STRONGER_BOSSES 	= 256;
 
-    public static final int BACK_TO_ORIGINS    = 512; // Next power of 2
-    public static final int I_HATE_MYSELF           = 1024;
+    public static final int BACK_TO_ORIGINS     = 512; // Next power of 2
+    public static final int I_HATE_MYSELF       = 1024;
+    public static final int GUNS_BLAZING        = 2048;
 
-	public static final int MAX_VALUE           = 2047;
+	public static final int MAX_VALUE           = 4095;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -56,7 +57,8 @@ public class Challenges {
 			"darkness",
 			"no_scrolls",
             "back_to_origins",
-            "i_hate_myself"
+            "i_hate_myself",
+            "guns_blazing"
 	};
 
 	public static final int[] MASKS = {
@@ -64,7 +66,7 @@ public class Challenges {
             NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS,
             NO_SCROLLS,
 
-            BACK_TO_ORIGINS, I_HATE_MYSELF
+            BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING
 	};
 
 	public static int activeChallenges(){
