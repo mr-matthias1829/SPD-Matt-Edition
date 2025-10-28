@@ -922,13 +922,21 @@ public abstract class Char extends Actor {
 		}
 		
 		//TODO improve this when I have proper damage source logic
-		if (AntiMagic.RESISTS.contains(src.getClass())){
-			dmg -= AntiMagic.drRoll(this, glyphLevel(AntiMagic.class));
-			if (buff(ArcaneArmor.class) != null) {
-				dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
-			}
-			if (dmg < 0) dmg = 0;
-		}
+        if (AntiMagic.RESISTS.contains(src.getClass())){
+            // Apply armor's base magic DR
+            if (this instanceof Hero && ((Hero)this).belongings.armor() != null){
+                Armor armor = ((Hero)this).belongings.armor();
+                dmg -= Random.NormalIntRange(armor.magicDRMin(), armor.magicDRMax());
+            }
+
+            // Apply AntiMagic glyph bonus
+            dmg -= AntiMagic.drRoll(this, glyphLevel(AntiMagic.class));
+
+            if (buff(ArcaneArmor.class) != null) {
+                dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
+            }
+            if (dmg < 0) dmg = 0;
+        }
 		
 		if (buff( Paralysis.class ) != null) {
 			buff( Paralysis.class ).processDamage(dmg);

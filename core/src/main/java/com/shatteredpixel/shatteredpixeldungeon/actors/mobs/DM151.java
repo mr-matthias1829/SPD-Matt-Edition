@@ -19,7 +19,7 @@ public class DM151 extends DM100 implements Callback {
         spriteClass = DM151Sprite.class;
         HP = HT = 24; //15
         baseSpeed = 1f;
-        lootChance = 0.25f;
+        lootChance = 0.15f; //0.25f
 
         WANDERING = new DM151.Wandering();
         state = WANDERING;

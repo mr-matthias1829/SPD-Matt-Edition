@@ -55,7 +55,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 	@Override
 	protected boolean usableOnItem(Item item) {
-		return item.isUpgradable();
+		return item.isUpgradable() && !(item instanceof Wand);
 	}
 
 	@Override

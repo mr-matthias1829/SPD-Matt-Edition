@@ -59,7 +59,6 @@ public class DM100 extends Mob implements Callback {
         properties.add(Property.INORGANIC);
     }
 
-    // SIMPLER APPROACH: Just modify the existing behavior
     @Override
     protected boolean getCloser(int target) {
         // If adjacent to target, move away instead
@@ -136,7 +135,7 @@ public class DM100 extends Mob implements Callback {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 3, 7 ); //3,10
+        return Random.NormalIntRange( 4, 8 );//3,7 //3,10
     }
 
     @Override

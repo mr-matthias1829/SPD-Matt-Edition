@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -99,23 +100,31 @@ public class WndUpgrade extends Window {
 
 		// *** Computing current and next level to display ***
 
-		int levelFrom = toUpgrade.isIdentified() ? toUpgrade.level() : 0;
-		int levelTo = levelFrom + 1;
 
-		if (toUpgrade instanceof Wand && ((Wand) toUpgrade).resinBonus > 0){
-			levelTo--;
-		}
+        boolean curseInfused = (toUpgrade instanceof Weapon && ((Weapon) toUpgrade).curseInfusionBonus)
+                || (toUpgrade instanceof Armor && ((Armor) toUpgrade).curseInfusionBonus)
+                || (toUpgrade instanceof Wand && ((Wand) toUpgrade).curseInfusionBonus);
 
-		boolean curseInfused = (toUpgrade instanceof Weapon && ((Weapon) toUpgrade).curseInfusionBonus)
-				|| (toUpgrade instanceof Armor && ((Armor) toUpgrade).curseInfusionBonus)
-				|| (toUpgrade instanceof Wand && ((Wand) toUpgrade).curseInfusionBonus);
+        int levelFrom, levelTo;
 
-		if (curseInfused){
-			if (toUpgrade.trueLevel()/6 < (toUpgrade.trueLevel()+1)/6){
-				//new level bracket for curse infusion bonus
-				levelTo++;
-			}
-		}
+        if (upgrader instanceof ScrollOfMagicUpgrade && toUpgrade instanceof Armor) {
+            // For magic upgrades, show magic level
+            levelFrom = ((Armor) toUpgrade).magicLevel;
+            levelTo = levelFrom + 1;
+        } else {
+            levelFrom = toUpgrade.isIdentified() ? toUpgrade.level() : 0;
+            levelTo = levelFrom + 1;
+
+            if (toUpgrade instanceof Wand && ((Wand) toUpgrade).resinBonus > 0){
+                levelTo--;
+            }
+
+            if (curseInfused){
+                if (toUpgrade.trueLevel()/6 < (toUpgrade.trueLevel()+1)/6){
+                    levelTo++;
+                }
+            }
+        }
 
 		// *** Sprites, showing item at current level and with +1 ***
 
@@ -214,10 +223,18 @@ public class WndUpgrade extends Window {
 		//blocking (armor and shields)
 		if (toUpgrade instanceof Armor){
 			Armor.Augment aug = ((Armor) toUpgrade).augment;
-			bottom = fillFields(Messages.get(this, "blocking"),
-					((Armor) toUpgrade).DRMin(levelFrom) + "-" + (((Armor) toUpgrade).DRMax(levelFrom)),
-					((Armor) toUpgrade).DRMin(levelTo) + "-" +  (((Armor) toUpgrade).DRMax(levelTo)),
-					bottom);
+            if (upgrader instanceof ScrollOfUpgrade) {
+                bottom = fillFields(Messages.get(this, "blocking_physical"),
+                        ((Armor) toUpgrade).DRMin(levelFrom) + "-" + (((Armor) toUpgrade).DRMax(levelFrom)),
+                        ((Armor) toUpgrade).DRMin(levelTo) + "-" + (((Armor) toUpgrade).DRMax(levelTo)),
+                        bottom);
+
+            } else if (upgrader instanceof ScrollOfMagicUpgrade){
+                bottom = fillFields(Messages.get(this, "blocking_magic"),
+                        ((Armor) toUpgrade).magicDRMin(levelFrom) + "-" + (((Armor) toUpgrade).magicDRMax(levelFrom)),
+                        ((Armor) toUpgrade).magicDRMin(levelTo) + "-" + (((Armor) toUpgrade).magicDRMax(levelTo)),
+                        bottom);
+            }
 		} else if (toUpgrade instanceof RoundShield){
 			bottom = fillFields(Messages.get(this, "blocking"),
 					0 + "-" + ((RoundShield) toUpgrade).DRMax(levelFrom),
@@ -417,33 +434,41 @@ public class WndUpgrade extends Window {
 
 		// *** Buttons for confirming/cancelling ***
 
-		btnUpgrade = new RedButton(Messages.get(this, "upgrade")){
-			@Override
-			protected void onClick() {
-				super.onClick();
+        btnUpgrade = new RedButton(Messages.get(this, "upgrade")){
+            @Override
+            protected void onClick() {
+                super.onClick();
 
-				ScrollOfUpgrade.upgrade(Dungeon.hero);
+                Item upgraded = toUpgrade;
 
-				Item upgraded = toUpgrade;
-				if (upgrader instanceof ScrollOfUpgrade){
-					((ScrollOfUpgrade) upgrader).readAnimation();
-					upgraded = ((ScrollOfUpgrade) upgrader).upgradeItem(toUpgrade);
-					Sample.INSTANCE.play( Assets.Sounds.READ );
-				} else if (upgrader instanceof MagicalInfusion){
-					((MagicalInfusion) upgrader).useAnimation();
-					upgraded = ((MagicalInfusion) upgrader).upgradeItem(toUpgrade);
-				}
+                if (upgrader instanceof ScrollOfUpgrade){
+                    ScrollOfUpgrade.upgrade(Dungeon.hero);
+                    ((ScrollOfUpgrade) upgrader).readAnimation();
+                    upgraded = ((ScrollOfUpgrade) upgrader).upgradeItem(toUpgrade);
+                    Sample.INSTANCE.play( Assets.Sounds.READ );
 
-				if (!force) upgrader.detach(Dungeon.hero.belongings.backpack);
-				Item moreUpgradeItem = Dungeon.hero.belongings.getItem(upgrader.getClass());
+                } else if (upgrader instanceof ScrollOfMagicUpgrade){
+                    ScrollOfMagicUpgrade.magicUpgrade(Dungeon.hero);
+                    ((ScrollOfMagicUpgrade) upgrader).readAnimation();
+                    ((ScrollOfMagicUpgrade) upgrader).upgradeItem(toUpgrade);
+                    // Note: upgraded stays as toUpgrade because we modify in-place
+                    Sample.INSTANCE.play( Assets.Sounds.READ );
 
-				hide();
+                } else if (upgrader instanceof MagicalInfusion){
+                    ((MagicalInfusion) upgrader).useAnimation();
+                    upgraded = ((MagicalInfusion) upgrader).upgradeItem(toUpgrade);
+                }
 
-				if (moreUpgradeItem != null && toUpgrade.isUpgradable()){
-					GameScene.show(new WndUpgrade(moreUpgradeItem, upgraded, false));
-				}
-			}
-		};
+                if (!force) upgrader.detach(Dungeon.hero.belongings.backpack);
+                Item moreUpgradeItem = Dungeon.hero.belongings.getItem(upgrader.getClass());
+
+                hide();
+
+                if (moreUpgradeItem != null && toUpgrade.isUpgradable()){
+                    GameScene.show(new WndUpgrade(moreUpgradeItem, upgraded, false));
+                }
+            }
+        };
 		btnUpgrade.setRect(0, bottom+2*GAP, WIDTH/2f, 16);
 		add(btnUpgrade);
 
@@ -489,7 +514,9 @@ public class WndUpgrade extends Window {
 			((ScrollOfUpgrade) upgrader).reShowSelector(force);
 		} else if (upgrader instanceof MagicalInfusion){
 			((MagicalInfusion)upgrader).reShowSelector();
-		}
+		} else if (upgrader instanceof ScrollOfMagicUpgrade) {
+            ((ScrollOfMagicUpgrade) upgrader).reShowSelector(force);
+        }
 	}
 
 	private float fillFields(String title, String msg1, String msg2, float bottom){

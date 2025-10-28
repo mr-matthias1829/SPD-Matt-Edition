@@ -117,6 +117,8 @@ public class Armor extends EquipableItem {
 	public boolean glyphHardened = false;
 	public boolean curseInfusionBonus = false;
 	public boolean masteryPotionBonus = false;
+
+    public int magicLevel = 0;
 	
 	protected BrokenSeal seal;
 	
@@ -139,6 +141,8 @@ public class Armor extends EquipableItem {
 	private static final String SEAL            = "seal";
 	private static final String AUGMENT			= "augment";
 
+    private static final String MAGIC_LEVEL = "magic_level";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
@@ -150,6 +154,7 @@ public class Armor extends EquipableItem {
 		bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
 		bundle.put( SEAL, seal);
 		bundle.put( AUGMENT, augment);
+        bundle.put( MAGIC_LEVEL, magicLevel );
 	}
 
 	@Override
@@ -162,8 +167,10 @@ public class Armor extends EquipableItem {
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
 		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 		seal = (BrokenSeal)bundle.get(SEAL);
-		
+
 		augment = bundle.getEnum(AUGMENT, Augment.class);
+
+        magicLevel = bundle.getInt( MAGIC_LEVEL );
 	}
 
 	@Override
@@ -376,35 +383,76 @@ public class Armor extends EquipableItem {
 		return DRMax(buffedLvl());
 	}
 
-	public int DRMax(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 1 + tier + lvl + augment.defenseFactor(lvl);
-		}
+    public int DRMax(int lvl){
+        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+            return 1 + tier + lvl + augment.defenseFactor(lvl);
+        }
 
-		int max = tier * (2 + lvl) + augment.defenseFactor(lvl);
-		if (lvl > max){
-			return ((lvl - max)+1)/2;
-		} else {
-			return max;
-		}
-	}
+        // Calculate penalty from magic levels
+        int magicPenalty = (int)(magicLevel * 0.5f); // 50% of what a level would give
+        int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
-	public final int DRMin(){
+        int max = tier * (2 + effectiveLevel) + augment.defenseFactor(effectiveLevel);
+        if (effectiveLevel > max){
+            return ((effectiveLevel - max)+1)/2;
+        } else {
+            return max;
+        }
+    }
+
+
+    public final int DRMin(){
 		return DRMin(buffedLvl());
 	}
 
-	public int DRMin(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 0;
-		}
+    public int DRMin(int lvl){
+        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+            return 0;
+        }
 
-		int max = DRMax(lvl);
-		if (lvl >= max){
-			return (lvl - max);
-		} else {
-			return lvl;
-		}
-	}
+        int magicPenalty = (int)(magicLevel * 0.5f);
+        int effectiveLevel = Math.max(0, lvl - magicPenalty);
+
+        int max = DRMax(lvl);
+        if (effectiveLevel >= max){
+            return (effectiveLevel - max);
+        } else {
+            return effectiveLevel;
+        }
+    }
+
+    public int magicDRMax(int magicLvl){
+        // Calculate penalty from physical levels
+        int physicalPenalty = (int)(level() * 0.5f);
+        int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
+
+        int max = tier * (1 + effectiveMagicLevel);
+        if (effectiveMagicLevel > max){
+            return ((effectiveMagicLevel - max)+1)/2;
+        } else {
+            return max;
+        }
+    }
+
+    public int magicDRMin(int magicLvl){
+        int physicalPenalty = (int)(level() * 0.5f);
+        int effectiveMagicLevel = Math.max(0, (int)((magicLvl - physicalPenalty)/1.5));
+
+        int max = magicDRMax(magicLvl);
+        if (effectiveMagicLevel >= max){
+            return (effectiveMagicLevel - max);
+        } else {
+            return effectiveMagicLevel;
+        }
+    }
+
+    public final int magicDRMax(){
+        return magicDRMax(magicLevel);
+    }
+
+    public final int magicDRMin(){
+        return magicDRMin(magicLevel);
+    }
 
 	//This exists so we can test what a char's base evasion would be without armor affecting it
 	//more ugly static vars yaaay~
@@ -449,6 +497,14 @@ public class Armor extends EquipableItem {
 		if (curseInfusionBonus) level += 1 + level/6;
 		return level;
 	}
+
+    public int getLevel(){
+        return getTrueLevel()/3;
+    }
+
+    public int getTrueLevel(){
+        return level() + magicLevel;
+    }
 	
 	@Override
 	public Item upgrade() {
@@ -579,20 +635,24 @@ public class Armor extends EquipableItem {
 
 		}
 	}
-	
+
 	@Override
 	public String info() {
 		String info = super.info();
-		
+
 		if (levelKnown) {
 
 			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", tier, DRMin(), DRMax(), STRReq());
-			
+
+            info += "\n" + Messages.get(Armor.class, "curr_magic_absorb", magicDRMin(), magicDRMax());
+
 			if (Dungeon.hero != null && STRReq() > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "too_heavy");
 			}
 		} else {
 			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", tier, DRMin(0), DRMax(0), STRReq(0));
+
+            info += "\n" + Messages.get(Armor.class, "avg_magic_absorb", magicDRMin(0), magicDRMax(0));
 
 			if (Dungeon.hero != null && STRReq(0) > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "probably_too_heavy");
@@ -698,16 +758,15 @@ public class Armor extends EquipableItem {
 	}
 
 	public int STRReq(int lvl){
-		int req = STRReq(tier, lvl);
+		int req = STRReq(tier, lvl, magicLevel);
 		if (masteryPotionBonus){
 			req -= 2;
 		}
 		return req;
 	}
 
-	protected static int STRReq(int tier, int lvl){
-		lvl = Math.max(0, lvl);
-
+	protected static int STRReq(int tier, int lvl, int mlvl){
+		lvl = Math.max(0, (lvl + mlvl)/3);
 		//strength req decreases at +1,+3,+6,+10,etc.
 		return (int)((8 + Math.round(tier * 2.5)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2);
 	}
@@ -723,8 +782,8 @@ public class Armor extends EquipableItem {
 		if (cursedKnown && (cursed || hasCurseGlyph())) {
 			price /= 2;
 		}
-		if (levelKnown && level() > 0) {
-			price *= (level() + 1);
+		if (levelKnown && (level() > 0 || magicLevel > 0)) {
+			price *= (int) (((level() + 1) + (magicLevel + 1)) /2);
 		}
 		if (price < 1) {
 			price = 1;

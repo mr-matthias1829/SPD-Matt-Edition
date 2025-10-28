@@ -40,7 +40,7 @@ public class Flow extends Armor.Glyph {
 		if (level == -1 || !Dungeon.level.water[owner.pos]){
 			return 1;
 		} else {
-			return (2f + 0.5f*level) * genericProcChanceMultiplier(owner);
+			return (2f + 0.1f*level) * genericProcChanceMultiplier(owner);
 		}
 	}
 

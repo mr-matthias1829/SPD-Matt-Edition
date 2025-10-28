@@ -129,13 +129,28 @@ public class AntiMagic extends Armor.Glyph {
 		RESISTS.add( YogFist.BrightFist.LightBeam.class );
 		RESISTS.add( YogFist.DarkFist.DarkBolt.class );
 	}
-	
-	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
-		//no proc effect, triggers in Char.damage
-		return damage;
-	}
-	
+
+    public int proc(Armor armor, Char attacker, Char defender, int damage) {
+
+        if (damage <= 1){
+            return damage;
+        }
+        // Only trigger if attacker exists
+        if (attacker != null) {
+
+            // Check if the attack class is in the RESISTS list
+            if (RESISTS.contains(attacker.getClass())) {
+                float procChance = (armor.getLevel()+6f)/(armor.getLevel()+50f) * procChanceMultiplier(defender);
+                if (Random.Float() < procChance) {
+                    defender.sprite.showStatus(TEAL.color,"antimagic!"); // visual feedback
+                    return damage /4; // reduce damage to 25%
+                }
+            }
+        }
+
+        return damage;
+    }
+
 	public static int drRoll( Char owner, int level ){
 		if (level == -1){
 			return 0;
