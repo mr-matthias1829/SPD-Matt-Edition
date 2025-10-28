@@ -606,7 +606,7 @@ public class Generator {
 		}
 	}
 
-	private static final float[][] floorSetTierProbs = new float[][] {
+	public static final float[][] floorSetTierProbs = new float[][] {
 
             {90, 8, 2,  0,  0},
             {50, 40, 7, 3,  0},

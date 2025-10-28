@@ -325,8 +325,8 @@ public class Wandmaker extends NPC {
 
 				given = false;
 				wand1 = (Wand) Generator.random(Generator.Category.WAND);
-				wand1.cursed = false;
-				wand1.upgrade();
+				wand1.cursed = (Random.Int(2) == 0);
+				//wand1.upgrade();
 
 				wand2 = (Wand) Generator.random(Generator.Category.WAND);
 				ArrayList<Item> toUndo = new ArrayList<>();
@@ -337,8 +337,8 @@ public class Wandmaker extends NPC {
 				for (Item i :toUndo){
 					Generator.undoDrop(i);
 				}
-				wand2.cursed = false;
-				wand2.upgrade();
+				wand2.cursed = (Random.Int(2) == 0);
+				//wand2.upgrade();
 				
 			}
 		}

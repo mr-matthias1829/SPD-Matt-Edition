@@ -53,6 +53,7 @@ import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 public class Ghost extends NPC {
@@ -299,7 +300,9 @@ public class Ghost extends NPC {
 				reset();
 			}
 		}
-		
+
+
+        /*
 		public static void spawn( SewerLevel level, Room room ) {
 			if (!spawned && Dungeon.depth > 1 && Random.Int( 5 - Dungeon.depth ) == 0) {
 				
@@ -363,6 +366,70 @@ public class Ghost extends NPC {
 
 			}
 		}
+         */
+
+
+        public static void spawn( SewerLevel level, Room room ) {
+            if (!spawned && Dungeon.depth > 1 && Random.Int( 5 - Dungeon.depth ) == 0) {
+
+                Ghost ghost = new Ghost();
+                do {
+                    ghost.pos = level.pointToCell(room.random());
+                } while (ghost.pos == -1 || level.solid[ghost.pos] || !level.openSpace[ghost.pos] || ghost.pos == level.exit());
+                level.mobs.add( ghost );
+
+                spawned = true;
+                //dungeon depth determines type of quest.
+                //depth2=fetid rat, 3=gnoll trickster, 4=great crab
+                type = Dungeon.depth-1;
+
+                given = false;
+                processed = false;
+                depth = Dungeon.depth;
+
+                // Use Generator's floor set tier probabilities instead of hardcoded values
+                // depth 2-4 corresponds to floorSet 0 (first 5 floors)
+                int floorSet = Dungeon.depth / 5;
+                floorSet = (int) GameMath.gate(0, floorSet, Generator.floorSetTierProbs.length-1);
+
+                // Generate armor using Generator's tier probabilities
+                armor = Generator.randomArmor(floorSet);
+
+                // Generate weapon using Generator's tier probabilities
+                weapon = Generator.randomWeapon(floorSet);
+
+                // Clear weapon's starting properties
+                weapon.level(0);
+                weapon.enchant(null);
+                weapon.cursed = false;
+
+                // Use Weapon/Armor's random() method logic for upgrade level
+                // This matches the standard 75%:+0, 20%:+1, 5%:+2 distribution
+                int n = 0;
+                if (Random.Int(4) == 0) {
+                    n++;
+                    if (Random.Int(5) == 0) {
+                        n++;
+                    }
+                }
+                weapon.upgrade(n);
+                armor.upgrade(n);
+
+                // Use standard enchantment chance from Weapon/Armor random() methods
+                // 20% base chance (10% for weapons in standard drops, but quest can be more generous)
+                // Generate enchantments first so RNG outcome doesn't affect number of rolls
+                enchant = Weapon.Enchantment.random();
+                glyph = Armor.Glyph.random();
+
+                float enchantRoll = Random.Float();
+                // Using 0.2f (20%) instead of standard 0.1f to make quest rewards slightly better
+                if (enchantRoll > 0.1f * ParchmentScrap.enchantChanceMultiplier()){
+                    enchant = null;
+                    glyph = null;
+                }
+
+            }
+        }
 		
 		public static void process() {
 			if (spawned && given && !processed && (depth == Dungeon.depth)) {
