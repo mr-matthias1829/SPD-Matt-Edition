@@ -14,8 +14,8 @@ allprojects {
         appName = 'SPD Matt Edition'
         appPackageName = 'com.DumMatt.ShatteredPixelDungeonMattEdition'
 
-        appVersionCode = 906 // 877 was starting
-        appVersionName = 'SHATTERED-3.2.5---MOD-v1242'
+        appVersionCode = 911 // 877 was starting
+        appVersionName = 'SHATTERED-3.2.5---MOD-v1250'
 
         appJavaCompatibility = JavaVersion.VERSION_11
 
