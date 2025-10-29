@@ -61,7 +61,6 @@ public class SpiritualNecromancer extends Mob {
         lootChance = 0.15f;
 
         properties.add(Property.INORGANIC);
-        properties.add(Property.UNDEAD);
 
         HUNTING = new Hunting();
     }

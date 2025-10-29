@@ -146,7 +146,7 @@ public enum Bestiary {
 
 	static {
         SPECIAL.addEntities(
-                GnollMyth.class, Goopling.class, DM151.class, SpiritualNecromancer.class, DM166.class
+                GnollMyth.class, Goopling.class, DM151.class, SpiritualNecromancer.class, DM166.class, Warden.class
         );
 
 		REGIONAL.addEntities(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class,

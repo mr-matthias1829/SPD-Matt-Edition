@@ -42,153 +42,209 @@ import com.watabou.utils.Random;
 
 public class Guard extends Mob {
 
-	//they can only use their chains once
-	private boolean chainsUsed = false;
+    //they can only use their chains once
+    private boolean chainsUsed = false;
 
-	{
-		spriteClass = GuardSprite.class;
+    {
+        spriteClass = GuardSprite.class;
 
-		HP = HT = 60; //50 //40
-		defenseSkill = 10;
+        HP = HT = 60; //50 //40
+        defenseSkill = 10;
 
-		EXP = 7;
-		maxLvl = 14;
+        EXP = 7;
+        maxLvl = 14;
 
-		loot = Generator.Category.ARMOR;
-		lootChance = 0.06f; //0.2f //by default, see lootChance()
+        loot = Generator.Category.ARMOR;
+        lootChance = 0.06f; //0.2f //by default, see lootChance()
 
-		properties.add(Property.UNDEAD);
-		
-		HUNTING = new Hunting();
-	}
+        properties.add(Property.UNDEAD);
 
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange(5, 14);
-	} //4,12
+        HUNTING = new Hunting();
+    }
 
-	private boolean chain(int target){
-		if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE))
-			return false;
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange(5, 14);
+    } //4,12
 
-		Ballistica chain = new Ballistica(pos, target, Ballistica.PROJECTILE);
+    // --- New: bash special + cooldown ---
+    private int bashCooldown = 0; // counts down every Guard turn
+    private final String BASHCD = "bashcd";
 
-		if (chain.collisionPos != enemy.pos
-				|| chain.path.size() < 2
-				|| Dungeon.level.pit[chain.path.get(1)])
-			return false;
-		else {
-			int newPos = -1;
-			for (int i : chain.subPath(1, chain.dist)){
-				//find the closest position to the guard that's open for the target
-				if (!Dungeon.level.solid[i] && Actor.findChar(i) == null
-						&& (Dungeon.level.openSpace[i] || !Char.hasProp(enemy, Property.LARGE))){
-					newPos = i;
-					break;
-				}
-			}
+    /**
+     * Perform the Bash special:
+     * - stronger melee damage than normal
+     * - applies Cripple to the target
+     * - sets cooldown to 5 turns
+     */
+    private boolean bash( Char enemy ){
+        if (bashCooldown > 0 || enemy == null) return false;
 
-			if (newPos == -1){
-				return false;
-			} else {
-				final int newPosFinal = newPos;
-				this.target = newPos;
+        // stronger damage than normal damageRoll()
+        int dmg = damageRoll()*2;// tweak as needed
 
-				if (sprite.visible || enemy.sprite.visible) {
-					yell(Messages.get(this, "scorpion"));
-					new Item().throwSound();
-					Sample.INSTANCE.play(Assets.Sounds.CHAINS);
-					sprite.parent.add(new Chains(sprite.center(),
-							enemy.sprite.destinationCenter(),
-							Effects.Type.CHAIN,
-							new Callback() {
-						public void call() {
-							Actor.add(new Pushing(enemy, enemy.pos, newPosFinal, new Callback() {
-								public void call() {
-									pullEnemy(enemy, newPosFinal);
-								}
-							}));
-							next();
-						}
-					}));
-				} else {
-					pullEnemy(enemy, newPos);
-				}
-			}
-		}
-		chainsUsed = true;
-		return true;
-	}
+        // play attack animation if visible
+        if (sprite.visible || enemy.sprite.visible) {
+            sprite.attack(enemy.pos);
+            // optionally play a sound here if you have an appropriate Assets.Sounds constant
+            // Sample.INSTANCE.play(Assets.Sounds.SOME_HIT_SOUND);
+        }
 
-	private void pullEnemy( Char enemy, int pullPos ){
-		enemy.pos = pullPos;
-		enemy.sprite.place(pullPos);
-		Dungeon.level.occupyCell(enemy);
-		Cripple.prolong(enemy, Cripple.class, 4f);
-		if (enemy == Dungeon.hero) {
-			Dungeon.hero.interrupt();
-			Dungeon.observe();
-			GameScene.updateFog();
-		} else {
-			enemy.sprite.visible = Dungeon.level.heroFOV[pullPos];
-		}
-	}
+        // apply damage and cripple
+        enemy.damage(dmg, this);
+        Cripple.prolong(enemy, Cripple.class, 2f); // 2f turns style similar to chains
 
-	@Override
-	public int attackSkill( Char target ) {
-		return 12;
-	}
+        // If we banged the hero, interrupt to update UI/fov etc.
+        if (enemy == Dungeon.hero) {
+            Dungeon.hero.interrupt();
+            Dungeon.observe();
+            GameScene.updateFog();
+        } else {
+            enemy.sprite.visible = Dungeon.level.heroFOV[enemy.pos];
+        }
 
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 7);
-	}
+        // set cooldown (5 turns)
+        bashCooldown = 5;
 
-	@Override
-	public float lootChance() {
-		//each drop makes future drops 1/3 as likely
-		// so loot chance looks like: 1/5, 1/15, 1/45, 1/135, etc.
-		return super.lootChance() * (float)Math.pow(1/3f, Dungeon.LimitedDrops.GUARD_ARM.count);
-	}
+        return true;
+    }
+    // --- End bash special ---
 
-	@Override
-	public Item createLoot() {
-		Dungeon.LimitedDrops.GUARD_ARM.count++;
-		return super.createLoot();
-	}
+    private boolean chain(int target){
+        if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE))
+            return false;
 
-	private final String CHAINSUSED = "chainsused";
+        Ballistica chain = new Ballistica(pos, target, Ballistica.PROJECTILE);
 
-	@Override
-	public void storeInBundle(Bundle bundle) {
-		super.storeInBundle(bundle);
-		bundle.put(CHAINSUSED, chainsUsed);
-	}
+        if (chain.collisionPos != enemy.pos
+                || chain.path.size() < 2
+                || Dungeon.level.pit[chain.path.get(1)])
+            return false;
+        else {
+            int newPos = -1;
+            for (int i : chain.subPath(1, chain.dist)){
+                //find the closest position to the guard that's open for the target
+                if (!Dungeon.level.solid[i] && Actor.findChar(i) == null
+                        && (Dungeon.level.openSpace[i] || !Char.hasProp(enemy, Property.LARGE))){
+                    newPos = i;
+                    break;
+                }
+            }
 
-	@Override
-	public void restoreFromBundle(Bundle bundle) {
-		super.restoreFromBundle(bundle);
-		chainsUsed = bundle.getBoolean(CHAINSUSED);
-	}
-	
-	private class Hunting extends Mob.Hunting{
-		@Override
-		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
-			enemySeen = enemyInFOV;
-			
-			if (!chainsUsed
-					&& enemyInFOV
-					&& !isCharmedBy( enemy )
-					&& !canAttack( enemy )
-					&& Dungeon.level.distance( pos, enemy.pos ) < 5
+            if (newPos == -1){
+                return false;
+            } else {
+                final int newPosFinal = newPos;
+                this.target = newPos;
 
-					
-					&& chain(enemy.pos)){
-				return !(sprite.visible || enemy.sprite.visible);
-			} else {
-				return super.act( enemyInFOV, justAlerted );
-			}
-			
-		}
-	}
+                if (sprite.visible || enemy.sprite.visible) {
+                    yell(Messages.get(this, "scorpion"));
+                    new Item().throwSound();
+                    Sample.INSTANCE.play(Assets.Sounds.CHAINS);
+                    sprite.parent.add(new Chains(sprite.center(),
+                            enemy.sprite.destinationCenter(),
+                            Effects.Type.CHAIN,
+                            new Callback() {
+                                public void call() {
+                                    Actor.add(new Pushing(enemy, enemy.pos, newPosFinal, new Callback() {
+                                        public void call() {
+                                            pullEnemy(enemy, newPosFinal);
+                                        }
+                                    }));
+                                    next();
+                                }
+                            }));
+                } else {
+                    pullEnemy(enemy, newPos);
+                }
+            }
+        }
+        chainsUsed = true;
+        return true;
+    }
+
+    private void pullEnemy( Char enemy, int pullPos ){
+        enemy.pos = pullPos;
+        enemy.sprite.place(pullPos);
+        Dungeon.level.occupyCell(enemy);
+        Cripple.prolong(enemy, Cripple.class, 4f);
+        if (enemy == Dungeon.hero) {
+            Dungeon.hero.interrupt();
+            Dungeon.observe();
+            GameScene.updateFog();
+        } else {
+            enemy.sprite.visible = Dungeon.level.heroFOV[pullPos];
+        }
+    }
+
+    @Override
+    public int attackSkill( Char target ) {
+        return 12;
+    }
+
+    @Override
+    public int drRoll() {
+        return super.drRoll() + Random.NormalIntRange(0, 7);
+    }
+
+    @Override
+    public float lootChance() {
+        //each drop makes future drops 1/3 as likely
+        // so loot chance looks like: 1/5, 1/15, 1/45, 1/135, etc.
+        return super.lootChance() * (float)Math.pow(1/3f, Dungeon.LimitedDrops.GUARD_ARM.count);
+    }
+
+    @Override
+    public Item createLoot() {
+        Dungeon.LimitedDrops.GUARD_ARM.count++;
+        return super.createLoot();
+    }
+
+    private final String CHAINSUSED = "chainsused";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(CHAINSUSED, chainsUsed);
+        bundle.put(BASHCD, bashCooldown);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        chainsUsed = bundle.getBoolean(CHAINSUSED);
+        bashCooldown = bundle.getInt(BASHCD);
+    }
+
+    private class Hunting extends Mob.Hunting{
+        @Override
+        public boolean act( boolean enemyInFOV, boolean justAlerted ) {
+            enemySeen = enemyInFOV;
+
+            // decrement bash cooldown at the start of Guard's turn
+            if (bashCooldown > 0) bashCooldown--;
+
+            // Attempt bash if we are adjacent/can attack and cooldown ready
+            if (canAttack(enemy) && !isCharmedBy(enemy) && bashCooldown == 0) {
+                if (bash(enemy)) {
+                    // return true when action occurred; the caller expects truthiness like your chain handling
+                    return !(sprite.visible || enemy.sprite.visible);
+                }
+            }
+
+            // existing chain behaviour (when not able to attack)
+            if (!chainsUsed
+                    && enemyInFOV
+                    && !isCharmedBy( enemy )
+                    && !canAttack( enemy )
+                    && Dungeon.level.distance( pos, enemy.pos ) < 5
+
+                    && chain(enemy.pos)){
+                return !(sprite.visible || enemy.sprite.visible);
+            } else {
+                return super.act( enemyInFOV, justAlerted );
+            }
+
+        }
+    }
 }

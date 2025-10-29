@@ -109,7 +109,8 @@ public class WndUpgrade extends Window {
 
         if (upgrader instanceof ScrollOfMagicUpgrade && toUpgrade instanceof Armor) {
             // For magic upgrades, show magic level
-            levelFrom = ((Armor) toUpgrade).magicLevel;
+            //levelFrom = ((Armor) toUpgrade).magicLevel;
+            levelFrom = toUpgrade.isIdentified() ? ((Armor) toUpgrade).magicLevel : 0;
             levelTo = levelFrom + 1;
         } else {
             levelFrom = toUpgrade.isIdentified() ? toUpgrade.level() : 0;

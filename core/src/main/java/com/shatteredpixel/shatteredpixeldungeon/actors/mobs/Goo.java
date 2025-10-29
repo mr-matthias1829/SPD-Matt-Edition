@@ -53,7 +53,7 @@ public class Goo extends Mob {
     {
         HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 150 : 125;
         EXP = 10;
-        defenseSkill = 8;
+        defenseSkill = 4; //8
         spriteClass = GooSprite.class;
 
         properties.add(Property.BOSS);

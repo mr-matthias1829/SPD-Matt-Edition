@@ -26,7 +26,7 @@ public class DM151 extends DM100 implements Callback {
     }
 
     // custom zap delay (instance-based, not static)
-    protected float TIME_TO_ZAP_151 = 1f / 3f;
+    protected float TIME_TO_ZAP_151 = 1f / 2.25f; //3f
 
     @Override
     protected boolean doAttack(Char enemy) {

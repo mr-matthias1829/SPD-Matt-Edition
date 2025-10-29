@@ -45,12 +45,14 @@ public class ScrollOfMagicUpgrade extends InventoryScroll {
 
     // This method actually performs the magic upgrade
     public void upgradeItem( Item item ){
+        magicUpgrade( curUser );
 
         Degrade.detach( curUser, Degrade.class );
 
         if (item instanceof Armor) {
             Armor a = (Armor) item;
             boolean wasCursed = a.cursed;
+            boolean wasHardened = a.glyphHardened;
             boolean hadCursedGlyph = a.hasCurseGlyph();
             boolean hadGoodGlyph = a.hasGoodGlyph();
 
@@ -70,11 +72,16 @@ public class ScrollOfMagicUpgrade extends InventoryScroll {
                 ScrollOfUpgrade.weakenCurse( Dungeon.hero );
             }
 
-            // Hardening loss chance
-            if (a.glyphHardened && a.magicLevel >= 6 && Random.Float(10) < Math.pow(2, a.magicLevel-6)){
-                a.glyphHardened = false;
-                GLog.w( Messages.get(Armor.class, "hardening_gone") );
-            } else if (hadGoodGlyph && !a.hasGoodGlyph()){
+            // Hardening loss chance - fixed calculation
+            if (wasHardened && a.magicLevel >= 6){
+                int lossChance = 10 * (int)Math.pow(2, a.magicLevel - 6);
+                if (Random.Int(100) < lossChance){
+                    a.glyphHardened = false;
+                    GLog.w( Messages.get(Armor.class, "hardening_gone") );
+                }
+            }
+
+            if (hadGoodGlyph && !a.hasGoodGlyph()){
                 GLog.w( Messages.get(Armor.class, "incompatible") );
             }
 
@@ -104,6 +111,6 @@ public class ScrollOfMagicUpgrade extends InventoryScroll {
 
     @Override
     public int energyVal() {
-        return isKnown() ? 10 * quantity : super.energyVal();
+        return isKnown() ? 5 * quantity : super.energyVal();
     }
 }
