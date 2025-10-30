@@ -53,7 +53,8 @@ public class ExoticCrystals extends Trinket {
 		if (level == -1){
 			return 0f;
 		} else {
-			return 0.125f + 0.125f*level;
+            //return 0.125f + 0.125f*level;
+            return 0.05f + 0.025f*level;
 		}
 	}
 

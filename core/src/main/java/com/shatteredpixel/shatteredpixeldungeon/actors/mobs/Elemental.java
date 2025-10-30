@@ -258,9 +258,9 @@ public abstract class Elemental extends Mob {
 			spriteClass = ElementalSprite.NewbornFire.class;
 
 			defenseSkill = 12;
-			HT = HP = 60;
+			HT = HP = 90; //60
 			properties.add(Property.MINIBOSS);
-            properties.add( Property.FIERY );
+            //properties.add( Property.FIERY );
 		}
 
 		private int targetingPos = -1;
@@ -395,7 +395,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		public int damageRoll() {
 			if (!summonedALly) {
-				return Random.NormalIntRange(10, 12);
+				return Random.NormalIntRange(14, 18); //10,12
 			} else {
 				return super.damageRoll();
 			}

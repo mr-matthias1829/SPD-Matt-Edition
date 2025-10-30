@@ -81,7 +81,7 @@ public class Guard extends Mob {
         if (bashCooldown > 0 || enemy == null) return false;
 
         // stronger damage than normal damageRoll()
-        int dmg = damageRoll()*2;// tweak as needed
+        int dmg = (int) (damageRoll()*1.5);// tweak as needed
 
         // play attack animation if visible
         if (sprite.visible || enemy.sprite.visible) {
@@ -103,8 +103,7 @@ public class Guard extends Mob {
             enemy.sprite.visible = Dungeon.level.heroFOV[enemy.pos];
         }
 
-        // set cooldown (5 turns)
-        bashCooldown = 5;
+        bashCooldown = 12;
 
         return true;
     }
@@ -184,8 +183,8 @@ public class Guard extends Mob {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 7);
-    }
+        return super.drRoll() + Random.NormalIntRange(0, 5);
+    } //0,7
 
     @Override
     public float lootChance() {

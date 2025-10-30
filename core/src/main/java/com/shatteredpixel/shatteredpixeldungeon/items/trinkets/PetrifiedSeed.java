@@ -57,7 +57,7 @@ public class PetrifiedSeed extends Trinket {
 		if (level <= 0){
 			return 1f;
 		} else {
-			return 1f + .25f*level/3f;
+			return 1f + .15f*level/3f;
 		}
 	}
 
@@ -73,13 +73,13 @@ public class PetrifiedSeed extends Trinket {
 			default:
 				return 0;
 			case 0:
-				return 0.25f;
+				return 0.08f;
 			case 1:
-				return 0.46f;
+				return 0.12f;
 			case 2:
-				return 0.65f;
+				return 0.16f;
 			case 3:
-				return 0.8f;
+				return 0.2f;
 		}
 	}
 }

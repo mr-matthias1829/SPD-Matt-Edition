@@ -360,8 +360,8 @@ public class Generator {
 					ScrollOfTransmutation.class,
                     ScrollOfMagicUpgrade.class
 			};
-			SCROLL.defaultProbs  = new float[]{ 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2};
-			SCROLL.defaultProbs2 = new float[]{ 0, 2, 0, 2, 1, 2, 1, 1, 1, 1, 1, 0, 1};
+			SCROLL.defaultProbs  = new float[]{ 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 0};
+			SCROLL.defaultProbs2 = new float[]{ 0, 2, 0, 2, 1, 2, 1, 1, 1, 1, 1, 0, 0};
 			SCROLL.probs = SCROLL.defaultProbs.clone();
 			
 			STONE.classes = new Class<?>[]{
@@ -387,15 +387,16 @@ public class Generator {
 					WandOfDisintegration.class,
 					WandOfFireblast.class,
 					WandOfCorrosion.class,
-					WandOfBlastWave.class,
+					//WandOfBlastWave.class,
 					WandOfLivingEarth.class,
 					WandOfFrost.class,
 					WandOfPrismaticLight.class,
 					WandOfWarding.class,
 					WandOfTransfusion.class,
 					WandOfCorruption.class,
-					WandOfRegrowth.class };
-			WAND.defaultProbs = new float[]{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
+					WandOfRegrowth.class,
+                    WandOfBlastWave.class};
+			WAND.defaultProbs = new float[]{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0 };
 			WAND.probs = WAND.defaultProbs.clone();
 			
 			//see generator.randomWeapon
@@ -573,15 +574,16 @@ public class Generator {
 					ThirteenLeafClover.class,
 					TrapMechanism.class,
 					MimicTooth.class,
-					WondrousResin.class,
+					//WondrousResin.class,
 					EyeOfNewt.class,
 					SaltCube.class,
 					VialOfBlood.class,
 					ShardOfOblivion.class,
 					ChaoticCenser.class,
-					FerretTuft.class
+					FerretTuft.class,
+                    WondrousResin.class
 			};
-			TRINKET.defaultProbs = new float[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+			TRINKET.defaultProbs = new float[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 };
 			TRINKET.probs = TRINKET.defaultProbs.clone();
 
 			for (Category cat : Category.values()){

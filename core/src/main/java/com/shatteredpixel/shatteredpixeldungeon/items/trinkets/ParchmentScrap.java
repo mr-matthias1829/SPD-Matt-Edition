@@ -77,9 +77,9 @@ public class ParchmentScrap extends Trinket {
 			case 1:
 				return 2f;
 			case 2:
-				return 1f;
+				return 2.5f;
 			case 3:
-				return 0f;
+				return 3f;
 		}
 	}
 }

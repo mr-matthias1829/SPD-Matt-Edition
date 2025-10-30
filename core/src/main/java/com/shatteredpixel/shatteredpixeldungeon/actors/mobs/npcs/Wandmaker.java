@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.CeremonialCandle;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
@@ -296,39 +297,47 @@ public class Wandmaker extends NPC {
 		
 		public static void spawnWandmaker( Level level, Room room ) {
 			if (questRoomSpawned) {
-				
-				questRoomSpawned = false;
-				
-				Wandmaker npc = new Wandmaker();
-				boolean validPos;
-				//Do not spawn wandmaker on the entrance, in front of a door, or on bad terrain.
-				do {
-					validPos = true;
-					npc.pos = level.pointToCell(room.random((room.width() > 6 && room.height() > 6) ? 2 : 1));
-					if (npc.pos == level.entrance() || level.solid[npc.pos]){
-						validPos = false;
-					}
-					for (int i : PathFinder.NEIGHBOURS4){
-						if (level.map[npc.pos+i] == Terrain.DOOR){
-							validPos = false;
-						}
-					}
-					if (level.traps.get(npc.pos) != null
-							|| !level.passable[npc.pos]
-							|| level.map[npc.pos] == Terrain.EMPTY_SP){
-						validPos = false;
-					}
-				} while (!validPos);
-				level.mobs.add( npc );
 
-				spawned = true;
+                questRoomSpawned = false;
 
-				given = false;
-				wand1 = (Wand) Generator.random(Generator.Category.WAND);
+                Wandmaker npc = new Wandmaker();
+                boolean validPos;
+                //Do not spawn wandmaker on the entrance, in front of a door, or on bad terrain.
+                do {
+                    validPos = true;
+                    npc.pos = level.pointToCell(room.random((room.width() > 6 && room.height() > 6) ? 2 : 1));
+                    if (npc.pos == level.entrance() || level.solid[npc.pos]) {
+                        validPos = false;
+                    }
+                    for (int i : PathFinder.NEIGHBOURS4) {
+                        if (level.map[npc.pos + i] == Terrain.DOOR) {
+                            validPos = false;
+                        }
+                    }
+                    if (level.traps.get(npc.pos) != null
+                            || !level.passable[npc.pos]
+                            || level.map[npc.pos] == Terrain.EMPTY_SP) {
+                        validPos = false;
+                    }
+                } while (!validPos);
+                level.mobs.add(npc);
+
+                spawned = true;
+
+                given = false;
+                if (Random.Float() <= 0.2f) {
+                    wand1 = (Wand) new WandOfBlastWave();
+                } else {
+                    wand1 = (Wand) Generator.random(Generator.Category.WAND);
+                }
 				wand1.cursed = (Random.Int(2) == 0);
 				//wand1.upgrade();
 
-				wand2 = (Wand) Generator.random(Generator.Category.WAND);
+                if (Random.Float() <= 0.2f) {
+                    wand2 = (Wand) new WandOfBlastWave();
+                } else {
+                wand2 = (Wand) Generator.random(Generator.Category.WAND);
+                }
 				ArrayList<Item> toUndo = new ArrayList<>();
 				while (wand2.getClass() == wand1.getClass()) {
 					toUndo.add(wand2);
@@ -348,7 +357,8 @@ public class Wandmaker extends NPC {
 			if (!spawned && (type != 0 || (Dungeon.depth > 6 && Random.Int( 10 - Dungeon.depth ) == 0))) {
 
 				// decide between 1,2, or 3 for quest type.
-				if (type == 0) type = Random.Int(3)+1;
+				//if (type == 0) type = Random.Int(3)+1;
+                if (type == 0) type = Random.Int(2)+2; //disabled corpse dust quest
 				
 				switch (type){
 					case 1: default:

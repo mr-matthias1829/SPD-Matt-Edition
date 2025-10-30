@@ -62,8 +62,8 @@ public class Gold extends Item {
 		Catalog.setSeen(getClass());
 		Statistics.itemTypesDiscovered.add(getClass());
 
-		Dungeon.gold += quantity;
-		Statistics.goldCollected += quantity;
+		Dungeon.gold += quantity /2;
+		Statistics.goldCollected += (int) (quantity *0.65); // reduce by 35%
 		Badges.validateGoldCollected();
 
 		GameScene.pickUp( this, pos );

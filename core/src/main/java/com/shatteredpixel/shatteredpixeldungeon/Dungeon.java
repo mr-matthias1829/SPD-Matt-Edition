@@ -99,7 +99,7 @@ public class Dungeon {
 	public static enum LimitedDrops {
 		//limited world drops
 		STRENGTH_POTIONS,
-		UPGRADE_SCROLLS,
+		UPGRADE_SCROLLS, MAGIC_UPGRADE_SCROLLS,
 		ARCANE_STYLI,
 		ENCH_STONE,
 		INT_STONE,
@@ -558,6 +558,19 @@ public class Dungeon {
 		//chance is floors left / scrolls left
 		return Random.Int(5 - floorThisSet) < souLeftThisSet;
 	}
+
+    public static boolean msouNeeded() {
+        int souLeftThisSet;
+        //3 SOU each floor set (now 5)
+        int totalMSOU = 3; //yes i added this myself --matt
+
+        souLeftThisSet = totalMSOU - (LimitedDrops.MAGIC_UPGRADE_SCROLLS.count - (depth / 5) * totalMSOU);
+        if (souLeftThisSet <= 0) return false;
+
+        int floorThisSet = (depth % 5);
+        //chance is floors left / scrolls left
+        return Random.Int(5 - floorThisSet) < souLeftThisSet;
+    }
 	
 	public static boolean asNeeded() {
 		//1 AS each floor set

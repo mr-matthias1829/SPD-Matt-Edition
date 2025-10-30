@@ -48,20 +48,20 @@ public class RingOfElements extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, soloBuffedBonus()))));
+					Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.925f, soloBuffedBonus()))));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, combinedBuffedBonus(Dungeon.hero)))));
+						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.925f, combinedBuffedBonus(Dungeon.hero)))));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 17.5f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 7.5f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, level+1))) + "%";
+		return Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.925f, level+1))) + "%";
 	}
 	
 	@Override
@@ -90,7 +90,8 @@ public class RingOfElements extends Ring {
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(0.825, getBuffedBonus(target, Resistance.class));
+				//return (float)Math.pow(0.825, getBuffedBonus(target, Resistance.class));
+                return (float)Math.pow(0.925, getBuffedBonus(target, Resistance.class));
 			}
 		}
 		

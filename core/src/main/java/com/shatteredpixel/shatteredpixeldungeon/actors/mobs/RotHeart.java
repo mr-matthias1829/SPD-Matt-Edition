@@ -39,7 +39,7 @@ public class RotHeart extends Mob {
 	{
 		spriteClass = RotHeartSprite.class;
 
-		HP = HT = 80;
+		HP = HT = 125; //80
 		defenseSkill = 0;
 
 		EXP = 4;
@@ -60,12 +60,12 @@ public class RotHeart extends Mob {
 	@Override
 	public void damage(int dmg, Object src) {
 		//TODO: when effect properties are done, change this to FIRE
-		if (src instanceof Burning) {
-			destroy();
-			sprite.die();
-		} else {
+		//if (src instanceof Burning) {
+		//	destroy();
+		//	sprite.die();
+		//} else {
 			super.damage(dmg, src);
-		}
+		//}
 	}
 
 	@Override
@@ -130,8 +130,8 @@ public class RotHeart extends Mob {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 5);
-	}
+		return super.drRoll() + Random.NormalIntRange(1, 5);
+	} //0,5
 	
 	{
 		immunities.add( ToxicGas.class );

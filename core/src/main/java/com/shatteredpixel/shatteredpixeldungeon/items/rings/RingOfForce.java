@@ -69,15 +69,17 @@ public class RingOfForce extends Ring {
 	
 	// *** Weapon-like properties ***
 
-	private static float tier(int str){
-		float tier = Math.max(1, (str - 8)/2f);
-		//each str point after 18 is half as effective
-		if (tier > 5){
-			tier = 5 + (tier - 5) / 2f;
-		}
-		return tier;
-	}
+    private static float tier(int str){
+        float tier = Math.max(1, (str - 8) / 2f);
 
+        // each STR point after 14 is half as effective
+        if (str > 14) {
+            float excess = str - 14;
+            tier = 1 + (excess / 4f); // because original was /2f, now halve again
+        }
+
+        return tier;
+    }
 	public static int damageRoll( Hero hero ){
 		if (hero.buff(Force.class) != null
 				&& hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) == null) {

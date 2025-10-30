@@ -78,27 +78,29 @@ public class RingOfMight extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					soloBonus(), Messages.decimalFormat("#.##", 100f * (Math.pow(1.035, soloBuffedBonus()) - 1f)));
+					soloBonus(), Messages.decimalFormat("#.##", 100f * (Math.pow(1.025, soloBuffedBonus()) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						getBonus(Dungeon.hero, Might.class), Messages.decimalFormat("#.##", 100f * (Math.pow(1.035, combinedBuffedBonus(Dungeon.hero)) - 1f)));
+						getBonus(Dungeon.hero, Might.class), Messages.decimalFormat("#.##", 100f * (Math.pow(1.025, combinedBuffedBonus(Dungeon.hero)) - 1f)));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", 1, Messages.decimalFormat("#.##", 3.5f));
+			return Messages.get(this, "typical_stats", 1, Messages.decimalFormat("#.##", 2.5f));
 		}
 	}
 
 	@Override
 	public String upgradeStat1(int level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Integer.toString(level+1);
+		//return Integer.toString(level+1);
+        return Integer.toString((int) ((level*0.5)+0.5));
 	}
 
 	@Override
 	public String upgradeStat2(int level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.035, level+1)-1f)) + "%";
+		//return Messages.decimalFormat("#.##", 100f * (Math.pow(1.035, level+1)-1f)) + "%";
+        return Messages.decimalFormat("#.##", 100f * (Math.pow(1.025, level+1)-1f)) + "%";
 	}
 
 	@Override
@@ -111,7 +113,7 @@ public class RingOfMight extends Ring {
 	}
 	
 	public static float HTMultiplier( Char target ){
-		return (float)Math.pow(1.035, getBuffedBonus(target, Might.class));
+		return (float)Math.pow(1.025, getBuffedBonus(target, Might.class));
 	}
 
 	public class Might extends RingBuff {

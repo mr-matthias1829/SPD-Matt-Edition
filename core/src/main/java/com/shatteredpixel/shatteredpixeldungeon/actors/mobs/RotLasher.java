@@ -45,7 +45,7 @@ public class RotLasher extends Mob {
 		EXP = 1;
 
 		loot = Generator.Category.SEED;
-		lootChance = 0.75f;
+		lootChance = 0.2f; //0.75f
 
 		state = WANDERING = new Waiting();
 		viewDistance = 1;
@@ -57,26 +57,27 @@ public class RotLasher extends Mob {
 	@Override
 	protected boolean act() {
 		if (HP < HT && (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos))) {
-			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(Math.min(5, HT - HP)), FloatingText.HEALING);
-			HP = Math.min(HT, HP + 5);
+			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(Math.min(10, HT - HP)), FloatingText.HEALING);
+			HP = Math.min(HT, HP + 10); //+5
 		}
 		return super.act();
 	}
 
 	@Override
 	public void damage(int dmg, Object src) {
-		if (src instanceof Burning) {
-			destroy();
-			sprite.die();
-		} else {
+		//if (src instanceof Burning) {
+		//	destroy();
+		//	sprite.die();
+		//} else {
 			super.damage(dmg, src);
-		}
+		//}
 	}
 
 	@Override
 	public boolean attack(Char enemy, float dmgMulti, float dmgBonus, float accMulti) {
 		if (enemy == Dungeon.hero){
-			Statistics.questScores[1] -= 100;
+			//Statistics.questScores[1] -= 100;
+            Statistics.questScores[1] -= 15;
 		}
 		return super.attack(enemy, dmgMulti, dmgBonus, accMulti);
 	}
@@ -105,8 +106,8 @@ public class RotLasher extends Mob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange(10, 20);
-	}
+		return Random.NormalIntRange(6, 15);
+	} //10,20
 
 	@Override
 	public int attackSkill( Char target ) {
@@ -126,7 +127,7 @@ public class RotLasher extends Mob {
 
 		@Override
 		protected boolean noticeEnemy() {
-			spend(TICK);
+			spend(TICK/2);
 			return super.noticeEnemy();
 		}
 	}

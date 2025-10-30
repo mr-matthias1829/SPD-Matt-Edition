@@ -66,20 +66,20 @@ public class RingOfWealth extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (Math.pow(1.20f, soloBuffedBonus()) - 1f)));
+					Messages.decimalFormat("#.##", 100f * (Math.pow(1.06f, soloBuffedBonus()) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.20f, combinedBuffedBonus(Dungeon.hero)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (Math.pow(1.06f, combinedBuffedBonus(Dungeon.hero)) - 1f)));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 20f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 6f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.2f, level+1)-1f)) + "%";
+		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.06f, level+1)-1f)) + "%";
 	}
 
 	private static final String TRIES_TO_DROP = "tries_to_drop";
@@ -105,7 +105,8 @@ public class RingOfWealth extends Ring {
 	}
 	
 	public static float dropChanceMultiplier( Char target ){
-		return (float)Math.pow(1.20, getBuffedBonus(target, Wealth.class));
+		//return (float)Math.pow(1.20, getBuffedBonus(target, Wealth.class));
+        return (float)Math.pow(1.06, getBuffedBonus(target, Wealth.class));
 	}
 	
 	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
@@ -116,13 +117,13 @@ public class RingOfWealth extends Ring {
 		CounterBuff triesToDrop = target.buff(TriesToDropTracker.class);
 		if (triesToDrop == null){
 			triesToDrop = Buff.affect(target, TriesToDropTracker.class);
-			triesToDrop.countUp( Random.NormalIntRange(0, 20) );
+			triesToDrop.countUp( Random.NormalIntRange(40, 80) );
 		}
 
 		CounterBuff dropsToEquip = target.buff(DropsToEquipTracker.class);
 		if (dropsToEquip == null){
 			dropsToEquip = Buff.affect(target, DropsToEquipTracker.class);
-			dropsToEquip.countUp( Random.NormalIntRange(5, 10) );
+			dropsToEquip.countUp( Random.NormalIntRange(16, 28) );
 		}
 
 		//now handle reward logic
@@ -193,6 +194,7 @@ public class RingOfWealth extends Ring {
 	public static Item genConsumableDrop(int level) {
 		float roll = Random.Float();
 		//60% chance - 4% per level. Starting from +15: 0%
+        /*
 		if (roll < (0.6f - 0.04f * level)) {
 			latestDropTier = 1;
 			return genLowValueConsumable();
@@ -205,6 +207,21 @@ public class RingOfWealth extends Ring {
 			latestDropTier = 3;
 			return genHighValueConsumable();
 		}
+         */
+
+        //60% chance
+        if (roll < (0.8f - 0.01f * level)) {
+            latestDropTier = 1;
+            return genLowValueConsumable();
+            //30% chance
+        } else if (roll < (0.9f - 0.005f * level)) {
+            latestDropTier = 2;
+            return genMidValueConsumable();
+            //10% chance + 2% per level. Starting from +15: 40%+2%*(lvl-15)
+        } else {
+            latestDropTier = 3;
+            return genHighValueConsumable();
+        }
 	}
 
 	private static Item genLowValueConsumable(){
@@ -270,7 +287,8 @@ public class RingOfWealth extends Ring {
 	private static Item genEquipmentDrop( int level ){
 		Item result;
 		//each upgrade increases depth used for calculating drops by 1
-		int floorset = (Dungeon.depth + level)/5;
+		//int floorset = (Dungeon.depth + level)/5;
+        int floorset = (Dungeon.depth + level/3)/5;
 		switch (Random.Int(5)){
 			default: case 0: case 1:
 				Weapon w = Generator.randomWeapon(floorset, true);
@@ -293,13 +311,14 @@ public class RingOfWealth extends Ring {
 		}
 		//minimum level is 1/2/3/4/5/6 when ring level is 1/3/5/7/9/11
 		if (result.isUpgradable()){
-			int minLevel = (level+1)/2;
+			//int minLevel = (level+1)/2;
+            int minLevel = (level)/4;
 			if (result.level() < minLevel){
 				result.level(minLevel);
 			}
 		}
-		result.cursed = false;
-		result.cursedKnown = true;
+		//result.cursed = false;
+		//result.cursedKnown = true;
 		if (result.level() >= 2) {
 			latestDropTier = 4;
 		} else {

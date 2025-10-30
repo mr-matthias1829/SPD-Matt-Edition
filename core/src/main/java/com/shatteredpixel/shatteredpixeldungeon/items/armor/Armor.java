@@ -389,7 +389,7 @@ public class Armor extends EquipableItem {
         }
 
         // Calculate penalty from magic levels
-        int magicPenalty = (int)(magicLevel * 0.5f); // 50% of what a level would give
+        int magicPenalty = (int)(magicLevel * 0.2f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
         int max = tier * (2 + effectiveLevel) + augment.defenseFactor(effectiveLevel);
@@ -410,7 +410,7 @@ public class Armor extends EquipableItem {
             return 0;
         }
 
-        int magicPenalty = (int)(magicLevel * 0.5f);
+        int magicPenalty = (int)(magicLevel * 0.2f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
         int max = DRMax(lvl);
@@ -423,10 +423,10 @@ public class Armor extends EquipableItem {
 
     public int magicDRMax(int magicLvl){
         // Calculate penalty from physical levels
-        int physicalPenalty = (int)(level() * 0.5f);
+        int physicalPenalty = (int)(level() * 0.2f);
         int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
 
-        int max = tier * (1 + effectiveMagicLevel);
+        int max = tier * (2 + effectiveMagicLevel);
         if (effectiveMagicLevel > max){
             return ((effectiveMagicLevel - max)+1)/2;
         } else {
@@ -435,7 +435,7 @@ public class Armor extends EquipableItem {
     }
 
     public int magicDRMin(int magicLvl){
-        int physicalPenalty = (int)(level() * 0.5f);
+        int physicalPenalty = (int)(level() * 0.2f);
         int effectiveMagicLevel = Math.max(0, (int)((magicLvl - physicalPenalty)/1.5));
 
         int max = magicDRMax(magicLvl);
