@@ -1,8 +1,10 @@
-# Shattered Pixel Dungeon
+# Shattered Pixel Dungeon Matt Edition
 
 Releases at the bottom of this readme!
 
-Still heavily in development, even the current release isn't even completely done!
+Still wip... mostly
+
+Also might crash in a few cases because my coding skills are insane (report them and i'll TRY to fix them)
 
 ===============================
 
