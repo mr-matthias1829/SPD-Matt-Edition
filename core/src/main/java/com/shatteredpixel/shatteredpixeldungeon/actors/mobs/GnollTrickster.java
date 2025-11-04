@@ -147,7 +147,8 @@ public class GnollTrickster extends Gnoll {
 			super.aggro(ch);
 		}
 	}
-	
+
+    /*
 	@Override
 	public Item createLoot() {
 		MissileWeapon drop = (MissileWeapon)super.createLoot();
@@ -161,6 +162,8 @@ public class GnollTrickster extends Gnoll {
 		drop.quantity((drop.quantity()+1)/2);
 		return drop;
 	}
+
+     */
 	
 	@Override
 	public void die( Object cause ) {

@@ -67,7 +67,7 @@ public class Guard extends Mob {
         return Random.NormalIntRange(5, 14);
     } //4,12
 
-    // --- New: bash special + cooldown ---
+    // --- Bash special + cooldown ---
     private int bashCooldown = 0; // counts down every Guard turn
     private final String BASHCD = "bashcd";
 
@@ -75,42 +75,61 @@ public class Guard extends Mob {
      * Perform the Bash special:
      * - stronger melee damage than normal
      * - applies Cripple to the target
-     * - sets cooldown to 5 turns
+     * - sets cooldown to 12 turns
      */
     private boolean bash( Char enemy ){
         if (bashCooldown > 0 || enemy == null) return false;
 
-        // stronger damage than normal damageRoll()
-        int dmg = (int) (damageRoll()*1.5);// tweak as needed
-
         // play attack animation if visible
-        if (sprite.visible || enemy.sprite.visible) {
+        if (sprite != null && enemy.sprite != null && (sprite.visible || enemy.sprite.visible)) {
             sprite.attack(enemy.pos);
-            // optionally play a sound here if you have an appropriate Assets.Sounds constant
-            // Sample.INSTANCE.play(Assets.Sounds.SOME_HIT_SOUND);
+            return false; // wait for animation to complete via onAttackComplete
+        } else {
+            // execute immediately if sprites not available
+            executeBash(enemy);
+            spend(attackDelay());
+            return true;
         }
+    }
+
+    // Execute the bash attack
+    private void executeBash( Char enemy ){
+        if (enemy == null || !enemy.isAlive()) return;
+
+        // stronger damage than normal damageRoll()
+        int dmg = (int) (damageRoll() * 1.5f);
 
         // apply damage and cripple
         enemy.damage(dmg, this);
-        Cripple.prolong(enemy, Cripple.class, 2f); // 2f turns style similar to chains
+        Cripple.prolong(enemy, Cripple.class, 2f);
 
-        // If we banged the hero, interrupt to update UI/fov etc.
-        if (enemy == Dungeon.hero) {
+        // If we hit the hero, interrupt to update UI/fov
+        if (enemy == Dungeon.hero && Dungeon.hero.isAlive()) {
             Dungeon.hero.interrupt();
             Dungeon.observe();
             GameScene.updateFog();
-        } else {
-            enemy.sprite.visible = Dungeon.level.heroFOV[enemy.pos];
         }
 
         bashCooldown = 12;
+    }
 
-        return true;
+    private boolean bashInProgress = false;
+
+    @Override
+    public void onAttackComplete() {
+        if (bashInProgress) {
+            bashInProgress = false;
+            executeBash(enemy);
+            spend(attackDelay());
+            next();
+        } else {
+            super.onAttackComplete();
+        }
     }
     // --- End bash special ---
 
     private boolean chain(int target){
-        if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE))
+        if (chainsUsed || enemy == null || enemy.properties().contains(Property.IMMOVABLE))
             return false;
 
         Ballistica chain = new Ballistica(pos, target, Ballistica.PROJECTILE);
@@ -136,7 +155,7 @@ public class Guard extends Mob {
                 final int newPosFinal = newPos;
                 this.target = newPos;
 
-                if (sprite.visible || enemy.sprite.visible) {
+                if (sprite != null && enemy.sprite != null && (sprite.visible || enemy.sprite.visible)) {
                     yell(Messages.get(this, "scorpion"));
                     new Item().throwSound();
                     Sample.INSTANCE.play(Assets.Sounds.CHAINS);
@@ -163,6 +182,8 @@ public class Guard extends Mob {
     }
 
     private void pullEnemy( Char enemy, int pullPos ){
+        if (enemy == null || !enemy.isAlive()) return;
+
         enemy.pos = pullPos;
         enemy.sprite.place(pullPos);
         Dungeon.level.occupyCell(enemy);
@@ -224,22 +245,25 @@ public class Guard extends Mob {
             if (bashCooldown > 0) bashCooldown--;
 
             // Attempt bash if we are adjacent/can attack and cooldown ready
-            if (canAttack(enemy) && !isCharmedBy(enemy) && bashCooldown == 0) {
+            if (enemy != null && canAttack(enemy) && !isCharmedBy(enemy) && bashCooldown == 0) {
+                bashInProgress = true;
                 if (bash(enemy)) {
-                    // return true when action occurred; the caller expects truthiness like your chain handling
-                    return !(sprite.visible || enemy.sprite.visible);
+                    // bash executed immediately (no animation)
+                    return true;
                 }
+                // bash started animation, wait for onAttackComplete
+                return false;
             }
 
             // existing chain behaviour (when not able to attack)
             if (!chainsUsed
+                    && enemy != null
                     && enemyInFOV
                     && !isCharmedBy( enemy )
                     && !canAttack( enemy )
                     && Dungeon.level.distance( pos, enemy.pos ) < 5
-
                     && chain(enemy.pos)){
-                return !(sprite.visible || enemy.sprite.visible);
+                return !(sprite != null && enemy.sprite != null && (sprite.visible || enemy.sprite.visible));
             } else {
                 return super.act( enemyInFOV, justAlerted );
             }
