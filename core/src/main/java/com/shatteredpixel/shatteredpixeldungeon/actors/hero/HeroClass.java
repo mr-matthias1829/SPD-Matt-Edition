@@ -171,16 +171,19 @@ public enum HeroClass {
 	}
 
 	private static void initWarrior( Hero hero ) {
-		(hero.belongings.weapon = new WornShortsword()).identify();
-		ThrowingStone stones = new ThrowingStone();
-		stones.identify().collect();
+        (hero.belongings.weapon = new WornShortsword()).identify();
+        ThrowingStone stones = new ThrowingStone();
+        stones.identify().collect();
 
-		Dungeon.quickslot.setSlot(0, stones);
+        Dungeon.quickslot.setSlot(0, stones);
 
-		if (hero.belongings.armor != null){
-			hero.belongings.armor.affixSeal(new BrokenSeal());
-			Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
-		}
+        if (hero.belongings.armor != null) {
+            hero.belongings.armor.affixSeal(new BrokenSeal());
+            Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
+        } else{
+            BrokenSeal seal = new BrokenSeal();
+            seal.identify().collect();
+        }
 
 		new PotionOfHealing().identify();
 		new ScrollOfRage().identify();
