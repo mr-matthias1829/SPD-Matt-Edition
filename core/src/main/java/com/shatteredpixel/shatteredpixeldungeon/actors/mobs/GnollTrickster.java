@@ -52,8 +52,6 @@ public class GnollTrickster extends Gnoll {
 
 		WANDERING = new Wandering();
 		state = WANDERING;
-
-		properties.add(Property.MINIBOSS);
 	}
     public void setLevel( int depth ){
         int lvl = 0;
@@ -66,6 +64,9 @@ public class GnollTrickster extends Gnoll {
         }
         this.level = lvl;
         adjustStats(level);
+        if (level == 0) {
+            properties.add(Property.MINIBOSS);
+        }
     }
     public void adjustStats( int level ) {
         HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
@@ -100,11 +101,13 @@ public class GnollTrickster extends Gnoll {
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
         //damage = Random.NormalIntRange( 2, 7 ); // 1,6
-        damage = Random.NormalIntRange(2 * (1+level), (int) (7 * (1+level * 1.2)));
+        damage = Random.NormalIntRange(2 * (1+level), (int) (5 * (1+level * 1.2)));
 
 		if (combo >= 1){
 			//score loss is on-hit instead of on-attack as it's tied to combo
-			Statistics.questScores[0] -= 50;
+            if (level == 0) {
+                Statistics.questScores[0] -= 50;
+            }
 		}
 
 		//The gnoll's attacks get more severe the more the player lets it hit them

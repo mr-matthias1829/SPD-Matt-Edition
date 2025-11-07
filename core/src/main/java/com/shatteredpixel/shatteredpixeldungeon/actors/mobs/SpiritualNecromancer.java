@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GhoulSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SpiritualNecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -263,7 +264,7 @@ public class SpiritualNecromancer extends Mob {
 
         summoning = firstSummon = false;
 
-        Ghoul newSkeleton = new GhoulFromNecro();
+        Ghoul newSkeleton = new NecroGhoul();
         newSkeleton.pos = summoningPos;
         GameScene.add( newSkeleton );
         Dungeon.level.occupyCell( newSkeleton );
@@ -422,12 +423,34 @@ public class SpiritualNecromancer extends Mob {
         }
     }
 
-    public class GhoulFromNecro extends Ghoul {
+    public static class NecroGhoul extends Ghoul {
 
+        {
+            state = WANDERING;
+
+            spriteClass = SpiritualNecromancer.NecroGhoul.NecroGhoulSprite.class;
+
+            //no loot or exp
+            maxLvl = -5;
+        }
         @Override
         protected boolean act() {
             // disable automatic child spawning
             return super.act(); // will still do normal Ghoul behavior except spawning children
+        }
+
+        public static class NecroGhoulSprite extends GhoulSprite {
+
+            public NecroGhoulSprite(){
+                super();
+                brightness(0.75f);
+            }
+
+            @Override
+            public void resetColor() {
+                super.resetColor();
+                brightness(0.75f);
+            }
         }
     }
 }

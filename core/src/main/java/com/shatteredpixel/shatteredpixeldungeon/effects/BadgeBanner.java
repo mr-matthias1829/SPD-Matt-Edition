@@ -51,36 +51,44 @@ public class BadgeBanner extends Image {
 	
 	private int index;
 	private float time;
+
+    private static TextureFilm atlasExtra;
 	
 	private static TextureFilm atlas;
 	
 	public static ArrayList<BadgeBanner> showing = new ArrayList<>();
 	
 	private BadgeBanner( int index ) {
-		
-		super( Assets.Interfaces.BADGES );
-		
-		if (atlas == null) {
-			atlas = new TextureFilm( texture, SIZE, SIZE );
-		}
+
+        super(Assets.Interfaces.BADGES);
+
+        if (atlas == null) atlas = new TextureFilm(texture, SIZE, SIZE);
+
+        SmartTexture texExtra = TextureCache.get(Assets.Interfaces.BADGES_EXTRA);
+        if (atlasExtra == null) atlasExtra = new TextureFilm(texExtra, SIZE, SIZE);
 		
 		setup(index);
 	}
-	
-	public void setup( int index ){
-		this.index = index;
-		
-		frame( atlas.get( index ) );
-		origin.set( width / 2, height / 2 );
-		
-		alpha( 0 );
-		scale.set( 2 * DEFAULT_SCALE );
-		
-		state = State.FADE_IN;
-		time = FADE_IN_TIME;
-		
-		Sample.INSTANCE.play( Assets.Sounds.BADGE );
-	}
+
+    private static final int EXTRA_OFFSET = 200; // or whatever threshold you want
+
+    public void setup(int index) {
+        this.index = index;
+
+        if (index < EXTRA_OFFSET) {
+            frame(atlas.get(index));
+        } else {
+            int localIndex = index - EXTRA_OFFSET;
+            frame(atlasExtra.get(localIndex));
+        }
+
+        origin.set(width / 2, height / 2);
+        alpha(0);
+        scale.set(2 * DEFAULT_SCALE);
+        state = State.FADE_IN;
+        time = FADE_IN_TIME;
+        Sample.INSTANCE.play(Assets.Sounds.BADGE);
+    }
 	
 	@Override
 	public void update() {
@@ -206,13 +214,41 @@ public class BadgeBanner extends Image {
 	public static boolean isShowingBadges(){
 		return !showing.isEmpty();
 	}
-	
-	public static Image image( int index ) {
-		Image image = new Image( Assets.Interfaces.BADGES );
-		if (atlas == null) {
-			atlas = new TextureFilm( image.texture, 16, 16 );
-		}
-		image.frame( atlas.get( index ) );
-		return image;
-	}
+
+    public static Image image(int index) {
+        Image image;
+        TextureFilm film;
+
+        final int EXTRA_OFFSET = 200;
+
+        // Use base sheet
+        if (index < EXTRA_OFFSET) {
+            image = new Image(Assets.Interfaces.BADGES);
+            if (atlas == null) {
+                atlas = new TextureFilm(image.texture, SIZE, SIZE);
+            }
+            film = atlas;
+
+            // Use extra sheet
+        } else {
+            image = new Image(Assets.Interfaces.BADGES_EXTRA);
+
+            if (atlasExtra == null) {
+                SmartTexture texExtra = TextureCache.get(Assets.Interfaces.BADGES_EXTRA);
+                atlasExtra = new TextureFilm(texExtra, SIZE, SIZE);
+            }
+            film = atlasExtra;
+
+            index -= EXTRA_OFFSET; // shift into local index range
+        }
+
+        // Protect against out-of-range indexes
+        if (film.get(index) == null) {
+            System.err.println("[BadgeBanner] Warning: badge index " + index + " invalid for selected atlas!");
+            return image;
+        }
+
+        image.frame(film.get(index));
+        return image;
+    }
 }

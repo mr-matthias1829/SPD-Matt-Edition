@@ -435,7 +435,7 @@ abstract public class Weapon extends KindOfWeapon {
 			float effectRoll = Random.Float();
 
         if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
-            if (effectRoll < 0.99f * ParchmentScrap.curseChanceMultiplier()) {
+            if (effectRoll < 0.7f * ParchmentScrap.curseChanceMultiplier()) {
                 enchant(Enchantment.randomCurse());
                 cursed = true;
             } else if (effectRoll >= 1f - (0.01f * ParchmentScrap.enchantChanceMultiplier())) {

@@ -733,7 +733,7 @@ public class Armor extends EquipableItem {
 			float effectRoll = Random.Float();
 
         if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
-            if (effectRoll < 0.99f * ParchmentScrap.curseChanceMultiplier()) {
+            if (effectRoll < 0.7f * ParchmentScrap.curseChanceMultiplier()) {
                 inscribe(Glyph.randomCurse());
                 cursed = true;
             } else if (effectRoll >= 1f - (0.01f * ParchmentScrap.enchantChanceMultiplier())) {
@@ -768,7 +768,7 @@ public class Armor extends EquipableItem {
 	protected static int STRReq(int tier, int lvl, int mlvl){
 		lvl = Math.max(0, (lvl + mlvl)/3);
 		//strength req decreases at +1,+3,+6,+10,etc.
-		return (int)((8 + Math.round(tier * 2.5)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2);
+		return (int)((8 +Math.round(tier * 2.5)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2);
 	}
 	
 	@Override

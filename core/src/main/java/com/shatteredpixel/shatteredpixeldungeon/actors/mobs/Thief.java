@@ -183,7 +183,7 @@ public class Thief extends Mob {
         Item toSteal;
         if (Random.Int(10) > 6) { // 40%
             toSteal = hero.belongings.randomEquipped();
-            if (toSteal == null || toSteal.unique || toSteal.visiblyUpgraded() > 4) {
+            if (toSteal == null || toSteal.unique || toSteal.cursed) {
                 toSteal = hero.belongings.randomUnequipped();
             }
         } else

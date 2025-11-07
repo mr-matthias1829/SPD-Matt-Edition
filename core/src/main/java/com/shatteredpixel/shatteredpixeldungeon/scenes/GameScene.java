@@ -1451,7 +1451,7 @@ public class GameScene extends PixelScene {
                 // Alert all mobs - they have sprites now
                 for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                     if (mob.sprite != null) {
-                        if (Random.Float() <= 0.4f){
+                        if (Random.Float() <= (0.2f + (0.025 * Dungeon.depth))){
                             mob.beckon(Dungeon.hero.pos);
                         }
                     }

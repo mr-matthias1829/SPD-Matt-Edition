@@ -214,7 +214,13 @@ public class Badges {
 		GAMES_PLAYED_5              ( 124, BadgeType.GLOBAL ),
 		HIGH_SCORE_5                ( 125 ),
 		CHAMPION_2                  ( 126 ),
-		CHAMPION_3                  ( 127 );
+		CHAMPION_3                  ( 127 ),
+
+
+
+        VICTORY_WITH_8_CHALLENGES(325, BadgeType.GLOBAL),
+        VICTORY_WITH_10_CHALLENGES(326, BadgeType.GLOBAL),
+        VICTORY_WITH_ALL_CHALLENGES(327, BadgeType.GLOBAL);
 
 		public boolean meta;
 
@@ -1021,30 +1027,55 @@ public class Badges {
 			displayBadge( badge );
 		}
 	}
-	
-	public static void validateVictory() {
 
-		Badge badge = Badge.VICTORY;
-		local.add( badge );
-		displayBadge( badge );
+    public static void validateVictory() {
 
-		badge = victoryClassBadges.get(Dungeon.hero.heroClass);
-		if (badge == null) return;
-		local.add( badge );
-		unlock(badge);
+        Badge badge = Badge.VICTORY;
+        local.add( badge );
+        displayBadge( badge );
 
-		boolean allUnlocked = true;
-		for (Badge b : victoryClassBadges.values()){
-			if (!isUnlocked(b)){
-				allUnlocked = false;
-				break;
-			}
-		}
-		if (allUnlocked){
-			badge = Badge.VICTORY_ALL_CLASSES;
-			displayBadge( badge );
-		}
-	}
+        badge = victoryClassBadges.get(Dungeon.hero.heroClass);
+        if (badge == null) return;
+        local.add( badge );
+        unlock(badge);
+
+        boolean allUnlocked = true;
+        for (Badge b : victoryClassBadges.values()){
+            if (!isUnlocked(b)){
+                allUnlocked = false;
+                break;
+            }
+        }
+        if (allUnlocked){
+            badge = Badge.VICTORY_ALL_CLASSES;
+            displayBadge( badge );
+        }
+
+        // --- new challenge-based victory badges --- //
+        // ensure global set is loaded before using unlock/isUnlocked
+        loadGlobal();
+
+        int c = Challenges.activeChallenges();
+        int total = Challenges.totalChallenges(); // or Challenges.MASKS.length if you didn't add totalChallenges()
+
+        // award only the highest badge appropriate; unlock lower tiers silently
+        if (c >= total) {
+            // all challenges
+            unlock(Badge.VICTORY_WITH_8_CHALLENGES);
+            unlock(Badge.VICTORY_WITH_10_CHALLENGES);
+            displayBadge(Badge.VICTORY_WITH_ALL_CHALLENGES);
+            saveGlobal();
+        } else if (c >= 10) {
+            // 10+ challenges
+            unlock(Badge.VICTORY_WITH_8_CHALLENGES);
+            displayBadge(Badge.VICTORY_WITH_10_CHALLENGES);
+            saveGlobal();
+        } else if (c >= 8) {
+            // 8+ challenges
+            displayBadge(Badge.VICTORY_WITH_8_CHALLENGES);
+            saveGlobal();
+        }
+    }
 
 	public static void validateTakingTheMick(Object cause){
 		if ((cause == Dungeon.hero || cause instanceof Explosive.ExplosiveCurseBomb)

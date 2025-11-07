@@ -272,7 +272,7 @@ public class Ring extends KindofMisc {
 		
 		//50% chance to be cursed (used to be 30%)
         if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
-            if (Random.Float() < 0.99f) {
+            if (Random.Float() < 0.7f) {
                 cursed = true;
             }
 

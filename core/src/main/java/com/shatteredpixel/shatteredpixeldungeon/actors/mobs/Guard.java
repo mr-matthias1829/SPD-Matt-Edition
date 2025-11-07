@@ -49,7 +49,7 @@ public class Guard extends Mob {
         spriteClass = GuardSprite.class;
 
         HP = HT = 60; //50 //40
-        defenseSkill = 10;
+        defenseSkill = 1; //10
 
         EXP = 7;
         maxLvl = 14;
@@ -64,8 +64,8 @@ public class Guard extends Mob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(5, 14);
-    } //4,12
+        return Random.NormalIntRange(5, 10);
+    }//5,14 //4,12
 
     // --- Bash special + cooldown ---
     private int bashCooldown = 0; // counts down every Guard turn
@@ -204,8 +204,8 @@ public class Guard extends Mob {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 5);
-    } //0,7
+        return super.drRoll() + Random.NormalIntRange(0, 4);
+    } //0,5 //0,7
 
     @Override
     public float lootChance() {

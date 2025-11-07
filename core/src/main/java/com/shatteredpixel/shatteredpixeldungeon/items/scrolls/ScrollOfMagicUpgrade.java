@@ -62,13 +62,10 @@ public class ScrollOfMagicUpgrade extends InventoryScroll {
             // Remove curse
             a.cursed = false;
 
-            // Handle curse removal chances
-            int uncurseChance = 4 + a.visiblyUpgraded();
-            int weakenChance = 2 + a.visiblyUpgraded();
 
-            if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph() && Random.Int(uncurseChance) == 0){
+            if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
                 ScrollOfUpgrade.removeCurse( Dungeon.hero );
-            } else if (a.cursedKnown && wasCursed && !a.cursed && Random.Int(weakenChance) == 0){
+            } else if (a.cursedKnown && wasCursed && !a.cursed){
                 ScrollOfUpgrade.weakenCurse( Dungeon.hero );
             }
 

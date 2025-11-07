@@ -86,12 +86,10 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			boolean hadGoodEnchant = w.hasGoodEnchant();
 
 			item = w.upgrade();
-            int uncurseChance = 4 + w.visiblyUpgraded();
-            int weakenChance = 2 + w.visiblyUpgraded();
 
-			if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant() && Random.Int(uncurseChance) == 0){
+			if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
 				removeCurse( Dungeon.hero );
-			} else if (w.cursedKnown && wasCursed && !w.cursed && Random.Int(weakenChance) == 0){
+			} else if (w.cursedKnown && wasCursed && !w.cursed){
 				weakenCurse( Dungeon.hero );
 			}
 			if (wasHardened && !w.enchantHardened){

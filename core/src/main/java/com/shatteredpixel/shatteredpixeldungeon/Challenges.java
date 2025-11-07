@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 
 public class Challenges {
 
@@ -40,11 +41,13 @@ public class Challenges {
 	public static final int CHAMPION_ENEMIES	= 128;
 	public static final int STRONGER_BOSSES 	= 256;
 
+
     public static final int BACK_TO_ORIGINS     = 512; // Next power of 2
     public static final int I_HATE_MYSELF       = 1024;
     public static final int GUNS_BLAZING        = 2048;
+    public static final int WONKY_STEP       = 4096;
 
-	public static final int MAX_VALUE           = 4095;
+	public static final int MAX_VALUE           = 8191;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -58,7 +61,8 @@ public class Challenges {
 			"no_scrolls",
             "back_to_origins",
             "i_hate_myself",
-            "guns_blazing"
+            "guns_blazing",
+            "wonky_step"
 	};
 
 	public static final int[] MASKS = {
@@ -66,7 +70,7 @@ public class Challenges {
             NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS,
             NO_SCROLLS,
 
-            BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING
+            BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING, WONKY_STEP
 	};
 
 	public static int activeChallenges(){
@@ -77,22 +81,21 @@ public class Challenges {
 		return chCount;
 	}
 
+    public static int totalChallenges() {
+        return MASKS.length;
+    }
+
 	public static boolean isItemBlocked( Item item ){
 
 		if (Dungeon.isChallenged(NO_HERBALISM) && item instanceof Dewdrop){
 			return true;
 		}
 
-        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof Dewdrop) {
-            return true;
-        }
-        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof Stylus) {
-            return true;
-        }
+
         if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && (item instanceof ScrollOfIdentify)) {
             return true;
         }
-        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof Pasty) {
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof StoneOfIntuition) {
             return true;
         }
 
