@@ -225,7 +225,8 @@ public class HeroSelectScene extends PixelScene {
 			add(btnOptions);
 		}
 
-		if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
+		//if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
+        if (!DeviceCompat.isDebug()){
 			Dungeon.challenges = 0;
 			SPDSettings.challenges(0);
 			SPDSettings.customSeed("");
