@@ -74,11 +74,19 @@ public class Badges {
 		FOUND_RATMOGRIFY,
 
 		//bronze
+        UNLOCK_WARRIOR_A                ( 0 ),
+        UNLOCK_MAGE_A                 ( 1 ),
+        UNLOCK_ROGUE_A                ( 2 ),
+        UNLOCK_HUNTRESS_A             ( 3 ),
+        UNLOCK_DUELIST_A              ( 4 ),
+        UNLOCK_CLERIC_A               ( 5 ),
+
 		UNLOCK_MAGE                 ( 1 ),
 		UNLOCK_ROGUE                ( 2 ),
 		UNLOCK_HUNTRESS             ( 3 ),
 		UNLOCK_DUELIST              ( 4 ),
 		UNLOCK_CLERIC               ( 5 ),
+
 		MONSTERS_SLAIN_1            ( 6 ),
 		MONSTERS_SLAIN_2            ( 7 ),
 		GOLD_COLLECTED_1            ( 8 ),
@@ -218,9 +226,11 @@ public class Badges {
 
 
 
-        VICTORY_WITH_8_CHALLENGES(325, BadgeType.GLOBAL),
-        VICTORY_WITH_10_CHALLENGES(326, BadgeType.GLOBAL),
-        VICTORY_WITH_ALL_CHALLENGES(327, BadgeType.GLOBAL);
+        VICTORY_WITH_8_CHALLENGES(325),
+        VICTORY_WITH_10_CHALLENGES(326),
+        VICTORY_WITH_ALL_CHALLENGES(327),
+        AGAINST_ALL_ODDS (206),
+        AGAINST_EVERYTHING_AND_MORE (207);
 
 		public boolean meta;
 
@@ -380,6 +390,11 @@ public class Badges {
 			badge = Badge.MONSTERS_SLAIN_3;
 			local.add( badge );
 		}
+        if (!local.contains( Badge.UNLOCK_WARRIOR_A ) && Statistics.enemiesSlain >= 75) {
+            if (badge != null) unlock(badge);
+            badge = Badge.UNLOCK_WARRIOR_A;
+            local.add( badge );
+        }
 		if (!local.contains( Badge.MONSTERS_SLAIN_4 ) && Statistics.enemiesSlain >= 250) {
 			if (badge != null) unlock(badge);
 			badge = Badge.MONSTERS_SLAIN_4;
@@ -849,6 +864,27 @@ public class Badges {
 		thirdBossSubclassBadges.put(HeroSubClass.PRIEST, Badge.BOSS_SLAIN_3_PRIEST);
 		thirdBossSubclassBadges.put(HeroSubClass.PALADIN, Badge.BOSS_SLAIN_3_PALADIN);
 	}
+
+
+    public static void validateDepth(){
+        Badge badge = null;
+        if (Dungeon.depth == 11 && !isUnlocked(Badge.UNLOCK_ROGUE_A)) {
+            badge = Badge.UNLOCK_ROGUE_A;
+            local.add(badge);
+        }
+        if (Statistics.thrownAttacks == 0 && Dungeon.depth == 11 && !isUnlocked(Badge.UNLOCK_HUNTRESS_A)){
+            badge = Badge.UNLOCK_HUNTRESS_A;
+            local.add(badge);
+        }
+        if (Dungeon.depth == 16 && !isUnlocked(Badge.UNLOCK_CLERIC_A)){
+            badge = Badge.UNLOCK_CLERIC_A;
+            local.add(badge);
+        }
+
+        if (badge != null) {
+            displayBadge(badge);
+        }
+    }
 	
 	public static void validateBossSlain() {
 		Badge badge = null;
@@ -952,6 +988,8 @@ public class Badges {
 		
 		Badge badge = null;
 		switch (Dungeon.hero.heroClass) {
+            case PEASANT:
+                break;
 			case WARRIOR:
 				badge = Badge.MASTERY_WARRIOR;
 				break;
@@ -971,8 +1009,10 @@ public class Badges {
 				badge = Badge.MASTERY_CLERIC;
 				break;
 		}
-		
+
+        if (badge != null){
 		unlock(badge);
+        }
 	}
 
 	public static void validateRatmogrify(){
@@ -983,6 +1023,9 @@ public class Badges {
 		if (Statistics.upgradesUsed >= 1 && !isUnlocked(Badge.UNLOCK_MAGE)){
 			displayBadge( Badge.UNLOCK_MAGE );
 		}
+        if (Statistics.upgradesUsed >= 20 && !isUnlocked(Badge.UNLOCK_MAGE_A)){
+            displayBadge( Badge.UNLOCK_MAGE_A );
+        }
 	}
 	
 	public static void validateRogueUnlock(){
@@ -1012,6 +1055,21 @@ public class Badges {
 				displayBadge(Badge.UNLOCK_DUELIST);
 			}
 		}
+
+        if (!isUnlocked(Badge.UNLOCK_DUELIST_A) && Dungeon.hero != null
+                && Dungeon.hero.belongings.weapon instanceof MeleeWeapon
+                && ((MeleeWeapon) Dungeon.hero.belongings.weapon).tier >= 4
+                && ((MeleeWeapon) Dungeon.hero.belongings.weapon).STRReq() <= Dungeon.hero.STR()){
+
+            if (Dungeon.hero.belongings.weapon.isIdentified() &&
+                    ((MeleeWeapon) Dungeon.hero.belongings.weapon).STRReq() <= Dungeon.hero.STR()) {
+                displayBadge(Badge.UNLOCK_DUELIST_A);
+
+            } else if (!Dungeon.hero.belongings.weapon.isIdentified() &&
+                    ((MeleeWeapon) Dungeon.hero.belongings.weapon).STRReq(0) <= Dungeon.hero.STR()){
+                displayBadge(Badge.UNLOCK_DUELIST_A);
+            }
+        }
 	}
 
 	public static void validateClericUnlock(){
@@ -1049,31 +1107,6 @@ public class Badges {
         if (allUnlocked){
             badge = Badge.VICTORY_ALL_CLASSES;
             displayBadge( badge );
-        }
-
-        // --- new challenge-based victory badges --- //
-        // ensure global set is loaded before using unlock/isUnlocked
-        loadGlobal();
-
-        int c = Challenges.activeChallenges();
-        int total = Challenges.totalChallenges(); // or Challenges.MASKS.length if you didn't add totalChallenges()
-
-        // award only the highest badge appropriate; unlock lower tiers silently
-        if (c >= total) {
-            // all challenges
-            unlock(Badge.VICTORY_WITH_8_CHALLENGES);
-            unlock(Badge.VICTORY_WITH_10_CHALLENGES);
-            displayBadge(Badge.VICTORY_WITH_ALL_CHALLENGES);
-            saveGlobal();
-        } else if (c >= 10) {
-            // 10+ challenges
-            unlock(Badge.VICTORY_WITH_8_CHALLENGES);
-            displayBadge(Badge.VICTORY_WITH_10_CHALLENGES);
-            saveGlobal();
-        } else if (c >= 8) {
-            // 8+ challenges
-            displayBadge(Badge.VICTORY_WITH_8_CHALLENGES);
-            saveGlobal();
         }
     }
 
@@ -1182,9 +1215,17 @@ public class Badges {
 	}
 
 	public static void validateChampion( int challenges ) {
+        Badge badge = null;
+
+        if (Dungeon.hero.heroClass == HeroClass.PEASANT){
+            badge = Badge.AGAINST_ALL_ODDS;
+            unlock(badge);
+        }
+
 		if (challenges == 0) return;
-		Badge badge = null;
+
 		if (challenges >= 1) {
+            unlock(badge);
 			badge = Badge.CHAMPION_1;
 		}
 		if (challenges >= 3){
@@ -1195,6 +1236,26 @@ public class Badges {
 			unlock(badge);
 			badge = Badge.CHAMPION_3;
 		}
+
+        int total = Challenges.totalChallenges();
+
+        if (challenges >= total) {
+            unlock(badge);
+            badge = Badge.VICTORY_WITH_ALL_CHALLENGES;
+        }
+        if (challenges >= 10) {
+            unlock(badge);
+            badge = Badge.VICTORY_WITH_10_CHALLENGES;
+        }
+        if (challenges >= 8) {
+            unlock(badge);
+            badge = Badge.VICTORY_WITH_8_CHALLENGES;
+        }
+
+        if (Dungeon.hero.heroClass == HeroClass.PEASANT && challenges >= 5){
+            unlock(badge);
+            badge = Badge.AGAINST_EVERYTHING_AND_MORE;
+        }
 		local.add(badge);
 		displayBadge( badge );
 	}

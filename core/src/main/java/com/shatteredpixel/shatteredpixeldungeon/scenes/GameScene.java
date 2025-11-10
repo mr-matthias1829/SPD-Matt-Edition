@@ -1445,6 +1445,9 @@ public class GameScene extends PixelScene {
                 }
             }
 
+            if (Dungeon.justEnteredFloor){
+                Badges.validateDepth();
+            }
             // Trigger GUNS_BLAZING challenge effect - ONLY when just entered floor
             if (Dungeon.justEnteredFloor && Dungeon.isChallenged(Challenges.GUNS_BLAZING)) {
 

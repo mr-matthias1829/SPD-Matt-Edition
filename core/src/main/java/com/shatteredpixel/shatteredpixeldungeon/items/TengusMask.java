@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -35,9 +36,11 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndChooseAbility;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChooseSubclass;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -70,7 +73,15 @@ public class TengusMask extends Item {
 			
 			curUser = hero;
 
-			GameScene.show( new WndChooseSubclass( this, hero ) );
+            if (hero.heroClass != HeroClass.PEASANT) {
+                GameScene.show( new WndChooseSubclass( this, hero ) );
+            } else {
+                if (Random.Float() > 0.35) {
+                    GLog.w(Messages.get(this, "peasant_no_mask"));
+                }else{
+                    GLog.w(Messages.get(this, "peasant_no_mask_alt"));
+                }
+            }
 			
 		}
 	}

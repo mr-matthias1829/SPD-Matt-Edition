@@ -238,6 +238,7 @@ public class Assets {
 	}
 
 	public static class Splashes {
+        public static final String PEASANT  = "splashes/peasant.jpg";
 		public static final String WARRIOR  = "splashes/warrior.jpg";
 		public static final String MAGE     = "splashes/mage.jpg";
 		public static final String ROGUE    = "splashes/rogue.jpg";
@@ -264,6 +265,7 @@ public class Assets {
 		public static final String ITEMS        = "sprites/items.png";
 		public static final String ITEM_ICONS   = "sprites/item_icons.png";
 
+        public static final String PEASANT = "sprites/peasant.png";
 		public static final String WARRIOR  = "sprites/warrior.png";
 		public static final String MAGE     = "sprites/mage.png";
 		public static final String ROGUE    = "sprites/rogue.png";

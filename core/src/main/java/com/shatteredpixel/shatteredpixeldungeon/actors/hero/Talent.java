@@ -1139,28 +1139,45 @@ public enum Talent {
 
 	private static final String TALENT_TIER = "talents_tier_";
 
-	public static void storeTalentsInBundle( Bundle bundle, Hero hero ){
-		for (int i = 0; i < MAX_TALENT_TIERS; i++){
-			LinkedHashMap<Talent, Integer> tier = hero.talents.get(i);
-			Bundle tierBundle = new Bundle();
+    public static void storeTalentsInBundle( Bundle bundle, Hero hero ){
+        // FIX: Handle PEASANT class with empty talents
+        if (hero.heroClass == HeroClass.PEASANT) {
+            // For PEASANT, save empty talent bundles
+            for (int i = 0; i < MAX_TALENT_TIERS; i++){
+                bundle.put(TALENT_TIER+(i+1), new Bundle());
+            }
+            bundle.put("replacements", new Bundle());
+            return;
+        }
 
-			for (Talent talent : tier.keySet()){
-				if (tier.get(talent) > 0){
-					tierBundle.put(talent.name(), tier.get(talent));
-				}
-				if (tierBundle.contains(talent.name())){
-					tier.put(talent, Math.min(tierBundle.getInt(talent.name()), talent.maxPoints()));
-				}
-			}
-			bundle.put(TALENT_TIER+(i+1), tierBundle);
-		}
+        // Original logic for other classes
+        for (int i = 0; i < MAX_TALENT_TIERS; i++){
+            // FIX: Check if talents list has enough elements
+            if (i < hero.talents.size()) {
+                LinkedHashMap<Talent, Integer> tier = hero.talents.get(i);
+                Bundle tierBundle = new Bundle();
 
-		Bundle replacementsBundle = new Bundle();
-		for (Talent t : hero.metamorphedTalents.keySet()){
-			replacementsBundle.put(t.name(), hero.metamorphedTalents.get(t));
-		}
-		bundle.put("replacements", replacementsBundle);
-	}
+                for (Talent talent : tier.keySet()){
+                    if (tier.get(talent) > 0){
+                        tierBundle.put(talent.name(), tier.get(talent));
+                    }
+                    if (tierBundle.contains(talent.name())){
+                        tier.put(talent, Math.min(tierBundle.getInt(talent.name()), talent.maxPoints()));
+                    }
+                }
+                bundle.put(TALENT_TIER+(i+1), tierBundle);
+            } else {
+                // If tier doesn't exist, save empty bundle
+                bundle.put(TALENT_TIER+(i+1), new Bundle());
+            }
+        }
+
+        Bundle replacementsBundle = new Bundle();
+        for (Talent t : hero.metamorphedTalents.keySet()){
+            replacementsBundle.put(t.name(), hero.metamorphedTalents.get(t));
+        }
+        bundle.put("replacements", replacementsBundle);
+    }
 
 	private static final HashSet<String> removedTalents = new HashSet<>();
 	static{
@@ -1172,48 +1189,63 @@ public enum Talent {
 		//nothing atm
 	}
 
-	public static void restoreTalentsFromBundle( Bundle bundle, Hero hero ){
-		if (bundle.contains("replacements")){
-			Bundle replacements = bundle.getBundle("replacements");
-			for (String key : replacements.getKeys()){
-				String value = replacements.getString(key);
-				if (renamedTalents.containsKey(key)) key = renamedTalents.get(key);
-				if (renamedTalents.containsKey(value)) value = renamedTalents.get(value);
-				if (!removedTalents.contains(key) && !removedTalents.contains(value)){
-					try {
-						hero.metamorphedTalents.put(Talent.valueOf(key), Talent.valueOf(value));
-					} catch (Exception e) {
-						ShatteredPixelDungeon.reportException(e);
-					}
-				}
-			}
-		}
+    public static void restoreTalentsFromBundle( Bundle bundle, Hero hero ){
+        if (bundle.contains("replacements")){
+            Bundle replacements = bundle.getBundle("replacements");
+            for (String key : replacements.getKeys()){
+                String value = replacements.getString(key);
+                if (renamedTalents.containsKey(key)) key = renamedTalents.get(key);
+                if (renamedTalents.containsKey(value)) value = renamedTalents.get(value);
+                if (!removedTalents.contains(key) && !removedTalents.contains(value)){
+                    try {
+                        hero.metamorphedTalents.put(Talent.valueOf(key), Talent.valueOf(value));
+                    } catch (Exception e) {
+                        ShatteredPixelDungeon.reportException(e);
+                    }
+                }
+            }
+        }
 
-		if (hero.heroClass != null)     initClassTalents(hero);
-		if (hero.subClass != null)      initSubclassTalents(hero);
-		if (hero.armorAbility != null)  initArmorTalents(hero);
+        // FIX: Only initialize talents for non-PEASANT classes
+        if (hero.heroClass != null && hero.heroClass != HeroClass.PEASANT) {
+            initClassTalents(hero);
+            if (hero.subClass != null)      initSubclassTalents(hero);
+            if (hero.armorAbility != null)  initArmorTalents(hero);
 
-		for (int i = 0; i < MAX_TALENT_TIERS; i++){
-			LinkedHashMap<Talent, Integer> tier = hero.talents.get(i);
-			Bundle tierBundle = bundle.contains(TALENT_TIER+(i+1)) ? bundle.getBundle(TALENT_TIER+(i+1)) : null;
+            // Only restore talent points for non-PEASANT classes
+            for (int i = 0; i < MAX_TALENT_TIERS; i++){
+                // FIX: Ensure talents list has enough elements
+                if (i < hero.talents.size()) {
+                    LinkedHashMap<Talent, Integer> tier = hero.talents.get(i);
+                    Bundle tierBundle = bundle.contains(TALENT_TIER+(i+1)) ? bundle.getBundle(TALENT_TIER+(i+1)) : null;
 
-			if (tierBundle != null){
-				for (String tName : tierBundle.getKeys()){
-					int points = tierBundle.getInt(tName);
-					if (renamedTalents.containsKey(tName)) tName = renamedTalents.get(tName);
-					if (!removedTalents.contains(tName)) {
-						try {
-							Talent talent = Talent.valueOf(tName);
-							if (tier.containsKey(talent)) {
-								tier.put(talent, Math.min(points, talent.maxPoints()));
-							}
-						} catch (Exception e) {
-							ShatteredPixelDungeon.reportException(e);
-						}
-					}
-				}
-			}
-		}
-	}
-
+                    if (tierBundle != null){
+                        for (String tName : tierBundle.getKeys()){
+                            int points = tierBundle.getInt(tName);
+                            if (renamedTalents.containsKey(tName)) tName = renamedTalents.get(tName);
+                            if (!removedTalents.contains(tName)) {
+                                try {
+                                    Talent talent = Talent.valueOf(tName);
+                                    if (tier.containsKey(talent)) {
+                                        tier.put(talent, Math.min(points, talent.maxPoints()));
+                                    }
+                                } catch (Exception e) {
+                                    ShatteredPixelDungeon.reportException(e);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // For PEASANT, ensure talents structure exists but is empty
+            while (hero.talents.size() < MAX_TALENT_TIERS){
+                hero.talents.add(new LinkedHashMap<>());
+            }
+            // Clear any talents that might have been incorrectly restored
+            for (int i = 0; i < MAX_TALENT_TIERS; i++) {
+                hero.talents.get(i).clear();
+            }
+        }
+    }
 }

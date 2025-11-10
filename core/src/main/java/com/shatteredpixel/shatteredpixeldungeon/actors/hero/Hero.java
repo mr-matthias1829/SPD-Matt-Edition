@@ -209,7 +209,7 @@ public class Hero extends Char {
         if (SPDSettings.cheatMode()){
             HT = HP = 999030;
             baseHP = HT;
-            STR = 12;
+            STR = 25;
             cheating = true;
             Badges.setBadgesDisabled(true);
             Dungeon.rankable = false;
@@ -2238,18 +2238,20 @@ public class Hero extends Char {
 
 		super.move( step, travelling);
 
-        if (Random.Float() < 0.025f && !flying) {
-            GLog.w("You Stumble as you take a step!");
-            int dmg = (int) (HT * 0.04);
-            damage(dmg, this);
-            if (Random.Float() < 0.2f) {
-                GLog.n("You fall onto the ground and injure your ankle!");
-                Cripple.prolong(this, Cripple.class, 3f);
-                damage(dmg*2, this);
-                if (Random.Float() < 0.3f) {
-                    GLog.n("Your ankle is twisted!");
-                    Cripple.prolong(this, Cripple.class, 20f);
-                    damage(dmg*4, this);
+        if (Dungeon.isChallenged(Challenges.WONKY_STEP)) {
+            if (Random.Float() < 0.025f && !flying) {
+                GLog.w("You Stumble as you take a step!");
+                int dmg = (int) (HT * 0.04);
+                damage(dmg, this);
+                if (Random.Float() < 0.2f) {
+                    GLog.n("You fall onto the ground and injure your ankle!");
+                    Cripple.prolong(this, Cripple.class, 3f);
+                    damage(dmg * 2, this);
+                    if (Random.Float() < 0.3f) {
+                        GLog.n("Your ankle is twisted!");
+                        Cripple.prolong(this, Cripple.class, 20f);
+                        damage(dmg * 4, this);
+                    }
                 }
             }
         }

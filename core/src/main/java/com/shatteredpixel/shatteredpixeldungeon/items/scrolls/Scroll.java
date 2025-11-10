@@ -29,7 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpiritualNecromancer;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
@@ -37,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
@@ -187,7 +190,16 @@ public abstract class Scroll extends Item {
 					&& !(this instanceof ScrollOfRemoveCurse || this instanceof ScrollOfAntiMagic)){
 				GLog.n( Messages.get(this, "cursed") );
 			} else {
-				doRead();
+                if (hero.heroClass == HeroClass.PEASANT && (this instanceof ScrollOfMetamorphosis)) {
+                    if (!isKnown()) {
+                        identify();
+                        curItem = detach(curUser.belongings.backpack);
+                    }
+
+                    GLog.n( Messages.get(this, "peasant_no_use") );
+                } else {
+                    doRead();
+                }
 			}
 			
 		}

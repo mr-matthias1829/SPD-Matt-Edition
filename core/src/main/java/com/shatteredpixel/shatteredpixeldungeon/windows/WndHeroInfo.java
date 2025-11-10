@@ -58,6 +58,9 @@ public class WndHeroInfo extends WndTabbed {
 
 		Image tabIcon;
 		switch (cl){
+            case PEASANT:
+                tabIcon = new ItemSprite(ItemSpriteSheet.TRINKET_CATA, null);
+                break;
 			case WARRIOR: default:
 				tabIcon = new ItemSprite(ItemSpriteSheet.SEAL, null);
 				break;
@@ -238,161 +241,220 @@ public class WndHeroInfo extends WndTabbed {
 		}
 	}
 
-	private static class TalentInfoTab extends Component {
+    private static class TalentInfoTab extends Component {
 
-		private RenderedTextBlock title;
-		private RenderedTextBlock message;
-		private TalentsPane talentPane;
+        private RenderedTextBlock title;
+        private RenderedTextBlock message;
+        private TalentsPane talentPane;
+        private RenderedTextBlock noContentMessage; // Add this
 
-		public TalentInfoTab( HeroClass cls ){
-			super();
-			title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "talents")), 9);
-			title.hardlight(TITLE_COLOR);
-			add(title);
+        public TalentInfoTab( HeroClass cls ){
+            super();
+            title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "talents")), 9);
+            title.hardlight(TITLE_COLOR);
+            add(title);
 
-			message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "talents_msg"), 6);
-			add(message);
+            // Handle PEASANT case
+            if (cls == HeroClass.PEASANT) {
+                message = PixelScene.renderTextBlock("", 6); // Empty message
+                noContentMessage = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "peasant_no_content"), 6);
+                add(message);
+                add(noContentMessage);
+                talentPane = null;
+            } else {
+                message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "talents_msg"), 6);
+                add(message);
 
-			ArrayList<LinkedHashMap<Talent, Integer>> talents = new ArrayList<>();
-			Talent.initClassTalents(cls, talents);
-			talents.get(2).clear(); //we show T3 talents with subclasses
+                ArrayList<LinkedHashMap<Talent, Integer>> talents = new ArrayList<>();
+                Talent.initClassTalents(cls, talents);
+                talents.get(2).clear(); //we show T3 talents with subclasses
 
-			talentPane = new TalentsPane(TalentButton.Mode.INFO, talents);
-			add(talentPane);
-		}
+                talentPane = new TalentsPane(TalentButton.Mode.INFO, talents);
+                add(talentPane);
+                noContentMessage = null;
+            }
+        }
 
-		@Override
-		protected void layout() {
-			super.layout();
+        @Override
+        protected void layout() {
+            super.layout();
 
-			title.setPos((width-title.width())/2, MARGIN);
-			message.maxWidth((int)width);
-			message.setPos(0, title.bottom()+4*MARGIN);
+            title.setPos((width-title.width())/2, MARGIN);
 
-			talentPane.setRect(0, message.bottom() + 3*MARGIN, width, 85);
+            if (noContentMessage != null) {
+                // PEASANT layout
+                message.setSize(0, 0); // hide empty message
+                noContentMessage.maxWidth((int)width);
+                noContentMessage.setPos(0, title.bottom()+4*MARGIN);
+                height = Math.max(height, noContentMessage.bottom());
+            } else {
+                // Normal class layout
+                message.maxWidth((int)width);
+                message.setPos(0, title.bottom()+4*MARGIN);
+                talentPane.setRect(0, message.bottom() + 3*MARGIN, width, 85);
+                height = Math.max(height, talentPane.bottom());
+            }
+        }
+    }
 
-			height = Math.max(height, talentPane.bottom());
-		}
-	}
+    private static class SubclassInfoTab extends Component {
 
-	private static class SubclassInfoTab extends Component {
+        private RenderedTextBlock title;
+        private RenderedTextBlock message;
+        private RenderedTextBlock noContentMessage; // Add this
+        private RenderedTextBlock[] subClsDescs;
+        private IconButton[] subClsInfos;
 
-		private RenderedTextBlock title;
-		private RenderedTextBlock message;
-		private RenderedTextBlock[] subClsDescs;
-		private IconButton[] subClsInfos;
+        public SubclassInfoTab( HeroClass cls ){
+            super();
+            title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "subclasses")), 9);
+            title.hardlight(TITLE_COLOR);
+            add(title);
 
-		public SubclassInfoTab( HeroClass cls ){
-			super();
-			title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "subclasses")), 9);
-			title.hardlight(TITLE_COLOR);
-			add(title);
+            // Handle PEASANT case
+            if (cls == HeroClass.PEASANT) {
+                message = PixelScene.renderTextBlock("", 6); // Empty message
+                noContentMessage = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "peasant_no_content"), 6);
+                add(message);
+                add(noContentMessage);
+                subClsDescs = null;
+                subClsInfos = null;
+            } else {
+                message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "subclasses_msg"), 6);
+                add(message);
+                noContentMessage = null;
 
-			message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "subclasses_msg"), 6);
-			add(message);
+                HeroSubClass[] subClasses = cls.subClasses();
 
-			HeroSubClass[] subClasses = cls.subClasses();
+                subClsDescs = new RenderedTextBlock[subClasses.length];
+                subClsInfos = new IconButton[subClasses.length];
 
-			subClsDescs = new RenderedTextBlock[subClasses.length];
-			subClsInfos = new IconButton[subClasses.length];
+                for (int i = 0; i < subClasses.length; i++){
+                    subClsDescs[i] = PixelScene.renderTextBlock(subClasses[i].shortDesc(), 6);
+                    int finalI = i;
+                    subClsInfos[i] = new IconButton( Icons.get(Icons.INFO) ){
+                        @Override
+                        protected void onClick() {
+                            Game.scene().addToFront(new WndInfoSubclass(cls, subClasses[finalI]));
+                        }
+                    };
+                    add(subClsDescs[i]);
+                    add(subClsInfos[i]);
+                }
+            }
+        }
 
-			for (int i = 0; i < subClasses.length; i++){
-				subClsDescs[i] = PixelScene.renderTextBlock(subClasses[i].shortDesc(), 6);
-				int finalI = i;
-				subClsInfos[i] = new IconButton( Icons.get(Icons.INFO) ){
-					@Override
-					protected void onClick() {
-						Game.scene().addToFront(new WndInfoSubclass(cls, subClasses[finalI]));
-					}
-				};
-				add(subClsDescs[i]);
-				add(subClsInfos[i]);
-			}
+        @Override
+        protected void layout() {
+            super.layout();
 
-		}
+            title.setPos((width-title.width())/2, MARGIN);
 
-		@Override
-		protected void layout() {
-			super.layout();
+            if (noContentMessage != null) {
+                // PEASANT layout
+                message.setSize(0, 0); // hide empty message
+                noContentMessage.maxWidth((int)width);
+                noContentMessage.setPos(0, title.bottom()+4*MARGIN);
+                height = Math.max(height, noContentMessage.bottom());
+            } else {
+                // Normal class layout
+                message.maxWidth((int)width);
+                message.setPos(0, title.bottom()+4*MARGIN);
 
-			title.setPos((width-title.width())/2, MARGIN);
-			message.maxWidth((int)width);
-			message.setPos(0, title.bottom()+4*MARGIN);
+                float pos = message.bottom()+4*MARGIN;
 
-			float pos = message.bottom()+4*MARGIN;
+                for (int i = 0; i < subClsDescs.length; i++){
+                    subClsDescs[i].maxWidth((int)width - 20);
+                    subClsDescs[i].setPos(0, pos);
 
-			for (int i = 0; i < subClsDescs.length; i++){
-				subClsDescs[i].maxWidth((int)width - 20);
-				subClsDescs[i].setPos(0, pos);
+                    subClsInfos[i].setRect(width-20, subClsDescs[i].top() + (subClsDescs[i].height()-20)/2, 20, 20);
 
-				subClsInfos[i].setRect(width-20, subClsDescs[i].top() + (subClsDescs[i].height()-20)/2, 20, 20);
+                    pos = subClsDescs[i].bottom() + 4*MARGIN;
+                }
 
-				pos = subClsDescs[i].bottom() + 4*MARGIN;
-			}
+                height = Math.max(height, pos - 4*MARGIN);
+            }
+        }
+    }
 
-			height = Math.max(height, pos - 4*MARGIN);
+    private static class ArmorAbilityInfoTab extends Component {
 
-		}
-	}
+        private RenderedTextBlock title;
+        private RenderedTextBlock message;
+        private RenderedTextBlock noContentMessage; // Add this
+        private RenderedTextBlock[] abilityDescs;
+        private IconButton[] abilityInfos;
 
-	private static class ArmorAbilityInfoTab extends Component {
+        public ArmorAbilityInfoTab(HeroClass cls){
+            super();
+            title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "abilities")), 9);
+            title.hardlight(TITLE_COLOR);
+            add(title);
 
-		private RenderedTextBlock title;
-		private RenderedTextBlock message;
-		private RenderedTextBlock[] abilityDescs;
-		private IconButton[] abilityInfos;
+            // Handle PEASANT case
+            if (cls == HeroClass.PEASANT) {
+                message = PixelScene.renderTextBlock("", 6); // Empty message
+                noContentMessage = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "peasant_no_content"), 6);
+                add(message);
+                add(noContentMessage);
+                abilityDescs = null;
+                abilityInfos = null;
+            } else {
+                message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "abilities_msg"), 6);
+                add(message);
+                noContentMessage = null;
 
-		public ArmorAbilityInfoTab(HeroClass cls){
-			super();
-			title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "abilities")), 9);
-			title.hardlight(TITLE_COLOR);
-			add(title);
+                ArmorAbility[] abilities = cls.armorAbilities();
 
-			message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "abilities_msg"), 6);
-			add(message);
+                abilityDescs = new RenderedTextBlock[abilities.length];
+                abilityInfos = new IconButton[abilities.length];
 
-			ArmorAbility[] abilities = cls.armorAbilities();
+                for (int i = 0; i < abilities.length; i++){
+                    abilityDescs[i] = PixelScene.renderTextBlock(abilities[i].shortDesc(), 6);
+                    int finalI = i;
+                    abilityInfos[i] = new IconButton( Icons.get(Icons.INFO) ){
+                        @Override
+                        protected void onClick() {
+                            Game.scene().addToFront(new WndInfoArmorAbility(cls, abilities[finalI]));
+                        }
+                    };
+                    add(abilityDescs[i]);
+                    add(abilityInfos[i]);
+                }
+            }
+        }
 
-			abilityDescs = new RenderedTextBlock[abilities.length];
-			abilityInfos = new IconButton[abilities.length];
+        @Override
+        protected void layout() {
+            super.layout();
 
-			for (int i = 0; i < abilities.length; i++){
-				abilityDescs[i] = PixelScene.renderTextBlock(abilities[i].shortDesc(), 6);
-				int finalI = i;
-				abilityInfos[i] = new IconButton( Icons.get(Icons.INFO) ){
-					@Override
-					protected void onClick() {
-						Game.scene().addToFront(new WndInfoArmorAbility(cls, abilities[finalI]));
-					}
-				};
-				add(abilityDescs[i]);
-				add(abilityInfos[i]);
-			}
+            title.setPos((width-title.width())/2, MARGIN);
 
-		}
+            if (noContentMessage != null) {
+                // PEASANT layout
+                message.setSize(0, 0); // hide empty message
+                noContentMessage.maxWidth((int)width);
+                noContentMessage.setPos(0, title.bottom()+4*MARGIN);
+                height = Math.max(height, noContentMessage.bottom());
+            } else {
+                // Normal class layout
+                message.maxWidth((int)width);
+                message.setPos(0, title.bottom()+4*MARGIN);
 
-		@Override
-		protected void layout() {
-			super.layout();
+                float pos = message.bottom()+4*MARGIN;
 
-			title.setPos((width-title.width())/2, MARGIN);
-			message.maxWidth((int)width);
-			message.setPos(0, title.bottom()+4*MARGIN);
+                for (int i = 0; i < abilityDescs.length; i++){
+                    abilityDescs[i].maxWidth((int)width - 20);
+                    abilityDescs[i].setPos(0, pos);
 
-			float pos = message.bottom()+4*MARGIN;
+                    abilityInfos[i].setRect(width-20, abilityDescs[i].top() + (abilityDescs[i].height()-20)/2, 20, 20);
 
-			for (int i = 0; i < abilityDescs.length; i++){
-				abilityDescs[i].maxWidth((int)width - 20);
-				abilityDescs[i].setPos(0, pos);
+                    pos = abilityDescs[i].bottom() + 4*MARGIN;
+                }
 
-				abilityInfos[i].setRect(width-20, abilityDescs[i].top() + (abilityDescs[i].height()-20)/2, 20, 20);
-
-				pos = abilityDescs[i].bottom() + 4*MARGIN;
-			}
-
-			height = Math.max(height, pos - 4*MARGIN);
-
-		}
-	}
+                height = Math.max(height, pos - 4*MARGIN);
+            }
+        }
+    }
 
 }

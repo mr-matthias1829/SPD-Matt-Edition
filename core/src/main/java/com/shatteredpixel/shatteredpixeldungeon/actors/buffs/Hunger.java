@@ -49,7 +49,7 @@ public class Hunger extends Buff implements Hero.Doom {
 
     public float starvingThreshold() {
         if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
-            return STARVING * 450f;
+            return 450f;
         }
         return STARVING;
     }

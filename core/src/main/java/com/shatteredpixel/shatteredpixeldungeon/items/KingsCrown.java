@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
@@ -68,8 +69,13 @@ public class KingsCrown extends Item {
 		if (action.equals(AC_WEAR)) {
 
 			curUser = hero;
-			if (hero.belongings.armor() != null){
-				GameScene.show( new WndChooseAbility(this, hero.belongings.armor(), hero));
+
+            if (hero.belongings.armor() != null){
+                if (hero.heroClass != HeroClass.PEASANT) {
+                    GameScene.show(new WndChooseAbility(this, hero.belongings.armor(), hero));
+                } else {
+                    GLog.w(Messages.get(this, "peasant_no_ability"));
+                }
 			} else {
 				GLog.w( Messages.get(this, "naked"));
 			}

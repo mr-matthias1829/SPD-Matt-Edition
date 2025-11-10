@@ -46,9 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Smok
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
-import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
+import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
@@ -67,6 +65,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImag
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
@@ -82,7 +81,11 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.DeviceCompat;
 
+import java.util.ArrayList;
+
 public enum HeroClass {
+
+    PEASANT(),
 
 	WARRIOR( HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
 	MAGE( HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
@@ -98,8 +101,17 @@ public enum HeroClass {
 
 	public void initHero( Hero hero ) {
 
-		hero.heroClass = this;
-		Talent.initClassTalents(hero);
+        hero.heroClass = this;
+
+        if (this != PEASANT) {
+            Talent.initClassTalents(hero);
+        } else {
+            // Initialize empty talent tiers for PEASANT to prevent IndexOutOfBoundsException
+            hero.talents = new ArrayList<>();
+            for (int i = 0; i < Talent.MAX_TALENT_TIERS; i++) {
+                hero.talents.add(new java.util.LinkedHashMap<>());
+            }
+        }
 
 		Item i = new ClothArmor().identify();
 		//if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;
@@ -116,6 +128,10 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 
 		switch (this) {
+            case PEASANT:
+                initPeasant(hero);
+                break;
+
 			case WARRIOR:
 				initWarrior( hero );
 				break;
@@ -169,6 +185,16 @@ public enum HeroClass {
 		}
 		return null;
 	}
+
+
+    private static void initPeasant(Hero hero ) {
+        // bro starts with nothing
+
+        ThrowingStone stones = new ThrowingStone();
+        stones.identify().collect();
+        ThrowingStone stones2 = new ThrowingStone();
+        stones2.identify().collect();
+    }
 
 	private static void initWarrior( Hero hero ) {
         (hero.belongings.weapon = new WornShortsword()).identify();
@@ -297,6 +323,8 @@ public enum HeroClass {
 
 	public String spritesheet() {
 		switch (this) {
+            case PEASANT:
+                return Assets.Sprites.PEASANT;
 			case WARRIOR: default:
 				return Assets.Sprites.WARRIOR;
 			case MAGE:
@@ -314,6 +342,8 @@ public enum HeroClass {
 
 	public String splashArt(){
 		switch (this) {
+            case PEASANT:
+                return Assets.Splashes.PEASANT;
 			case WARRIOR: default:
 				return Assets.Splashes.WARRIOR;
 			case MAGE:
@@ -334,18 +364,20 @@ public enum HeroClass {
 		if (DeviceCompat.isDebug()) return true;
 
 		switch (this){
+            case PEASANT:
+                return true;
 			case WARRIOR: default:
-				return true;
+                return Badges.isUnlocked(Badges.Badge.UNLOCK_WARRIOR_A);
 			case MAGE:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE);
+				return Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE_A);
 			case ROGUE:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_ROGUE);
+				return Badges.isUnlocked(Badges.Badge.UNLOCK_ROGUE_A);
 			case HUNTRESS:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_HUNTRESS);
+				return Badges.isUnlocked(Badges.Badge.UNLOCK_HUNTRESS_A);
 			case DUELIST:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST);
+				return Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST_A);
 			case CLERIC:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_CLERIC);
+				return Badges.isUnlocked(Badges.Badge.UNLOCK_CLERIC_A);
 		}
 	}
 	

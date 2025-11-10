@@ -65,6 +65,7 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 		} else {
 			identifiedByUse = false;
 		}
+
 		GameScene.show(new WndMetamorphChoose());
 	}
 

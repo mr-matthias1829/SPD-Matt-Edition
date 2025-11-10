@@ -95,53 +95,56 @@ abstract public class ClassArmor extends Armor {
 		return user.armorAbility.targetedPos(user, dst);
 	}
 
-	public static ClassArmor upgrade (Hero owner, Armor armor ) {
-		
-		ClassArmor classArmor = null;
-		
-		switch (owner.heroClass) {
-			case WARRIOR:
-				classArmor = new WarriorArmor();
-				break;
-			case ROGUE:
-				classArmor = new RogueArmor();
-				break;
-			case MAGE:
-				classArmor = new MageArmor();
-				break;
-			case HUNTRESS:
-				classArmor = new HuntressArmor();
-				break;
-			case DUELIST:
-				classArmor = new DuelistArmor();
-				break;
-			case CLERIC:
-				classArmor = new ClericArmor();
-				break;
-		}
-		
-		classArmor.level(armor.trueLevel());
-		classArmor.tier = armor.tier;
-		classArmor.augment = armor.augment;
-		classArmor.inscribe(armor.glyph);
-		if (armor.seal != null) {
-			classArmor.seal = armor.seal;
-		}
-		classArmor.glyphHardened = armor.glyphHardened;
-		classArmor.cursed = armor.cursed;
-		classArmor.curseInfusionBonus = armor.curseInfusionBonus;
-		classArmor.masteryPotionBonus = armor.masteryPotionBonus;
-		if (armor.levelKnown && armor.cursedKnown) {
-			classArmor.identify();
-		} else {
-			classArmor.levelKnown = armor.levelKnown;
-			classArmor.cursedKnown = true;
-		}
+    public static ClassArmor upgrade (Hero owner, Armor armor ) {
 
-		classArmor.charge = 50;
-		
-		return classArmor;
-	}
+        ClassArmor classArmor = null;
+
+        switch (owner.heroClass) {
+            case PEASANT:
+                // Peasants cannot get class armor
+                return null;
+            case WARRIOR:
+                classArmor = new WarriorArmor();
+                break;
+            case ROGUE:
+                classArmor = new RogueArmor();
+                break;
+            case MAGE:
+                classArmor = new MageArmor();
+                break;
+            case HUNTRESS:
+                classArmor = new HuntressArmor();
+                break;
+            case DUELIST:
+                classArmor = new DuelistArmor();
+                break;
+            case CLERIC:
+                classArmor = new ClericArmor();
+                break;
+        }
+
+        classArmor.level(armor.trueLevel());
+        classArmor.tier = armor.tier;
+        classArmor.augment = armor.augment;
+        classArmor.inscribe(armor.glyph);
+        if (armor.seal != null) {
+            classArmor.seal = armor.seal;
+        }
+        classArmor.glyphHardened = armor.glyphHardened;
+        classArmor.cursed = armor.cursed;
+        classArmor.curseInfusionBonus = armor.curseInfusionBonus;
+        classArmor.masteryPotionBonus = armor.masteryPotionBonus;
+        if (armor.levelKnown && armor.cursedKnown) {
+            classArmor.identify();
+        } else {
+            classArmor.levelKnown = armor.levelKnown;
+            classArmor.cursedKnown = true;
+        }
+
+        classArmor.charge = 50;
+
+        return classArmor;
+    }
 
 	private static final String ARMOR_TIER	= "armortier";
 	private static final String CHARGE	    = "charge";

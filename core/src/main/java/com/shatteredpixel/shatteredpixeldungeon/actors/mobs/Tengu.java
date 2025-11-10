@@ -87,7 +87,7 @@ public class Tengu extends Mob {
     {
         spriteClass = TenguSprite.class;
 
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 450 : 300;
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 350 : 300;
         EXP = 20;
         defenseSkill = 15;
 
@@ -177,7 +177,7 @@ public class Tengu extends Mob {
         }
 
         //phase 1 of the fight is over - triggers at 65% HP (195 HP at HT=300)
-        if (state == PrisonBossLevel.State.FIGHT_START && HP <= HT * 40/100) { //65
+        if (state == PrisonBossLevel.State.FIGHT_START && HP <= HT * 65/100) { //65
             HP = HT; // heal to full (300)
             yell(Messages.get(this, "interesting"));
             ((PrisonBossLevel)Dungeon.level).progress();
@@ -465,7 +465,7 @@ public class Tengu extends Mob {
         }
 
         // In phase 1, don't use abilities until below 50% HP
-        if (!phase2Started && HP > HT / 2) {
+        if (!phase2Started) {
             return false;
         }
 
@@ -477,14 +477,14 @@ public class Tengu extends Mob {
             float hpPercent = (float) HP / HT;
             int baseCooldown;
 
-            if (hpPercent > 0.6f) { //0.5
-                baseCooldown = 7; // early phase 2
-            } else if (hpPercent > 0.4f) { //0.35
-                baseCooldown = 5; // mid phase 2
+            if (hpPercent > 0.5f) { //0.5
+                baseCooldown = 8; // early phase 2
+            } else if (hpPercent > 0.35f) { //0.35
+                baseCooldown = 6; // mid phase 2
             } else if (hpPercent > 0.15f) { //0.15
-                baseCooldown = 4; // late phase 2
+                baseCooldown = 5; // late phase 2
             } else {
-                baseCooldown = 3; // critical HP
+                baseCooldown = 4; // critical HP
             }
 
             abilityCooldown = baseCooldown;
