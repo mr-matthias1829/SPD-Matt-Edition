@@ -788,14 +788,15 @@ public class HeroSelectScene extends PixelScene {
 			StyledButton challengeButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndChallenges.class, "title"), 6){
 				@Override
 				protected void onClick() {
-					if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
-						ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
-								Icons.get(Icons.CHALLENGE_GREY),
-								Messages.get(WndChallenges.class, "title"),
-								Messages.get(HeroSelectScene.class, "challenges_nowin")
-						));
-						return;
-					}
+
+					//if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
+					//	ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
+					//			Icons.get(Icons.CHALLENGE_GREY),
+					//			Messages.get(WndChallenges.class, "title"),
+					//			Messages.get(HeroSelectScene.class, "challenges_nowin")
+					//	));
+					//	return;
+					//}
 
 					ShatteredPixelDungeon.scene().addToFront(new WndChallenges(SPDSettings.challenges(), true) {
 						public void onBackPressed() {
