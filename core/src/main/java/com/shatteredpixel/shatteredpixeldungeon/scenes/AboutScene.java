@@ -69,11 +69,11 @@ public class AboutScene extends PixelScene {
 
         //*** Mod Credits ***
         CreditsBlock matt = new CreditsBlock(true, 0xF5A6F2,  // Gold highlight
-                "Dum Matt (or mrmatthias1829)",
+                "SPD Matt Edition",
                 Icons.DUM_MATT.get(),
-                "Matt Edition mod dev\nBased on SPD's open source",
-                "I don't actually have a websit-",
-                " ");
+                "developed by _Dum Matt_\n(or _mrmatthias1829_ i guess)\nBased on SPD's open source",
+                "I don't actually have a websi-",
+                "https://github.com/mr-matthias1829/SPD-Matt-Edition");
         // center horizontally; use y cursor for vertical placement
         matt.setRect((Camera.main.width - colWidth)/2f, y, colWidth, 0);
         content.add(matt);
