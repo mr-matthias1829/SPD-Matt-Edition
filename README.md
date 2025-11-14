@@ -31,6 +31,7 @@ Well, I gotchu.
 From changing hp, damage, and all other stats, to straight up changing mechanics, new content, and making bosses harder. We got it all! But don't expect it all to be bad... nonono... we have plenty of buffs and nerfs, some good, some bad. But of course we got (some) balancing.
 
 But in all honesty? Expect to die... ALOT...
+
 All in all: have fun, pray to rng that you survive, and... just don't be stupid
 
 ## Other (somewhat) important information
