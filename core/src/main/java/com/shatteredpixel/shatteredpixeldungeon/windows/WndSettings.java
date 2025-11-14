@@ -131,8 +131,10 @@ public class WndSettings extends WndTabbed {
 		data = new DataTab();
 		data.setSize(width, 0);
 		height = Math.max(height, data.height());
-		add( data );
 
+		//add( data );
+
+        /*
 		add( new IconTab(Icons.get(Icons.DATA)){
 			@Override
 			protected void select(boolean value) {
@@ -141,6 +143,7 @@ public class WndSettings extends WndTabbed {
 				if (value) last_index = 3;
 			}
 		});
+         */
 
 		audio = new AudioTab();
 		audio.setSize(width, 0);
@@ -1062,6 +1065,7 @@ public class WndSettings extends WndTabbed {
 		RedButton[] lanBtns;
 		ColorBlock sep3;
 		RenderedTextBlock txtTranifex;
+        RenderedTextBlock txtNote;
 		RedButton btnCredits;
 
 		@Override
@@ -1141,6 +1145,10 @@ public class WndSettings extends WndTabbed {
 			txtTranifex = PixelScene.renderTextBlock(5);
 			txtTranifex.text(Messages.get(this, "transifex"));
 			add(txtTranifex);
+
+            txtNote = PixelScene.renderTextBlock(5);
+            txtNote .text(Messages.get(this, "translationsupport"));
+            add(txtNote);
 
 			if (currLang != Languages.ENGLISH) {
 				String credText = Messages.titleCase(Messages.get(this, "credits"));
@@ -1267,12 +1275,18 @@ public class WndSettings extends WndTabbed {
 				txtTranifex.setPos(0, y);
 				txtTranifex.maxWidth((int)btnCredits.left());
 
-				height = Math.max(btnCredits.bottom(), txtTranifex.bottom());
+                txtNote.setPos(0, y+txtTranifex.height()+2);
+                txtNote.maxWidth((int)btnCredits.left());
+
+				height = Math.max(btnCredits.bottom(), txtNote.bottom());
 			} else {
 				txtTranifex.setPos(0, y);
 				txtTranifex.maxWidth((int)width);
 
-				height = txtTranifex.bottom();
+                txtNote.setPos(0, y+txtTranifex.height()+2);
+                txtNote.maxWidth((int)width);
+
+				height = txtNote.bottom();
 			}
 
 		}

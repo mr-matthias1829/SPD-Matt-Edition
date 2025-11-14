@@ -61,23 +61,40 @@ public class AboutScene extends PixelScene {
 		ScrollPane list = new ScrollPane( new Component() );
 		add( list );
 
-		Component content = list.content();
-		content.clear();
+        Component content = list.content();
+        content.clear();
 
-		//*** Shattered Pixel Dungeon Credits ***
+        // Start y cursor at top inset
+        float y = insets.top + 6f;
 
-		CreditsBlock shpx = new CreditsBlock(true, Window.SHPX_COLOR,
-				"Shattered Pixel Dungeon",
-				Icons.SHPX.get(),
-				"Developed by: _Evan Debenham_\nBased on Pixel Dungeon's open source",
-				"ShatteredPixel.com",
-				"https://ShatteredPixel.com");
-		if (landscape()){
-			shpx.setRect((w - fullWidth)/2f - 6, insets.top + 10, 120, 0);
-		} else {
-			shpx.setRect((w - fullWidth)/2f, insets.top + 6, 120, 0);
-		}
-		content.add(shpx);
+        //*** Mod Credits ***
+        CreditsBlock matt = new CreditsBlock(true, 0xF5A6F2,  // Gold highlight
+                "Dum Matt (or mrmatthias1829)",
+                Icons.DUM_MATT.get(),
+                "Matt Edition mod dev\nBased on SPD's open source",
+                "I don't actually have a websit-",
+                " ");
+        // center horizontally; use y cursor for vertical placement
+        matt.setRect((Camera.main.width - colWidth)/2f, y, colWidth, 0);
+        content.add(matt);
+
+        // add a small separator and move the cursor down
+        addLine(matt.bottom() + 6, content);
+        y = matt.bottom() + 6f;      // 6px spacing before next block
+
+        //*** Shattered Pixel Dungeon Credits ***
+        CreditsBlock shpx = new CreditsBlock(true, Window.SHPX_COLOR,
+                "Shattered Pixel Dungeon",
+                Icons.SHPX.get(),
+                "Developed by: _Evan Debenham_\nBased on Pixel Dungeon's open source",
+                "ShatteredPixel.com",
+                "https://ShatteredPixel.com");
+        if (landscape()){
+            shpx.setRect((w - fullWidth)/2f - 6, y + 8, 120, 0); // small extra top padding for the large title
+        } else {
+            shpx.setRect((w - fullWidth)/2f, y, 120, 0);
+        }
+        content.add(shpx);
 
 		CreditsBlock alex = new CreditsBlock(false, Window.SHPX_COLOR,
 				"Splash Art & Design:",

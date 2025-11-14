@@ -325,33 +325,35 @@ public class SPDSettings extends GameSettings {
 		put(KEY_NEWS, value);
 	}
 
-	public static boolean news(){
-		return getBoolean(KEY_NEWS, true);
-	}
+    public static boolean news(){
+        return false;
+    }
 
 	public static void updates(boolean value){
 		put(KEY_UPDATES, value);
 	}
 
-	public static boolean updates(){
-		return getBoolean(KEY_UPDATES, true);
+    public static boolean updates(){
+        return false;
+    }
+
+
+    public static void betas(boolean value){
+		put(KEY_BETAS, false);
 	}
 
-	public static void betas(boolean value){
-		put(KEY_BETAS, value);
-	}
+    public static boolean betas(){
+        return false;
+    }
 
-	public static boolean betas(){
-		return getBoolean(KEY_BETAS, Game.version.contains("BETA") || Game.version.contains("RC"));
-	}
 
-	public static void WiFi(boolean value){
+    public static void WiFi(boolean value){
 		put(KEY_WIFI, value);
 	}
 
-	public static boolean WiFi(){
-		return getBoolean(KEY_WIFI, true);
-	}
+    public static boolean WiFi(){
+        return false;
+    }
 
 	public static void newsLastRead(long lastRead){
 		put(KEY_NEWS_LAST_READ, lastRead);

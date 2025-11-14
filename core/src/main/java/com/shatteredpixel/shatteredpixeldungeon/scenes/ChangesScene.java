@@ -33,21 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.TitleBackground;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.ChangeInfo;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChanges;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChangesTabbed;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_1_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_2_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_3_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_4_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_5_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_6_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_7_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_8_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_9_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v1_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v2_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v3_X_Changes;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.*;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
@@ -183,6 +169,9 @@ public class ChangesScene extends PixelScene {
 				v0_2_X_Changes.addAllChanges(changeInfos);
 				v0_1_X_Changes.addAllChanges(changeInfos);
 				break;
+            case 8:
+                MOD_v1000_v12xx_Changes.addAllChanges(changeInfos);
+                break;
 		}
 
 		ScrollPane list = new ScrollPane( new Component() ){
@@ -348,6 +337,21 @@ public class ChangesScene extends PixelScene {
 		if (changesSelected != 7) btnOld.textColor( 0xBBBBBB );
 		btnOld.setRect(btn0_6.right()-2, btn0_8.top(), 22, changesSelected == 7 ? 19 : 15);
 		addToBack(btnOld);
+
+
+        StyledButton btnMod = new StyledButton(Chrome.Type.GREY_BUTTON_TR, "MOD", 8){
+            @Override
+            protected void onClick() {
+                super.onClick();
+                if (changesSelected != 8) {
+                    changesSelected = 8;
+                    ShatteredPixelDungeon.seamlessResetScene();
+                }
+            }
+        };
+        if (changesSelected != 8) btnMod.textColor( 0xBBBBBB );
+        btnMod.setRect(btnOld.right()-2, btnOld.top(), 25, changesSelected == 8 ? 19 : 15);
+        addToBack(btnMod);
 
 		addToBack( BG );
 

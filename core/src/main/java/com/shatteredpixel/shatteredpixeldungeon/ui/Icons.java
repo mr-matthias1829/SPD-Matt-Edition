@@ -131,6 +131,8 @@ public enum Icons {
 	CELESTI,
 	KRISTJAN,
 	CUBE_CODE,
+
+    DUM_MATT,
 	PURIGRO,
 	ARCNOR;
 
@@ -425,6 +427,10 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 160, 96, 27, 30 ) );
 				icon.scale.set(PixelScene.align(0.49f));
 				break;
+            case DUM_MATT:
+                icon.frame( icon.texture.uvRectBySize( 187, 96, 33, 32 ) );
+                icon.scale.set(PixelScene.align(0.49f));
+                break;
 
 		}
 		return icon;
@@ -447,7 +453,8 @@ public enum Icons {
 		switch (cl) {
             case PEASANT:
                 //return new ItemSprite(ItemSpriteSheet.WORN_SHORTSWORD);
-                return new ItemSprite(ItemSpriteSheet.TRINKET_CATA);
+                //return new ItemSprite(ItemSpriteSheet.TRINKET_CATA);
+                return new ItemSprite(ItemSpriteSheet.ARMOR_LEATHER);
 			case WARRIOR:
 				return new ItemSprite(ItemSpriteSheet.SEAL);
 			case MAGE:

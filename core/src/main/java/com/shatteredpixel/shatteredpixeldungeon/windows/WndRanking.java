@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -39,18 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BadgesGrid;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BadgesList;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Button;
-import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
-import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
@@ -427,47 +417,73 @@ public class WndRanking extends WndTabbed {
 		}
 	}
 
-	private class ChallengesTab extends Group{
+    private RenderedTextBlock text;
+    private class ChallengesTab extends Group {
 
-		public ChallengesTab(){
-			super();
+        private ScrollPane scroll;
 
-			camera = WndRanking.this.camera;
+        public ChallengesTab(){
+            super();
 
-			float pos = 0;
+            camera = WndRanking.this.camera;
 
-			for (int i=0; i < Challenges.NAME_IDS.length; i++) {
+            // Create scroll area with empty content group
+            scroll = new ScrollPane(new Component());
+            add(scroll);
 
-				final String challenge = Challenges.NAME_IDS[i];
+            // Place scroll area within the tab (same layout as your previous group)
+            scroll.setRect(0, 0, WIDTH, HEIGHT);
 
-				CheckBox cb = new CheckBox( Messages.titleCase(Messages.get(Challenges.class, challenge)) );
-				cb.checked( (Dungeon.challenges & Challenges.MASKS[i]) != 0 );
-				cb.active = false;
+            Component content = scroll.content();
 
-				if (i > 0) {
-					pos += 1;
-				}
-				cb.setRect( 0, pos, WIDTH-16, 15 );
+            float posY = 0;
 
-				add( cb );
+            String header = "This tab is scrollable!";
+            text = PixelScene.renderTextBlock(header, 6); // size 6, small text
+            text.maxWidth(WIDTH - 10); // leave padding
+            text.setPos(0, posY);
+            content.add(text);
 
-				IconButton info = new IconButton(Icons.get(Icons.INFO)){
-					@Override
-					protected void onClick() {
-						super.onClick();
-						ShatteredPixelDungeon.scene().add(
-								new WndMessage(Messages.get(Challenges.class, challenge+"_desc"))
-						);
-					}
-				};
-				info.setRect(cb.right(), pos, 16, 15);
-				add(info);
+            posY = text.bottom() + 4; // spacing below text block
 
-				pos = cb.bottom();
-			}
-		}
+            for (int i = 0; i < Challenges.NAME_IDS.length; i++) {
 
-	}
+                final String challenge = Challenges.NAME_IDS[i];
+
+                // Checkbox
+                CheckBox cb = new CheckBox(
+                        Messages.titleCase(Messages.get(Challenges.class, challenge))
+                );
+                cb.checked((Dungeon.challenges & Challenges.MASKS[i]) != 0);
+                cb.active = false;
+
+                cb.setRect(0, posY, WIDTH - 20, 15);
+                content.add(cb);
+
+                // Info button
+                IconButton info = new IconButton(Icons.get(Icons.INFO)){
+                    @Override
+                    protected void onClick() {
+                        super.onClick();
+                        ShatteredPixelDungeon.scene().add(
+                                new WndMessage(Messages.get(Challenges.class, challenge + "_desc"))
+                        );
+                    }
+                };
+
+                info.setRect(cb.right(), posY, 16, 15);
+                content.add(info);
+
+                posY += 16;
+            }
+
+            // Tell ScrollPane how tall the content is
+            content.setSize(WIDTH, posY);
+
+            // Scroll to top by default
+            scroll.scrollTo(0, 0);
+        }
+    }
 
 	private class ItemButton extends Button {
 		
