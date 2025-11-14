@@ -42,9 +42,9 @@ Credits for vanilla SPD go to Even Debenham, also known as Shattered Pixel.
 
 ### Modding info
 
-this mod is made using the source code of vanilla SPD. it's exactly as you might expect: exactly SPD but with a few changes. internally, the code remains mostly the same with next to no big changes. also meaning that this is not dynamic, because vanilla isn't either.
+This mod is made using the source code of vanilla SPD. It's exactly as you might expect: exactly SPD but with a few changes. Internally, the code remains mostly the same with no gigantic structure changes. Also meaning that this is not really dynamic, because vanilla isn't either.
 
-if you can mod vanilla SPD, then you can certainly mod this mod too if you wish (for whatever reason). if you don't know how to mod vanilla SPD, you might want to read the 'readme' on their source code and go from there. you will likely need some java knowledge.
+If you can mod vanilla SPD, then you can certainly mod this mod too if you wish (for whatever reason). If you don't know how to mod vanilla SPD, you might want to read the 'readme' on their source code and go from there. you will need some java knowledge if you wish to get something big done.
 
 
-to the creator of SPD: i understand if you wish for me to take down or private this mod if you request so. (Because it might be too vanilla like)
+To the creator of SPD: I understand if you wish for me to take down or private this mod if you request so. (Because it might be too vanilla like)
