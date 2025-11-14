@@ -1,57 +1,50 @@
 # Shattered Pixel Dungeon Matt Edition
 
-Releases at the bottom of this readme!
+(note: while the mod does have all the vanilla translations, I will only ever change or add to the english translation)
 
-Still wip... mostly
+Releases can be found   [![here]()](https://github.com/mr-matthias1829/SPD-Matt-Edition/releases)
+
+Still in major development.
 
 Also might crash in a few cases because my coding skills are insane (report them and i'll TRY to fix them)
 
-===============================
 
-short 'booga booga i aint readin all that' version:
+## Short 'booga booga i aint readin all that' version:
 
-game was hard
+Game was hard
 
-this mod make harder
+This mod make harder
 
-but it balanced, no worry
+But it balanced, no worry
 
-plenty of changes of good or bad
+Plenty of changes of good or bad
 
-expect die
-
-===============================
-
-welcome to my absolutely garbage mod for SPD.
-
-do you hate yourself? do you hate crabs and snakes? do you hate rng biting in your ass? or do you think vanilla is too easy?... (somehow)
-
-well, i gotchu.
-from changing hp, damage, and all other stats, to straight up changing mechanics and making bosses harder. we got it all! But don't expect it all to be bad... nonono... we have plenty of buffs and nerfs, some good, some bad. and of course we got (some) balancing.
-
-but in all honesty? expect to die alot...
-all in all: have fun, pray that you survive, and... don't be stupid :)
-
-(note: while the mod does have all the vanilla translations, I will only ever change or add to the english translation)
-
-=======================================
-
-You can find the official vanilla SPD releases of the game on:
-
-[![Github Releases](https://shatteredpixel.com/assets/images/badges/github.png)](https://github.com/00-Evan/shattered-pixel-dungeon/releases)
-
-You can find non-source code and actual releases of the mod here:
-
-[![Github Releases](https://shatteredpixel.com/assets/images/badges/github.png)](https://github.com/mr-matthias1829/SPD-Matt-Edition/releases)
+Expect die
 
 
-=======================================
 
-about: mod structure and modding this mod
+## welcome to my absolutely garbage mod for SPD.
 
-this mod is made using the source code of vanilla SPD. it's exactly as you might expect: exactly SPD but with a few changes. internally, the code remains mostly the same with next to no big changes. also meaning that this is not dynamic, because vanilla isn't either.
+Do you hate yourself? Do you love crabs and snakes? Do you wish that rng is the reason you die? Do you want more content that only exists to make your run more painful? Or do you think vanilla is too easy?... (SOMEHOW???)
 
-if you can mod vanilla SPD, then you can certainly mod this mod too if you wish (for whatever reason). if you don't know how to mod vanilla SPD, you might want to read the 'readme' on their source code and go from there. you will likely need some java knowledge.
+Well, I gotchu.
+From changing hp, damage, and all other stats, to straight up changing mechanics, new content, and making bosses harder. We got it all! But don't expect it all to be bad... nonono... we have plenty of buffs and nerfs, some good, some bad. But of course we got (some) balancing.
+
+But in all honesty? Expect to die... ALOT...
+
+All in all: have fun, pray to rng that you survive, and... just don't be stupid
+
+## Other (somewhat) important information
+
+You can find the *official* vanilla SPD releases of the game [![here]()](https://github.com/00-Evan/shattered-pixel-dungeon/releases)
+
+Credits for vanilla SPD go to Even Debenham, also known as Shattered Pixel.
+
+### Modding info
+
+This mod is made using the source code of vanilla SPD. It's exactly as you might expect: exactly SPD but with a few changes. Internally, the code remains mostly the same with no gigantic structure changes. Also meaning that this is not really dynamic, because vanilla isn't either.
+
+If you can mod vanilla SPD, then you can certainly mod this mod too if you wish (for whatever reason). If you don't know how to mod vanilla SPD, you might want to read the 'readme' on their source code and go from there. you will need some java knowledge if you wish to get something big done.
 
 
-to the creator of SPD: i understand if you wish for me to take down or private this mod if you request so.
+To the creator of SPD: I understand if you wish for me to take down or private this mod if you request so. (Because it might be too vanilla like)
