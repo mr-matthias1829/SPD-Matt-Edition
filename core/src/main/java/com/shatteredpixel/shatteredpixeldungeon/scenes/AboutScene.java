@@ -68,15 +68,33 @@ public class AboutScene extends PixelScene {
         float y = insets.top + 6f;
 
         //*** Mod Credits ***
-        CreditsBlock matt = new CreditsBlock(true, 0xF5A6F2,  // Gold highlight
+        CreditsBlock matt = new CreditsBlock(true, 0xF5A6F2,
                 "SPD Matt Edition",
                 Icons.DUM_MATT.get(),
                 "developed by _Dum Matt_\n(or _mrmatthias1829_ i guess)\nBased on SPD's open source",
                 "I don't actually have a websi-",
-                "https://github.com/mr-matthias1829/SPD-Matt-Edition");
+                " ");
         // center horizontally; use y cursor for vertical placement
-        matt.setRect((Camera.main.width - colWidth)/2f, y, colWidth, 0);
+        if (landscape()){
+            matt.setRect((Camera.main.width - colWidth)/2f, y, colWidth, 0);
+        } else {
+            matt.setRect((Camera.main.width - colWidth)/2f, y, colWidth, 0);
+        }
         content.add(matt);
+
+        CreditsBlock git = new CreditsBlock(true, 0xF5A6F2,
+                "Github",
+                Icons.DUM_MATT.get(),
+                "Find the mod here:",
+                "Github",
+                "https://github.com/mr-matthias1829/SPD-Matt-Edition");
+        git.setSize(colWidth/2f, 0);
+        if (landscape()){
+            git.setPos((matt.right()), y);
+        } else {
+            git.setPos((matt.right()), y);
+        }
+        content.add(git);
 
         // add a small separator and move the cursor down
         addLine(matt.bottom() + 6, content);
@@ -92,7 +110,7 @@ public class AboutScene extends PixelScene {
         if (landscape()){
             shpx.setRect((w - fullWidth)/2f - 6, y + 8, 120, 0); // small extra top padding for the large title
         } else {
-            shpx.setRect((w - fullWidth)/2f, y, 120, 0);
+            shpx.setRect((w - fullWidth)/2f, y+8, 120, 0);
         }
         content.add(shpx);
 

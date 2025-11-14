@@ -225,7 +225,7 @@ public class Badges {
 		CHAMPION_3                  ( 127 ),
 
 
-
+        NO_UPGRADE_BOSS3 (296),
         VICTORY_WITH_8_CHALLENGES(325),
         VICTORY_WITH_10_CHALLENGES(326),
         VICTORY_WITH_ALL_CHALLENGES(327),
@@ -880,6 +880,10 @@ public class Badges {
             badge = Badge.UNLOCK_CLERIC_A;
             local.add(badge);
         }
+        if (Dungeon.depth == 16 && Statistics.upgradesUsed == 0 && !isUnlocked(Badge.NO_UPGRADE_BOSS3)){
+            badge = Badge.NO_UPGRADE_BOSS3;
+            local.add( badge );
+        }
 
         if (badge != null) {
             displayBadge(badge);
@@ -947,6 +951,7 @@ public class Badges {
 						displayBadge( badge );
 					}
 				}
+
 			}
 
 			if (Statistics.qualifiedForBossRemainsBadge && Dungeon.hero.belongings.getItem(RemainsItem.class) != null){
@@ -1459,9 +1464,12 @@ public class Badges {
 
 		if (badge == Badge.BOSS_SLAIN_1_ALL_CLASSES){
 			for (HeroClass cls : HeroClass.values()){
-				result += "\n";
-				if (isUnlocked(firstBossClassBadges.get(cls)))  result += "_" + Messages.titleCase(cls.title()) + "_";
-				else                                            result += Messages.titleCase(cls.title());
+                if (cls != HeroClass.PEASANT) {
+                    result += "\n";
+                    if (isUnlocked(firstBossClassBadges.get(cls)))
+                        result += "_" + Messages.titleCase(cls.title()) + "_";
+                    else result += Messages.titleCase(cls.title());
+                }
 			}
 
 			return result;
@@ -1469,9 +1477,11 @@ public class Badges {
 		} else if (badge == Badge.VICTORY_ALL_CLASSES) {
 
 			for (HeroClass cls : HeroClass.values()){
-				result += "\n";
-				if (isUnlocked(victoryClassBadges.get(cls)))    result += "_" + Messages.titleCase(cls.title()) + "_";
-				else                                            result += Messages.titleCase(cls.title());
+                if (cls != HeroClass.PEASANT) {
+                    result += "\n";
+                    if (isUnlocked(victoryClassBadges.get(cls))) result += "_" + Messages.titleCase(cls.title()) + "_";
+                    else result += Messages.titleCase(cls.title());
+                }
 			}
 
 			return result;

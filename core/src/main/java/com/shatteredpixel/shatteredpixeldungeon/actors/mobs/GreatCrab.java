@@ -44,7 +44,7 @@ public class GreatCrab extends Crab {
 
 		HP = HT = 32; //25
 		defenseSkill = 0; //see damage()
-		baseSpeed = 1f;
+		baseSpeed = 1.2f; //1f
 
 		EXP = 6;
 
@@ -63,7 +63,7 @@ public class GreatCrab extends Crab {
 	protected boolean getCloser( int target ) {
 		//this is used so that the crab remains slower, but still detects the player at the expected rate.
 		moving++;
-		if (moving < 3) {
+		if (moving < 6) {
 			return super.getCloser( target );
 		} else {
 			moving = 0;

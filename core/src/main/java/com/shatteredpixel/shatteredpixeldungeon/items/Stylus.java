@@ -47,7 +47,7 @@ public class Stylus extends Item {
 	{
 		image = ItemSpriteSheet.STYLUS;
 		
-		stackable = true;
+		//stackable = true; // oh noooooo... why must i be so evil :)?
 
 		defaultAction = AC_INSCRIBE;
 

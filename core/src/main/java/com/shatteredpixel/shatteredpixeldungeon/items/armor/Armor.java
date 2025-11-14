@@ -389,7 +389,7 @@ public class Armor extends EquipableItem {
         }
 
         // Calculate penalty from magic levels
-        int magicPenalty = (int)(magicLevel * 0.2f);
+        int magicPenalty = (int)(magicLevel * 0.3f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
         int max = tier * (2 + effectiveLevel) + augment.defenseFactor(effectiveLevel);
@@ -410,7 +410,7 @@ public class Armor extends EquipableItem {
             return 0;
         }
 
-        int magicPenalty = (int)(magicLevel * 0.2f);
+        int magicPenalty = (int)(magicLevel * 0.3f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
         int max = DRMax(lvl);
@@ -422,11 +422,15 @@ public class Armor extends EquipableItem {
     }
 
     public int magicDRMax(int magicLvl){
+        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+            return 1 + tier + magicLvl;
+        }
+
         // Calculate penalty from physical levels
-        int physicalPenalty = (int)(level() * 0.2f);
+        int physicalPenalty = (int)(level() * 0.3f);
         int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
 
-        int max = tier * (2 + effectiveMagicLevel);
+        int max = tier * (2+ effectiveMagicLevel/2)+(effectiveMagicLevel % 2);
         if (effectiveMagicLevel > max){
             return ((effectiveMagicLevel - max)+1)/2;
         } else {
@@ -435,8 +439,12 @@ public class Armor extends EquipableItem {
     }
 
     public int magicDRMin(int magicLvl){
-        int physicalPenalty = (int)(level() * 0.2f);
-        int effectiveMagicLevel = Math.max(0, (int)((magicLvl - physicalPenalty)/1.5));
+        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+            return 0;
+        }
+
+        int physicalPenalty = (int)(level() * 0.3f);
+        int effectiveMagicLevel = Math.max(0, ((magicLvl - physicalPenalty))/2 + (magicLvl - physicalPenalty) % 2);
 
         int max = magicDRMax(magicLvl);
         if (effectiveMagicLevel >= max){

@@ -73,7 +73,7 @@ public class SpiritualNecromancer extends Mob {
 
     protected ArrayList<Ghoul> mySkeletons = new ArrayList<>();
     protected ArrayList<Integer> storedSkeletonIDs = new ArrayList<>();
-    private int maxSkeletons = 4; // Change this number for more skeletons!
+    private int maxSkeletons = 3; // Change this number for more skeletons!
 
     @Override
     protected boolean act() {
