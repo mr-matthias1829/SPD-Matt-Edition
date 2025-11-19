@@ -669,7 +669,7 @@ abstract public class MissileWeapon extends Weapon {
 		}
 
 		info += "\n\n";
-		String statsInfo = Messages.get(this, "stats_desc");
+		String statsInfo = statsInfo();
 		if (!statsInfo.equals("")) info += statsInfo + " ";
 		info += Messages.get(MissileWeapon.class, "distance");
 
@@ -700,6 +700,10 @@ abstract public class MissileWeapon extends Weapon {
 		}
 		
 		return info;
+	}
+
+	public String statsInfo(){
+		return Messages.get(this, "stats_desc");
 	}
 	
 	@Override

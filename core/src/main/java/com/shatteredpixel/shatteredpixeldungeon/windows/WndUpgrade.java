@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -212,6 +213,14 @@ public class WndUpgrade extends Window {
                     aug.damageFactor(getWeaponMin(toUpgrade, levelTo)) + "-" + aug.damageFactor(getWeaponMax(toUpgrade, levelTo)),
                     bottom);
         }
+
+		//bleeding (tomahawk)
+		if (toUpgrade instanceof Tomahawk){
+			bottom = fillFields(Messages.get(this, "bleeding"),
+					Math.round(((Tomahawk) toUpgrade).minBleed(levelFrom)) + "-" + Math.round(((Tomahawk) toUpgrade).maxBleed(levelFrom)),
+					Math.round(((Tomahawk) toUpgrade).minBleed(levelTo)) + "-" + Math.round(((Tomahawk) toUpgrade).maxBleed(levelTo)),
+					bottom);
+		}
 
 		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST
 				&& toUpgrade instanceof MeleeWeapon && ((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelFrom) != null){
