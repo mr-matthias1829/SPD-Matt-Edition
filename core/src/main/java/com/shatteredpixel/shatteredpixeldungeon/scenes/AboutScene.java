@@ -92,13 +92,18 @@ public class AboutScene extends PixelScene {
         if (landscape()){
             git.setPos((matt.right()), y);
         } else {
-            git.setPos((matt.right()), y);
+            git.setPos((Camera.main.width - colWidth/2f)/2f, matt.bottom() + 5); // Center it below matt
         }
         content.add(git);
 
-        // add a small separator and move the cursor down
-        addLine(matt.bottom() + 6, content);
-        y = matt.bottom() + 6f;      // 6px spacing before next block
+        // Update the line and y cursor to account for git's position
+        if (landscape()) {
+            addLine(matt.bottom() + 6, content);
+            y = matt.bottom() + 6f;
+        } else {
+            addLine(git.bottom() + 6, content);
+            y = git.bottom() + 6f;
+        }
 
         //*** Shattered Pixel Dungeon Credits ***
         CreditsBlock shpx = new CreditsBlock(true, Window.SHPX_COLOR,

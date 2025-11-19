@@ -19,6 +19,12 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
 
+        list.add(new ChangeInfo("_v1274:_ ui fix", true,
+                "\n_UI:_\n"
+                        + "1. fixed the github going offscreen in the about section on mobile\n"
+                        + "2. fixed mod tab on the changes menu to be positioned better\n"
+
+        ));
         list.add(new ChangeInfo("_v1271:_ prettier ui, nerfed armor", true,
                 "\n_UI:_\n"
                         + "1. about tab now includes a link to the github of the mod\n"
