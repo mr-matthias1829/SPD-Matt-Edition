@@ -68,11 +68,16 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -98,6 +103,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
@@ -158,7 +164,7 @@ public class Hero extends Char {
 	public static final int STARTING_STR = 10;
 	
 	private static final float TIME_TO_REST		    = 1f;
-	private static final float TIME_TO_SEARCH	    = 3f; //2f
+	private static final float TIME_TO_SEARCH	    = 2f;
 	private static final float HUNGER_FOR_SEARCH	= 6f;
 	
 	public HeroClass heroClass = HeroClass.ROGUE;
@@ -190,8 +196,6 @@ public class Hero extends Char {
 	public int exp = 0;
 	
 	public int HTBoost = 0;
-    public boolean cheating = false;
-    public int baseHP = 30;
 	
 	private ArrayList<Mob> visibleEnemies;
 
@@ -202,27 +206,9 @@ public class Hero extends Char {
 	public Hero() {
 		super();
 
-        if (SPDSettings.cheatMode()){
-            HT = HP = 999030;
-            baseHP = HT;
-            STR = 25;
-            cheating = true;
-            Badges.setBadgesDisabled(true);
-            Dungeon.rankable = false;
-        }
-        else if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)){
-            HP = HT = 20;
-            baseHP = 20;
-            STR = STARTING_STR;
-            cheating = false;
-        }
-        else {
-            HP = HT = 30; //20
-            baseHP = 30;
-            STR = STARTING_STR;
-            cheating = false;
-        }
-
+		HP = HT = 20;
+		STR = STARTING_STR;
+		
 		belongings = new Belongings( this );
 		
 		visibleEnemies = new ArrayList<>();
@@ -230,10 +216,10 @@ public class Hero extends Char {
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
-
-            HT = baseHP + 5 * (lvl - 1) + HTBoost; //20 + 5*(lvl-1)
-            float multiplier = RingOfMight.HTMultiplier(this);
-            HT = Math.round(multiplier * HT);
+		
+		HT = 20 + 5*(lvl-1) + HTBoost;
+		float multiplier = RingOfMight.HTMultiplier(this);
+		HT = Math.round(multiplier * HT);
 		
 		if (buff(ElixirOfMight.HTBoost.class) != null){
 			HT += buff(ElixirOfMight.HTBoost.class).boost();
@@ -1197,7 +1183,7 @@ public class Hero extends Char {
 				hasKey = true;
 
 			} else if (door == Terrain.LOCKED_EXIT
-					&& Notes.keyCount(new SkeletonKey(Dungeon.depth)) > 0) {
+					&& Notes.keyCount(new WornKey(Dungeon.depth)) > 0) {
 
 				hasKey = true;
 				
@@ -1790,14 +1776,14 @@ public class Hero extends Char {
 
 		if (step != -1) {
 
-			float delay = 1 / speed();
+			float delay = 1;
 
 			if (buff(GreaterHaste.class) != null){
 				delay = 0;
 			}
 
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
-					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay))){
+					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay / speed()))){
 				if (!Chasm.jumpConfirmed){
 					Chasm.heroJump(this);
 					interrupt();
@@ -1821,7 +1807,7 @@ public class Hero extends Char {
 			sprite.move(pos, step);
 			move(step);
 
-			spend( delay );
+			spend( delay / speed() );
 			
 			search(false);
 
@@ -2071,6 +2057,18 @@ public class Hero extends Char {
 	}
 	
 	@Override
+	protected synchronized void onRemove() {
+		//same as super, except we retain charger for rankings purposes
+		for (Buff buff : buffs()) {
+			if (buff instanceof MeleeWeapon.Charger){
+				Actor.remove(buff);
+			} else {
+				buff.detach();
+			}
+		}
+	}
+
+	@Override
 	public void die( Object cause ) {
 		
 		curAction = null;
@@ -2233,24 +2231,6 @@ public class Hero extends Char {
 		boolean wasHighGrass = Dungeon.level.map[step] == Terrain.HIGH_GRASS;
 
 		super.move( step, travelling);
-
-        if (Dungeon.isChallenged(Challenges.WONKY_STEP)) {
-            if (Random.Float() < 0.025f && !flying) {
-                GLog.w("You Stumble as you take a step!");
-                int dmg = (int) (HT * 0.04);
-                damage(dmg, this);
-                if (Random.Float() < 0.2f) {
-                    GLog.n("You fall onto the ground and injure your ankle!");
-                    Cripple.prolong(this, Cripple.class, 3f);
-                    damage(dmg * 2, this);
-                    if (Random.Float() < 0.3f) {
-                        GLog.n("Your ankle is twisted!");
-                        Cripple.prolong(this, Cripple.class, 20f);
-                        damage(dmg * 4, this);
-                    }
-                }
-            }
-        }
 		
 		if (!flying && travelling) {
 			if (Dungeon.level.water[pos]) {
@@ -2307,11 +2287,11 @@ public class Hero extends Char {
 	public void onMotionComplete() {
 		GameScene.checkKeyHold();
 	}
-
-    @Override
-    public void onOperateComplete() {
-
-        if (curAction instanceof HeroAction.Unlock) {
+	
+	@Override
+	public void onOperateComplete() {
+		
+		if (curAction instanceof HeroAction.Unlock) {
 
             int doorCell = ((HeroAction.Unlock)curAction).dst;
             int door = Dungeon.level.map[doorCell];
@@ -2320,7 +2300,16 @@ public class Hero extends Char {
                 boolean hasKey = true;
                 if (door == Terrain.LOCKED_DOOR) {
                     hasKey = Notes.remove(new IronKey(Dungeon.depth, Dungeon.branch));
-                    if (hasKey) Level.set(doorCell, Terrain.DOOR);
+					if (hasKey) {
+						Level.set(doorCell, Terrain.DOOR);
+						if (skele != null && !skele.isCursed()){
+							skele.keyUsed(new IronKey(Dungeon.depth));
+						}
+					}
+				} else if (door == Terrain.HERO_LKD_DR) {
+					hasKey = true;
+					Level.set(doorCell, Terrain.DOOR);
+					GLog.i( Messages.get(SkeletonKey.class, "force_lock"));
                 } else if (door == Terrain.CRYSTAL_DOOR) {
                     hasKey = Notes.remove(new CrystalKey(Dungeon.depth, Dungeon.branch));
                     if (hasKey) {
@@ -2343,6 +2332,7 @@ public class Hero extends Char {
         } else if (curAction instanceof HeroAction.OpenChest) {
 
             Heap heap = Dungeon.level.heaps.get( ((HeroAction.OpenChest)curAction).dst );
+			SkeletonKey.keyRecharge skele = buff(SkeletonKey.keyRecharge.class);
 
             if (Dungeon.level.distance(pos, heap.pos) <= 1){
                 boolean hasKey = true;
@@ -2364,10 +2354,10 @@ public class Hero extends Char {
         }
         curAction = null;
 
-        if (!ready) {
-            super.onOperateComplete();
-        }
-    }
+		if (!ready) {
+			super.onOperateComplete();
+		}
+	}
 
 	public boolean search( boolean intentional ) {
 		
@@ -2451,13 +2441,11 @@ public class Hero extends Char {
 							
 						//unintentional trap detection scales from 40% at floor 0 to 30% at floor 25
 						} else if (Dungeon.level.map[curr] == Terrain.SECRET_TRAP) {
-							//chance = 0.4f - (Dungeon.depth / 250f);
-                            chance = 0.4f - (Dungeon.depth / 60f);
+							chance = 0.4f - (Dungeon.depth / 250f);
 							
 						//unintentional door detection scales from 20% at floor 0 to 0% at floor 20
 						} else {
-							//chance = 0.2f - (Dungeon.depth / 100f);
-                            chance = 0.2f - (Dungeon.depth / 80f);
+							chance = 0.2f - (Dungeon.depth / 100f);
 						}
 
 						//don't want to let the player search though hidden doors in tutorial
