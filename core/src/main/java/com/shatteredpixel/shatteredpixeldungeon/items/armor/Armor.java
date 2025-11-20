@@ -392,7 +392,7 @@ public class Armor extends EquipableItem {
         int magicPenalty = (int)(magicLevel * 0.3f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
-        int max = tier * (2 + effectiveLevel) + augment.defenseFactor(effectiveLevel);
+        int max = ((tier+1)/2) * (2 + effectiveLevel) + augment.defenseFactor(effectiveLevel);
         if (effectiveLevel > max){
             return ((effectiveLevel - max)+1)/2;
         } else {
@@ -430,7 +430,7 @@ public class Armor extends EquipableItem {
         int physicalPenalty = (int)(level() * 0.3f);
         int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
 
-        int max = tier * (2+ effectiveMagicLevel/2)+(effectiveMagicLevel % 2);
+        int max = (int)((tier+0.5)/1.5) * (2+ effectiveMagicLevel/2)+(effectiveMagicLevel % 2);
         if (effectiveMagicLevel > max){
             return ((effectiveMagicLevel - max)+1)/2;
         } else {

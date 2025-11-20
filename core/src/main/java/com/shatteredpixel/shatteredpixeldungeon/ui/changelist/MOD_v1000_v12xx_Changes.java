@@ -19,6 +19,16 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
 
+        list.add(new ChangeInfo("_v1277:_ tier nerf", true,
+                "\n_UI:_\n"
+                        + "1. nerfed weapons with a tier above 1, more so on items tiered above 2\n"
+                        + "2. nerfed armor damage blocking scaling per level on higher tiers\n"
+
+                        +"\n_NOTES:_\n"
+                        + "1. this nerf was done because upgrade effect scaling was nuts.\n"
+                        + "2. chances are that now they are too weak though and will need to be fixed later\n"
+        ));
+
         list.add(new ChangeInfo("_v1274:_ ui fix", true,
                 "\n_UI:_\n"
                         + "1. fixed the github going offscreen in the about section on mobile\n"

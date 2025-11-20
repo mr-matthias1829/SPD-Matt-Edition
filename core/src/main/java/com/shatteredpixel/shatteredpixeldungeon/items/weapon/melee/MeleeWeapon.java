@@ -308,7 +308,7 @@ public class MeleeWeapon extends Weapon {
 		String info = super.info();
 
 		if (levelKnown) {
-			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
+			info += "\n\n" + Messages.get(MeleeWeapon.class, "stats_known", tier, augment.damageFactor(applyTierNerf(min(), tier)), augment.damageFactor(applyTierNerf(max(), tier)), STRReq());
 			if (Dungeon.hero != null) {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
@@ -580,4 +580,7 @@ public class MeleeWeapon extends Weapon {
 		}
 	}
 
+    public int applyTierNerf(int damage){
+        return applyTierNerf(damage, tier);
+    }
 }

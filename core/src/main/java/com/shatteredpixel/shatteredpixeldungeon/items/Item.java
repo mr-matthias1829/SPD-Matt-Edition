@@ -720,4 +720,19 @@ public class Item implements Bundlable {
 			return Messages.get(Item.class, "prompt");
 		}
 	};
+
+
+    protected int applyTierNerf(int value, int tier) {
+        float[] tierMult = {
+                1.0f,  // tier 1
+                0.9f,  // tier 2
+                0.7f,  // tier 3
+                0.5f,  // tier 4
+                0.3f   // tier 5
+        };
+
+        // Clamp it in case tiers above 5 exist
+        int t = Math.max(1, Math.min(tier, tierMult.length));
+        return Math.round(value * tierMult[t - 1]);
+    }
 }
