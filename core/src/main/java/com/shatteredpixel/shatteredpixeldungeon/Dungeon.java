@@ -548,8 +548,8 @@ public class Dungeon {
 	
 	public static boolean souNeeded() {
 		int souLeftThisSet;
-		//3 SOU each floor set (now 5)
-        int totalSOU = 5; //yes i added this myself --matt
+		//3 SOU each floor set (now 4)
+        int totalSOU = 4; //yes i added this myself --matt
 
 		souLeftThisSet = totalSOU - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * totalSOU);
 		if (souLeftThisSet <= 0) return false;
@@ -562,7 +562,7 @@ public class Dungeon {
     public static boolean msouNeeded() {
         int souLeftThisSet;
         //3 SOU each floor set (now 5)
-        int totalMSOU = 3; //yes i added this myself --matt
+        int totalMSOU = 2; //yes i added this myself --matt
 
         souLeftThisSet = totalMSOU - (LimitedDrops.MAGIC_UPGRADE_SCROLLS.count - (depth / 5) * totalMSOU);
         if (souLeftThisSet <= 0) return false;

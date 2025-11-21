@@ -722,17 +722,24 @@ public class Item implements Bundlable {
 	};
 
 
-    protected int applyTierNerf(int value, int tier) {
+    public int applyTierNerf(int value, int tier, boolean isMelee) {
         float[] tierMult = {
                 1.0f,  // tier 1
                 0.9f,  // tier 2
                 0.7f,  // tier 3
-                0.5f,  // tier 4
-                0.3f   // tier 5
+                0.6f,  // tier 4
+                0.5f   // tier 5
         };
 
-        // Clamp it in case tiers above 5 exist
+        // Clamp tier to valid range
         int t = Math.max(1, Math.min(tier, tierMult.length));
-        return Math.round(value * tierMult[t - 1]);
+        float nerfed = value * tierMult[t - 1];
+
+        // Additional nerf for melee weapons only
+        if (isMelee) {
+            nerfed *= 0.82f;
+        }
+
+        return Math.round(nerfed);
     }
 }

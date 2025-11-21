@@ -202,8 +202,6 @@ abstract public class Weapon extends KindOfWeapon {
 			}
 		}
 
-        MeleeWeapon MW = new MeleeWeapon();
-        damage = MW.applyTierNerf(damage);
 		return damage;
 	}
 	

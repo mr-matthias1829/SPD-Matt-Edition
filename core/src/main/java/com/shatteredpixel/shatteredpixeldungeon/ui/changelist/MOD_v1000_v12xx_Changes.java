@@ -2,11 +2,6 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import java.util.ArrayList;
 
-/**
- * Auto-generated changelist for the mod. Each entry becomes a clickable version.
- * Drop this file into com.shatteredpixel.shatteredpixeldungeon.ui.changelist and
- * add a case in ChangesScene to call MOD_v1000_v12xx_Changes.addAllChanges(changeInfos);
- */
 public class MOD_v1000_v12xx_Changes {
 
     public static void addAllChanges(ArrayList<ChangeInfo> list){
@@ -19,8 +14,47 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
 
+        list.add(new ChangeInfo("_v1280:_ item rebalance", true,
+                "\n_HERO:_\n"
+                        + "1. peasant now starts with stones quickslotted... most insane change fr\n"
+
+                        + "\n_ITEMS:_\n"
+                        + "1. slightly rebalanced the nerf from previous version for the better\n"
+                        + "2. ALL melee weapons are now 18% weaker despite tier\n"
+                        + "3. tier nerf effect on melee weapons now also affects throwable weapons (missile type weapons)\n"
+                        + "4. 1 less upgrade and magic upgrade scrolls spawn each region (4 upg and 2 M-upg now)\n"
+                        + "5. wand of corrosion no longer naturally spawns\n"
+                        + "6. scroll of recharge has less effect on wands (0.25 -> 0.19)\n"
+                        + "7. wands take more base turns to recharge (10 -> 20)\n"
+                        + "8. wands take longer to recharge (more complex math stuff, just trust me bro)\n"
+                        + "9. all wands that deal direct damage deal 10% less damage, debuff excluded\n"
+
+                        + "\n_GLYPHS:_\n"
+                        + "1. glyph of potential has a rarer chance to proc now and gives less charge\n"
+
+                        + "\n_UI:_\n"
+                        + "1. upgrade window now correctly shows weapon stats\n"
+
+                        + "\n_BADGES:_\n"
+                        + "1. unlock mage badge now only requires 14 scrolls instead of 20\n"
+                        + "2. strength badges requirements increased\n"
+                        + "3. new badge for reaching 30 strength\n"
+
+                        + "\n_BOSSES:_\n"
+                        + "1. reduced goo hp (125/150 -> 100/125)\n"
+                        + "2. reduced tengu hp (300/350 -> 250/300)\n"
+
+                        + "\n_QUESTS:_\n"
+                        + "1. wandmaker now always gives out the newborn fire elemental quest _(will likely be changed in future)_\n"
+                        + "2. wandmaker now always guaranteed has either wand of blastwave or wand of corrosion as a quest reward\n"
+                        + "3. newborn fire elemental is considered fiery again, as well as icy now\n"
+                        + "4. newborn fire elemental ranged cooldown decreased (3,5) -> (1,4), takes less turns to charge attack (*3 -> *2)\n"
+                        + "5. newborn fire elemental ranged attack fixed (hopefully)\n"
+                        + "6. newborn fire elemental damage reduced (14,18 -> 8,15)\n"
+        ));
+
         list.add(new ChangeInfo("_v1277:_ tier nerf", true,
-                "\n_UI:_\n"
+                "\n_ITEMS_\n"
                         + "1. nerfed weapons with a tier above 1, more so on items tiered above 2\n"
                         + "2. nerfed armor damage blocking scaling per level on higher tiers\n"
 

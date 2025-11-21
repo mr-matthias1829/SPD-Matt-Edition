@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -231,13 +233,27 @@ abstract public class KindOfWeapon extends EquipableItem {
 		}
 	}
 
-	public int min(){
-		return min(buffedLvl());
-	}
+    public int min(){
+        int baseMin = min(buffedLvl());
+        if (this instanceof MissileWeapon){
+            return applyTierNerf(baseMin, ((MissileWeapon)this).tier, false);
+        }
+        if (this instanceof MeleeWeapon) {
+            return applyTierNerf(baseMin, ((MeleeWeapon)this).tier, true);
+        }
+        return baseMin;
+    }
 
-	public int max(){
-		return max(buffedLvl());
-	}
+    public int max(){
+        int baseMax = max(buffedLvl());
+        if (this instanceof MissileWeapon){
+            return applyTierNerf(baseMax, ((MissileWeapon)this).tier, false);
+        }
+        if (this instanceof MeleeWeapon) {
+            return applyTierNerf(baseMax, ((MeleeWeapon)this).tier, true);
+        }
+        return baseMax;
+    }
 
 	abstract public int min(int lvl);
 	abstract public int max(int lvl);

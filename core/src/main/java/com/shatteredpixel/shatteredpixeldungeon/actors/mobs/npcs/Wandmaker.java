@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
@@ -325,19 +326,16 @@ public class Wandmaker extends NPC {
                 spawned = true;
 
                 given = false;
-                if (Random.Float() <= 0.2f) {
+                if (Random.Float() <= 0.5f) {
                     wand1 = (Wand) new WandOfBlastWave();
                 } else {
-                    wand1 = (Wand) Generator.random(Generator.Category.WAND);
+                    wand1 = (Wand) new WandOfCorrosion();
                 }
 				wand1.cursed = (Random.Int(2) == 0);
 				//wand1.upgrade();
 
-                if (Random.Float() <= 0.2f) {
-                    wand2 = (Wand) new WandOfBlastWave();
-                } else {
                 wand2 = (Wand) Generator.random(Generator.Category.WAND);
-                }
+
 				ArrayList<Item> toUndo = new ArrayList<>();
 				while (wand2.getClass() == wand1.getClass()) {
 					toUndo.add(wand2);
@@ -358,7 +356,8 @@ public class Wandmaker extends NPC {
 
 				// decide between 1,2, or 3 for quest type.
 				//if (type == 0) type = Random.Int(3)+1;
-                if (type == 0) type = Random.Int(2)+2; //disabled corpse dust quest
+                //if (type == 0) type = Random.Int(2)+2; //disabled corpse dust quest
+                if (type == 0) type = 2; // ALWAYS ritual quest
 				
 				switch (type){
 					case 1: default:

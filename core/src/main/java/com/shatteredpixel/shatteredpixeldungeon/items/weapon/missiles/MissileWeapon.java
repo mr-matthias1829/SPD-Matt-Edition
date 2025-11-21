@@ -94,7 +94,8 @@ abstract public class MissileWeapon extends Weapon {
 	protected int usesToID(){
 		return 10; //half of a melee weapon
 	}
-	
+
+    /*
 	@Override
 	public int min() {
 		if (Dungeon.hero != null){
@@ -103,13 +104,21 @@ abstract public class MissileWeapon extends Weapon {
 			return Math.max(0 , min( buffedLvl() ));
 		}
 	}
+     */
 	
 	@Override
 	public int min(int lvl) {
-		return  2 * tier +                      //base
-				lvl;                            //level scaling
+        int bonus = 0;
+        if (Dungeon.hero != null) {
+            bonus = RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
+        }
+		return Math.max(0,
+                2 * tier +                      //base
+				lvl                             //level scaling
+                + bonus);
 	}
-	
+
+    /*
 	@Override
 	public int max() {
 		if (Dungeon.hero != null){
@@ -118,11 +127,18 @@ abstract public class MissileWeapon extends Weapon {
 			return Math.max(0 , max( buffedLvl() ));
 		}
 	}
+     */
 	
 	@Override
 	public int max(int lvl) {
-		return  5 * tier +                      //base
-				tier*lvl;                       //level scaling
+        int bonus = 0;
+        if (Dungeon.hero != null) {
+        bonus = RingOfSharpshooting.levelDamageBonus(Dungeon.hero);
+        }
+		return  Math.max(0,
+                5 * tier +                      //base
+				tier*lvl                        //level scaling
+                + bonus);
 	}
 	
 	public int STRReq(int lvl){

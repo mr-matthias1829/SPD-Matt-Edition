@@ -260,7 +260,8 @@ public abstract class Elemental extends Mob {
 			defenseSkill = 12;
 			HT = HP = 90; //60
 			properties.add(Property.MINIBOSS);
-            //properties.add( Property.FIERY );
+            properties.add( Property.FIERY );
+            properties.add( Property.ICY );
 		}
 
 		private int targetingPos = -1;
@@ -324,7 +325,7 @@ public abstract class Elemental extends Mob {
 					}
 
 					GLog.n(Messages.get(this, "charging"));
-					spend(GameMath.gate(attackDelay(), (int)Math.ceil(Dungeon.hero.cooldown()), 3*attackDelay()));
+					spend(GameMath.gate(attackDelay(), (int)Math.ceil(Dungeon.hero.cooldown()), 2*attackDelay())); // 3*
 					Dungeon.hero.interrupt();
 					return true;
 				} else {
@@ -362,25 +363,24 @@ public abstract class Elemental extends Mob {
 							GameScene.add(Blob.seed(targetingPos + i, 16, Fire.class)); //8
 						}
 
-						Char target = Actor.findChar(targetingPos + i);
-						if (target != null && target != this) {
-							Buff.affect(target, Burning.class).reignite(target);
-
+                        Char target = Actor.findChar(targetingPos + i);
+                        if (target != null && target != this) {
                             int dmg = damageRoll();
                             dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-                            enemy.damage(dmg, new DM100.LightningBolt());
+                            target.damage(dmg, this);
+                            Buff.affect(target, Burning.class).reignite(target);
 
-							if (target == Dungeon.hero){
-								Statistics.questScores[1] -= 200;
-							}
-						}
+                            if (target == Dungeon.hero){
+                                Statistics.questScores[1] -= 200;
+                            }
+                        }
 					}
 				}
 				Sample.INSTANCE.play(Assets.Sounds.BURNING);
 			}
 
 			targetingPos = -1;
-			rangedCooldown = Random.NormalIntRange( 3, 5 );
+			rangedCooldown = Random.NormalIntRange( 1, 4 ); //3,5
 		}
 
 		@Override
@@ -395,7 +395,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		public int damageRoll() {
 			if (!summonedALly) {
-				return Random.NormalIntRange(14, 18); //10,12
+				return Random.NormalIntRange(8, 15); //14,18 //10,12
 			} else {
 				return super.damageRoll();
 			}

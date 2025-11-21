@@ -204,14 +204,14 @@ public class WndUpgrade extends Window {
 
 		// *** Various lines for stats, highlighting differences between current level and +1 ***
 
-		//physical damage
-		if (toUpgrade instanceof Weapon){
-			Weapon.Augment aug = ((Weapon) toUpgrade).augment;
-			bottom = fillFields(Messages.get(this, "damage"),
-					aug.damageFactor(((Weapon) toUpgrade).min(levelFrom)) + "-" + aug.damageFactor(((Weapon) toUpgrade).max(levelFrom)),
-					aug.damageFactor(((Weapon) toUpgrade).min(levelTo)) + "-" + aug.damageFactor(((Weapon) toUpgrade).max(levelTo)),
-					bottom);
-		}
+        //physical damage
+        if (toUpgrade instanceof Weapon){
+            Weapon.Augment aug = ((Weapon) toUpgrade).augment;
+            bottom = fillFields(Messages.get(this, "damage"),
+                    aug.damageFactor(getWeaponMin(toUpgrade, levelFrom)) + "-" + aug.damageFactor(getWeaponMax(toUpgrade, levelFrom)),
+                    aug.damageFactor(getWeaponMin(toUpgrade, levelTo)) + "-" + aug.damageFactor(getWeaponMax(toUpgrade, levelTo)),
+                    bottom);
+        }
 
 		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST
 				&& toUpgrade instanceof MeleeWeapon && ((MeleeWeapon) toUpgrade).upgradeAbilityStat(levelFrom) != null){
@@ -559,4 +559,26 @@ public class WndUpgrade extends Window {
 		return message.bottom();
 	}
 
+
+    private int getWeaponMin(Item weapon, int level){
+        int baseMin = ((Weapon)weapon).min(level);
+        if (weapon instanceof MeleeWeapon) {
+            return ((Item)weapon).applyTierNerf(baseMin, ((MeleeWeapon)weapon).tier, true);
+        }
+        if (weapon instanceof MissileWeapon) {
+            return ((Item)weapon).applyTierNerf(baseMin, ((MissileWeapon)weapon).tier, false);
+        }
+        return baseMin;
+    }
+
+    private int getWeaponMax(Item weapon, int level){
+        int baseMax = ((Weapon)weapon).max(level);
+        if (weapon instanceof MeleeWeapon) {
+            return ((Item)weapon).applyTierNerf(baseMax, ((MeleeWeapon)weapon).tier, true);
+        }
+        if (weapon instanceof MissileWeapon) {
+            return ((Item)weapon).applyTierNerf(baseMax, ((MissileWeapon)weapon).tier, false);
+        }
+        return baseMax;
+    }
 }

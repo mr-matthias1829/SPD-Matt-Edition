@@ -44,10 +44,10 @@ public class Potential extends Glyph {
 		// lvl 2 - 37.5%
 		//float procChance = (level+1f)/(level+6f) * procChanceMultiplier(defender);
 
-        float procChance = (level+1f)/(level+5f) * procChanceMultiplier(defender);
+        float procChance = (level+10f)/(level+50f) * procChanceMultiplier(defender);
 		if (Random.Float() < procChance && defender instanceof Hero) {
 
-			float powerMulti = Math.max(1f, procChance);
+			float powerMulti = Math.max(0.2f, procChance/2f);
 
 			int wands = ((Hero) defender).belongings.charge( powerMulti );
 			if (wands > 0) {

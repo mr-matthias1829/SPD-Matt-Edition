@@ -159,6 +159,8 @@ public class Badges {
 		LEVEL_REACHED_4             ( 72 ),
 		STRENGTH_ATTAINED_4         ( 73 ),
 		STRENGTH_ATTAINED_5         ( 74 ),
+
+        STRENGTH_ATTAINED_6         ( 74 ),
 		FOOD_EATEN_4                ( 75 ),
 		FOOD_EATEN_5                ( 76 ),
 		ITEMS_CRAFTED_4             ( 77 ),
@@ -475,30 +477,35 @@ public class Badges {
 	public static void validateStrengthAttained() {
 		Badge badge = null;
 		
-		if (!local.contains( Badge.STRENGTH_ATTAINED_1 ) && Dungeon.hero.STR >= 12) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_1 ) && Dungeon.hero.STR >= 13) {
 			badge = Badge.STRENGTH_ATTAINED_1;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_2 ) && Dungeon.hero.STR >= 14) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_2 ) && Dungeon.hero.STR >= 16) {
 			if (badge != null) unlock(badge);
 			badge = Badge.STRENGTH_ATTAINED_2;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_3 ) && Dungeon.hero.STR >= 16) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_3 ) && Dungeon.hero.STR >= 19) {
 			if (badge != null) unlock(badge);
 			badge = Badge.STRENGTH_ATTAINED_3;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_4 ) && Dungeon.hero.STR >= 18) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_4 ) && Dungeon.hero.STR >= 22) {
 			if (badge != null) unlock(badge);
 			badge = Badge.STRENGTH_ATTAINED_4;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.STRENGTH_ATTAINED_5 ) && Dungeon.hero.STR >= 20) {
+		if (!local.contains( Badge.STRENGTH_ATTAINED_5 ) && Dungeon.hero.STR >= 25) {
 			if (badge != null) unlock(badge);
 			badge = Badge.STRENGTH_ATTAINED_5;
 			local.add( badge );
 		}
+        if (!local.contains( Badge.STRENGTH_ATTAINED_6 ) && Dungeon.hero.STR >= 30) {
+            if (badge != null) unlock(badge);
+            badge = Badge.STRENGTH_ATTAINED_6;
+            local.add( badge );
+        }
 		
 		displayBadge( badge );
 	}
@@ -1028,7 +1035,7 @@ public class Badges {
 		if (Statistics.upgradesUsed >= 1 && !isUnlocked(Badge.UNLOCK_MAGE)){
 			displayBadge( Badge.UNLOCK_MAGE );
 		}
-        if (Statistics.upgradesUsed >= 20 && !isUnlocked(Badge.UNLOCK_MAGE_A)){
+        if (Statistics.upgradesUsed >= 14 && !isUnlocked(Badge.UNLOCK_MAGE_A)){
             displayBadge( Badge.UNLOCK_MAGE_A );
         }
 	}
