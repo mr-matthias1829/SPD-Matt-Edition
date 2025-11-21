@@ -77,7 +77,6 @@ public class EscapeCrystal extends Item {
 				for (Buff b : hero.buffs()){
 					if (b instanceof Wand.Charger
 							|| b instanceof Artifact.ArtifactBuff
-							|| b instanceof Ring.RingBuff
 							|| b instanceof MeleeWeapon.Charger
 							|| b instanceof ClassArmor.Charger){
 						b.detach();
@@ -95,9 +94,9 @@ public class EscapeCrystal extends Item {
 						LevelTransition.Type.BRANCH_EXIT);
 				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
 				Game.switchScene( InterlevelScene.class );
-				detachAll(hero.belongings.backpack);
 
 			}
+			detach(hero.belongings.backpack);
 
 		}
 
