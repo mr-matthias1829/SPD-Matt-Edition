@@ -97,7 +97,7 @@ public class Guard extends Mob {
         if (enemy == null || !enemy.isAlive()) return;
 
         // stronger damage than normal damageRoll()
-        int dmg = (int) (damageRoll() * 1.5f);
+        int dmg = (int) (damageRoll() * 1.25f); // 1.5f
 
         // apply damage and cripple
         enemy.damage(dmg, this);

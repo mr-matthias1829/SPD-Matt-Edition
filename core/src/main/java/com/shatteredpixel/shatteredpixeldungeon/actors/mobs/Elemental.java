@@ -261,7 +261,7 @@ public abstract class Elemental extends Mob {
 			HT = HP = 90; //60
 			properties.add(Property.MINIBOSS);
             properties.add( Property.FIERY );
-            properties.add( Property.ICY );
+            properties.add( Property.ICY ); // so it doesnt instantly die when frozen
 		}
 
 		private int targetingPos = -1;
@@ -395,7 +395,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		public int damageRoll() {
 			if (!summonedALly) {
-				return Random.NormalIntRange(8, 15); //14,18 //10,12
+				return Random.NormalIntRange(8, 12); //8,15 //14,18 //10,12
 			} else {
 				return super.damageRoll();
 			}

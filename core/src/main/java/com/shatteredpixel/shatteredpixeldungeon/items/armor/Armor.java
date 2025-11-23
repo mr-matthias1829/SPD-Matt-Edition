@@ -379,87 +379,162 @@ public class Armor extends EquipableItem {
 		return hero != null && hero.belongings.armor() == this;
 	}
 
-	public final int DRMax(){
-		return DRMax(buffedLvl());
-	}
+// ===== PHYSICAL DAMAGE REDUCTION =====
+
+    public final int DRMax(){
+        return DRMax(buffedLvl());
+    }
 
     public int DRMax(int lvl){
+        // No armor challenge: simplified formula
         if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
             return 1 + tier + lvl + augment.defenseFactor(lvl);
         }
 
-        // Calculate penalty from magic levels
+        // Calculate effective level after magic upgrade penalty
         int magicPenalty = (int)(magicLevel * 0.3f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
-        int max = ((tier+1)/2) * (2 + effectiveLevel) + augment.defenseFactor(effectiveLevel);
-        if (effectiveLevel > max){
-            return ((effectiveLevel - max)+1)/2;
+        // NEW: Tier multiplier scales linearly with tier
+        // T1: 1.0, T2: 1.25, T3: 1.5, T4: 1.75, T5: 2.0
+        float tierMultiplier = 1f + ((tier - 1) * 0.25f);
+
+        // NEW: Scaling increases slightly with each level
+        // Base formula: tierMultiplier * (base + effectiveLevel * (1 + effectiveLevel * 0.03))
+        // This gives slightly accelerating returns per level (reduced from 0.05 to 0.03)
+        int baseValue = 2;
+        float levelScaling = effectiveLevel * (1f + effectiveLevel * 0.03f);
+
+        int baseDR = Math.round(tierMultiplier * (baseValue + levelScaling));
+        int augmentBonus = augment.defenseFactor(effectiveLevel);
+
+        int maxDR = baseDR + augmentBonus;
+
+        // If effective level exceeds max DR, add bonus DR at reduced rate
+        if (effectiveLevel > maxDR){
+            int excessLevels = effectiveLevel - maxDR;
+            int bonusDR = (excessLevels + 1) / 2;  // Half rate for excess levels
+            return bonusDR;
         } else {
-            return max;
+            return maxDR;
         }
     }
 
-
     public final int DRMin(){
-		return DRMin(buffedLvl());
-	}
+        return DRMin(buffedLvl());
+    }
 
     public int DRMin(int lvl){
+        // No armor challenge: no minimum DR
         if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
             return 0;
         }
 
+        // Calculate effective level after magic upgrade penalty
         int magicPenalty = (int)(magicLevel * 0.3f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
-        int max = DRMax(lvl);
-        if (effectiveLevel >= max){
-            return (effectiveLevel - max);
+        int maxDR = DRMax(lvl);
+
+        // If effective level exceeds max DR, min equals excess
+        if (effectiveLevel >= maxDR){
+            return (effectiveLevel - maxDR);
         } else {
+            // Otherwise, min DR equals effective level
             return effectiveLevel;
         }
     }
 
-    public int magicDRMax(int magicLvl){
-        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-            return 1 + tier + magicLvl;
-        }
+// ===== STRENGTH REQUIREMENT =====
 
-        // Calculate penalty from physical levels
-        int physicalPenalty = (int)(level() * 0.3f);
-        int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
-
-        int max = (int)((tier+0.5)/1.5) * (2+ effectiveMagicLevel/2)+(effectiveMagicLevel % 2);
-        if (effectiveMagicLevel > max){
-            return ((effectiveMagicLevel - max)+1)/2;
-        } else {
-            return max;
-        }
+    public int STRReq(){
+        return STRReq(level());
     }
 
-    public int magicDRMin(int magicLvl){
-        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-            return 0;
+    public int STRReq(int lvl){
+        int req = STRReq(tier, lvl);
+        if (masteryPotionBonus){
+            req -= 2;
         }
-
-        int physicalPenalty = (int)(level() * 0.3f);
-        int effectiveMagicLevel = Math.max(0, ((magicLvl - physicalPenalty))/2 + (magicLvl - physicalPenalty) % 2);
-
-        int max = magicDRMax(magicLvl);
-        if (effectiveMagicLevel >= max){
-            return (effectiveMagicLevel - max);
-        } else {
-            return effectiveMagicLevel;
-        }
+        return req;
     }
+
+    protected static int STRReq(int tier, int lvl){
+        // Base STR requirement by tier
+        // T1: 8, T2: 11, T3: 13, T4: 16, T5: 18
+        int baseSTR = 8 + Math.round(tier * 2.5f);
+
+        // NEW: STR requirement INCREASES with upgrades
+        // Every 2 levels adds +1 STR requirement (IF /2f)
+        // at /2f: +0-1: +0 STR, +2-3: +1 STR, +4-5: +2 STR, +6-7: +3 STR, etc.
+
+        int strIncrease = (int)(lvl / 1.5f);
+
+        return baseSTR + strIncrease;
+    }
+
+// ===== MAGIC DAMAGE REDUCTION =====
 
     public final int magicDRMax(){
         return magicDRMax(magicLevel);
     }
 
+    public int magicDRMax(int magicLvl){
+        // No armor challenge: simplified formula
+        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+            return 1 + tier + magicLvl;
+        }
+
+        // Calculate effective magic level after physical upgrade penalty
+        int physicalPenalty = (int)(level() * 0.3f);
+        int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
+
+        // Base magic DR formula (more complex than physical)
+        // tierMultiplier calculation: (tier + 0.5) / 1.5
+        // Results: T1: 1, T2: 1, T3: 2, T4: 2, T5: 3
+        int tierMultiplier = (int)((tier + 0.5) / 1.5);
+
+        // Base value includes half of effective level plus odd remainder
+        int baseValue = 2 + (effectiveMagicLevel / 2) + (effectiveMagicLevel % 2);
+
+        int maxMagicDR = tierMultiplier * baseValue;
+
+        // If effective level exceeds max, add bonus DR at reduced rate
+        if (effectiveMagicLevel > maxMagicDR){
+            int excessLevels = effectiveMagicLevel - maxMagicDR;
+            int bonusDR = (excessLevels + 1) / 2;  // Half rate for excess levels
+            return bonusDR;
+        } else {
+            return maxMagicDR;
+        }
+    }
+
     public final int magicDRMin(){
         return magicDRMin(magicLevel);
+    }
+
+    public int magicDRMin(int magicLvl) {
+        // No armor challenge: no minimum DR
+        if (Dungeon.isChallenged(Challenges.NO_ARMOR)) {
+            return 0;
+        }
+
+        // Calculate effective magic level after physical upgrade penalty
+        int physicalPenalty = (int) (level() * 0.3f);
+        int magicLevelAfterPenalty = magicLvl - physicalPenalty;
+
+        // Effective level is half of post-penalty level, rounding up for odd numbers
+        int effectiveMagicLevel = Math.max(0, (magicLevelAfterPenalty / 2) + (magicLevelAfterPenalty % 2));
+
+        int maxMagicDR = magicDRMax(magicLvl);
+
+        // If effective level exceeds max, min equals excess
+        if (effectiveMagicLevel >= maxMagicDR) {
+            return (effectiveMagicLevel - maxMagicDR);
+        } else {
+            // Otherwise, min DR equals effective level
+            return effectiveMagicLevel;
+        }
     }
 
 	//This exists so we can test what a char's base evasion would be without armor affecting it
@@ -761,23 +836,7 @@ public class Armor extends EquipableItem {
 		return this;
 	}
 
-	public int STRReq(){
-		return STRReq(level());
-	}
 
-	public int STRReq(int lvl){
-		int req = STRReq(tier, lvl, magicLevel);
-		if (masteryPotionBonus){
-			req -= 2;
-		}
-		return req;
-	}
-
-	protected static int STRReq(int tier, int lvl, int mlvl){
-		lvl = Math.max(0, (lvl + mlvl)/3);
-		//strength req decreases at +1,+3,+6,+10,etc.
-		return (int)((8 +Math.round(tier * 2.5)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2);
-	}
 	
 	@Override
 	public int value() {

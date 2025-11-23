@@ -14,6 +14,29 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
 
+        list.add(new ChangeInfo("_v1285:_ prison rebalance", true,
+                "\n_ITEMS:_\n"
+                        + "1. overhauled armor physical DR scaling, higher tiers are now noticeably better\n"
+                        + "2. upgrades on armor now get compoundingly better each upgrade\n"
+                        + "3. armor now gains a higher strength requirement as you upgrade it\n"
+
+                        + "\n_ENEMIES:_\n"
+                        + "1. necromancer defensive reduced (14 -> 10). hp reduced (45 -> 40)\n"
+                        + "2. guard bash damage multi reduced (x1.5 -> x1.25)\n"
+                        + "3. skeleton damage reduced (3,11 -> 3,9), defensive reduced (16 -> 12)\n"
+
+                        + "\n_FLOORS:_\n"
+                        + "8. 1 less thief\n"
+                        + "9. 1 less DM100\n"
+
+                        + "\n_QUESTS:_\n"
+                        + "1. wandmaker quest rewards cursed % reduced (50% -> 25%)\n"
+                        + "2. newborn fire elemental damage reduced (8,15 -> 8,12)\n"
+
+                        + "\n_NOTES:_\n"
+                        + "1. yes, you observe correctly: I have YET to change floors 11 to 25... be patient\n"
+        ));
+
         list.add(new ChangeInfo("_v1280:_ item rebalance", true,
                 "\n_HERO:_\n"
                         + "1. peasant now starts with stones quickslotted... most insane change fr\n"
@@ -54,7 +77,7 @@ public class MOD_v1000_v12xx_Changes {
         ));
 
         list.add(new ChangeInfo("_v1277:_ tier nerf", true,
-                "\n_ITEMS_\n"
+                "\n_ITEMS:_\n"
                         + "1. nerfed weapons with a tier above 1, more so on items tiered above 2\n"
                         + "2. nerfed armor damage blocking scaling per level on higher tiers\n"
 

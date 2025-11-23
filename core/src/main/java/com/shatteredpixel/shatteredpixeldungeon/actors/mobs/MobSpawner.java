@@ -114,19 +114,19 @@ public class MobSpawner extends Actor {
                         Snake.class, Slime.class, Slime.class));
 			case 8:
 				// WAS 2x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 1x slime
-                // IS 1x skeleton, 2x thief, 2x DM-100, 2x guard, 1x necromancer + 2x slime
+                // IS 1x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 2x slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class,
-						Thief.class, Thief.class,
+						Thief.class,
 						DM100.class, DM100.class,
 						Guard.class, Guard.class,
 						Necromancer.class,
                         Slime.class, Slime.class));
 			case 9: case 10:
 				// WAS 1x skeleton, 1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x DM100
-                // IS 1x thief, 3x DM-100, 2x guard, 2x necromancer + 1x slime and 1x DM151
+                // IS 1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x slime and 1x DM151
 				return new ArrayList<>(Arrays.asList(
 						Thief.class,
-						DM100.class, DM100.class, DM100.class, DM151.class,
+						DM100.class, DM100.class, DM151.class,
 						Guard.class, Guard.class,
 						Necromancer.class, Necromancer.class,
                         Slime.class));

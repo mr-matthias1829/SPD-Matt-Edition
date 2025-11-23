@@ -47,7 +47,7 @@ public class Skeleton extends Mob {
 		spriteClass = SkeletonSprite.class;
 		
 		HP = HT = 25;
-		defenseSkill = 16; //9
+		defenseSkill = 12;//16 //9
 		
 		EXP = 3; //5
 		maxLvl = 10;
@@ -61,8 +61,8 @@ public class Skeleton extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 3, 11 );
-	} //3,7 // 2,10
+		return Random.NormalIntRange( 3, 9 );
+	}//3,11 //3,7 // 2,10
 	
 	@Override
 	public void die( Object cause ) {
