@@ -460,6 +460,8 @@ public class Armor extends EquipableItem {
     }
 
     protected static int STRReq(int tier, int lvl){
+        lvl = Math.max(0, lvl);
+
         // Base STR requirement by tier
         // T1: 8, T2: 11, T3: 13, T4: 16, T5: 18
         int baseSTR = 8 + Math.round(tier * 2.5f);
@@ -468,7 +470,7 @@ public class Armor extends EquipableItem {
         // Every 2 levels adds +1 STR requirement (IF /2f)
         // at /2f: +0-1: +0 STR, +2-3: +1 STR, +4-5: +2 STR, +6-7: +3 STR, etc.
 
-        int strIncrease = (int)(lvl / 1.5f);
+        int strIncrease = (int)(lvl / 2f);
 
         return baseSTR + strIncrease;
     }

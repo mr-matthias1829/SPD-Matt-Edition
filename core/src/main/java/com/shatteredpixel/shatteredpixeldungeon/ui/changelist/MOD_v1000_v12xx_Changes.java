@@ -14,6 +14,20 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
 
+        list.add(new ChangeInfo("_v1288:_ general rebalance", true,
+                "\n_ITEMS:_\n"
+                        + "1. reduced nerf to all melee weapons (-18% -> -7%)\n"
+                        + "2. reduced tier nerf to all melee weapons\n"
+                        + "3. armor STR req based on level scales slower\n"
+                        + "4. weapon STR req now increases based on level\n"
+
+                        + "\n_ENEMIES:_\n"
+                        + "1. thieves are slower in the sewer (0.8 -> 0.75) and have less hp (32 -> 20), unchanged in prison\n"
+                        + "2. fetid rat base hp reduced (30 -> 24)\n"
+                        + "3. gnoll trickster speed reduced (1.2 -> 1), unchanged in caves\n"
+                        + "4. crab damage reduced (4,8 -> 3,8)\n"
+        ));
+
         list.add(new ChangeInfo("_v1285:_ prison rebalance", true,
                 "\n_ITEMS:_\n"
                         + "1. overhauled armor physical DR scaling, higher tiers are now noticeably better\n"

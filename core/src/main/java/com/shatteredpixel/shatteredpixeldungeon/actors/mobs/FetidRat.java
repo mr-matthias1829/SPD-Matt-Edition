@@ -66,7 +66,7 @@ public class FetidRat extends Rat {
         adjustStats(level);
     }
     public void adjustStats( int level ) {
-        HP = HT = (int) (30 * (1+level * 0.65));// was a set value before //36 //20
+        HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
         defenseSkill = 8 * (1+level); //5
 
         EXP = (int) (3 * (1+level*0.25)); //4

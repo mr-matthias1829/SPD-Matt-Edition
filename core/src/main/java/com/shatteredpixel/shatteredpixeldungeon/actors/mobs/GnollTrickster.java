@@ -79,6 +79,7 @@ public class GnollTrickster extends Gnoll {
         if (level == 0) {
             properties.add(Property.MINIBOSS);
             lootChance = 1f; // only loot guaranteed when killed as quest
+            baseSpeed = 1f;
         } else {
             lootChance = 0.18f;
         }

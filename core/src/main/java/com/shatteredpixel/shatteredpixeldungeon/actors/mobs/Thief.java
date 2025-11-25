@@ -64,20 +64,22 @@ public class Thief extends Mob {
     private static final String STEALATTEMPTS = "stealattempts";
     public void setLevel( int depth ){
         int lvl = 0;
-        if (depth < 5) {
-            lvl = 0;
-        } else {
-            lvl = 2;
-        }
+        lvl = 1+(int)(Math.floor(depth/5));
+
+
         this.level = lvl;
         adjustStats(level);
     }
     public void adjustStats( int level ) {
-        if (level >= 5){
+        if (level >= 3){
             baseSpeed = 0.9f;
         }
+        else if (level >= 2){
+            baseSpeed = 0.8f;
+        }
         else{
-            baseSpeed = 0.8f; //0.75
+            baseSpeed = 0.75f;
+            HP = HT = 20;
         }
     }
 
