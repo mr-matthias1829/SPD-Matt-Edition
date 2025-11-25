@@ -54,7 +54,7 @@ import java.util.Collections;
 
 public class WelcomeScene extends PixelScene {
 
-	private static final int LATEST_UPDATE = 859;
+	private static final int LATEST_UPDATE = 878;
 
 	//used so that the game does not keep showing the window forever if cleaning fails
 	private static boolean triedCleaningTemp = false;
@@ -261,13 +261,6 @@ public class WelcomeScene extends PixelScene {
 				}
 			}
 
-			if (previousVersion <= ShatteredPixelDungeon.v2_4_2){
-				//Dwarf King's final journal entry changed, set it as un-read
-				if (Document.HALLS_KING.isPageRead(Document.KING_ATTRITION)){
-					Document.HALLS_KING.unreadPage(Document.KING_ATTRITION);
-				}
-			}
-
 			try {
 				Rankings.INSTANCE.load();
 				for (Rankings.Record rec : Rankings.INSTANCE.records.toArray(new Rankings.Record[0])){
@@ -298,10 +291,6 @@ public class WelcomeScene extends PixelScene {
 				Game.reportException( new RuntimeException("Rankings Updating Failed!",e));
 			}
 			Dungeon.daily = Dungeon.dailyReplay = false;
-
-			if (previousVersion <= ShatteredPixelDungeon.v2_4_2){
-				Document.ADVENTURERS_GUIDE.findPage(Document.GUIDE_ALCHEMY);
-			}
 
 			Badges.saveGlobal(true);
 			Journal.saveGlobal(true);
