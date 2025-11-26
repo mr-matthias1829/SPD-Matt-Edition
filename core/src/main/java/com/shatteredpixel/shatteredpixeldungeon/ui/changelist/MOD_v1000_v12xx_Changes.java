@@ -14,6 +14,12 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
 
+        list.add(new ChangeInfo("_v1289:_ less rng", true,
+                "\n_MECHANIC CHANGES:_\n"
+                        + "1. at least one tier 1 armor now always spawns on floor 3, 50% on floor 2.\n"
+                        + "2. let's hope this doesn't cause crashes!\n"
+        ));
+
         list.add(new ChangeInfo("_v1288:_ general rebalance", true,
                 "\n_ITEMS:_\n"
                         + "1. reduced nerf to all melee weapons (-18% -> -7%)\n"

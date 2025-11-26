@@ -446,6 +446,42 @@ public abstract class RegularLevel extends Level {
 			
 		}
 
+
+
+        // GUARANTEED TIER 1 ARMOR ON FLOOR 3
+        Random.pushGenerator(Random.Long());
+        if (Dungeon.depth == 3 || (Random.Float() > 0.5f && Dungeon.depth == 2)) {
+            Item tier1Armor = null;
+            try {
+                // Option 1: If Generator has a method for armor by tier
+                tier1Armor = Generator.randomArmor(1);
+
+                // Option 2: If you need to specify it differently, might be:
+                // tier1Armor = Generator.random(Generator.Category.ARMOR);
+                // then filter/ensure it's tier 1
+
+            } catch (Exception e) {
+                // Fallback: generate any random item if armor generation fails
+                tier1Armor = Generator.random();
+            }
+
+            if (tier1Armor != null) {
+                int cell = randomDropCell();
+                if (cell != -1) { // Check for valid cell
+                    if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
+                        map[cell] = Terrain.GRASS;
+                        losBlocking[cell] = false;
+                    }
+                    drop(tier1Armor, cell).type = Heap.Type.HEAP;
+                }
+            }
+        }
+        Random.popGenerator();
+
+
+
+
+
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();
 			if (item instanceof TrinketCatalyst){
