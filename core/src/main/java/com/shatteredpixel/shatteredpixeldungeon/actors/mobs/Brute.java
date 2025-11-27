@@ -92,9 +92,7 @@ public class Brute extends Mob {
 				triggerEnrage();
 			}
 			if (rage == null){
-				for (BruteRage b : buffs(BruteRage.class)){
-					rage = b;
-				}
+				rage = buff(BruteRage.class);
 			}
 			return rage != null && rage.shielding() > 0;
 		}
