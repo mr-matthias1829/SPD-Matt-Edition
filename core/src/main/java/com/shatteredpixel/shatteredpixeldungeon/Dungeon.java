@@ -355,6 +355,12 @@ public class Dungeon {
 				case 14:
 					level = new MiningLevel();
 					break;
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                    level = new VaultLevel();
+                    break;
 				default:
 					level = new DeadEndLevel();
 			}

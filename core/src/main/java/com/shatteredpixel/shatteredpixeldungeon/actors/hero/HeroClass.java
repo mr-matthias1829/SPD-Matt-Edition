@@ -51,11 +51,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.CrackedSpyglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Glock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -228,6 +230,7 @@ public enum HeroClass {
 		ThrowingKnife knives = new ThrowingKnife();
 		knives.identify().collect();
 
+        /* FOR TESTING PURPOSES
         Quarterstaff staff = new Quarterstaff();
         staff.identify().collect();
 
@@ -239,6 +242,12 @@ public enum HeroClass {
         ClothArmor a = new ClothArmor();
         a.identify().collect();
 
+        CrackedSpyglass sp = new CrackedSpyglass();
+        sp.identify().collect();
+
+        SkeletonKey k = new SkeletonKey();
+        k.identify().collect();
+
         new Glock().identify().collect();
 
         for (int s = 2; s < 100; s++) {
@@ -247,7 +256,7 @@ public enum HeroClass {
             new PotionOfStrength().identify().collect();
             new PotionOfExperience().identify().collect();
         }
-// testing as if i actually was there
+         */
 
 		Dungeon.quickslot.setSlot(0, cloak);
 		Dungeon.quickslot.setSlot(1, knives);

@@ -109,11 +109,14 @@ public class ToxicGasRoom extends SpecialRoom {
 
 	}
 
-	@Override
-	public boolean canPlaceCharacter(Point p, Level l) {
-		Blob gas = l.blobs.get(ToxicGas.class);
-		return gas == null || gas.volume == 0 || gas.cur[l.pointToCell(p)] == 0;
-	}
+    @Override
+    public boolean canPlaceCharacter(Point p, Level l) {
+        if (!super.canPlaceCharacter(p, l)) {
+            return false;
+        }
+        Blob gas = l.blobs.get(ToxicGas.class);
+        return gas == null || gas.volume == 0 || gas.cur[l.pointToCell(p)] == 0;
+    }
 
 	@Override
 	public boolean canPlaceTrap(Point p) {

@@ -304,13 +304,19 @@ public class Wandmaker extends NPC {
                 Wandmaker npc = new Wandmaker();
                 boolean validPos;
                 //Do not spawn wandmaker on the entrance, in front of a door, or on bad terrain.
+                int tries = 0;
+                int dist = 2;
                 do {
                     validPos = true;
-                    npc.pos = level.pointToCell(room.random((room.width() > 6 && room.height() > 6) ? 2 : 1));
-                    if (npc.pos == level.entrance() || level.solid[npc.pos]) {
+                    if (tries > 30 && dist > 0){
+                        tries = 0;
+                        dist--;
+                    }
+                    npc.pos = level.pointToCell(room.random(dist));
+                    if (npc.pos == level.entrance() || level.solid[npc.pos]){
                         validPos = false;
                     }
-                    for (int i : PathFinder.NEIGHBOURS4) {
+                    for (int i : PathFinder.NEIGHBOURS4){
                         if (level.map[npc.pos + i] == Terrain.DOOR) {
                             validPos = false;
                         }
@@ -320,6 +326,7 @@ public class Wandmaker extends NPC {
                             || level.map[npc.pos] == Terrain.EMPTY_SP) {
                         validPos = false;
                     }
+                    tries++;
                 } while (!validPos);
                 level.mobs.add(npc);
 

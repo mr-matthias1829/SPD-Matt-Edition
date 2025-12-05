@@ -17,7 +17,16 @@ public class MOD_v1000_v12xx_Changes {
         list.add(new ChangeInfo("_Notes:_", true,
                 "This mod does _NOT_ auto-update or have visible in-game news.\n\n"
                         + "Download the latest github release for new updates and changelogs.\n\n"
-                        + "you can find a _link_ to the github on _the about page!_"));
+                        + "you can find a _link_ to the github on _the about page!_\n\n\n"
+                        + "while this mod does (try) to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
+
+        list.add(new ChangeInfo("_v1299:_ THE HORRIBLE MERGE", true,
+                "\n_CHANGES:_\n"
+                        + "1. a horrible and terrible attempt at trying to merge this mod with the new SPD 3.3.0\n"
+                        + "2. i... tried my best ok :( (there's likely a ton of issues and changes missing because i merged it VERY weirdly)\n"
+                        + "3. wonderous resin (trinket) can be obtained again (it remains the same still... FOR NOW)\n"
+                        + "4. the game now (hopefully) saves the fact that you are cheating if you are per savefile\n"
+        ));
 
         list.add(new ChangeInfo("_v1297:_ ice caves", true,
                 "\n_MECHANIC CHANGES_\n"

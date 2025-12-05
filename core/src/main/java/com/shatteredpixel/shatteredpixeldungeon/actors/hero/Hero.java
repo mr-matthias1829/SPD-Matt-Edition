@@ -21,14 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -228,62 +221,81 @@ public class Hero extends Char {
 	public int STR;
 	
 	public float awareness;
-	
+
 	public int lvl = 1;
 	public int exp = 0;
-	
-	public int HTBoost = 0;
-	
+    public int HTBoost = 0;
+    public boolean cheating = false;
+    public int baseHP = 30;
+
 	private ArrayList<Mob> visibleEnemies;
 
 	//This list is maintained so that some logic checks can be skipped
 	// for enemies we know we aren't seeing normally, resulting in better performance
 	public ArrayList<Mob> mindVisionEnemies = new ArrayList<>();
 
-	public Hero() {
-		super();
+    public Hero() {
+        super();
 
-		HP = HT = 20;
-		STR = STARTING_STR;
-		
-		belongings = new Belongings( this );
-		
-		visibleEnemies = new ArrayList<>();
-	}
-	
-	public void updateHT( boolean boostHP ){
-		int curHT = HT;
-		
-		HT = 20 + 5*(lvl-1) + HTBoost;
-		float multiplier = RingOfMight.HTMultiplier(this);
-		HT = Math.round(multiplier * HT);
-		
-		if (buff(ElixirOfMight.HTBoost.class) != null){
-			HT += buff(ElixirOfMight.HTBoost.class).boost();
-		}
-		
-		if (boostHP){
-			HP += Math.max(HT - curHT, 0);
-		}
-		HP = Math.min(HP, HT);
-	}
+        if (SPDSettings.cheatMode()){
+            HT = HP = 999030;
+            baseHP = HT;
+            STR = 25;
+            cheating = true;
+            Badges.setBadgesDisabled(true);
+            Dungeon.rankable = false;
+        }
+        else if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)){
+            HP = HT = 20;
+            baseHP = 20;
+            STR = STARTING_STR;
+            cheating = false;
+        }
+        else {
+            HP = HT = 30; //20
+            baseHP = 30;
+            STR = STARTING_STR;
+            cheating = false;
+        }
 
-	public int STR() {
-		int strBonus = 0;
+        belongings = new Belongings( this );
 
-		strBonus += RingOfMight.strengthBonus( this );
-		
-		AdrenalineSurge buff = buff(AdrenalineSurge.class);
-		if (buff != null){
-			strBonus += buff.boost();
-		}
+        visibleEnemies = new ArrayList<>();
+    }
 
-		if (hasTalent(Talent.STRONGMAN)){
-			strBonus += (int)Math.floor(STR * (0.03f + 0.05f*pointsInTalent(Talent.STRONGMAN)));
-		}
+    public void updateHT( boolean boostHP ){
+        int curHT = HT;
 
-		return STR + strBonus;
-	}
+        HT = baseHP + 5 * (lvl - 1) + HTBoost; //20 + 5*(lvl-1)
+        float multiplier = RingOfMight.HTMultiplier(this);
+        HT = Math.round(multiplier * HT);
+
+        if (buff(ElixirOfMight.HTBoost.class) != null){
+            HT += buff(ElixirOfMight.HTBoost.class).boost();
+        }
+
+        if (boostHP){
+            HP += Math.max(HT - curHT, 0);
+        }
+        HP = Math.min(HP, HT);
+    }
+
+    public int STR() {
+        int strBonus = 0;
+
+        strBonus += RingOfMight.strengthBonus( this );
+
+        AdrenalineSurge buff = buff(AdrenalineSurge.class);
+        if (buff != null){
+            strBonus += buff.boost();
+        }
+
+        if (hasTalent(Talent.STRONGMAN)){
+            strBonus += (int)Math.floor(STR * (0.03f + 0.05f*pointsInTalent(Talent.STRONGMAN)));
+        }
+
+        return STR + strBonus;
+    }
 
 	private static final String CLASS       = "class";
 	private static final String SUBCLASS    = "subClass";
@@ -295,6 +307,7 @@ public class Hero extends Char {
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
+    private static final String CHEATING    = "cheating";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -315,6 +328,8 @@ public class Hero extends Char {
 		bundle.put( EXPERIENCE, exp );
 		
 		bundle.put( HTBOOST, HTBoost );
+
+        bundle.put (CHEATING, cheating);
 
 		belongings.storeInBundle( bundle );
 	}
@@ -338,6 +353,8 @@ public class Hero extends Char {
 		defenseSkill = bundle.getInt( DEFENSE );
 		
 		STR = bundle.getInt( STRENGTH );
+
+        cheating = bundle.getBoolean( CHEATING );
 
 		belongings.restoreFromBundle( bundle );
 	}
@@ -2508,15 +2525,17 @@ public class Hero extends Char {
 						//unintentional searches always fail with a cursed talisman
 						} else if (cursed) {
 							chance = 0f;
-							
+
 						//unintentional trap detection scales from 40% at floor 0 to 30% at floor 25
-						} else if (Dungeon.level.map[curr] == Terrain.SECRET_TRAP) {
-							chance = 0.4f - (Dungeon.depth / 250f);
-							
-						//unintentional door detection scales from 20% at floor 0 to 0% at floor 20
-						} else {
-							chance = 0.2f - (Dungeon.depth / 100f);
-						}
+                        } else if (Dungeon.level.map[curr] == Terrain.SECRET_TRAP) {
+                            //chance = 0.4f - (Dungeon.depth / 250f);
+                            chance = 0.4f - (Dungeon.depth / 60f);
+
+                            //unintentional door detection scales from 20% at floor 0 to 0% at floor 20
+                        } else {
+                            //chance = 0.2f - (Dungeon.depth / 100f);
+                            chance = 0.2f - (Dungeon.depth / 80f);
+                        }
 
 						//don't want to let the player search though hidden doors in tutorial
 						if (SPDSettings.intro()){
