@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
@@ -35,76 +36,108 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.watabou.utils.Random;
 
 public class WndChooseSubclass extends Window {
-	
-	private static final int WIDTH		= 130;
-	private static final float GAP		= 2;
-	
-	public WndChooseSubclass(final TengusMask tome, final Hero hero ) {
-		
-		super();
 
-		IconTitle titlebar = new IconTitle();
-		titlebar.icon( new ItemSprite( tome.image(), null ) );
-		titlebar.label( tome.name() );
-		titlebar.setRect( 0, 0, WIDTH, 0 );
-		add( titlebar );
+    private static final int WIDTH		= 130;
+    private static final float GAP		= 2;
 
-		RenderedTextBlock message = PixelScene.renderTextBlock( 6 );
-		message.text( Messages.get(this, "message"), WIDTH );
-		message.setPos( titlebar.left(), titlebar.bottom() + GAP );
-		add( message );
+    public WndChooseSubclass(final TengusMask tome, final Hero hero ) {
 
-		float pos = message.bottom() + 3*GAP;
+        super();
 
-		for (HeroSubClass subCls : hero.heroClass.subClasses()){
-			RedButton btnCls = new RedButton( subCls.shortDesc(), 6 ) {
-				@Override
-				protected void onClick() {
-					GameScene.show(new WndOptions(new HeroIcon(subCls),
-							Messages.titleCase(subCls.title()),
-							Messages.get(WndChooseSubclass.this, "are_you_sure"),
-							Messages.get(WndChooseSubclass.this, "yes"),
-							Messages.get(WndChooseSubclass.this, "no")){
-						@Override
-						protected void onSelect(int index) {
-							hide();
-							if (index == 0 && WndChooseSubclass.this.parent != null){
-								WndChooseSubclass.this.hide();
-								tome.choose( subCls );
-							}
-						}
-					});
-				}
-			};
-			btnCls.leftJustify = true;
-			btnCls.multiline = true;
-			btnCls.setSize(WIDTH-20, btnCls.reqHeight()+2);
-			btnCls.setRect( 0, pos, WIDTH-20, btnCls.reqHeight()+2);
-			add( btnCls );
+        IconTitle titlebar = new IconTitle();
+        titlebar.icon( new ItemSprite( tome.image(), null ) );
+        titlebar.label( tome.name() );
+        titlebar.setRect( 0, 0, WIDTH-16, 0 );
+        add( titlebar );
 
-			IconButton clsInfo = new IconButton(Icons.get(Icons.INFO)){
-				@Override
-				protected void onClick() {
-					GameScene.show(new WndInfoSubclass(Dungeon.hero.heroClass, subCls));
-				}
-			};
-			clsInfo.setRect(WIDTH-20, btnCls.top() + (btnCls.height()-20)/2, 20, 20);
-			add(clsInfo);
+        IconButton random = new IconButton(Icons.SHUFFLE.get()){
+            @Override
+            protected void onClick() {
+                super.onClick();
+                GameScene.show(new WndOptions(Icons.SHUFFLE.get(),
+                        Messages.get(WndChooseSubclass.class, "random_title"),
+                        Messages.get(WndChooseSubclass.class, "random_sure"),
+                        Messages.get(WndChooseSubclass.class, "yes"),
+                        Messages.get(WndChooseSubclass.class, "no")){
+                    @Override
+                    protected void onSelect(int index) {
+                        super.onSelect(index);
+                        if (index == 0){
+                            WndChooseSubclass.this.hide();
+                            HeroSubClass cls = Random.oneOf(hero.heroClass.subClasses());
+                            tome.choose(cls);
+                            GameScene.show(new WndInfoSubclass(hero.heroClass, cls));
+                        }
+                    }
+                });
+            }
 
-			pos = btnCls.bottom() + GAP;
-		}
+            @Override
+            protected String hoverText() {
+                return Messages.get(WndChooseSubclass.class, "random_title");
+            }
+        };
+        random.setRect(WIDTH-16, 0, 16, 16);
+        add(random);
 
-		RedButton btnCancel = new RedButton( Messages.get(this, "cancel") ) {
-			@Override
-			protected void onClick() {
-				hide();
-			}
-		};
-		btnCancel.setRect( 0, pos, WIDTH, 18 );
-		add( btnCancel );
-		
-		resize( WIDTH, (int)btnCancel.bottom() );
-	}
+        RenderedTextBlock message = PixelScene.renderTextBlock( 6 );
+        message.text( Messages.get(this, "message"), WIDTH );
+        message.setPos( titlebar.left(), titlebar.bottom() + GAP );
+        add( message );
+
+        float pos = message.bottom() + 3*GAP;
+
+        for (HeroSubClass subCls : hero.heroClass.subClasses()){
+            RedButton btnCls = new RedButton( subCls.shortDesc(), 6 ) {
+                @Override
+                protected void onClick() {
+                    GameScene.show(new WndOptions(new HeroIcon(subCls),
+                            Messages.titleCase(subCls.title()),
+                            Messages.get(WndChooseSubclass.this, "are_you_sure"),
+                            Messages.get(WndChooseSubclass.this, "yes"),
+                            Messages.get(WndChooseSubclass.this, "no")){
+                        @Override
+                        protected void onSelect(int index) {
+                            hide();
+                            if (index == 0 && WndChooseSubclass.this.parent != null){
+                                WndChooseSubclass.this.hide();
+                                tome.choose( subCls );
+                                Statistics.qualifiedForRandomVictoryBadge = false;
+                            }
+                        }
+                    });
+                }
+            };
+            btnCls.leftJustify = true;
+            btnCls.multiline = true;
+            btnCls.setSize(WIDTH-20, btnCls.reqHeight()+2);
+            btnCls.setRect( 0, pos, WIDTH-20, btnCls.reqHeight()+2);
+            add( btnCls );
+
+            IconButton clsInfo = new IconButton(Icons.get(Icons.INFO)){
+                @Override
+                protected void onClick() {
+                    GameScene.show(new WndInfoSubclass(Dungeon.hero.heroClass, subCls));
+                }
+            };
+            clsInfo.setRect(WIDTH-20, btnCls.top() + (btnCls.height()-20)/2, 20, 20);
+            add(clsInfo);
+
+            pos = btnCls.bottom() + GAP;
+        }
+
+        RedButton btnCancel = new RedButton( Messages.get(this, "cancel") ) {
+            @Override
+            protected void onClick() {
+                hide();
+            }
+        };
+        btnCancel.setRect( 0, pos, WIDTH, 18 );
+        add( btnCancel );
+
+        resize( WIDTH, (int)btnCancel.bottom() );
+    }
 }

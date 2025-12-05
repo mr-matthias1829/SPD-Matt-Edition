@@ -242,14 +242,14 @@ public class SPDSettings extends GameSettings {
 	public static int lastClass() {
 		return getInt( KEY_LAST_CLASS, 0, 0, 3 );
 	}
-	
-	public static void challenges( int value ) {
-		put( KEY_CHALLENGES, value );
-	}
-	
-	public static int challenges() {
-		return getInt( KEY_CHALLENGES, 0, 0, Challenges.MAX_VALUE );
-	}
+
+    public static void challenges( int value ) {
+        put( KEY_CHALLENGES, value );
+    }
+
+    public static int challenges() {
+        return getInt( KEY_CHALLENGES, 0, 0, Challenges.MAX_VALUE );
+    }
 
 	public static void customSeed( String value ){
 		put( KEY_CUSTOM_SEED, value );

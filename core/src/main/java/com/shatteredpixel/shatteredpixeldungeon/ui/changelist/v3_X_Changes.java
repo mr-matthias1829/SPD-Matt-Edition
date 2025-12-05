@@ -89,6 +89,11 @@ public class v3_X_Changes {
 		changes.hardlight(Window.TITLE_COLOR);
 		changeInfos.add(changes);
 
+        changes.addButton( new ChangeButton(Icons.get(Icons.DUM_MATT), "Mod notice",
+                "While this mod (attempted) to update to 3.3.0,\n\n"
+                        + "NOT all changes have been applied to this mod (mainly stat changes).\n\n"
+                        + "this trend will _likely continue_ for future vanilla update pulls!"));
+
 		changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Dev Commentary",
 				"**-** Released December 4th, 2025\n" +
 				"**-** 122 days after v3.2.0 (66 days after v3.2.5)\n" +

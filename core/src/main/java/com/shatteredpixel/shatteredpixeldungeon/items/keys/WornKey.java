@@ -27,7 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class WornKey extends Key {
 
     {
-        image = ItemSpriteSheet.SKELETON_KEY;
+        image = ItemSpriteSheet.WORN_KEY;
     }
 
     public WornKey() {

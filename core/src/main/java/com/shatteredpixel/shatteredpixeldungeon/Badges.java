@@ -177,54 +177,55 @@ public class Badges {
 		GAMES_PLAYED_3              ( 86, BadgeType.GLOBAL ),
 		HIGH_SCORE_3                ( 87 ),
 
-		//platinum
-		MANY_BUFFS                  ( 96 ),
-		ITEM_LEVEL_5                ( 97 ),
-		LEVEL_REACHED_5             ( 98 ),
-		HAPPY_END                   ( 99 ),
-		HAPPY_END_REMAINS           ( 100 ),
-		RODNEY                      ( 101, BadgeType.JOURNAL ),
-		ALL_WEAPONS_IDENTIFIED      , //still exists internally for pre-2.5 saves
-		ALL_ARMOR_IDENTIFIED        , //still exists internally for pre-2.5 saves
-		ALL_WANDS_IDENTIFIED        , //still exists internally for pre-2.5 saves
-		ALL_ITEMS_IDENTIFIED        , //still exists internally for pre-2.5 saves
-		VICTORY_WARRIOR,
-		VICTORY_MAGE,
-		VICTORY_ROGUE,
-		VICTORY_HUNTRESS,
-		VICTORY_DUELIST,
-		VICTORY_CLERIC,
-		VICTORY_ALL_CLASSES         ( 102, BadgeType.GLOBAL ),
-		DEATH_FROM_ALL              ( 103, BadgeType.GLOBAL ),
-		BOSS_SLAIN_3_GLADIATOR,
-		BOSS_SLAIN_3_BERSERKER,
-		BOSS_SLAIN_3_WARLOCK,
-		BOSS_SLAIN_3_BATTLEMAGE,
-		BOSS_SLAIN_3_FREERUNNER,
-		BOSS_SLAIN_3_ASSASSIN,
-		BOSS_SLAIN_3_SNIPER,
-		BOSS_SLAIN_3_WARDEN,
-		BOSS_SLAIN_3_CHAMPION,
-		BOSS_SLAIN_3_MONK,
-		BOSS_SLAIN_3_PRIEST,
-		BOSS_SLAIN_3_PALADIN,
-		BOSS_SLAIN_3_ALL_SUBCLASSES ( 104, BadgeType.GLOBAL ),
-		BOSS_CHALLENGE_3            ( 105 ),
-		BOSS_CHALLENGE_4            ( 106 ),
-		RESEARCHER_4                ( 107, BadgeType.JOURNAL ),
-		GAMES_PLAYED_4              ( 108, BadgeType.GLOBAL ),
-		HIGH_SCORE_4                ( 109 ),
-		CHAMPION_1                  ( 110 ),
+        //platinum
+        MANY_BUFFS                  ( 96 ),
+        ITEM_LEVEL_5                ( 97 ),
+        LEVEL_REACHED_5             ( 98 ),
+        HAPPY_END                   ( 99 ),
+        VICTORY_RANDOM              ( 100 ),
+        HAPPY_END_REMAINS           ( 101 ),
+        RODNEY                      ( 102, BadgeType.JOURNAL ),
+        ALL_WEAPONS_IDENTIFIED      , //still exists internally for pre-2.5 saves
+        ALL_ARMOR_IDENTIFIED        , //still exists internally for pre-2.5 saves
+        ALL_WANDS_IDENTIFIED        , //still exists internally for pre-2.5 saves
+        ALL_ITEMS_IDENTIFIED        , //still exists internally for pre-2.5 saves
+        VICTORY_WARRIOR,
+        VICTORY_MAGE,
+        VICTORY_ROGUE,
+        VICTORY_HUNTRESS,
+        VICTORY_DUELIST,
+        VICTORY_CLERIC,
+        VICTORY_ALL_CLASSES         ( 103, BadgeType.GLOBAL ),
+        DEATH_FROM_ALL              ( 104, BadgeType.GLOBAL ),
+        BOSS_SLAIN_3_GLADIATOR,
+        BOSS_SLAIN_3_BERSERKER,
+        BOSS_SLAIN_3_WARLOCK,
+        BOSS_SLAIN_3_BATTLEMAGE,
+        BOSS_SLAIN_3_FREERUNNER,
+        BOSS_SLAIN_3_ASSASSIN,
+        BOSS_SLAIN_3_SNIPER,
+        BOSS_SLAIN_3_WARDEN,
+        BOSS_SLAIN_3_CHAMPION,
+        BOSS_SLAIN_3_MONK,
+        BOSS_SLAIN_3_PRIEST,
+        BOSS_SLAIN_3_PALADIN,
+        BOSS_SLAIN_3_ALL_SUBCLASSES ( 105, BadgeType.GLOBAL ),
+        BOSS_CHALLENGE_3            ( 106 ),
+        BOSS_CHALLENGE_4            ( 107 ),
+        RESEARCHER_4                ( 108, BadgeType.JOURNAL ),
+        GAMES_PLAYED_4              ( 109, BadgeType.GLOBAL ),
+        HIGH_SCORE_4                ( 110 ),
+        CHAMPION_1                  ( 111 ),
 
-		//diamond
-		PACIFIST_ASCENT             ( 120 ),
-		TAKING_THE_MICK             ( 121 ), //This might be the most obscure game reference I've made
-		BOSS_CHALLENGE_5            ( 122 ),
-		RESEARCHER_5                ( 123, BadgeType.JOURNAL ),
-		GAMES_PLAYED_5              ( 124, BadgeType.GLOBAL ),
-		HIGH_SCORE_5                ( 125 ),
-		CHAMPION_2                  ( 126 ),
-		CHAMPION_3                  ( 127 ),
+        //diamond
+        PACIFIST_ASCENT             ( 120 ),
+        TAKING_THE_MICK             ( 121 ), //This might be the most obscure game reference I've made
+        BOSS_CHALLENGE_5            ( 122 ),
+        RESEARCHER_5                ( 123, BadgeType.JOURNAL ),
+        GAMES_PLAYED_5              ( 124, BadgeType.GLOBAL ),
+        HIGH_SCORE_5                ( 125 ),
+        CHAMPION_2                  ( 126 ),
+        CHAMPION_3                  ( 127 ),
 
 
         NO_UPGRADE_BOSS3 (296),
@@ -1103,6 +1104,16 @@ public class Badges {
         Badge badge = Badge.VICTORY;
         local.add( badge );
         displayBadge( badge );
+
+        //technically player can also not spend talent points if they want for some reason
+        if (Statistics.qualifiedForRandomVictoryBadge
+                && Dungeon.hero.subClass != null
+                && Dungeon.hero.armorAbility != null){
+            badge = Badge.VICTORY_RANDOM;
+            local.add( badge );
+            displayBadge( badge );
+        }
+
 
         badge = victoryClassBadges.get(Dungeon.hero.heroClass);
         if (badge == null) return;

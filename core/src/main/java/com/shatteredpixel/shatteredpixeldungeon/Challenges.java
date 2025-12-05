@@ -47,6 +47,7 @@ public class Challenges {
     public static final int GUNS_BLAZING        = 2048;
     public static final int WONKY_STEP       = 4096;
 
+    public static final int MAX_CHALS           = 13;
 	public static final int MAX_VALUE           = 8191;
 
 	public static final String[] NAME_IDS = {
@@ -73,13 +74,17 @@ public class Challenges {
             BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING, WONKY_STEP
 	};
 
-	public static int activeChallenges(){
-		int chCount = 0;
-		for (int ch : Challenges.MASKS){
-			if ((Dungeon.challenges & ch) != 0) chCount++;
-		}
-		return chCount;
-	}
+    public static int activeChallenges(){
+        return activeChallenges(Dungeon.challenges);
+    }
+
+    public static int activeChallenges(int mask){
+        int chCount = 0;
+        for (int ch : Challenges.MASKS){
+            if ((mask & ch) != 0) chCount++;
+        }
+        return chCount;
+    }
 
     public static int totalChallenges() {
         return MASKS.length;
