@@ -22,36 +22,37 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.WardenSprite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.IceSnakeSprite;
 import com.watabou.utils.Random;
 
-public class Warden extends Guard {
-
-
-    {
-        spriteClass = WardenSprite.class;
-
-        HP = HT = 140;
-        defenseSkill = 19;
-
-        EXP = 9;
-        maxLvl = 25;
-
-        properties.add(Property.DEMONIC);
-    }
-
-    @Override
-    public int damageRoll() {
-        return Random.NormalIntRange(22, 38);
-    }
-
-    @Override
-    public int attackSkill( Char target ) {
-        return 40;
-    }
+public class IceSnake extends Snake {
+	
+	{
+		spriteClass = IceSnakeSprite.class;
+		
+		HP = HT = 24;
+		defenseSkill = 45;
+		
+		EXP = 5;
+		maxLvl = 15;
+        properties.add(Property.ICY);
+	}
+	
+	@Override
+	public int damageRoll() {
+		return Random.NormalIntRange( 10, 16 );
+	}
+	
+	@Override
+	public int attackSkill( Char target ) {
+		return 18;
+	}
 
     @Override
-    public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 10);
+    protected boolean doAttack(Char enemy) {
+        Buff.prolong(enemy, Chill.class, Chill.DURATION/3f );
+        return super.doAttack(enemy);
     }
 }

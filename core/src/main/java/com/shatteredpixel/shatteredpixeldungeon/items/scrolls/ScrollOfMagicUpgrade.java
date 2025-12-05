@@ -7,9 +7,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -44,61 +47,91 @@ public class ScrollOfMagicUpgrade extends InventoryScroll {
     }
 
     // This method actually performs the magic upgrade
-    public void upgradeItem( Item item ){
-        magicUpgrade( curUser );
+    public Item upgradeItem( Item item ){
+       // magicUpgrade( curUser );
 
         Degrade.detach( curUser, Degrade.class );
 
-        if (item instanceof Armor) {
+        //logic for telling the user when item properties change from upgrades
+        //...yes this is rather messy
+        if (item instanceof Weapon){
+            Weapon w = (Weapon) item;
+            boolean wasCursed = w.cursed;
+            boolean wasHardened = w.enchantHardened;
+            boolean hadCursedEnchant = w.hasCurseEnchant();
+            boolean hadGoodEnchant = w.hasGoodEnchant();
+
+            item = w.upgrade();
+
+            if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
+                removeCurse( Dungeon.hero );
+            } else if (w.cursedKnown && wasCursed && !w.cursed){
+                weakenCurse( Dungeon.hero );
+            }
+            if (wasHardened && !w.enchantHardened){
+                GLog.w( Messages.get(Weapon.class, "hardening_gone") );
+            } else if (hadGoodEnchant && !w.hasGoodEnchant()){
+                GLog.w( Messages.get(Weapon.class, "incompatible") );
+            }
+
+        } else if (item instanceof Armor){
             Armor a = (Armor) item;
             boolean wasCursed = a.cursed;
             boolean wasHardened = a.glyphHardened;
             boolean hadCursedGlyph = a.hasCurseGlyph();
             boolean hadGoodGlyph = a.hasGoodGlyph();
 
-            // Upgrade magic level
-            a.magicLevel++;
+            item = a.upgrade();
 
-            // Remove curse
-            a.cursed = false;
+            int uncurseChance = 4 + a.visiblyUpgraded();
+            int weakenChance = 2 + a.visiblyUpgraded();
 
-
-            if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
-                ScrollOfUpgrade.removeCurse( Dungeon.hero );
-            } else if (a.cursedKnown && wasCursed && !a.cursed){
-                ScrollOfUpgrade.weakenCurse( Dungeon.hero );
+            if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph() && Random.Int(uncurseChance) == 0){
+                removeCurse( Dungeon.hero );
+            } else if (a.cursedKnown && wasCursed && !a.cursed && Random.Int(weakenChance) == 0){
+                weakenCurse( Dungeon.hero );
             }
-
-            // Hardening loss chance - fixed calculation
-            if (wasHardened && a.magicLevel >= 6){
-                int lossChance = 10 * (int)Math.pow(2, a.magicLevel - 6);
-                if (Random.Int(100) < lossChance){
-                    a.glyphHardened = false;
-                    GLog.w( Messages.get(Armor.class, "hardening_gone") );
-                }
-            }
-
-            if (hadGoodGlyph && !a.hasGoodGlyph()){
+            if (wasHardened && !a.glyphHardened){
+                GLog.w( Messages.get(Armor.class, "hardening_gone") );
+            } else if (hadGoodGlyph && !a.hasGoodGlyph()){
                 GLog.w( Messages.get(Armor.class, "incompatible") );
             }
 
-        } else if (item instanceof Wand) {
+        } else if (item instanceof Wand || item instanceof Ring) {
             boolean wasCursed = item.cursed;
-            item.upgrade();
 
-            if (item.cursedKnown && wasCursed && !item.cursed) {
-                ScrollOfUpgrade.removeCurse(Dungeon.hero);
+            item = item.upgrade();
+
+            if (item.cursedKnown && wasCursed && !item.cursed){
+                removeCurse( Dungeon.hero );
             }
+
+        } else {
+            item = item.upgrade();
         }
 
         Badges.validateItemLevelAquired( item );
         Statistics.upgradesUsed++;
         Badges.validateMageUnlock();
+
         Catalog.countUse(item.getClass());
+
+        return item;
     }
 
     public static void magicUpgrade( Hero hero ) {
         hero.sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );
+    }
+
+    public static void weakenCurse( Hero hero ){
+        GLog.p( Messages.get(ScrollOfUpgrade.class, "weaken_curse") );
+        hero.sprite.emitter().start( ShadowParticle.UP, 0.05f, 5 );
+    }
+
+    public static void removeCurse( Hero hero ){
+        GLog.p( Messages.get(ScrollOfUpgrade.class, "remove_curse") );
+        hero.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10 );
+        Badges.validateClericUnlock();
     }
 
     @Override

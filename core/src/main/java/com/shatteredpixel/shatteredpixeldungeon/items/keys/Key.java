@@ -34,56 +34,59 @@ import com.watabou.utils.Bundle;
 
 public abstract class Key extends Item {
 
-	public static final float TIME_TO_UNLOCK = 5f;
-	
-	{
-		stackable = true;
-		unique = true;
-	}
+    public static final float TIME_TO_UNLOCK = 5f;
 
-	//TODO currently keys can only appear on branch = 0, add branch support here if that changes
-	public int depth;
-	
-	@Override
-	public boolean isSimilar( Item item ) {
-		return super.isSimilar(item) && ((Key)item).depth == depth;
-	}
+    {
+        stackable = true;
+        unique = true;
+    }
 
-	@Override
-	public boolean doPickUp(Hero hero, int pos) {
-		Catalog.setSeen(getClass());
-		Statistics.itemTypesDiscovered.add(getClass());
-		GameScene.pickUpJournal(this, pos);
-		WndJournal.last_index = 0;
-		Notes.add(this);
-		Sample.INSTANCE.play( Assets.Sounds.ITEM );
-		hero.spendAndNext( pickupDelay() );
-		GameScene.updateKeyDisplay();
-		return true;
-	}
+    public int depth;
+    public int branch;
 
-	private static final String DEPTH = "depth";
-	
-	@Override
-	public void storeInBundle( Bundle bundle ) {
-		super.storeInBundle( bundle );
-		bundle.put( DEPTH, depth );
-	}
-	
-	@Override
-	public void restoreFromBundle( Bundle bundle ) {
-		super.restoreFromBundle( bundle );
-		depth = bundle.getInt( DEPTH );
-	}
-	
-	@Override
-	public boolean isUpgradable() {
-		return false;
-	}
-	
-	@Override
-	public boolean isIdentified() {
-		return true;
-	}
+    @Override
+    public boolean isSimilar( Item item ) {
+        return super.isSimilar(item) && ((Key)item).depth == depth && ((Key)item).branch == branch;
+    }
+
+    @Override
+    public boolean doPickUp(Hero hero, int pos) {
+        Catalog.setSeen(getClass());
+        Statistics.itemTypesDiscovered.add(getClass());
+        GameScene.pickUpJournal(this, pos);
+        WndJournal.last_index = 0;
+        Notes.add(this);
+        Sample.INSTANCE.play( Assets.Sounds.ITEM );
+        hero.spendAndNext( pickupDelay() );
+        GameScene.updateKeyDisplay();
+        return true;
+    }
+
+    private static final String DEPTH = "depth";
+    private static final String BRANCH = "branch";
+
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle( bundle );
+        bundle.put( DEPTH, depth );
+        bundle.put( BRANCH, branch );
+    }
+
+    @Override
+    public void restoreFromBundle( Bundle bundle ) {
+        super.restoreFromBundle( bundle );
+        depth = bundle.getInt( DEPTH );
+        branch = bundle.getInt( BRANCH );
+    }
+
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
+
+    @Override
+    public boolean isIdentified() {
+        return true;
+    }
 
 }

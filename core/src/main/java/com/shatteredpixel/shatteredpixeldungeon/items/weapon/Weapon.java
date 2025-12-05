@@ -361,7 +361,7 @@ abstract public class Weapon extends KindOfWeapon {
 		//return (int)((8 + tier * 2.5) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2);
 
 
-        int baseSTR = 8 + Math.round(tier * 2.5f);
+        int baseSTR = 8 +  (int)(Math.round((tier-0.5) * 2.5f));
 
         int strIncrease = (int)(lvl / 2f);
 

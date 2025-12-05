@@ -43,7 +43,7 @@ public class Brute extends Mob {
 		spriteClass = BruteSprite.class;
 		
 		HP = HT = 40;
-		defenseSkill = 15;
+		defenseSkill = 10; //15
 		
 		EXP = 8;
 		maxLvl = 16;
@@ -57,8 +57,8 @@ public class Brute extends Mob {
 	@Override
 	public int damageRoll() {
 		return buff(BruteRage.class) != null ?
-				Random.NormalIntRange( 15, 40 ) :
-				Random.NormalIntRange( 5, 25 );
+				Random.NormalIntRange( 10, 30 ) : // 15,40
+				Random.NormalIntRange( 5, 18 ); //5,25
 	}
 	
 	@Override
@@ -93,8 +93,8 @@ public class Brute extends Mob {
 	}
 	
 	protected void triggerEnrage(){
-		Buff.affect(this, BruteRage.class).setShield(HT/2 + 4);
-		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT/2 + 4), FloatingText.SHIELDING );
+		Buff.affect(this, BruteRage.class).setShield(HT/3 + 4);//(HT/2 + 4);
+		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT/3 + 4), FloatingText.SHIELDING );
 		if (Dungeon.level.heroFOV[pos]) {
 			SpellSprite.show( this, SpellSprite.BERSERK);
 		}

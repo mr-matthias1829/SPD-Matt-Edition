@@ -255,10 +255,17 @@ public class WndUpgrade extends Window {
 					Integer.toString((((Weapon) toUpgrade).STRReq(levelTo))),
 					bottom);
 		} else if (toUpgrade instanceof Armor) {
-			bottom = fillFields(Messages.get(this, "weight"),
-					Integer.toString((((Armor) toUpgrade).STRReq(levelFrom))),
-					Integer.toString((((Armor) toUpgrade).STRReq(levelTo))),
+            if (upgrader instanceof ScrollOfMagicUpgrade){
+			        bottom = fillFields(Messages.get(this, "weight"),
+                    Integer.toString((((Armor) toUpgrade).STRReq(toUpgrade.isIdentified() ? ((Armor) toUpgrade).level() : 0))),
+                    Integer.toString((((Armor) toUpgrade).STRReq(toUpgrade.isIdentified() ? ((Armor) toUpgrade).level() : 0))),
+                    bottom);
+            } else {
+                bottom = fillFields(Messages.get(this, "weight"),
+                Integer.toString((((Armor) toUpgrade).STRReq(levelFrom))),
+                Integer.toString((((Armor) toUpgrade).STRReq(levelTo))),
 					bottom);
+            }
 		}
 
 		//durability

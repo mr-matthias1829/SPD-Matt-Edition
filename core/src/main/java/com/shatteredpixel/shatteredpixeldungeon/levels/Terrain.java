@@ -36,6 +36,9 @@ public class Terrain {
 	public static final int EMBERS			= 9;
 	public static final int LOCKED_DOOR		= 10;
 	public static final int CRYSTAL_DOOR	= 31;
+
+    public static final int ICY_DOOR = 100;
+
 	public static final int PEDESTAL		= 11;
 	public static final int WALL_DECO		= 12;
 	public static final int BARRICADE		= 13;
@@ -93,6 +96,7 @@ public class Terrain {
 		flags[EMBERS]		= PASSABLE;
 		flags[LOCKED_DOOR]	= LOS_BLOCKING | SOLID;
 		flags[CRYSTAL_DOOR]	= SOLID;
+        flags[ICY_DOOR] = SOLID | LOS_BLOCKING;
 		flags[PEDESTAL]		= PASSABLE;
 		flags[WALL_DECO]	= flags[WALL];
 		flags[BARRICADE]	= FLAMABLE | SOLID | LOS_BLOCKING;

@@ -115,8 +115,9 @@ public class CavesLevel extends RegularLevel {
 	
 	@Override
 	public boolean activateTransition(Hero hero, LevelTransition transition) {
-		if (transition.type == LevelTransition.Type.BRANCH_EXIT
-				&& (!Blacksmith.Quest.given() || Blacksmith.Quest.completed() || !Blacksmith.Quest.started())) {
+        if (transition.type == LevelTransition.Type.BRANCH_EXIT
+                && transition.destBranch == 1  // <-- ADD THIS CHECK
+                && (!Blacksmith.Quest.given() || Blacksmith.Quest.completed() || !Blacksmith.Quest.started())) {
 
 			Blacksmith smith = null;
 			for (Char c : Actor.chars()){

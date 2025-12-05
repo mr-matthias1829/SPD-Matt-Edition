@@ -93,8 +93,11 @@ public abstract class Shaman extends Mob {
 		if (Dungeon.level.adjacent( pos, enemy.pos )
 				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) {
 			
-			return super.doAttack( enemy );
-			
+			boolean result = super.doAttack( enemy );
+            if (hit(this, enemy, false) && Random.Float() < 0.20) {
+                debuff(enemy);
+            }
+            return result;
 		} else {
 			
 			if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
@@ -155,7 +158,7 @@ public abstract class Shaman extends Mob {
 		
 		@Override
 		protected void debuff( Char enemy ) {
-			Buff.prolong( enemy, Weakness.class, Weakness.DURATION );
+			Buff.prolong( enemy, Weakness.class, Weakness.DURATION/2 );
 		}
 	}
 	
@@ -166,7 +169,7 @@ public abstract class Shaman extends Mob {
 		
 		@Override
 		protected void debuff( Char enemy ) {
-			Buff.prolong( enemy, Vulnerable.class, Vulnerable.DURATION );
+			Buff.prolong( enemy, Vulnerable.class, Vulnerable.DURATION/2 );
 		}
 	}
 	
@@ -177,7 +180,7 @@ public abstract class Shaman extends Mob {
 		
 		@Override
 		protected void debuff( Char enemy ) {
-			Buff.prolong( enemy, Hex.class, Hex.DURATION );
+			Buff.prolong( enemy, Hex.class, Hex.DURATION/2 );
 		}
 	}
 	

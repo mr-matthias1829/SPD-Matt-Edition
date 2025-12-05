@@ -115,11 +115,7 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 import com.watabou.utils.SparseArray;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public abstract class Level implements Bundlable {
 	
@@ -131,6 +127,7 @@ public abstract class Level implements Bundlable {
 		DARK,
 		LARGE,
 		TRAPS,
+        ICY,
 		SECRETS;
 
 		public String title(){
@@ -218,7 +215,7 @@ public abstract class Level implements Bundlable {
 		Random.pushGenerator( Dungeon.seedCurDepth() );
 
 		//TODO maybe just make this part of RegularLevel?
-		if (!Dungeon.bossLevel() && Dungeon.branch == 0) {
+		if (!Dungeon.bossLevel() && Dungeon.branch != 1) {
 
 			addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
@@ -262,10 +259,12 @@ public abstract class Level implements Bundlable {
 				Dungeon.LimitedDrops.TRINKET_CATA.drop();
 				addItemToSpawn( new TrinketCatalyst());
 			}
-			
+
+
 			if (Dungeon.depth > 1) {
 				//50% chance of getting a level feeling
 				//~7.15% chance for each feeling
+
 				switch (Random.Int( 14 )) {
 					case 0:
 						feeling = Feeling.CHASM;
@@ -515,7 +514,7 @@ public abstract class Level implements Bundlable {
 	abstract protected boolean build();
 	
 	private ArrayList<Class<?extends Mob>> mobsToSpawn = new ArrayList<>();
-	
+
 	public Mob createMob() {
 		if (mobsToSpawn == null || mobsToSpawn.isEmpty()) {
 			mobsToSpawn = MobSpawner.getMobRotation(Dungeon.depth);
@@ -526,6 +525,30 @@ public abstract class Level implements Bundlable {
 		return m;
 	}
 
+
+    /**
+     * Replace the mob rotation used by createMob().
+     * Subclasses should call this from createMobs() to set a custom rotation.
+     */
+    protected void setMobRotation(List<Class<? extends Mob>> rotation) {
+        mobsToSpawn.clear();
+        if (rotation != null) mobsToSpawn.addAll(rotation);
+    }
+
+    /** Append a single mob class to the rotation. */
+    protected void addMobToRotation(Class<? extends Mob> mobClass) {
+        if (mobClass != null) mobsToSpawn.add(mobClass);
+    }
+
+    /** Shuffle the current mob rotation. */
+    protected void shuffleMobRotation() {
+        Collections.shuffle(mobsToSpawn);
+    }
+
+    /** Read-only view of the rotation (for debugging/balancing). */
+    protected List<Class<? extends Mob>> getMobRotation() {
+        return Collections.unmodifiableList(mobsToSpawn);
+    }
 	abstract protected void createMobs();
 
 	abstract protected void createItems();

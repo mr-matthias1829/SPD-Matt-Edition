@@ -278,11 +278,14 @@ public class DungeonTileSheet {
 		else if (tile == Terrain.OPEN_DOOR)     return DungeonTileSheet.RAISED_DOOR_OPEN;
 		else if (tile == Terrain.LOCKED_DOOR)   return DungeonTileSheet.RAISED_DOOR_LOCKED;
 		else if (tile == Terrain.CRYSTAL_DOOR)   return DungeonTileSheet.RAISED_DOOR_CRYSTAL;
+        else if (tile == Terrain.ICY_DOOR) {
+            return DungeonTileSheet.RAISED_DOOR_CRYSTAL;
+        }
 		else return -1;
 	}
 
 	private static int[] doorTiles = new int[]{
-			Terrain.DOOR, Terrain.LOCKED_DOOR, Terrain.CRYSTAL_DOOR, Terrain.OPEN_DOOR
+			Terrain.DOOR, Terrain.LOCKED_DOOR, Terrain.CRYSTAL_DOOR, Terrain.OPEN_DOOR, Terrain.ICY_DOOR
 	};
 
 	public static boolean doorTile(int tile){
@@ -432,6 +435,9 @@ public class DungeonTileSheet {
 		directVisuals.put(Terrain.UNLOCKED_EXIT,    UNLOCKED_EXIT);
 		directVisuals.put(Terrain.WELL,             WELL);
 
+
+        directVisuals.put(Terrain.ICY_DOOR, directVisuals.get(Terrain.DOOR, FLOOR));
+
 	}
 
 	//These visuals directly represent game tiles (no stitching) when terrain is being shown as flat
@@ -442,6 +448,9 @@ public class DungeonTileSheet {
 		directFlatVisuals.put(Terrain.OPEN_DOOR,        FLAT_DOOR_OPEN);
 		directFlatVisuals.put(Terrain.LOCKED_DOOR,      FLAT_DOOR_LOCKED);
 		directFlatVisuals.put(Terrain.CRYSTAL_DOOR,     FLAT_DOOR_CRYSTAL);
+
+        directFlatVisuals.put(Terrain.ICY_DOOR, directFlatVisuals.get(Terrain.DOOR, FLAT_DOOR));
+
 		directFlatVisuals.put(Terrain.WALL_DECO,        FLAT_WALL_DECO);
 		directFlatVisuals.put(Terrain.BOOKSHELF,        FLAT_BOOKSHELF);
 		directFlatVisuals.put(Terrain.ALCHEMY,          FLAT_ALCHEMY_POT);

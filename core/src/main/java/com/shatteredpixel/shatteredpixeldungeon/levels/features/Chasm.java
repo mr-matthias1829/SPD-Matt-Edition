@@ -95,32 +95,76 @@ public class Chasm implements Hero.Doom {
 			}
 		});
 	}
-	
-	public static void heroFall( int pos ) {
-		
-		jumpConfirmed = false;
-				
-		Sample.INSTANCE.play( Assets.Sounds.FALLING );
 
-		Level.beforeTransition();
+    public static void heroFall( int pos ) {
 
-		if (Dungeon.hero.isAlive()) {
-			Dungeon.hero.interrupt();
-			InterlevelScene.mode = InterlevelScene.Mode.FALL;
-			if (Dungeon.level instanceof RegularLevel &&
-						((RegularLevel)Dungeon.level).room( pos ) instanceof WeakFloorRoom){
-				InterlevelScene.fallIntoPit = true;
-				Notes.remove(Notes.Landmark.DISTANT_WELL);
-			} else {
-				InterlevelScene.fallIntoPit = false;
-			}
-			Game.switchScene( InterlevelScene.class );
-		} else {
-			Dungeon.hero.sprite.visible = false;
-		}
-	}
+        jumpConfirmed = false;
 
-	@Override
+        Sample.INSTANCE.play( Assets.Sounds.FALLING );
+
+        Level.beforeTransition();
+
+        if (Dungeon.hero.isAlive()) {
+            Dungeon.hero.interrupt();
+
+            // If no other script already set a special transition, check for ice caves branch transitions
+            if (InterlevelScene.curTransition == null) {
+
+                if (Dungeon.depth == 14 && Dungeon.branch == 0) {
+                    // Falling from B0F14 goes to Ice Caves Floor 1
+                    LevelTransition transition = new LevelTransition(
+                            Dungeon.level,
+                            pos,
+                            LevelTransition.Type.BRANCH_EXIT,
+                            14,  // Ice Caves Floor 1
+                            2,   // Branch 2
+                            LevelTransition.Type.BRANCH_ENTRANCE
+                    );
+                    InterlevelScene.curTransition = transition;
+                    InterlevelScene.mode = InterlevelScene.Mode.FALL;
+                    InterlevelScene.fallIntoPit = false;
+
+                } else if (Dungeon.depth == 14 && Dungeon.branch == 2) {
+                    // Falling from B2F14 goes back to B0F14
+                    LevelTransition transition = new LevelTransition(
+                            Dungeon.level,
+                            pos,
+                            LevelTransition.Type.BRANCH_ENTRANCE,
+                            14,  // Back to floor 14
+                            0,   // Main branch
+                            LevelTransition.Type.BRANCH_EXIT
+                    );
+                    InterlevelScene.curTransition = transition;
+                    InterlevelScene.mode = InterlevelScene.Mode.FALL;
+                    InterlevelScene.fallIntoPit = false;
+
+                } else {
+                    // Normal fall behaviour only when no curTransition was pre-set by the receiver
+                    InterlevelScene.mode = InterlevelScene.Mode.FALL;
+                    if (Dungeon.level instanceof RegularLevel &&
+                            ((RegularLevel)Dungeon.level).room( pos ) instanceof WeakFloorRoom){
+                        InterlevelScene.fallIntoPit = true;
+                        Notes.remove(Notes.Landmark.DISTANT_WELL);
+                    } else {
+                        InterlevelScene.fallIntoPit = false;
+                    }
+                }
+
+            } else {
+                // curTransition already set by receiver: respect it.
+                // Just set the mode to FALL if not already and do NOT overwrite fallIntoPit.
+                InterlevelScene.mode = InterlevelScene.Mode.FALL;
+                // (Optionally update other flags here if the receiver expects them)
+            }
+
+            Game.switchScene( InterlevelScene.class );
+        } else {
+            Dungeon.hero.sprite.visible = false;
+        }
+    }
+
+
+    @Override
 	public void onDeath() {
 		Badges.validateDeathFromFalling();
 

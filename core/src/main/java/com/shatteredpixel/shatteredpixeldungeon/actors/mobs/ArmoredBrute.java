@@ -27,6 +27,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -51,8 +53,8 @@ public class ArmoredBrute extends Brute {
 	
 	@Override
 	protected void triggerEnrage () {
-		Buff.affect(this, ArmoredRage.class).setShield(HT/2 + 1);
-		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT/2 + 1), FloatingText.SHIELDING );
+		Buff.affect(this, ArmoredRage.class).setShield(HT); // /2+1
+		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT), FloatingText.SHIELDING );
 		if (Dungeon.level.heroFOV[pos]) {
 			sprite.showStatus( CharSprite.WARNING, Messages.get(this, "enraged") );
 		}
@@ -63,9 +65,9 @@ public class ArmoredBrute extends Brute {
 	@Override
 	public Item createLoot() {
 		if (Random.Int( 4 ) == 0) {
-			return new PlateArmor().random();
+			return new MailArmor().random();
 		}
-		return new ScaleArmor().random();
+		return new LeatherArmor().random();
 	}
 	
 	//similar to regular brute rate, but deteriorates much slower. 60 turns to death total.

@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -51,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Glock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -223,21 +225,34 @@ public class ShopRoom extends SpecialRoom {
 
 		ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
-		MeleeWeapon w;
-		MissileWeapon m;
+		MeleeWeapon w = null;
+		MissileWeapon m = null;
 		switch (Dungeon.depth) {
 		case 6: default:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
 			m = (MissileWeapon) Generator.random(Generator.misTiers[1]);
 			itemsToSpawn.add( new LeatherArmor().identify(false) );
+
+            FishingRod rod = new FishingRod();
+            if (Random.Float() < 0.6f){
+                rod.cursed = true;
+            }
+            rod.identify(false);
+
+            itemsToSpawn.add(rod);
+
+
 			break;
-			
+
 		case 11:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
 			m = (MissileWeapon) Generator.random(Generator.misTiers[2]);
 			itemsToSpawn.add( new MailArmor().identify(false) );
+
+            Glock gun = new Glock();
+            itemsToSpawn.add(gun);
 			break;
-			
+
 		case 16:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
 			m = (MissileWeapon) Generator.random(Generator.misTiers[3]);
@@ -253,19 +268,24 @@ public class ShopRoom extends SpecialRoom {
 			itemsToSpawn.add( new Torch() );
 			break;
 		}
-		w.enchant(null);
-		w.cursed = false;
-		w.level(0);
-		w.identify(false);
-		itemsToSpawn.add(w);
+        if (w != null) {
+            w.enchant(null);
+            w.cursed = false;
+            w.level(0);
+            w.identify(false);
+            itemsToSpawn.add(w);
+        }
 
-		m.enchant(null);
-		m.cursed = false;
-		m.level(0);
-		m.identify(false);
-		itemsToSpawn.add(m);
-		
-		itemsToSpawn.add( TippedDart.randomTipped(2) );
+        if (m != null) {
+            m.enchant(null);
+            m.cursed = false;
+            m.level(0);
+            m.identify(false);
+            itemsToSpawn.add(m);
+        }
+		if (Dungeon.depth != 6) {
+            itemsToSpawn.add(TippedDart.randomTipped(2));
+        }
 
 		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
 

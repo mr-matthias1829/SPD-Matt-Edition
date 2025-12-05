@@ -95,7 +95,7 @@ public class CavesBossLevel extends Level {
 
 	@Override
 	public String tilesTex() {
-		return Assets.Environment.TILES_CAVES;
+		return Assets.Environment.TILES_ICE2;
 	}
 
 	@Override
@@ -559,7 +559,12 @@ public class CavesBossLevel extends Level {
 		}
 
 		Painter.set(this, entrance, Terrain.ENTRANCE);
-		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
+		transitions.add(new LevelTransition(this,
+                entrance,
+                LevelTransition.Type.BRANCH_ENTRANCE,
+                14,
+                2,
+                LevelTransition.Type.REGULAR_EXIT));
 	}
 
 	private static short[] corner1 = {

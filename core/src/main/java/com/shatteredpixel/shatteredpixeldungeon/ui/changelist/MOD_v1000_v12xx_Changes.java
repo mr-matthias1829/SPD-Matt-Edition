@@ -6,6 +6,11 @@ public class MOD_v1000_v12xx_Changes {
 
     public static void addAllChanges(ArrayList<ChangeInfo> list){
 
+        /*
+        THE PLAN TODAY:
+        3. try to merge the newest spd 2.3.3 into this spd (merge conflicts go brrrrrr)
+         */
+
         // Newest versions first (reversed order)
 
         //notes
@@ -13,6 +18,57 @@ public class MOD_v1000_v12xx_Changes {
                 "This mod does _NOT_ auto-update or have visible in-game news.\n\n"
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_"));
+
+        list.add(new ChangeInfo("_v1297:_ ice caves", true,
+                "\n_MECHANIC CHANGES_\n"
+                        + "1. you are now significantly less likely to find a hidden trap or door without searching the deeper you get\n"
+
+                        + "\n_FLOORS_\n"
+                        + "F14. no longer directly connects to floor 15\n"
+                        + "B2F14. added new ice cave floor, which connects to F14 and F15\n"
+                        + "F15. now uses ice cave palette\n"
+
+                        + "\n_ENEMIES_\n"
+                        + "1. added the ice snake, DM100F, and frozen swarm\n"
+                        + "2. spinner defensive reduced (17 -> 14), hp reduced (50 -> 40)\n"
+                        + "3. armored brute armor drop tier reduced, has more shield when it dies (50% -> 100%)\n"
+                        + "4. brute defensive reduced (15 -> 10), has more shield when it dies (50% -> 66%), " +
+                        "unraged damage reduced (5,25 -> 5,18), raged damage reduced (15,40 -> 10,30)\n"
+                        + "5. shaman debuff duration is shorter (100% -> 50%), but now have a chance to inflict debuff on melee attacks (20%)\n"
+
+                        + "\n_ITEMS:_\n"
+                        + "1. melee weapons now start with less strength requirement (oops)\n"
+                        + "2. added the fishing rod, a new 'artifact' used to fish for loot\n"
+                        + "3. gun.\n" // added glock-40, but this is the more 'the hell do you mean gun?' factor which is funnier
+
+                        + "\n_SHOP:_\n"
+                        + "1. first shop (floor 6) no longer sells tipped darts\n"
+                        + "2. first shop (floor 6) now sells fishing rod\n"
+                        + "3. second shop (floor 11) now sells 'gun.'\n"
+
+                        + "\n_FIXES:_\n"
+                        + "1. fixed DM151 wandering (hopefully)\n"
+                        + "2. fixed scroll of magic upgrade reading animation triggering twice and too early\n"
+                        + "3. hardcoded the scroll of magic upgrade to not show the armor weight increasing when in reality it doesn't increase when applied\n"
+                        + "4. further fixed the scroll of magic upgrade in general\n"
+
+                        + "\n_NOTES:_\n"
+                        + "1. caves lacked a bit of that 'HMPF!', if you know what i mean\n"
+                        + "2. hence the addition of the ice caves, one big floor with a bit less dangerous enemies\n"
+                        + "3. the difficulty there becomes resource management, and finding the exit quick enough\n"
+                        + "4. also, in my testing i REALLY hated the spinners in the ice caves, hence why they don't spawn there anymore _:)_\n"
+
+                        + "\n_WHAT'S NEXT?:_\n"
+                        + "1. changes to the caves boss (haven't quite gotten to him yet)\n"
+                        + "2. changes to the blacksmith quest enemies (decided to not do this yet)\n"
+                        + "3. rebalances to the new items and cave enemies if required\n"
+                        + "4. potentially making the ice cave floor smaller\n"
+                        + "5. addition of more custom enemies or new rooms in the generation\n"
+
+                        + "\n_SNEAKPEEK?:_\n"
+                        + "1. i plan to make the dwarven city more... interesting.\n"
+                        + "2. and if you think you are finally done dealing with necromancers, thieves, and what not... think again\n"
+        ));
 
         list.add(new ChangeInfo("_v1289:_ less rng", true,
                 "\n_MECHANIC CHANGES:_\n"

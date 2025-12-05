@@ -29,7 +29,7 @@ public class ItemSpriteSheet {
 	public static final int SIZE = 16;
 
 	private static final int TX_WIDTH = 256;
-	private static final int TX_HEIGHT = 512;
+	private static final int TX_HEIGHT = 544; //512
 
 	private static final int WIDTH = TX_WIDTH / SIZE;
 
@@ -806,6 +806,18 @@ public class ItemSpriteSheet {
 		assignItemRect(CITY_PAGE,   10, 11);
 		assignItemRect(HALLS_PAGE,  10, 11);
 	}
+
+
+    private static final int MOD =                                   xy(1, 34);  //16 slots
+    public static final int OLD_FISHING_ROD  = MOD+0;
+    public static final int FISHING_ROD  = MOD+1;
+
+    // Guns in spd??? Man we have gotten to a new low...
+    public static final int GLOCK = MOD+2;
+    public static final int GLOCK_BULLET = MOD+3;
+    static{
+        assignItemRect(GLOCK_BULLET,11, 11);
+    }
 
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {

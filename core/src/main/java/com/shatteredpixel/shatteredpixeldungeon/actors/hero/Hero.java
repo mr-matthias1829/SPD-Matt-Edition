@@ -72,11 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesi
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -2311,67 +2307,67 @@ public class Hero extends Char {
 	public void onMotionComplete() {
 		GameScene.checkKeyHold();
 	}
-	
-	@Override
-	public void onOperateComplete() {
-		
-		if (curAction instanceof HeroAction.Unlock) {
 
-			int doorCell = ((HeroAction.Unlock)curAction).dst;
-			int door = Dungeon.level.map[doorCell];
-			
-			if (Dungeon.level.distance(pos, doorCell) <= 1) {
-				boolean hasKey = true;
-				if (door == Terrain.LOCKED_DOOR) {
-					hasKey = Notes.remove(new IronKey(Dungeon.depth));
-					if (hasKey) Level.set(doorCell, Terrain.DOOR);
-				} else if (door == Terrain.CRYSTAL_DOOR) {
-					hasKey = Notes.remove(new CrystalKey(Dungeon.depth));
-					if (hasKey) {
-						Level.set(doorCell, Terrain.EMPTY);
-						Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
-						CellEmitter.get( doorCell ).start( Speck.factory( Speck.DISCOVER ), 0.025f, 20 );
-					}
-				} else {
-					hasKey = Notes.remove(new SkeletonKey(Dungeon.depth));
-					if (hasKey) Level.set(doorCell, Terrain.UNLOCKED_EXIT);
-				}
-				
-				if (hasKey) {
-					GameScene.updateKeyDisplay();
-					GameScene.updateMap(doorCell);
-					spend(Key.TIME_TO_UNLOCK);
-				}
-			}
-			
-		} else if (curAction instanceof HeroAction.OpenChest) {
-			
-			Heap heap = Dungeon.level.heaps.get( ((HeroAction.OpenChest)curAction).dst );
-			
-			if (Dungeon.level.distance(pos, heap.pos) <= 1){
-				boolean hasKey = true;
-				if (heap.type == Type.SKELETON || heap.type == Type.REMAINS) {
-					Sample.INSTANCE.play( Assets.Sounds.BONES );
-				} else if (heap.type == Type.LOCKED_CHEST){
-					hasKey = Notes.remove(new GoldenKey(Dungeon.depth));
-				} else if (heap.type == Type.CRYSTAL_CHEST){
-					hasKey = Notes.remove(new CrystalKey(Dungeon.depth));
-				}
-				
-				if (hasKey) {
-					GameScene.updateKeyDisplay();
-					heap.open(this);
-					spend(Key.TIME_TO_UNLOCK);
-				}
-			}
-			
-		}
-		curAction = null;
+    @Override
+    public void onOperateComplete() {
 
-		if (!ready) {
-			super.onOperateComplete();
-		}
-	}
+        if (curAction instanceof HeroAction.Unlock) {
+
+            int doorCell = ((HeroAction.Unlock)curAction).dst;
+            int door = Dungeon.level.map[doorCell];
+
+            if (Dungeon.level.distance(pos, doorCell) <= 1) {
+                boolean hasKey = true;
+                if (door == Terrain.LOCKED_DOOR) {
+                    hasKey = Notes.remove(new IronKey(Dungeon.depth, Dungeon.branch));
+                    if (hasKey) Level.set(doorCell, Terrain.DOOR);
+                } else if (door == Terrain.CRYSTAL_DOOR) {
+                    hasKey = Notes.remove(new CrystalKey(Dungeon.depth, Dungeon.branch));
+                    if (hasKey) {
+                        Level.set(doorCell, Terrain.EMPTY);
+                        Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+                        CellEmitter.get(doorCell).start(Speck.factory(Speck.DISCOVER), 0.025f, 20);
+                    }
+                } else {
+                    hasKey = Notes.remove(new SkeletonKey(0,Dungeon.branch));
+                    if (hasKey) Level.set(doorCell, Terrain.UNLOCKED_EXIT);
+                }
+
+                if (hasKey) {
+                    GameScene.updateKeyDisplay();
+                    GameScene.updateMap(doorCell);
+                    spend(Key.TIME_TO_UNLOCK);
+                }
+            }
+
+        } else if (curAction instanceof HeroAction.OpenChest) {
+
+            Heap heap = Dungeon.level.heaps.get( ((HeroAction.OpenChest)curAction).dst );
+
+            if (Dungeon.level.distance(pos, heap.pos) <= 1){
+                boolean hasKey = true;
+                if (heap.type == Type.SKELETON || heap.type == Type.REMAINS) {
+                    Sample.INSTANCE.play( Assets.Sounds.BONES );
+                } else if (heap.type == Type.LOCKED_CHEST){
+                    hasKey = Notes.remove(new GoldenKey(Dungeon.depth, Dungeon.branch));
+                } else if (heap.type == Type.CRYSTAL_CHEST){
+                    hasKey = Notes.remove(new CrystalKey(Dungeon.depth, Dungeon.branch));
+                }
+
+                if (hasKey) {
+                    GameScene.updateKeyDisplay();
+                    heap.open(this);
+                    spend(Key.TIME_TO_UNLOCK);
+                }
+            }
+
+        }
+        curAction = null;
+
+        if (!ready) {
+            super.onOperateComplete();
+        }
+    }
 
 	public boolean search( boolean intentional ) {
 		
@@ -2455,11 +2451,13 @@ public class Hero extends Char {
 							
 						//unintentional trap detection scales from 40% at floor 0 to 30% at floor 25
 						} else if (Dungeon.level.map[curr] == Terrain.SECRET_TRAP) {
-							chance = 0.4f - (Dungeon.depth / 250f);
+							//chance = 0.4f - (Dungeon.depth / 250f);
+                            chance = 0.4f - (Dungeon.depth / 60f);
 							
 						//unintentional door detection scales from 20% at floor 0 to 0% at floor 20
 						} else {
-							chance = 0.2f - (Dungeon.depth / 100f);
+							//chance = 0.2f - (Dungeon.depth / 100f);
+                            chance = 0.2f - (Dungeon.depth / 80f);
 						}
 
 						//don't want to let the player search though hidden doors in tutorial

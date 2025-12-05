@@ -289,7 +289,7 @@ public class MobSpawner extends Actor {
 				else if (cl == Scorpio.class)       cl = Acidic.class;
 
 				rotation.set(i, cl);
-			}
+			}// brother im so stupid
 		}
 	}
 }

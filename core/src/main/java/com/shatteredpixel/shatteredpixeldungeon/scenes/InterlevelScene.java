@@ -61,6 +61,7 @@ import com.watabou.utils.PlatformSupport;
 import com.watabou.utils.Random;
 import com.watabou.utils.RectF;
 import com.watabou.utils.Signal;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -148,9 +149,9 @@ public class InterlevelScene extends PixelScene {
 					}
 				}
 				break;
-			case FALL:
-				loadingDepth = Dungeon.depth+1;
-				break;
+            case FALL:
+                    loadingDepth = Dungeon.depth;
+                break;
 			case ASCEND:
 				fadeTime = FAST_FADE;
 				if (curTransition != null)  loadingDepth = curTransition.destDepth;
@@ -674,7 +675,12 @@ public class InterlevelScene extends PixelScene {
 		Dungeon.saveAll();
 
 		Level level;
-		Dungeon.depth++;
+        if (curTransition != null) {
+            Dungeon.depth  = curTransition.destDepth;
+            Dungeon.branch = curTransition.destBranch;
+        } else {
+            Dungeon.depth++; // only increment if no transition
+        }
 		if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
 			level = Dungeon.loadLevel( GamesInProgress.curSlot );
 		} else {

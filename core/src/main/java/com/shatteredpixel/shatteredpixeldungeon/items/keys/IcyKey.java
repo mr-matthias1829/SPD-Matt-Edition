@@ -22,26 +22,38 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.keys;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndSupportPrompt;
+import com.watabou.noosa.Game;
+import com.watabou.utils.Callback;
 
-public class CrystalKey extends Key {
+import java.io.IOException;
 
-    {
-        image = ItemSpriteSheet.CRYSTAL_KEY;
+public class IcyKey extends Item {
+
+	{
+		image = ItemSpriteSheet.SKELETON_KEY;
+	}
+
+	public IcyKey() {
+		super();
+        unique = true;
+        stackable = false;
+	}
+
+    @Override
+    public boolean isUpgradable() {
+        return false;
     }
 
-    public CrystalKey() {
-        this( 0 );
+    @Override
+    public boolean isIdentified() {
+        return true;
     }
 
-    public CrystalKey( int depth ) {
-        this( depth, Dungeon.branch );
-    }
-
-    public CrystalKey( int depth, int branch ) {
-        super();
-        this.depth = depth;
-        this.branch = branch;
-    }
 
 }

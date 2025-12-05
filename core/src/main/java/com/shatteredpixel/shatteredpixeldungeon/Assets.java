@@ -43,6 +43,9 @@ public class Assets {
 		public static final String TILES_CITY   = "environment/tiles_city.png";
 		public static final String TILES_HALLS  = "environment/tiles_halls.png";
 
+        public static final String TILES_ICE  = "environment/tiles_ice.png";
+        public static final String TILES_ICE2  = "environment/tiles_ice5.png";
+
 		public static final String TILES_CAVES_CRYSTAL  = "environment/tiles_caves_crystal.png";
 		public static final String TILES_CAVES_GNOLL    = "environment/tiles_caves_gnoll.png";
 
@@ -134,6 +137,8 @@ public class Assets {
 		public static final String CAVES_TENSE          = "music/caves_tense.ogg";
 		public static final String CAVES_BOSS           = "music/caves_boss.ogg";
 		public static final String CAVES_BOSS_FINALE    = "music/caves_boss_finale.ogg";
+
+        public static final String ICE_CAVES          = "music/icecaves.ogg";
 
 		public static final String CITY_1               = "music/city_1.ogg";
 		public static final String CITY_2               = "music/city_2.ogg";
@@ -292,6 +297,9 @@ public class Assets {
 		public static final String CRAB     = "sprites/crab.png";
 		public static final String GOO      = "sprites/goo.png";
 		public static final String SWARM    = "sprites/swarm.png";
+
+        public static final String FROZENSWARM    = "sprites/frozenswarm.png";
+
 		public static final String SKELETON = "sprites/skeleton.png";
 		public static final String SHAMAN   = "sprites/shaman.png";
 		public static final String THIEF    = "sprites/thief.png";
@@ -324,6 +332,7 @@ public class Assets {
 		public static final String GUARDIAN = "sprites/guardian.png";
 		public static final String SLIME    = "sprites/slime.png";
 		public static final String SNAKE    = "sprites/snake.png";
+        public static final String ICESNAKE    = "sprites/icesnake.png";
 		public static final String NECRO    = "sprites/necromancer.png";
         public static final String NECRO2    = "sprites/necromancer2.png";
 		public static final String GHOUL    = "sprites/ghoul.png";
@@ -331,6 +340,7 @@ public class Assets {
 		public static final String SPAWNER  = "sprites/spawner.png";
 		public static final String DM100    = "sprites/dm100.png";
         public static final String DM151    = "sprites/dm151.png";
+        public static final String DM100F    = "sprites/dm100f.png";
         public static final String DM166    = "sprites/dm166.png";
 
 		public static final String PYLON    = "sprites/pylon.png";
