@@ -23,8 +23,14 @@ package com.shatteredpixel.shatteredpixeldungeon.items.quest;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -39,116 +45,127 @@ import java.util.ArrayList;
 
 public class EscapeCrystal extends Item {
 
-	{
-		image = ItemSpriteSheet.ESCAPE;
+    {
+        image = ItemSpriteSheet.ESCAPE;
 
-		unique = true;
+        unique = true;
 
-		defaultAction = AC_USE;
-	}
+        defaultAction = AC_USE;
+    }
 
-	public static final String AC_USE = "USE";
+    public static final String AC_USE = "USE";
 
-	@Override
-	public ArrayList<String> actions(Hero hero) {
-		ArrayList<String> actions = super.actions( hero );
-		actions.add(AC_USE);
-		return actions;
-	}
+    @Override
+    public ArrayList<String> actions(Hero hero) {
+        ArrayList<String> actions = super.actions( hero );
+        actions.add(AC_USE);
+        return actions;
+    }
 
-	@Override
-	public void execute( final Hero hero, String action ) {
+    @Override
+    public void execute( final Hero hero, String action ) {
 
-		super.execute(hero, action);
+        super.execute(hero, action);
 
-		if (action.equals( AC_USE )) {
+        if (action.equals( AC_USE )) {
 
-			if (Dungeon.depth > 15 && Dungeon.depth < 20 && Dungeon.branch == 1 && Dungeon.level instanceof VaultLevel){
+            if (Dungeon.depth > 15 && Dungeon.depth < 20 && Dungeon.branch == 1 && Dungeon.level instanceof VaultLevel){
 
-				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+                Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
-				restoreHeroBelongings(hero);
+                //for full release this will remove any non revive persists buff, but for now just do item buffs
+                for (Buff b : hero.buffs()){
+                    if (b instanceof Wand.Charger
+                            || b instanceof Artifact.ArtifactBuff
+                            || b instanceof Ring.RingBuff
+                            || b instanceof MeleeWeapon.Charger
+                            || b instanceof ClassArmor.Charger){
+                        b.detach();
+                    }
+                }
 
-				Level.beforeTransition();
-				InterlevelScene.curTransition = new LevelTransition(Dungeon.level,
-						hero.pos,
-						LevelTransition.Type.BRANCH_ENTRANCE,
-						Dungeon.depth,
-						0,
-						LevelTransition.Type.BRANCH_EXIT);
-				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
-				Game.switchScene( InterlevelScene.class );
+                restoreHeroBelongings(hero);
 
-			}
-			detach(hero.belongings.backpack);
+                Level.beforeTransition();
+                InterlevelScene.curTransition = new LevelTransition(Dungeon.level,
+                        hero.pos,
+                        LevelTransition.Type.BRANCH_ENTRANCE,
+                        Dungeon.depth,
+                        0,
+                        LevelTransition.Type.BRANCH_EXIT);
+                InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+                Game.switchScene( InterlevelScene.class );
+                detachAll(hero.belongings.backpack);
 
-		}
+            }
 
-	}
+        }
 
-	public static String BELONGINGS = "belongings";
-	public static String QUICKSLOTS = "quickslots";
-	public static String GOLD       = "gold";
-	public static String ENERGY     = "energy";
+    }
 
-	public void storeHeroBelongings( Hero hero ){
-		storedItems = new Bundle();
+    public static String BELONGINGS = "belongings";
+    public static String QUICKSLOTS = "quickslots";
+    public static String GOLD       = "gold";
+    public static String ENERGY     = "energy";
 
-		Bundle belongings = new Bundle();
-		hero.belongings.storeInBundle(belongings);
-		storedItems.put(BELONGINGS, belongings);
+    public void storeHeroBelongings( Hero hero ){
+        storedItems = new Bundle();
 
-		Bundle quickslots = new Bundle();
-		Dungeon.quickslot.storePlaceholders(quickslots);
-		storedItems.put(QUICKSLOTS, quickslots);
+        Bundle belongings = new Bundle();
+        hero.belongings.storeInBundle(belongings);
+        storedItems.put(BELONGINGS, belongings);
 
-		storedItems.put(GOLD, Dungeon.gold);
-		storedItems.put(ENERGY, Dungeon.energy);
+        Bundle quickslots = new Bundle();
+        Dungeon.quickslot.storePlaceholders(quickslots);
+        storedItems.put(QUICKSLOTS, quickslots);
 
-		Dungeon.quickslot.reset();
-		QuickSlotButton.reset();
-		Dungeon.gold = Dungeon.energy = 0;
-		hero.belongings.clear();
-	}
+        storedItems.put(GOLD, Dungeon.gold);
+        storedItems.put(ENERGY, Dungeon.energy);
 
-	public void restoreHeroBelongings( Hero hero ){
-		hero.belongings.clear();
+        Dungeon.quickslot.reset();
+        QuickSlotButton.reset();
+        Dungeon.gold = Dungeon.energy = 0;
+        hero.belongings.clear();
+    }
 
-		Dungeon.quickslot.reset();
-		Dungeon.quickslot.restorePlaceholders(storedItems.getBundle(QUICKSLOTS));
-		QuickSlotButton.reset();
+    public void restoreHeroBelongings( Hero hero ){
+        hero.belongings.clear();
 
-		Dungeon.hero.belongings.restoreFromBundle(storedItems.getBundle(BELONGINGS));
+        Dungeon.quickslot.reset();
+        Dungeon.quickslot.restorePlaceholders(storedItems.getBundle(QUICKSLOTS));
+        QuickSlotButton.reset();
 
-		Dungeon.gold = storedItems.getInt(GOLD);
-		Dungeon.energy = storedItems.getInt(ENERGY);
+        Dungeon.hero.belongings.restoreFromBundle(storedItems.getBundle(BELONGINGS));
 
-		storedItems = null;
-	}
+        Dungeon.gold = storedItems.getInt(GOLD);
+        Dungeon.energy = storedItems.getInt(ENERGY);
 
-	@Override
-	public boolean isUpgradable() {
-		return false;
-	}
+        storedItems = null;
+    }
 
-	@Override
-	public boolean isIdentified() {
-		return true;
-	}
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
 
-	public Bundle storedItems;
+    @Override
+    public boolean isIdentified() {
+        return true;
+    }
 
-	public static String STORED_ITEMS = "stored_items";
+    public Bundle storedItems;
 
-	@Override
-	public void storeInBundle(Bundle bundle) {
-		super.storeInBundle(bundle);
-		bundle.put(STORED_ITEMS, storedItems);
-	}
+    public static String STORED_ITEMS = "stored_items";
 
-	@Override
-	public void restoreFromBundle(Bundle bundle) {
-		super.restoreFromBundle(bundle);
-		storedItems = bundle.getBundle(STORED_ITEMS);
-	}
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(STORED_ITEMS, storedItems);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        storedItems = bundle.getBundle(STORED_ITEMS);
+    }
 }
