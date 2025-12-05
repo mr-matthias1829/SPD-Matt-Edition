@@ -24,22 +24,22 @@ package com.shatteredpixel.shatteredpixeldungeon.items.keys;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class SkeletonKey extends Key {
+public class WornKey extends Key {
 
     {
         image = ItemSpriteSheet.SKELETON_KEY;
     }
 
-    public SkeletonKey() {
+    public WornKey() {
         this( 0 );
     }
 
-    public SkeletonKey( int depth ) {
+    public WornKey(int depth ) {
         //this( depth, 0 );
         this( 0, Dungeon.branch );
     }
 
-    public SkeletonKey( int depth, int branch ) {
+    public WornKey(int depth, int branch ) {
         super();
         this.depth = depth;
         this.branch = branch;

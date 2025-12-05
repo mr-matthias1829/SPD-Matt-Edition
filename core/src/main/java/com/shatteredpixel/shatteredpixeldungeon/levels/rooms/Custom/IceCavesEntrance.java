@@ -2,13 +2,12 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.CaveRoom;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -72,7 +71,7 @@ public class IceCavesEntrance extends CaveRoom {
         level.transitions.add(entrance);
 
         // Add skeleton key to the level
-        level.addItemToSpawn(new SkeletonKey(Dungeon.depth));
+        level.addItemToSpawn(new WornKey(Dungeon.depth));
     }
 
     public static class BranchEntrance extends CustomTilemap {

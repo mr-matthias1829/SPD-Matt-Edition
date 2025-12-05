@@ -2293,20 +2293,28 @@ public class Hero extends Char {
 		
 		if (curAction instanceof HeroAction.Unlock) {
 
+
             int doorCell = ((HeroAction.Unlock)curAction).dst;
             int door = Dungeon.level.map[doorCell];
 
-            if (Dungeon.level.distance(pos, doorCell) <= 1) {
+            SkeletonKey.keyRecharge skele = buff(SkeletonKey.keyRecharge.class);
+            SkeletonKey.KeyReplacementTracker keyUseTrack = buff(SkeletonKey.KeyReplacementTracker.class);
+
+            if (skele != null && skele.isCursed() && Random.Int(6) != 0){
+                GLog.n(Messages.get(this, "key_distracted"));
+                spendAndNext(2*Key.TIME_TO_UNLOCK);
+                Buff.affect(this, Hunger.class).affectHunger(-4);
+            } else if (Dungeon.level.distance(pos, doorCell) <= 1) {
                 boolean hasKey = true;
                 if (door == Terrain.LOCKED_DOOR) {
                     hasKey = Notes.remove(new IronKey(Dungeon.depth, Dungeon.branch));
-					if (hasKey) {
-						Level.set(doorCell, Terrain.DOOR);
-						if (skele != null && !skele.isCursed()){
-							skele.keyUsed(new IronKey(Dungeon.depth));
-						}
-					}
-				} else if (door == Terrain.HERO_LKD_DR) {
+                    if (hasKey) {
+                        if (keyUseTrack != null){
+                            keyUseTrack.processIronLockOpened();
+                        }
+                        Level.set(doorCell, Terrain.DOOR);
+                    }
+                } else if (door == Terrain.HERO_LKD_DR) {
 					hasKey = true;
 					Level.set(doorCell, Terrain.DOOR);
 					GLog.i( Messages.get(SkeletonKey.class, "force_lock"));
@@ -2318,7 +2326,7 @@ public class Hero extends Char {
                         CellEmitter.get(doorCell).start(Speck.factory(Speck.DISCOVER), 0.025f, 20);
                     }
                 } else {
-                    hasKey = Notes.remove(new SkeletonKey(0,Dungeon.branch));
+                    hasKey = Notes.remove(new WornKey(0,Dungeon.branch));
                     if (hasKey) Level.set(doorCell, Terrain.UNLOCKED_EXIT);
                 }
 
