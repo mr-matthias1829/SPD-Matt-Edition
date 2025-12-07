@@ -459,7 +459,7 @@ public abstract class RegularLevel extends Level {
 
         // GUARANTEED TIER 1 ARMOR ON FLOOR 3
         Random.pushGenerator(Random.Long());
-        if (Dungeon.depth == 3 || (Random.Float() > 0.5f && Dungeon.depth == 2)) {
+        if (Dungeon.depth == 3) {
             Item tier1Armor = null;
             try {
                 // Option 1: If Generator has a method for armor by tier

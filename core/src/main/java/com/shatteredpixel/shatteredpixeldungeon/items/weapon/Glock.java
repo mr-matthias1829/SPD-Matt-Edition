@@ -193,13 +193,13 @@ public class Glock extends Weapon {
 
     @Override
     public int STRReq(int lvl) {
-        return STRReq(4, lvl); // tier 1
+        return STRReq(4, lvl+1); // tier 1
     }
 
     @Override
     public int min(int lvl) {
         // Fixed damage, not scaling with hero level
-        int dmg = (int)(5 + lvl/2)
+        int dmg = (int)(6 + lvl/2)
                 + (curseInfusionBonus ? 1 : 0);
         return Math.max(0, dmg);
     }
@@ -207,7 +207,7 @@ public class Glock extends Weapon {
     @Override
     public int max(int lvl) {
         // Fixed damage, not scaling with hero level
-        int dmg = 10 + lvl
+        int dmg = 15 + lvl
                 + (curseInfusionBonus ? 2 : 0);
         return Math.max(0, dmg);
     }

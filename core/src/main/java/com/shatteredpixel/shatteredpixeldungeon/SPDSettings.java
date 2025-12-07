@@ -305,11 +305,18 @@ public class SPDSettings extends GameSettings {
 	}
 
     public static final String KEY_CHEAT_MODE = "cheat_mode";
-    public static void cheatMode( boolean value ) {
-        put( KEY_CHEAT_MODE, value );
+    public static void cheatMode(boolean value) {
+        if (DeviceCompat.isDebug()) {
+            put(KEY_CHEAT_MODE, value);
+        } else {
+            put(KEY_CHEAT_MODE, false);   // or simply don't store at all
+        }
     }
     public static boolean cheatMode() {
-        return getBoolean( KEY_CHEAT_MODE, false ); // true is the default value
+        if (!DeviceCompat.isDebug()) {
+            return false;          // Hard-disable cheat mode outside debug
+        }
+        return getBoolean(KEY_CHEAT_MODE, false);
     }
 
 	//Connectivity

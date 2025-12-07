@@ -41,11 +41,13 @@ public class StenchGas extends Blob {
 
 		Char ch;
 		int cell;
+        Mob rat;
 
 		boolean fetidRatSpawned = false;
 		for (Mob m : Dungeon.level.mobs){
 			if (m instanceof FetidRat){
 				fetidRatSpawned = true;
+                rat = m;
 				break;
 			}
 		}
@@ -55,10 +57,15 @@ public class StenchGas extends Blob {
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
 					if (!ch.isImmune(this.getClass())) {
-						if (ch == Dungeon.hero && ch.buff(Paralysis.class) == null && fetidRatSpawned){
+						if (ch == Dungeon.hero && ch.buff(Paralysis.class) == null && fetidRatSpawned
+                                && Dungeon.depth < 6){
 							Statistics.questScores[0] -= 100;
 						}
-						Buff.prolong(ch, Paralysis.class, Paralysis.DURATION / 5);
+                        if (Dungeon.depth < 6) {
+                            Buff.prolong(ch, Paralysis.class, Paralysis.DURATION / 5);
+                        } else {
+                            Buff.prolong(ch, Paralysis.class, Paralysis.DURATION / 10);
+                        }
 					}
 				}
 			}

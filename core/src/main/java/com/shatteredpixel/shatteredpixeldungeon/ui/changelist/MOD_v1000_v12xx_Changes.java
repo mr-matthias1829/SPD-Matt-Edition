@@ -6,11 +6,6 @@ public class MOD_v1000_v12xx_Changes {
 
     public static void addAllChanges(ArrayList<ChangeInfo> list){
 
-        /*
-        THE PLAN TODAY:
-        3. try to merge the newest spd 2.3.3 into this spd (merge conflicts go brrrrrr)
-         */
-
         // Newest versions first (reversed order)
 
         //notes
@@ -19,6 +14,26 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_\n\n\n"
                         + "while this mod does (try) to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
+
+        list.add(new ChangeInfo("_v1300:_ stability changes", true,
+                "\n_CHANGES:_\n"
+                        + "1. cheating mode is removed unless you are running the game from the actual source code\n"
+                        + "2. cheating mode is now disabled by default if it's not visible in the options\n"
+                        + "3. challenges are unlocked by default once more\n"
+                        + "4. double checked if some changes were correctly implemented\n"
+                        + "5. fairly certain that at least 90%, if not everything from 3.3.0 is now correctly implemented\n"
+
+                        + "\n_BALANCES:_\n"
+                        + "1. buffed gun.\n"
+                        + "2. nerfed fishing rod loot chances a bit, made it easier for the rod to level up.\n"
+                        + "3. armored brute hp increased (40 -> 55), reduced enrage shield (=hp -> =hp/2).\n"
+                        + "4. brute enrage shield is now based on total hp instead of last hp before enrage\n"
+                        + "5. bat damage increased (5,18 -> 7,18)\n"
+                        + "6. gnoll trickster (caves only) speed reduced (1.2 -> 1), deals more damage, has less chance to miss, and needs a higher combo to inflict debuffs\n"
+                        + "7. fetid rat (caves only) no longer unfairly reduces quest score, deals more damage, and paralysis debuff from stench gas lasts shorter\n"
+                        + "8. fetid rat and gnoll trickster (both caves only) will no longer seek out the hero\n"
+                        + "9. guaranteed armor spawn is now always on floor 3 instead of 50/50 floor 2 or 3\n"
+        ));
 
         list.add(new ChangeInfo("_v1299:_ THE HORRIBLE MERGE", true,
                 "\n_CHANGES:_\n"

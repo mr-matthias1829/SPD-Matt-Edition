@@ -47,9 +47,6 @@ public class FetidRat extends Rat {
 	{
 		spriteClass = FetidRatSprite.class;
 
-		WANDERING = new Wandering();
-		state = WANDERING;
-
         setLevel( Dungeon.scalingDepth() );
 	}
 
@@ -57,6 +54,8 @@ public class FetidRat extends Rat {
         int lvl = 0;
         if (depth < 5) {
             lvl = 0;
+            WANDERING = new Wandering();
+            state = WANDERING;
         } else if (depth < 15){
             lvl = 1;
         } else {
@@ -91,12 +90,14 @@ public class FetidRat extends Rat {
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
         //damage = Random.NormalIntRange( 2, 5 ); // inherited before, was 1,4
-        damage = Random.NormalIntRange(3 * (1+level), (int) (7 * (1+level * 1.2)));
+        damage = Random.NormalIntRange(3 * (1+level), (int) (7 * (1+level * 1.3)));
 		if (Random.Int(3) == 0) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 			//score loss is on-hit instead of on-attack because it's tied to ooze
 			if (enemy == Dungeon.hero && !Dungeon.level.water[enemy.pos]){
-				Statistics.questScores[0] -= 50;
+                if (level == 0) {
+                    Statistics.questScores[0] -= 50;
+                }
 			}
 		}
 

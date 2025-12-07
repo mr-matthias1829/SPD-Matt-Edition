@@ -49,14 +49,13 @@ public class GnollTrickster extends Gnoll {
         baseSpeed = 1.2f; // 1f
 
 		EXP = 7; //5
-
-		WANDERING = new Wandering();
-		state = WANDERING;
 	}
     public void setLevel( int depth ){
         int lvl = 0;
         if (depth < 5) {
             lvl = 0;
+            WANDERING = new Wandering();
+            state = WANDERING;
         } else if (depth < 15){
             lvl = 1;
         } else {
@@ -71,7 +70,7 @@ public class GnollTrickster extends Gnoll {
     public void adjustStats( int level ) {
         HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
         defenseSkill = 5 * (1+level);
-        baseSpeed = 1.2f; // 1f
+        baseSpeed = 1f; // 1.2f 1f
 
         EXP = (int) (7 * (1+level*0.25)); //5
 
@@ -89,7 +88,7 @@ public class GnollTrickster extends Gnoll {
 
 	@Override
 	public int attackSkill( Char target ) {
-		return 16;
+		return (int)(16* (1+level*0.5));
 	}
 
 	@Override
@@ -102,7 +101,7 @@ public class GnollTrickster extends Gnoll {
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
         //damage = Random.NormalIntRange( 2, 7 ); // 1,6
-        damage = Random.NormalIntRange(2 * (1+level), (int) (5 * (1+level * 1.2)));
+        damage = Random.NormalIntRange(2 * (1+level), (int) (5 * (1+level * 1.7)));
 
 		if (combo >= 1){
 			//score loss is on-hit instead of on-attack as it's tied to combo
@@ -114,10 +113,11 @@ public class GnollTrickster extends Gnoll {
 		//The gnoll's attacks get more severe the more the player lets it hit them
 		combo++;
 		int effect = Random.Int(4)+combo;
+        int comboReq = level == 0 ? 3 : 5;
 
-		if (effect > 3) { //2
+		if (effect > comboReq) { //2
 
-			if (effect >=6 && enemy.buff(Burning.class) == null){
+			if (effect >=comboReq*2 && enemy.buff(Burning.class) == null){
 
 				if (Dungeon.level.flamable[enemy.pos]) {
 					GameScene.add(Blob.seed(enemy.pos, 4, Fire.class));

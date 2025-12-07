@@ -229,9 +229,9 @@ public class FishingRod extends Artifact {
         // Loot table using Generator - Roll from best to worst!
         float roll = Random.Float();
 
-        // Legendary items (5% base + luck bonus)
-        if (roll < 0.05f + luckBonus) {
-            lastCatchRarity = 16; // 16 exp for legendary
+        // Legendary items (3% base + luck bonus) //5%
+        if (roll < 0.03f + (luckBonus/1.5)) {
+            lastCatchRarity = 20; //16
             // Rings or wands
             if (Random.Int(2) == 0) {
                 return Generator.random(Generator.Category.RING);
@@ -239,9 +239,9 @@ public class FishingRod extends Artifact {
                 return Generator.random(Generator.Category.WAND);
             }
         }
-        // Rare items (10% base + luck bonus)
-        else if (roll < 0.10f + (luckBonus * 2)) {
-            lastCatchRarity = 8; // 8 exp for rare
+        // Rare items (6% base + luck bonus) //10%
+        else if (roll < 0.6f + (luckBonus/1.5)) {
+            lastCatchRarity = 12; //8
             // Armor or melee weapons
             if (Random.Int(2) == 0) {
                 return Generator.randomArmor();
@@ -249,9 +249,9 @@ public class FishingRod extends Artifact {
                 return Generator.randomWeapon();
             }
         }
-        // Uncommon items (25% base)
-        else if (roll < 0.25f + (luckBonus * 2)) {
-            lastCatchRarity = 3; // 3 exp for uncommon
+        // Uncommon items (16% base) //25%
+        else if (roll < 0.16f + (luckBonus * 1.5)) {
+            lastCatchRarity = 4; // 3
             // Potions or scrolls
             if (Random.Int(2) == 0) {
                 return Generator.random(Generator.Category.POTION);
@@ -261,7 +261,7 @@ public class FishingRod extends Artifact {
         }
         // Common items (60% base, fills the rest)
         else {
-            lastCatchRarity = 1; // 1 exp for common
+            lastCatchRarity = 1; // 1
             // Gold, seeds, or runestones
             int type = Random.Int(3);
             switch (type) {

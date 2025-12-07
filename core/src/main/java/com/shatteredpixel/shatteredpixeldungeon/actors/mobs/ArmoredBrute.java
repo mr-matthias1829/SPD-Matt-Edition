@@ -40,7 +40,8 @@ public class ArmoredBrute extends Brute {
 
 	{
 		spriteClass = ShieldedSprite.class;
-		
+
+        HP = HT = HT+15;
 		//see rollToDropLoot
 		loot = Generator.Category.ARMOR;
 		lootChance = 1f;
@@ -53,8 +54,8 @@ public class ArmoredBrute extends Brute {
 	
 	@Override
 	protected void triggerEnrage () {
-		Buff.affect(this, ArmoredRage.class).setShield(HT); // /2+1
-		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT), FloatingText.SHIELDING );
+		Buff.affect(this, ArmoredRage.class).setShield(HT/2+1); // ht  /2+1
+		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT/2+1), FloatingText.SHIELDING );
 		if (Dungeon.level.heroFOV[pos]) {
 			sprite.showStatus( CharSprite.WARNING, Messages.get(this, "enraged") );
 		}

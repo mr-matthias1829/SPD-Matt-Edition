@@ -711,16 +711,17 @@ public class WndSettings extends WndTabbed {
 			add(sep2);
 
             // Add your checkbox here
-            cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
-                @Override
-                protected void onClick() {
-                    super.onClick();
-                    SPDSettings.cheatMode(checked());
-                    // Add any immediate effects here if needed
-                }
-            };
-            cheatMode.checked(SPDSettings.cheatMode());
-            add(cheatMode);
+            if (DeviceCompat.isDebug()) {
+                cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
+                    @Override
+                    protected void onClick() {
+                        super.onClick();
+                        SPDSettings.cheatMode(checked());
+                    }
+                };
+                cheatMode.checked(SPDSettings.cheatMode());
+                add(cheatMode);
+            }
 
 
 			optControlSens = new OptionSlider(
@@ -790,9 +791,12 @@ public class WndSettings extends WndTabbed {
 				optHoldMoveSens.setRect(0, optControlSens.bottom() + GAP, width, SLIDER_HEIGHT);
 			}
 
-			height = optHoldMoveSens.bottom();
-            cheatMode.setRect(0, height + GAP, width, BTN_HEIGHT);
-            height = cheatMode.bottom();
+            height = optHoldMoveSens.bottom();
+
+            if (cheatMode != null) {
+                cheatMode.setRect(0, height + GAP, width, BTN_HEIGHT);
+                height = cheatMode.bottom();
+            }
 		}
 	}
 
