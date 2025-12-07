@@ -35,7 +35,7 @@ import com.watabou.utils.Bundle;
 
 public abstract class Key extends Item {
 
-	public static final float TIME_TO_UNLOCK = 1f;
+	public static final float TIME_TO_UNLOCK = 5f;
 	
 	{
 		stackable = true;

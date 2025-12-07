@@ -194,7 +194,7 @@ public class Hero extends Char {
 	public static final int STARTING_STR = 10;
 	
 	private static final float TIME_TO_REST		    = 1f;
-	private static final float TIME_TO_SEARCH	    = 2f;
+	private static final float TIME_TO_SEARCH	    = 3f;
 	private static final float HUNGER_FOR_SEARCH	= 6f;
 	
 	public HeroClass heroClass = HeroClass.ROGUE;
