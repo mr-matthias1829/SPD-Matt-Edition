@@ -15,6 +15,23 @@ public class MOD_v1000_v12xx_Changes {
                         + "you can find a _link_ to the github on _the about page!_\n\n\n"
                         + "while this mod does (try) to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
 
+
+        list.add(new ChangeInfo("_v1303:_ after the storm", true,
+                "\n_FIXES:_\n"
+                        + "1. lots of small fixes not worth listing... trust me bro\n"
+
+                        + "\n_BOSSES:_\n"
+                        + "1. goo hp increased (125:100 -> 160:120), defensive increased (4 -> 6), goopling spawn cooldown reduced (10 -> 8)\n"
+                        + "2. goo now spawns a additional goopling every time he spawns gooplings in the harder bosses challenge\n"
+                        + "3. tengu hp increased (300:250 -> 350:300), damage incrased (6,12 -> 6,14), phase 2 abilities start earlier (75% -> 80%)\n"
+                        + "4. tengu now has a last stand phase after beating him in phase 2 (he becomes invulnerable for 10 turns, and gets faster, but dies on his own after)\n"
+
+                        + "\n_ITEMS:_\n"
+                        + "1. spirit bow levels now count twice towards strength requirement\n"
+                        + "2. spirit bow damage increased (base 1,3 -> 1,4), scaling increased (/10,/5 -> /7,/4)\n"
+                        + "3. armor max DR scaling reduced a bit (too complex to state here)\n"
+        ));
+
         list.add(new ChangeInfo("_v1300:_ stability changes", true,
                 "\n_CHANGES:_\n"
                         + "1. cheating mode is removed unless you are running the game from the actual source code\n"

@@ -51,9 +51,9 @@ import com.watabou.utils.Random;
 public class Goo extends Mob {
 
     {
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 125 : 100;
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 160 : 120;
         EXP = 10;
-        defenseSkill = 4; //8
+        defenseSkill = 6; //4 //8
         spriteClass = GooSprite.class;
 
         properties.add(Property.BOSS);
@@ -67,7 +67,7 @@ public class Goo extends Mob {
     private int turnsUntilSpawn = 0;
 
 
-    private static final int SPAWN_COOLDOWN = 10; //8
+    private static final int SPAWN_COOLDOWN = 8; //10 //8
     private static final int MAX_GOOPLINGS = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 12 : 8;
 
     @Override
@@ -311,6 +311,7 @@ public class Goo extends Mob {
         // Calculate how many we can still spawn
         int allowed = Math.min(count, MAX_GOOPLINGS - existing);
 
+        allowed += Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 1 : 0;
 
 
         for (int i = 0; i < allowed; i++) {

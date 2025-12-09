@@ -249,7 +249,7 @@ public class Dungeon {
 		QuickSlotButton.reset();
 		Toolbar.swappedQuickslots = false;
 		
-		depth = 1;
+		depth = 10;
         lastEnteredDepth = depth;
 		branch = 0;
 		generatedLevels.clear();

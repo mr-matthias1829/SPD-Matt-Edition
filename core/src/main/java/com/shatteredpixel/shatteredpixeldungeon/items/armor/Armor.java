@@ -401,9 +401,9 @@ public class Armor extends EquipableItem {
 
         // NEW: Scaling increases slightly with each level
         // Base formula: tierMultiplier * (base + effectiveLevel * (1 + effectiveLevel * 0.03))
-        // This gives slightly accelerating returns per level (reduced from 0.05 to 0.03)
+        // This gives slightly accelerating returns per level
         int baseValue = 2;
-        float levelScaling = effectiveLevel * (1f + effectiveLevel * 0.03f);
+        float levelScaling = effectiveLevel * (1f + effectiveLevel * 0.0145f);
 
         int baseDR = Math.round(tierMultiplier * (baseValue + levelScaling));
         int augmentBonus = augment.defenseFactor(effectiveLevel);

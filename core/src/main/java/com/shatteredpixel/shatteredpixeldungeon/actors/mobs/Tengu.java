@@ -31,14 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
@@ -87,7 +80,7 @@ public class Tengu extends Mob {
     {
         spriteClass = TenguSprite.class;
 
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 300 : 250;
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 350 : 300;
         EXP = 20;
         defenseSkill = 15;
 
@@ -98,10 +91,15 @@ public class Tengu extends Mob {
         viewDistance = 12;
     }
 
+    private boolean lastStandActive = false;
+    private int lastStandTurns = 0;
+    private static final int LAST_STAND_DURATION = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 15 : 10;
+
+
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 6, 12 );
-    }
+        return Random.NormalIntRange( 6, 14 );
+    } //6,12
 
     @Override
     public int attackSkill( Char target ) {
@@ -114,6 +112,9 @@ public class Tengu extends Mob {
 
     @Override
     public int drRoll() {
+        if (lastStandActive) {
+            return super.drRoll() + 1000; // Just in case player hits somehow
+        }
         return super.drRoll() + Random.NormalIntRange(0, 5);
     }
 
@@ -137,18 +138,23 @@ public class Tengu extends Mob {
         PrisonBossLevel.State state = ((PrisonBossLevel)Dungeon.level).state();
 
         int hpBracket = HT / 8;
-
         int curbracket = HP / hpBracket;
-
         int beforeHitHP = HP;
+
+        // Don't take damage during Last Stand
+        if (lastStandActive && !(lastStandTurns >= LAST_STAND_DURATION)) {
+            sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
+            return;
+        }
+
         super.damage(dmg, src);
 
-        //cannot be hit through multiple brackets at a time
+        // Cannot be hit through multiple brackets at a time
         if (HP <= (curbracket-1)*hpBracket){
             HP = (curbracket-1)*hpBracket + 1;
         }
 
-        int newBracket =  HP / hpBracket;
+        int newBracket = HP / hpBracket;
         dmg = beforeHitHP - HP;
 
         LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
@@ -157,11 +163,18 @@ public class Tengu extends Mob {
             else                                                    lock.addTime(dmg);
         }
 
-        //phase 2 of the fight is over
-        if (HP == 0 && state == PrisonBossLevel.State.FIGHT_ARENA) {
-            //let full attack action complete first
-            Actor.add(new Actor() {
+        // Check for Last Stand activation (HP reaches 1 in phase 2)
+        if (HP <= 1 && state == PrisonBossLevel.State.FIGHT_ARENA && !lastStandActive) {
+            HP = 1;
+            activateLastStand();
+            return;
+        }
 
+        // Phase 2 of the fight is over (normal death)
+        if (HP == 0 && state == PrisonBossLevel.State.FIGHT_ARENA && lastStandActive &&
+                (lastStandTurns >= LAST_STAND_DURATION)) {
+            // Let full attack action complete first
+            Actor.add(new Actor() {
                 {
                     actPriority = VFX_PRIO;
                 }
@@ -176,9 +189,9 @@ public class Tengu extends Mob {
             return;
         }
 
-        //phase 1 of the fight is over - triggers at 65% HP (195 HP at HT=300)
-        if (state == PrisonBossLevel.State.FIGHT_START && HP <= HT * 65/100) { //65
-            HP = HT; // heal to full (300)
+        // Phase 1 of the fight is over - triggers at 65% HP
+        if (state == PrisonBossLevel.State.FIGHT_START && HP <= HT * 65/100) {
+            HP = HT;
             yell(Messages.get(this, "interesting"));
             ((PrisonBossLevel)Dungeon.level).progress();
             BossHealthBar.bleed(true);
@@ -186,13 +199,12 @@ public class Tengu extends Mob {
             // Reset ability tracking for phase 2
             abilitiesUsed = 0;
             arenaJumps = 0;
-            abilityCooldown = 4; // Start with longer cooldown (4 turns)
+            abilityCooldown = 4;
             phase2Started = true;
-            phase2AbilityThreshold = HT * 75/100; // 195 HP - abilities locked until below this
+            phase2AbilityThreshold = HT * 80/100;
         } else if (newBracket != curbracket) {
-            //let full attack action complete first
+            // Let full attack action complete first
             Actor.add(new Actor() {
-
                 {
                     actPriority = VFX_PRIO;
                 }
@@ -206,6 +218,23 @@ public class Tengu extends Mob {
             });
             return;
         }
+    }
+
+    // Add this new method after damage()
+    private void activateLastStand() {
+        lastStandActive = true;
+        lastStandTurns = 0;
+
+        // Apply Bless buff
+        Buff.affect(this, Bless.class, LAST_STAND_DURATION);
+
+        defenseSkill = 1000;
+
+        // Visual feedback
+        yell(Messages.get(this, "last_stand"));
+        sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "last_stand_status"));
+        CellEmitter.get(pos).burst(Speck.factory(Speck.LIGHT), 12);
+        Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
     }
 
     @Override
@@ -234,7 +263,7 @@ public class Tengu extends Mob {
             beacon.upgrade();
         }
 
-        yell( Messages.get(this, "defeated") );
+        yell( Messages.get(Dungeon.hero, "defeated") );
     }
 
     @Override
@@ -285,33 +314,58 @@ public class Tengu extends Mob {
 
                 //otherwise, jump in a larger possible area, as the room is bigger
             } else {
+                // Phase 2 jump behavior
 
-                int tries = 100;
-                do {
-                    newPos = Random.Int(level.length());
-                    tries--;
-                } while (  tries > 0 &&
-                        (level.solid[newPos] ||
-                                level.distance(newPos, enemy.pos) < 5 ||
-                                level.distance(newPos, enemy.pos) > 7 ||
-                                level.distance(newPos, Dungeon.hero.pos) < 5 ||
-                                level.distance(newPos, Dungeon.hero.pos) > 7 ||
-                                level.distance(newPos, pos) < 5 ||
-                                Actor.findChar(newPos) != null ||
-                                Dungeon.level.heaps.get(newPos) != null));
+                // During Last Stand, use more lenient jump conditions
+                if (lastStandActive) {
+                    int tries = 100;
+                    do {
+                        newPos = Random.Int(level.length());
+                        tries--;
+                    } while (tries > 0 &&
+                            (level.solid[newPos] ||
+                                    level.distance(newPos, pos) < 3 ||
+                                    Actor.findChar(newPos) != null ||
+                                    Dungeon.level.heaps.get(newPos) != null));
 
-                if (tries <= 0) newPos = pos;
+                    if (tries <= 0) {
+                        // If we still can't find a spot, just pick any valid cell
+                        tries = 100;
+                        do {
+                            newPos = Random.Int(level.length());
+                            tries--;
+                        } while (tries > 0 &&
+                                (level.solid[newPos] ||
+                                        Actor.findChar(newPos) != null));
+                        if (tries <= 0) newPos = pos;
+                    }
+                } else {
+                    // Normal phase 2 jump behavior
+                    int tries = 100;
+                    do {
+                        newPos = Random.Int(level.length());
+                        tries--;
+                    } while (tries > 0 &&
+                            (level.solid[newPos] ||
+                                    level.distance(newPos, enemy.pos) < 5 ||
+                                    level.distance(newPos, enemy.pos) > 7 ||
+                                    level.distance(newPos, Dungeon.hero.pos) < 5 ||
+                                    level.distance(newPos, Dungeon.hero.pos) > 7 ||
+                                    level.distance(newPos, pos) < 5 ||
+                                    Actor.findChar(newPos) != null ||
+                                    Dungeon.level.heaps.get(newPos) != null));
 
+                    if (tries <= 0) newPos = pos;
+                }
                 if (level.heroFOV[pos]) CellEmitter.get( pos ).burst( Speck.factory( Speck.WOOL ), 6 );
 
                 sprite.move( pos, newPos );
                 move( newPos );
 
-                if (arenaJumps < 4) arenaJumps++;
+                if (arenaJumps < 4 && !lastStandActive) arenaJumps++;
 
                 if (level.heroFOV[newPos]) CellEmitter.get( newPos ).burst( Speck.factory( Speck.WOOL ), 6 );
                 Sample.INSTANCE.play( Assets.Sounds.PUFF );
-
             }
 
             //if we're on another type of level
@@ -364,16 +418,20 @@ public class Tengu extends Mob {
     private static final String ABILITY_COOLDOWN      = "ability_cooldown";
     private static final String PHASE2_STARTED        = "phase2_started";
     private static final String PHASE2_ABILITY_THRESH = "phase2_ability_threshold";
+    private static final String LAST_STAND_ACTIVE = "last_stand_active";
+    private static final String LAST_STAND_TURNS = "last_stand_turns";
 
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
-        bundle.put( LAST_ABILITY, lastAbility );
-        bundle.put( ABILITIES_USED, abilitiesUsed );
-        bundle.put( ARENA_JUMPS, arenaJumps );
-        bundle.put( ABILITY_COOLDOWN, abilityCooldown );
-        bundle.put( PHASE2_STARTED, phase2Started );
-        bundle.put( PHASE2_ABILITY_THRESH, phase2AbilityThreshold );
+        bundle.put(LAST_ABILITY, lastAbility);
+        bundle.put(ABILITIES_USED, abilitiesUsed);
+        bundle.put(ARENA_JUMPS, arenaJumps);
+        bundle.put(ABILITY_COOLDOWN, abilityCooldown);
+        bundle.put(PHASE2_STARTED, phase2Started);
+        bundle.put(PHASE2_ABILITY_THRESH, phase2AbilityThreshold);
+        bundle.put(LAST_STAND_ACTIVE, lastStandActive);
+        bundle.put(LAST_STAND_TURNS, lastStandTurns);
     }
 
     @Override
@@ -381,12 +439,14 @@ public class Tengu extends Mob {
         loading = true;
         super.restoreFromBundle(bundle);
         loading = false;
-        lastAbility = bundle.getInt( LAST_ABILITY );
-        abilitiesUsed = bundle.getInt( ABILITIES_USED );
-        arenaJumps = bundle.getInt( ARENA_JUMPS );
-        abilityCooldown = bundle.getInt( ABILITY_COOLDOWN );
-        phase2Started = bundle.getBoolean( PHASE2_STARTED );
-        phase2AbilityThreshold = bundle.getInt( PHASE2_ABILITY_THRESH );
+        lastAbility = bundle.getInt(LAST_ABILITY);
+        abilitiesUsed = bundle.getInt(ABILITIES_USED);
+        arenaJumps = bundle.getInt(ARENA_JUMPS);
+        abilityCooldown = bundle.getInt(ABILITY_COOLDOWN);
+        phase2Started = bundle.getBoolean(PHASE2_STARTED);
+        phase2AbilityThreshold = bundle.getInt(PHASE2_ABILITY_THRESH);
+        lastStandActive = bundle.getBoolean(LAST_STAND_ACTIVE);
+        lastStandTurns = bundle.getInt(LAST_STAND_TURNS);
 
         BossHealthBar.assignBoss(this);
         if (HP <= HT/2) BossHealthBar.bleed(true);
@@ -398,8 +458,35 @@ public class Tengu extends Mob {
         @Override
         public boolean act(boolean enemyInFOV, boolean justAlerted) {
 
+            // Handle Last Stand turns
+            if (lastStandActive) {
+                lastStandTurns++;
+
+                if (lastStandTurns >= LAST_STAND_DURATION) {
+                    // Time's up - Tengu dies
+                    damage(1000, this);
+                    spend(TICK);
+                    return true;
+                }
+
+                // Show countdown
+                int turnsLeft = LAST_STAND_DURATION - lastStandTurns;
+                sprite.showStatus(CharSprite.WARNING, Integer.toString(turnsLeft));
+
+                // Still try to use abilities if possible
+                if (canUseAbility()){
+                    return useAbility();
+                }
+                jump();
+                // Jump every turn during Last Stand
+
+                spend(TICK);
+                return true;
+            }
+
+            // Normal behavior
             enemySeen = enemyInFOV;
-            if (enemyInFOV && !isCharmedBy( enemy ) && canAttack( enemy )) {
+            if (enemyInFOV && !isCharmedBy(enemy) && canAttack(enemy)) {
 
                 if (canUseAbility()){
                     return useAbility();
@@ -407,12 +494,11 @@ public class Tengu extends Mob {
 
                 recentlyAttackedBy.clear();
                 target = enemy.pos;
-                return doAttack( enemy );
+                return doAttack(enemy);
 
             } else {
 
-                //Try to switch targets to another enemy that is closer
-                //unless we have already done that and still can't attack them, then move on.
+                // Try to switch targets to another enemy that is closer
                 if (!recursing) {
                     Char oldEnemy = enemy;
                     enemy = null;
@@ -425,14 +511,13 @@ public class Tengu extends Mob {
                     }
                 }
 
-                //attempt to use an ability, even if enemy can't be decided
+                // Attempt to use an ability, even if enemy can't be decided
                 if (canUseAbility()){
                     return useAbility();
                 }
 
-                spend( TICK );
+                spend(TICK);
                 return true;
-
             }
         }
     }
@@ -483,8 +568,10 @@ public class Tengu extends Mob {
                 baseCooldown = 6; // mid phase 2
             } else if (hpPercent > 0.15f) { //0.15
                 baseCooldown = 5; // late phase 2
+            } else if (lastStandActive) {
+                baseCooldown = 2; // desperation
             } else {
-                baseCooldown = 4; // critical HP
+            baseCooldown = 4; // critical HP
             }
 
             abilityCooldown = baseCooldown;
