@@ -142,31 +142,34 @@ public class MobSpawner extends Actor {
 						Shaman.random(),
                         Necromancer.class));
 			case 12:
-				//2x bat, 2x brute, 1x shaman, 1x spinner + 1x fetid rat
+				//2x bat, 2x brute, 1x shaman, 1x spinner + 1x fetid rat, 1x baby
 				return new ArrayList<>(Arrays.asList(
 						Bat.class, Bat.class,
 						Brute.class, Brute.class,
 						Shaman.random(),
 						Spinner.class,
-                        FetidRat.class));
+                        FetidRat.class,
+                        GnollBaby.class));
 			case 13:
-				//1x bat, 2x brute, 2x shaman, 2x spinner, 1x DM-200 + 1x fetid rat
+				//1x bat, 2x brute, 2x shaman, 2x spinner, 1x DM-200 + 1x fetid rat, 1x baby
 				return new ArrayList<>(Arrays.asList(
 						Bat.class,
 						Brute.class, Brute.class,
 						Shaman.random(), Shaman.random(),
 						Spinner.class, Spinner.class,
 						DM200.class,
-                        FetidRat.class));
+                        FetidRat.class,
+                        GnollBaby.class));
 			case 14: case 15:
-				//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-200 + 1x gnoll trickster
+				//1x bat, 1x brute, 2x shaman, 2x spinner, 2x DM-200 + 1x gnoll trickster, 1x baby
 				return new ArrayList<>(Arrays.asList(
 						Bat.class,
 						Brute.class,
 						Shaman.random(), Shaman.random(),
 						Spinner.class, Spinner.class,
 						DM200.class, DM200.class,
-                        GnollTrickster.class));
+                        GnollTrickster.class,
+                        GnollBaby.class));
 
 			// City
 			case 16:

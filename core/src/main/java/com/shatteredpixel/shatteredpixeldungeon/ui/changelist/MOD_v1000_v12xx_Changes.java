@@ -15,6 +15,13 @@ public class MOD_v1000_v12xx_Changes {
                         + "you can find a _link_ to the github on _the about page!_\n\n\n"
                         + "while this mod does (try) to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
 
+        list.add(new ChangeInfo("_v1305:_ direct annoyance", true,
+                "\n_Changes:_\n"
+                        + "1. added the gnoll baby, which can spawn in the caves\n"
+                        + "2. yeah... that's all...\n"
+                        + "3. you probably have no idea how long it took me to properly make that gnoll baby\n"
+                        + "4. oh yeah, i also reverted all the stuff i changed for testing tengu reasons from the last version\n"
+        ));
 
         list.add(new ChangeInfo("_v1303:_ after the storm", true,
                 "\n_FIXES:_\n"

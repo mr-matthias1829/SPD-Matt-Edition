@@ -148,6 +148,7 @@ public enum Bestiary {
         SPECIAL.addEntities( // sorted on region/first (possible) appearance
                 GnollMyth.class, Goopling.class,
                 DM151.class,
+                GnollBaby.class,
                 DM100F.class, IceSnake.class, FrozenSwarm.class,
 
                 // CURRENTLY UNUSED:
