@@ -150,7 +150,7 @@ public class SkeletonKey extends Artifact {
 							return;
 						}
 						if (charge < 1){
-							GLog.i( Messages.get(this, "iron_charge") );
+							GLog.i( Messages.get(SkeletonKey.class, "iron_charges") );
 							return;
 						}
 						Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
@@ -556,7 +556,6 @@ public class SkeletonKey extends Artifact {
 
 	}
 
-
 	public static class KeyReplacementTracker extends Buff {
 
 		public int[] ironKeysNeeded, goldenKeysNeeded, crystalKeysNeeded;
@@ -642,7 +641,7 @@ public class SkeletonKey extends Artifact {
 			}
 			if (removed){
 				GameScene.updateKeyDisplay();
-				GLog.i("You discard your excess keys.");
+				GLog.i(Messages.get(SkeletonKey.class, "discard"));
 			}
 		}
 
