@@ -42,7 +42,7 @@ public class Slime extends Mob {
 		EXP = 3; //4
 		maxLvl = 9;
         level = Dungeon.scalingDepth();
-		
+
 		lootChance = 0.08f; //0.2f; //by default, see lootChance()
 	}
 	
@@ -80,7 +80,7 @@ public class Slime extends Mob {
         int DMGRDC = 2;
 
 		float scaleFactor = AscensionChallenge.statModifier(this);
-		int scaledDmg = Math.round(dmg/scaleFactor);
+        float scaledDmg = dmg/scaleFactor;;
 
         if (scaledDmg >= DMGRDC+1){
             //hard to deal 3+ damage instead of 6+
@@ -90,7 +90,7 @@ public class Slime extends Mob {
         /*
 		if (scaledDmg >= 5){
 			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
-			scaledDmg = 4 + (int)(Math.sqrt(8*(scaledDmg - 4) + 1) - 1)/2;
+			scaledDmg = 4 + (float)(Math.sqrt(8*(scaledDmg - 4) + 1) - 1)/2;
 		}
 
          */
