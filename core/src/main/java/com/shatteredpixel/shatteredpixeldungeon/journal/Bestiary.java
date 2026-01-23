@@ -99,7 +99,8 @@ import java.util.LinkedHashMap;
 //contains all the game's various entities, mostly enemies, NPCS, and allies, but also traps and plants
 public enum Bestiary {
 
-    SPECIAL,
+    //SPECIAL,
+    SPECIALUNUSED,
 	REGIONAL,
 	BOSSES,
 	UNIVERSAL,
@@ -145,33 +146,40 @@ public enum Bestiary {
 	}
 
 	static {
+        /*
         SPECIAL.addEntities( // sorted on region/first (possible) appearance
                 GnollMyth.class, Goopling.class,
                 DM151.class,
                 GnollBaby.class,
-                DM100F.class, IceSnake.class, FrozenSwarm.class,
+                DM100F.class, IceSnake.class, FrozenSwarm.class
+        );
+         */
 
+        SPECIALUNUSED.addEntities( // sorted on region/first (possible) appearance
                 // CURRENTLY UNUSED:
                 SpiritualNecromancer.class,
-                DM166.class, Warden.class
+                DM166.class, Warden.class,
+                DarkKing.class
         );
 
 		REGIONAL.addEntities(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class,
 				Skeleton.class, Thief.class, DM100.class, Guard.class, Necromancer.class,
-				Bat.class, Brute.class, Shaman.RedShaman.class, Shaman.BlueShaman.class, Shaman.PurpleShaman.class, Spinner.class, DM200.class,
+				Bat.class, Brute.class, Shaman.RedShaman.class, Shaman.BlueShaman.class, Shaman.PurpleShaman.class, GnollBaby.class, Spinner.class, DM200.class,
+                DM100F.class, IceSnake.class, FrozenSwarm.class,
 				Ghoul.class, Bandit.class, Elemental.FireElemental.class, Elemental.FrostElemental.class, Elemental.ShockElemental.class, Warlock.class, Monk.class, Golem.class,
 				RipperDemon.class, DemonSpawner.class, Succubus.class, Eye.class, Scorpio.class);
 
-		BOSSES.addEntities(Goo.class,
+		BOSSES.addEntities(Goopling.class, Goo.class,
 				Tengu.class,
 				Pylon.class, DM300.class,
 				DwarfKing.class,
-				YogDzewa.Larva.class, YogFist.BurningFist.class, YogFist.SoiledFist.class, YogFist.RottingFist.class, YogFist.RustedFist.class,YogFist.BrightFist.class, YogFist.DarkFist.class, YogDzewa.class);
+				YogDzewa.Larva.class, YogFist.BurningFist.class, YogFist.SoiledFist.class, YogFist.RottingFist.class, YogFist.RustedFist.class,YogFist.BrightFist.class, YogFist.DarkFist.class, YogDzewa.class,
+                DarkKing.class);
 
 		UNIVERSAL.addEntities(Wraith.class, Piranha.class, Mimic.class, GoldenMimic.class, EbonyMimic.class, Statue.class, GuardianTrap.Guardian.class, SentryRoom.Sentry.class);
 
-		RARE.addEntities(Albino.class, GnollExile.class, HermitCrab.class, CausticSlime.class,
-				SpectralNecromancer.class,
+		RARE.addEntities(Albino.class, GnollExile.class, GnollMyth.class, HermitCrab.class, CausticSlime.class,
+				SpectralNecromancer.class, DM151.class,
 				ArmoredBrute.class, DM201.class,
 				Elemental.ChaosElemental.class, Senior.class,
 				Acidic.class,

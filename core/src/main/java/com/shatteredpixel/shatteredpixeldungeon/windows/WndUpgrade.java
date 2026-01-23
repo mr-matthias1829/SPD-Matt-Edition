@@ -463,14 +463,11 @@ public class WndUpgrade extends Window {
                     ((ScrollOfUpgrade) upgrader).readAnimation();
                     upgraded = ((ScrollOfUpgrade) upgrader).upgradeItem(toUpgrade);
                     Sample.INSTANCE.play( Assets.Sounds.READ );
-
                 } else if (upgrader instanceof ScrollOfMagicUpgrade){
                     ScrollOfMagicUpgrade.magicUpgrade(Dungeon.hero);
                     ((ScrollOfMagicUpgrade) upgrader).readAnimation();
-                    ((ScrollOfMagicUpgrade) upgrader).upgradeItem(toUpgrade);
-                    // Note: upgraded stays as toUpgrade because we modify in-place
+                    upgraded = ((ScrollOfMagicUpgrade) upgrader).upgradeItem(toUpgrade);
                     Sample.INSTANCE.play( Assets.Sounds.READ );
-
                 } else if (upgrader instanceof MagicalInfusion){
                     ((MagicalInfusion) upgrader).useAnimation();
                     upgraded = ((MagicalInfusion) upgrader).upgradeItem(toUpgrade);
@@ -489,19 +486,20 @@ public class WndUpgrade extends Window {
 		btnUpgrade.setRect(0, bottom+2*GAP, WIDTH/2f, 16);
 		add(btnUpgrade);
 
-		btnCancel = new RedButton(Messages.get(this, "back")){
-			@Override
-			protected void onClick() {
-				super.onClick();
-				hide();
-				if (upgrader instanceof ScrollOfUpgrade) {
-					((ScrollOfUpgrade) upgrader).reShowSelector(force);
-				} else if (upgrader instanceof MagicalInfusion){
-					((MagicalInfusion)upgrader).reShowSelector();
-				}
-			}
-
-		};
+        btnCancel = new RedButton(Messages.get(this, "back")){
+            @Override
+            protected void onClick() {
+                super.onClick();
+                hide();
+                if (upgrader instanceof ScrollOfUpgrade) {
+                    ((ScrollOfUpgrade) upgrader).reShowSelector(force);
+                } else if (upgrader instanceof ScrollOfMagicUpgrade) {
+                    ((ScrollOfMagicUpgrade) upgrader).reShowSelector(force);
+                } else if (upgrader instanceof MagicalInfusion){
+                    ((MagicalInfusion)upgrader).reShowSelector();
+                }
+            }
+        };
 		btnCancel.setRect(btnUpgrade.right()+1, bottom+2*GAP, WIDTH/2f, 16);
 		add(btnCancel);
 

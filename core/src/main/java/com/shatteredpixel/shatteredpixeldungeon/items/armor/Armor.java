@@ -68,6 +68,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -797,40 +798,17 @@ public class Armor extends EquipableItem {
 
 	@Override
 	public Item random() {
-		//+0: 75% (3/4)
-		//+1: 20% (4/20)
-		//+2: 5%  (1/20)
-		int n = 0;
-		if (Random.Int(4) == 0) {
-			n++;
-			if (Random.Int(5) == 0) {
-				n++;
-			}
-		}
-		level(n);
+        level(rollEquipmentLevel(false));
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen
 		Random.pushGenerator(Random.Long());
 
-			//30% chance to be cursed (now 40%)
-			//15% chance to be inscribed (now 5%)
-			float effectRoll = Random.Float();
-
-        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
-            if (effectRoll < 0.7f * ParchmentScrap.curseChanceMultiplier()) {
-                inscribe(Glyph.randomCurse());
-                cursed = true;
-            } else if (effectRoll >= 1f - (0.01f * ParchmentScrap.enchantChanceMultiplier())) {
-                inscribe();
-            }
-        } else {
-            if (effectRoll < 0.4f * ParchmentScrap.curseChanceMultiplier()) {
-                inscribe(Glyph.randomCurse());
-                cursed = true;
-            } else if (effectRoll >= 1f - (0.05f * ParchmentScrap.enchantChanceMultiplier())) {
-                inscribe();
-            }
+        cursed = isEquipmentCursed(false);
+        if (cursed) {
+            inscribe(Glyph.randomCurse());
+        } else if (isEquipmentEnhanced(false)){
+            inscribe();
         }
 
 		Random.popGenerator();

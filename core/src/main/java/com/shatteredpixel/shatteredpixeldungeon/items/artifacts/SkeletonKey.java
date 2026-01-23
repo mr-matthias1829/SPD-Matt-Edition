@@ -547,6 +547,7 @@ public class SkeletonKey extends Artifact {
 
 	}
 
+
 	public static class KeyReplacementTracker extends Buff {
 
 		public int[] ironKeysNeeded, goldenKeysNeeded, crystalKeysNeeded;

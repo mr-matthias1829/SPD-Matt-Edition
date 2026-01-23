@@ -258,32 +258,11 @@ public class Ring extends KindofMisc {
 	
 	@Override
 	public Item random() {
-		//+0: 66.67% (2/3)
-		//+1: 26.67% (4/15)
-		//+2: 6.67%  (1/15)
-		int n = 0;
-		if (Random.Int(3) == 0) {
-			n++;
-			if (Random.Int(5) == 0){
-				n++;
-			}
-		}
-		level(n);
-		
-		//50% chance to be cursed (used to be 30%)
-        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
-            if (Random.Float() < 0.7f) {
-                cursed = true;
-            }
+        level(rollEquipmentLevel(true));
 
-            return this;
-        } else {
-            if (Random.Float() < 0.5f) {
-                cursed = true;
-            }
+        cursed = isEquipmentCursed(true);
 
-            return this;
-        }
+        return this;
 	}
 	
 	public static HashSet<Class<? extends Ring>> getKnown() {

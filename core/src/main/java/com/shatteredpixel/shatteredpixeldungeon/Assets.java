@@ -291,6 +291,7 @@ public class Assets {
 		public static final String WRAITH   = "sprites/wraith.png";
 		public static final String UNDEAD   = "sprites/undead.png";
 		public static final String KING     = "sprites/king.png";
+        public static final String DARKKING     = "sprites/king_dark.png";
 		public static final String PIRANHA  = "sprites/piranha.png";
 		public static final String EYE      = "sprites/eye.png";
 		public static final String GNOLL    = "sprites/gnoll.png";

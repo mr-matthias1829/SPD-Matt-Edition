@@ -164,6 +164,7 @@ public class Dungeon {
     private static int lastEnteredDepth = 1;
 
 	public static int challenges;
+    public static int sins;
 	public static int mobsToChampion;
 
 	public static Hero hero;
@@ -223,6 +224,7 @@ public class Dungeon {
 
 		initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
+        sins = SPDSettings.sins();
 		mobsToChampion = -1;
 
 		Actor.clear();
@@ -283,6 +285,9 @@ public class Dungeon {
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
 	}
+    public static boolean isSinActive( int sinMask ) {
+        return (sins & sinMask) != 0;
+    }
 
 	public static boolean levelHasBeenGenerated(int depth, int branch){
 		return generatedLevels.contains(depth + 1000*branch);
@@ -366,8 +371,6 @@ public class Dungeon {
 			}
         } else if (branch == 2) {
             switch (depth) {
-                case 1:
-                case 13:
                 case 14:
                     level = new IceCavesLevel();
                     break;
@@ -632,6 +635,7 @@ public class Dungeon {
 	private static final String DAILY_REPLAY= "daily_replay";
 	private static final String LAST_PLAYED = "last_played";
 	private static final String CHALLENGES	= "challenges";
+    private static final String SINS        = "sins";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
 	private static final String DEPTH		= "depth";
@@ -661,6 +665,7 @@ public class Dungeon {
 			bundle.put( DAILY_REPLAY, dailyReplay );
 			bundle.put( LAST_PLAYED, lastPlayed = Game.realTime);
 			bundle.put( CHALLENGES, challenges );
+            bundle.put( SINS, sins );
 			bundle.put( MOBS_TO_CHAMPION, mobsToChampion );
 			bundle.put( HERO, hero );
 			bundle.put( DEPTH, depth );
@@ -771,6 +776,11 @@ public class Dungeon {
 		Toolbar.swappedQuickslots = false;
 
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
+        if (bundle.contains( SINS )) {
+            Dungeon.sins = bundle.getInt( SINS );
+        } else {
+            Dungeon.sins = 0; // Default to 0 for old saves that don't have sins
+        }
 		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
 		
 		Dungeon.level = null;
@@ -894,6 +904,7 @@ public class Dungeon {
 		info.depth = bundle.getInt( DEPTH );
 		info.version = bundle.getInt( VERSION );
 		info.challenges = bundle.getInt( CHALLENGES );
+        info.sins = bundle.getInt( SINS );
 		info.seed = bundle.getLong( SEED );
 		info.customSeed = bundle.getString( CUSTOM_SEED );
 		info.daily = bundle.getBoolean( DAILY );
@@ -907,10 +918,8 @@ public class Dungeon {
 	public static void fail( Object cause ) {
 		if (WndResurrect.instance == null) {
 			updateLevelExplored();
-            if (rankable) {
                 Statistics.gameWon = false;
                 Rankings.INSTANCE.submit(false, cause);
-            }
 		}
 	}
 	
@@ -918,10 +927,8 @@ public class Dungeon {
 
 		updateLevelExplored();
 		hero.belongings.identify();
-        if (rankable) {
             Statistics.gameWon = true;
             Rankings.INSTANCE.submit(true, cause);
-        }
 	}
 
 	public static void updateLevelExplored(){

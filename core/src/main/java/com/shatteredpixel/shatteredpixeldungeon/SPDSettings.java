@@ -220,6 +220,7 @@ public class SPDSettings extends GameSettings {
 	
 	public static final String KEY_LAST_CLASS	= "last_class";
 	public static final String KEY_CHALLENGES	= "challenges";
+    public static final String KEY_SINS         = "sins";
 	public static final String KEY_CUSTOM_SEED	= "custom_seed";
 	public static final String KEY_LAST_DAILY	= "last_daily";
 	public static final String KEY_INTRO		= "intro";
@@ -246,11 +247,14 @@ public class SPDSettings extends GameSettings {
     public static void challenges( int value ) {
         put( KEY_CHALLENGES, value );
     }
+    public static void sins(int value){put(KEY_SINS, value);}
 
     public static int challenges() {
         return getInt( KEY_CHALLENGES, 0, 0, Challenges.MAX_VALUE );
     }
+    public static int sins(){return getInt(KEY_SINS, 0, 0, Sins.MAX_VALUE);}
 
+    /*
 	public static void customSeed( String value ){
 		put( KEY_CUSTOM_SEED, value );
 	}
@@ -258,8 +262,18 @@ public class SPDSettings extends GameSettings {
 	public static String customSeed() {
 		return getString( KEY_CUSTOM_SEED, "", 20);
 	}
+     */
 
-	public static void lastDaily( long value ){
+    public static void customSeed(String value) {
+        // intentionally ignored
+    }
+
+    public static String customSeed() {
+        return "";
+    }
+
+
+    public static void lastDaily( long value ){
 		put( KEY_LAST_DAILY, value );
 	}
 

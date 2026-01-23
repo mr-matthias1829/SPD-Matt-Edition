@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -45,12 +47,10 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
-import com.watabou.utils.Bundlable;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
-import com.watabou.utils.Reflection;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -564,8 +564,109 @@ public class Item implements Bundlable {
 	public Item random() {
 		return this;
 	}
-	
-	public String status() {
+
+    /**
+     * Rolls initial equipment level.
+     * Callers are responsible for RNG isolation if needed.
+     */
+
+    public int rollEquipmentLevel(boolean soft){
+        if (Dungeon.isSinActive(Sins.DESIRE)) {
+            //cant be bothered to calcuate each outcome... but uhh... it's in your favor okay?
+           int n = 1;
+            if (Random.Int(3) == 0) {
+                n++;
+                if (Random.Int(4) == 0){
+                    n++;
+                    if (Random.Int(3) == 0){
+                        n++;
+                    }
+                }
+            }
+            return n;
+        }
+
+        int n = 0;
+        if (soft) { // rolling for non-common equipment like rings, give them higher odds to be upgraded
+            //+0: 66.67% (2/3)
+            //+1: 26.67% (4/15)
+            //+2: 6.67%  (1/15)
+            if (Random.Int(3) == 0) {
+                n++;
+                if (Random.Int(5) == 0){
+                    n++;
+                }
+            }
+            return n;
+        } else { // common equipement like armor and weapons
+            //+0: 75% (3/4)
+            //+1: 20% (4/20)
+            //+2: 5%  (1/20)
+            if (Random.Int(4) == 0) {
+                n++;
+                if (Random.Int(5) == 0) {
+                    n++;
+                }
+            }
+            return n;
+        }
+    }
+
+    /**
+     * Rolls initial equipment level.
+     * Callers are responsible for RNG isolation if needed.
+     */
+
+    public boolean isEquipmentCursed(boolean soft){
+    float effectRoll = Random.Float();
+
+    if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
+        if (effectRoll < 0.7f * ParchmentScrap.curseChanceMultiplier()) {
+            return true;
+        }
+    } else if (soft){ // rolling for non-common equipment like rings, make them more likely to be cursed
+        if (effectRoll < 0.5f * ParchmentScrap.curseChanceMultiplier()) {
+            return true;
+        }
+    } else {
+        if (effectRoll < 0.4f * ParchmentScrap.curseChanceMultiplier()) {
+            return true;
+        }
+    }
+    return false;
+    }
+
+    public boolean isEquipmentEnhanced(boolean soft){
+        float effectRoll = Random.Float();
+
+        if (soft){  // rolling for non-common equipment like rings, make them more likely to be enhanced
+                    // however: only weapons and armor have enhancements. still here if that changes in the future though
+            if (effectRoll < 0.16f) {
+                return true;
+            }
+        } else {
+            if (effectRoll >= 1f - (0.1f * ParchmentScrap.enchantChanceMultiplier())) { // random voodoo magic i dont understand lol
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean shouldDesireDestroy(Item item) {
+        if (item == null) return false;
+        if (!Dungeon.isSinActive(Sins.DESIRE)) return false;
+        if (!item.isUpgradable()) return false;        // only upgradeable items ever get destroyed
+
+        // region-based scaling, capped
+        int region = 1 + (Dungeon.depth - 1) / 5;
+        float destroyChance = 0.5f + 0.08f * (region - 1);
+        destroyChance = Math.min(destroyChance, 0.95f); // cap so it's never 100%
+
+        return Random.Float() < destroyChance;
+    }
+
+
+    public String status() {
 		return quantity != 1 ? Integer.toString( quantity ) : null;
 	}
 

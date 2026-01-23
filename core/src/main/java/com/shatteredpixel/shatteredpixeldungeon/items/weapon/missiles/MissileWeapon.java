@@ -370,31 +370,18 @@ abstract public class MissileWeapon extends Weapon {
 
 	@Override
 	public Item random() {
-		//+0: 75% (3/4)
-		//+1: 20% (4/20)
-		//+2: 5%  (1/20)
-		int n = 0;
-		if (Random.Int(4) == 0) {
-			n++;
-			if (Random.Int(5) == 0) {
-				n++;
-			}
-		}
-		level(n);
+        level(rollEquipmentLevel(false));
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen
 		Random.pushGenerator(Random.Long());
 
-			//30% chance to be cursed
-			//10% chance to be enchanted
-			float effectRoll = Random.Float();
-			if (effectRoll < 0.3f * ParchmentScrap.curseChanceMultiplier()) {
-				enchant(Enchantment.randomCurse());
-				cursed = true;
-			} else if (effectRoll >= 1f - (0.1f * ParchmentScrap.enchantChanceMultiplier())){
-				enchant();
-			}
+        cursed = isEquipmentCursed(false);
+        if (cursed) {
+            enchant(Enchantment.randomCurse());
+        } else if (isEquipmentEnhanced(false)){
+            enchant();
+        }
 
 		Random.popGenerator();
 

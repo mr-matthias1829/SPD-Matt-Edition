@@ -26,37 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Drowsy;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HeroDisguise;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.AscendedForm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
@@ -294,6 +264,11 @@ public class Hero extends Char {
             strBonus += (int)Math.floor(STR * (0.03f + 0.05f*pointsInTalent(Talent.STRONGMAN)));
         }
 
+        int items = belongings.totalItemsCount();
+        if (Dungeon.isSinActive(Sins.ENVY) && items <= 15) {
+            strBonus += (int) envyMultiplier(true);
+        }
+
         return STR + strBonus;
     }
 
@@ -466,6 +441,16 @@ public class Hero extends Char {
 		}
 		Buff.affect( this, Regeneration.class );
 		Buff.affect( this, Hunger.class );
+
+        if (Dungeon.isSinActive( Sins.GREED )){
+            Buff.affect(this, Greed.class);
+        }
+        if (Dungeon.isSinActive( Sins.SLOTH )){
+            Buff.affect(this, Sloth.class);
+        }
+        if (Dungeon.isSinActive( Sins.PRIDE )){
+            Buff.affect(this, Pride.class);
+        }
 	}
 	
 	public int tier() {
@@ -618,7 +603,17 @@ public class Hero extends Char {
 			}
 		}
 
-		return Math.max(1, Math.round(evasion));
+        if (buff(Bulky.class) != null) {
+            return (int) (evasion * Bulky.evasionMultiplier()); // Cannot dodge any attacks
+        }
+
+        if (Dungeon.isSinActive( Sins.ENVY )){
+            evasion *= Math.min(1f, envyMultiplier(false)*0.9f); // only reduce evasion when nerfing speed already
+            // using *0.9f to make it a bit more punishing
+        }
+
+
+        return Math.max(1, Math.round(evasion));
 	}
 
 	@Override
@@ -708,6 +703,13 @@ public class Hero extends Char {
 			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
 		}
 
+        if (Dungeon.isSinActive( Sins.WRATH )){
+            dmg = Math.round(dmg * 1.2f);
+        }
+        if (Dungeon.hero.buff(Pride.class) != null) {
+            dmg = Math.round (dmg * Dungeon.hero.buff(Pride.class).getDamageMultiplier());
+        }
+
 		if (dmg < 0) dmg = 0;
 		return dmg;
 	}
@@ -745,11 +747,53 @@ public class Hero extends Char {
 			speed *= (2f + 0.25f*pointsInTalent(Talent.GROWING_POWER));
 		}
 
-		speed = AscensionChallenge.modifyHeroSpeed(speed);
+
+        speed *= envyMultiplier(false);
+
+        speed = AscensionChallenge.modifyHeroSpeed(speed);
 		
 		return speed;
 		
 	}
+
+    public float envyMultiplier(boolean strength){
+        if (Dungeon.isSinActive(Sins.ENVY)){
+            int depthBonus = (int) (1* Math.floor(Dungeon.depth/5)); // increases by 1 every 5 levels (aka every region)
+            if (Dungeon.isSinActive(Sins.DESIRE)){
+                depthBonus -= 2;
+            }
+            int items = Math.max(0, belongings.totalItemsCount()-depthBonus);
+
+            if (strength){
+                if (items <= 16) {
+                    return (float) Math.min(4, Math.floor((16 - items) / 4f));
+                } else {
+                    return 0f;
+                }
+            }
+
+            float mult = 1;
+            if (items <= 4) {
+                float base = 1.0f + (11 - 4) * 0.03f; // 1.21, result from next tier, should be added to this tier for proper scaling
+                mult *= base + (4 - items) * 0.12f;
+            }
+            else if (items <= 11) {
+                mult *= 1.0f + (11 - items) * 0.03f;
+            }
+            else if (items <= 16) {
+                mult *= 1.0f - (items - 11) * 0.03f;
+            }
+            else {
+                float base = 1.0f - (16 - 11) * 0.03f; // 0.85, result from previous tier
+                mult *= base - (items - 16) * 0.06f;
+            }
+
+            // Clamp to reasonable bounds (minimum x0.1) so your mult isnt totally crippled
+           return Math.max(mult, 0.1f);
+        } else {
+            return 1f;
+        }
+    }
 
 	@Override
 	public boolean canSurpriseAttack(){
@@ -1646,6 +1690,15 @@ public class Hero extends Char {
 		//we ceil this one to avoid letting the player easily take 0 dmg from tenacity early
 		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
 
+
+        if (Dungeon.isSinActive( Sins.WRATH )){
+            dmg = Math.round(dmg * 1.3f);
+        }
+        if (Dungeon.hero.buff(Pride.class) != null) {
+            Dungeon.hero.buff(Pride.class).onHeroGotHit();
+            dmg = Math.round (dmg * Dungeon.hero.buff(Pride.class).getIncomingDamageMultiplier());
+        }
+
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
 		super.damage( dmg, src );
@@ -2081,7 +2134,23 @@ public class Hero extends Char {
 	}
 	
 	public static int maxExp( int lvl ){
-		return 5 + lvl * 5;
+        // For saved game display (no active hero)
+        if (Dungeon.hero == null) {
+            // Just check if sloth sin is active in the save
+            if (Dungeon.isSinActive(Sins.SLOTH)) {
+                return (int)(4 + lvl * 4.5);
+            } else {
+                return 5 + lvl * 5;
+            }
+        }
+        // For active gameplay (hero exists)
+        else {
+            if (Dungeon.hero.buff(Sloth.class) != null) {
+                return 4 + lvl * 4;
+            } else {
+                return 5 + lvl * 5;
+            }
+        }
 	}
 	
 	public boolean isStarving() {

@@ -93,7 +93,7 @@ public class Tengu extends Mob {
 
     private boolean lastStandActive = false;
     private int lastStandTurns = 0;
-    private static final int LAST_STAND_DURATION = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 15 : 10;
+    private static final int LAST_STAND_DURATION = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 25 : 15;
 
 
     @Override

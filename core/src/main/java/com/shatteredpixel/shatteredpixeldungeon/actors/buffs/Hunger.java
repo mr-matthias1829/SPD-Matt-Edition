@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
@@ -41,17 +38,18 @@ public class Hunger extends Buff implements Hero.Doom {
 	public static final float STARVING	= 700f; //450
 
     public float hungryThreshold() {
-        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
-            return 300f;
-        }
-        return HUNGRY;
+        float base = HUNGRY;
+
+        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) base = 300f;
+        if (Dungeon.isSinActive(Sins.GLUTTONY)) base /= 2.5f;
+
+        return Math.max(base, 100f); // floor to keep it reasonable
     }
 
     public float starvingThreshold() {
-        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
-            return 450f;
-        }
-        return STARVING;
+        float base = STARVING;
+        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) base = 450f;
+        return Math.max(base, hungryThreshold()); // ensure starving is never below hungry
     }
 
 	private float level;
@@ -141,7 +139,6 @@ public class Hunger extends Buff implements Hero.Doom {
 	}
 
 	public void satisfy( float energy ) {
-
         //affectHunger( energy, false ); // old one
         if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
             level -= energy;

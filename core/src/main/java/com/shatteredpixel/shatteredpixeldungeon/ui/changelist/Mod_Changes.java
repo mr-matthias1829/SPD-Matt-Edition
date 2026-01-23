@@ -2,7 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import java.util.ArrayList;
 
-public class MOD_v1000_v12xx_Changes {
+public class Mod_Changes {
 
     public static void addAllChanges(ArrayList<ChangeInfo> list){
 
@@ -14,6 +14,53 @@ public class MOD_v1000_v12xx_Changes {
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_\n\n\n"
                         + "while this mod does (try) to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
+
+        list.add(new ChangeInfo("_v1309:_ Sinning", true,
+                "\n_NEW CONTENT:_\n"
+                        + "1. added the new sins modifier, with 7 sins to start\n"
+                        + "2. sins will give a powerful buff, while also adding a terrible debuff along with it\n"
+                        + "3. added a handful of new buffs and debuffs, most of which have a neutral effect\n"
+
+                        +"\n_BOSSES:_\n"
+                        + "1. tengu's last stand now lasts longer (15:10 -> 25:15)\n"
+
+                        +"\n_ENEMIES:_\n"
+                        + "1. gnoll shaman's ranged proc chance increased (50% -> 75%)\n"
+                        + "2. frozen swarm now only loses half of the clone's hp when cloning\n"
+
+                        +"\n_SHOPS:_\n"
+                        + "1. skeleton key no longer naturally spawns, instead only being obtainable through the caves shop\n"
+                        + "2. wonderous resin no longer naturally spawns, instead only being obtainable through the prisons shop\n"
+
+                        +"\n_BADGES:_\n"
+                        + "1. badge 'against everything and more' required challenges reduced (5 -> 3)\n"
+                        + "2. added 2 new badges related to sins\n"
+                        + "3. added 4 new badges related to damage in a single hit\n"
+                        + "4. solved some badge clutter by making them progressive/stack\n"
+
+                        +"\n_UI STUFF:_\n"
+                        + "1. rankings now show sins if the run had any enabled\n"
+                        + "2. 'about' button on the title screen now has a new icon... _:)_\n"
+                        + "3. the option to play on a seeded run is removed, as i somehow managed to break seeded runs, and it'll be a while before i ever fix that\n"
+                        + "4. daily runs MIGHT be broken too... but i'm uncertain about that one so it stays for now\n"
+                        + "5. removed the 'special' section in the bestiary and added it's enemies to the other existing categories\n"
+                        + "6. added the 'special unused' section in the bestiary, where a duplicate entry of enemies that can't be found in-game yet are added\n"
+
+                        +"\n_FIXES:_\n"
+                        + "1. fixed a mistake in the code that caused the hero to earn less gold (you earn 15% more gold now)\n"
+                        + "2. fishing rod now actually uses the gold quantity formula, though earns 20% less gold for balancing\n"
+                        + "3. completely redid scroll of magic upgrade for the 1000th time to fix a bug\n"
+                        + "4. whenever a game ends, it will now always go to ranks. (i removed edge case if statements that sometimes broke and invalidated your game for no reason)\n"
+                        + "5. sins are now correctly displayed and saved in ranks (not quite a bug, since i introduced sins this version, BUT MAN DID I BREAK MY MIND OVER THIS)\n"
+                        + "6. fixed the game crashing when you obtain the amulet with at least one challenge enabled\n"
+                        + "7. fixed the order priority for the newly added challenge badges\n"
+                        + "8. hopefully fixed the issue where the frozen swarm would spawn a normal swarm when hit\n"
+
+                        +"\n_OTHER:_\n"
+                        + "1. centralized the spawning level, curse chance, and enchanted chance for items\n"
+                        + "2. challenge 'i hate myself' now applies to thrown weapons and wands as well\n"
+                        + "3. curse chance for thrown weapons and wands increased by +10%\n"
+        ));
 
         list.add(new ChangeInfo("_v1305:_ direct annoyance", true,
                 "\n_Changes:_\n"

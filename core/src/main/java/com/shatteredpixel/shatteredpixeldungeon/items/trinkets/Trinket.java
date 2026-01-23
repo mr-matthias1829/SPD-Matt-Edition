@@ -78,6 +78,20 @@ public abstract class Trinket extends Item {
 		levelKnown = cursedKnown = true; //for pre-2.5 saves
 	}
 
+    @Override
+    public int value() {
+        int price = 60;
+        if (level() > 0)
+            price += 15*visiblyUpgraded();
+        if (cursed && cursedKnown) {
+            price /= 2;
+        }
+        if (price < 1) {
+            price = 1;
+        }
+        return price;
+    }
+
 	public static class PlaceHolder extends Trinket {
 
 		{

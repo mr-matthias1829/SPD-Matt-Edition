@@ -22,15 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
-import com.shatteredpixel.shatteredpixeldungeon.Rankings;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -78,7 +70,14 @@ public class WndRanking extends WndTabbed {
 
 		try {
 			Badges.loadGlobal();
-			Rankings.INSTANCE.loadGameData( rec );
+            // DEBUG: Log before loading
+            System.out.println("DEBUG: Before loadGameData - Dungeon.sins = " + Dungeon.sins + ", Dungeon.challenges = " + Dungeon.challenges);
+
+            Rankings.INSTANCE.loadGameData( rec );
+
+            // DEBUG: Log after loading
+            System.out.println("DEBUG: After loadGameData - Dungeon.sins = " + Dungeon.sins + ", Dungeon.challenges = " + Dungeon.challenges);
+            System.out.println("DEBUG: Record gameID = " + rec.gameID);
 			createControls();
 		} catch ( Exception e ) {
 			Game.reportException( new RuntimeException("Rankings Display Failed!",e));
@@ -97,35 +96,63 @@ public class WndRanking extends WndTabbed {
 	
 	private void createControls() {
 
-		if (Dungeon.hero != null) {
-			Icons[] icons =
-					{Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CHALLENGE_COLOR};
-			Group[] pages =
-					{new StatsTab(), new TalentsTab(), new ItemsTab(), new BadgesTab(), null};
+        if (Dungeon.hero != null) {
+            Icons[] icons;
+            Group[] pages;
 
-			if (Dungeon.challenges != 0) pages[4] = new ChallengesTab();
+            // If both challenges and sins are active
+            if (Dungeon.challenges != 0 && Dungeon.sins != 0) {
+                icons = new Icons[]{
+                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG,
+                        Icons.BADGES, Icons.CHALLENGE_COLOR, Icons.SIN_COLOR
+                };
+                pages = new Group[]{
+                        new StatsTab(), new TalentsTab(), new ItemsTab(),
+                        new BadgesTab(), new ChallengesTab(), new SinsTab()
+                };
+            }
+            // If only challenges are active
+            else if (Dungeon.challenges != 0) {
+                icons = new Icons[]{
+                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG,
+                        Icons.BADGES, Icons.CHALLENGE_COLOR
+                };
+                pages = new Group[]{
+                        new StatsTab(), new TalentsTab(), new ItemsTab(),
+                        new BadgesTab(), new ChallengesTab()
+                };
+            }
+            // If only sins are active
+            else if (Dungeon.sins != 0) {
+                icons = new Icons[]{
+                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG,
+                        Icons.BADGES, Icons.SIN_COLOR
+                };
+                pages = new Group[]{
+                        new StatsTab(), new TalentsTab(), new ItemsTab(),
+                        new BadgesTab(), new SinsTab()
+                };
+            }
+            // Neither active
+            else {
+                icons = new Icons[]{
+                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG, Icons.BADGES
+                };
+                pages = new Group[]{
+                        new StatsTab(), new TalentsTab(), new ItemsTab(), new BadgesTab()
+                };
+            }
 
-			for (int i = 0; i < pages.length; i++) {
+            for (int i = 0; i < pages.length; i++) {
+                add(pages[i]);
+                Tab tab = new RankingTab(icons[i], pages[i]);
+                add(tab);
+            }
 
-				if (pages[i] == null) {
-					break;
-				}
-
-				add(pages[i]);
-
-				Tab tab = new RankingTab(icons[i], pages[i]);
-				add(tab);
-			}
-
-			layoutTabs();
-
-			select(0);
-		} else {
-			StatsTab tab = new StatsTab();
-			add(tab);
-
-		}
-	}
+            layoutTabs();
+            select(0);
+        }
+    }
 
 	private class RankingTab extends IconTab {
 		
@@ -618,4 +645,64 @@ public class WndRanking extends WndTabbed {
 			Game.scene().add(new WndInfoItem(item));
 		}
 	}
+
+    private class SinsTab extends Group {
+        private ScrollPane scroll;
+
+        public SinsTab(){
+            super();
+
+            camera = WndRanking.this.camera;
+
+            scroll = new ScrollPane(new Component());
+            add(scroll);
+
+            scroll.setRect(0, 0, WIDTH, HEIGHT);
+
+            Component content = scroll.content();
+
+            float posY = 0;
+
+            // Simple header like ChallengesTab
+            String header = "Active Sins";
+            RenderedTextBlock text = PixelScene.renderTextBlock(header, 6);
+            text.maxWidth(WIDTH - 10);
+            text.setPos(0, posY);
+            content.add(text);
+
+            posY = text.bottom() + 4;
+
+            for (int i = 0; i < Sins.NAME_IDS.length; i++) {
+
+                final String sin = Sins.NAME_IDS[i];
+
+                CheckBox cb = new CheckBox(
+                        Messages.titleCase(Messages.get(Sins.class, sin))
+                );
+                cb.checked((Dungeon.sins & Sins.MASKS[i]) != 0);
+                cb.active = false;
+
+                cb.setRect(0, posY, WIDTH - 20, 15);
+                content.add(cb);
+
+                IconButton info = new IconButton(Icons.get(Icons.INFO)){
+                    @Override
+                    protected void onClick() {
+                        super.onClick();
+                        ShatteredPixelDungeon.scene().add(
+                                new WndMessage(Messages.get(Sins.class, sin + "_desc"))
+                        );
+                    }
+                };
+
+                info.setRect(cb.right(), posY, 16, 15);
+                content.add(info);
+
+                posY += 16;
+            }
+
+            content.setSize(WIDTH, posY);
+            scroll.scrollTo(0, 0);
+        }
+    }
 }

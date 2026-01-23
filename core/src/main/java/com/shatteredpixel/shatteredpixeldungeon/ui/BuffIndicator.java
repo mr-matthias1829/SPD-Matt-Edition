@@ -137,6 +137,11 @@ public class BuffIndicator extends Component {
 	public static final int SEAL_SHIELD = 84;
 	public static final int THROWN_WEP  = 85;
 
+
+    public static final int GREED = 96;
+    public static final int SLOTH = 97;
+    public static final int BULKY = 98;
+
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;
 	

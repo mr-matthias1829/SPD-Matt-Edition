@@ -43,14 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndHeroInfo;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndVictoryCongrats;
+import com.shatteredpixel.shatteredpixeldungeon.windows.*;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Camera;
@@ -236,7 +229,9 @@ public class HeroSelectScene extends PixelScene {
         //if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
         if (!DeviceCompat.isDebug()){
             Dungeon.challenges = 0;
+            Dungeon.sins = 0;
             SPDSettings.challenges(0);
+            SPDSettings.sins(0);
             SPDSettings.customSeed("");
         }
 
@@ -405,8 +400,10 @@ public class HeroSelectScene extends PixelScene {
     private void updateOptionsColor(){
         if (!SPDSettings.customSeed().isEmpty()){
             btnOptions.icon().hardlight(1f, 1.5f, 0.67f);
-        } else if (SPDSettings.challenges() != 0){
+        } else if (SPDSettings.challenges() != 0) {
             btnOptions.icon().hardlight(2f, 1.33f, 0.5f);
+        } else if (SPDSettings.sins() != 0) {
+            btnOptions.icon().hardlight(1.5f, 1f, 0.5f);
         } else {
             btnOptions.icon().resetColor();
         }
@@ -628,6 +625,7 @@ public class HeroSelectScene extends PixelScene {
         private ArrayList<ColorBlock> spacers;
 
         protected StyledButton challengeButton;
+        protected StyledButton sinButton;
 
         @Override
         protected void createChildren() {
@@ -637,6 +635,7 @@ public class HeroSelectScene extends PixelScene {
 
             buttons = new ArrayList<>();
             spacers = new ArrayList<>();
+            /*
             StyledButton seedButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "custom_seed"), 6){
                 @Override
                 protected void onClick() {
@@ -689,6 +688,7 @@ public class HeroSelectScene extends PixelScene {
             if (!SPDSettings.customSeed().isEmpty()) seedButton.icon().hardlight(1f, 1.5f, 0.67f);;
             buttons.add(seedButton);
             add(seedButton);
+            */
 
             StyledButton dailyButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "daily"), 6){
 
@@ -822,6 +822,34 @@ public class HeroSelectScene extends PixelScene {
             challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
             add(challengeButton);
             buttons.add(challengeButton);
+
+
+            sinButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndSins.class, "title"), 6){
+                @Override
+                protected void onClick() {
+
+                    //if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
+                    //	ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
+                    //			Icons.get(Icons.CHALLENGE_GREY),
+                    //			Messages.get(WndChallenges.class, "title"),
+                    //			Messages.get(HeroSelectScene.class, "challenges_nowin")
+                    //	));
+                    //	return;
+                    //}
+
+                    ShatteredPixelDungeon.scene().addToFront(new WndSins(SPDSettings.sins(), true) {
+                        public void onBackPressed() {
+                            super.onBackPressed();
+                            icon(Icons.get(SPDSettings.sins() > 0 ? Icons.SIN_COLOR : Icons.SIN_GREY));
+                            updateOptionsColor();
+                        }
+                    } );
+                }
+            };
+            sinButton.leftJustify = true;
+            sinButton.icon(Icons.get(SPDSettings.sins() > 0 ? Icons.SIN_COLOR : Icons.SIN_GREY));
+            add(sinButton);
+            buttons.add(sinButton);
 
             int unlockedCount = 0;
             for (HeroClass cls : HeroClass.values()){

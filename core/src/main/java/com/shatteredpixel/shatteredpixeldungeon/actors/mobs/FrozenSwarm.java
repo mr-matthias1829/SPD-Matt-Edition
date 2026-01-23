@@ -39,7 +39,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public class FrozenSwarm extends Swarm {
+public class FrozenSwarm extends Mob {
 
 	{
 		spriteClass = FrozenSwarmSprite.class;
@@ -127,8 +127,8 @@ public class FrozenSwarm extends Swarm {
                     GameScene.add( clone, SPLIT_DELAY );
 
                     // Split remaining HP in half
-                    clone.HP = (int)(remainingHP / 1.4f);
-                    remainingHP -= clone.HP;
+                    clone.HP = (int)(remainingHP / 2f);
+                    remainingHP -= clone.HP/2f;
 
                     Actor.add( new Pushing( clone, pos, clone.pos ) );
                     Dungeon.level.occupyCell(clone);

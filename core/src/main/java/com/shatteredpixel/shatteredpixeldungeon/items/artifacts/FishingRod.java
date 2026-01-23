@@ -265,7 +265,10 @@ public class FishingRod extends Artifact {
             // Gold, seeds, or runestones
             int type = Random.Int(3);
             switch (type) {
-                case 0: return new Gold(Random.IntRange(depth * 5, depth * 15));
+                case 0:
+                    Gold gold = (Gold) new Gold().random();
+                    gold.quantity((int)(gold.quantity() * 0.8f));
+                    return gold;
                 case 1: return Generator.random(Generator.Category.SEED);
                 default: return Generator.random(Generator.Category.STONE);
             }

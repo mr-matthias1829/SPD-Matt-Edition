@@ -170,7 +170,7 @@ public class ChangesScene extends PixelScene {
 				v0_1_X_Changes.addAllChanges(changeInfos);
 				break;
             case 8:
-                MOD_v1000_v12xx_Changes.addAllChanges(changeInfos);
+                Mod_Changes.addAllChanges(changeInfos);
                 break;
 		}
 

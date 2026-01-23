@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Greed;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -227,13 +229,21 @@ public class Badges {
         CHAMPION_2                  ( 126 ),
         CHAMPION_3                  ( 127 ),
 
-
-        NO_UPGRADE_BOSS3 (296),
         VICTORY_WITH_8_CHALLENGES(325),
         VICTORY_WITH_10_CHALLENGES(326),
         VICTORY_WITH_ALL_CHALLENGES(327),
+        STRONG (265),
+        MIGHTY (267),
+        POWERFUL (268),
+        OBLIVION (269),
+
+
+        OUT_OF_TIME (217),
+        WHAT_DID_IT_COST_EVERYTHING (218),
+        NO_UPGRADE_BOSS3 (296),
         AGAINST_ALL_ODDS (206),
         AGAINST_EVERYTHING_AND_MORE (207);
+
 
 		public boolean meta;
 
@@ -818,6 +828,12 @@ public class Badges {
 
 		validateDeathFromAll();
 	}
+
+    public static void validateDeathFromOutOfTime() {
+        Badge badge = Badge.OUT_OF_TIME;
+        local.add( badge );
+        displayBadge( badge );
+    }
 	
 	private static void validateDeathFromAll() {
 		if (isUnlocked( Badge.DEATH_FROM_FIRE ) &&
@@ -836,6 +852,20 @@ public class Badges {
 			}
 		}
 	}
+
+    public static void validateShopBadges( int goldSpent ) {
+        // goldspend isnt the most useful right now, but for future badges it might be
+        Badge badge = null;
+
+        if (!local.contains( Badge.WHAT_DID_IT_COST_EVERYTHING ) && Dungeon.isSinActive(Sins.GREED)) {
+            if (Dungeon.hero.buff(Greed.class) != null && Dungeon.hero.buff(Greed.class).getShopMultiplier() >= 5) {
+                badge = Badge.WHAT_DID_IT_COST_EVERYTHING;
+                local.add(badge);
+            }
+        }
+
+        displayBadge( badge );
+    }
 
 	private static LinkedHashMap<HeroClass, Badge> firstBossClassBadges = new LinkedHashMap<>();
 	static {
@@ -996,6 +1026,30 @@ public class Badges {
 			displayBadge(badge);
 		}
 	}
+
+    public static void validateDamageInOneHit( int dmg ) {
+        Badge badge = null;
+        if (dmg >= 15 && !isUnlocked(Badge.STRONG)) {
+            badge = Badge.STRONG;
+            local.add(badge);
+        }
+        if (dmg >= 35 && !isUnlocked(Badge.MIGHTY)) {
+            badge = Badge.MIGHTY;
+            local.add(badge);
+        }
+        if (dmg >= 60 && !isUnlocked(Badge.POWERFUL)) {
+            badge = Badge.POWERFUL;
+            local.add(badge);
+        }
+        if (dmg >= 99 && !isUnlocked(Badge.OBLIVION)) {
+            badge = Badge.OBLIVION;
+            local.add(badge);
+        }
+
+        if (badge != null) {
+            displayBadge(badge);
+        }
+    }
 	
 	public static void validateMastery() {
 		
@@ -1248,7 +1302,6 @@ public class Badges {
 		if (challenges == 0) return;
 
 		if (challenges >= 1) {
-            unlock(badge);
 			badge = Badge.CHAMPION_1;
 		}
 		if (challenges >= 3){
@@ -1262,20 +1315,20 @@ public class Badges {
 
         int total = Challenges.totalChallenges();
 
-        if (challenges >= total) {
+        if (challenges >= 8) {
             unlock(badge);
-            badge = Badge.VICTORY_WITH_ALL_CHALLENGES;
+            badge = Badge.VICTORY_WITH_8_CHALLENGES;
         }
         if (challenges >= 10) {
             unlock(badge);
             badge = Badge.VICTORY_WITH_10_CHALLENGES;
         }
-        if (challenges >= 8) {
+        if (challenges >= total) {
             unlock(badge);
-            badge = Badge.VICTORY_WITH_8_CHALLENGES;
+            badge = Badge.VICTORY_WITH_ALL_CHALLENGES;
         }
 
-        if (Dungeon.hero.heroClass == HeroClass.PEASANT && challenges >= 5){
+        if (Dungeon.hero.heroClass == HeroClass.PEASANT && challenges >= 3){
             unlock(badge);
             badge = Badge.AGAINST_EVERYTHING_AND_MORE;
         }
@@ -1356,14 +1409,26 @@ public class Badges {
 			{Badge.GOLD_COLLECTED_1, Badge.GOLD_COLLECTED_2, Badge.GOLD_COLLECTED_3, Badge.GOLD_COLLECTED_4, Badge.GOLD_COLLECTED_5},
 			{Badge.ITEM_LEVEL_1, Badge.ITEM_LEVEL_2, Badge.ITEM_LEVEL_3, Badge.ITEM_LEVEL_4, Badge.ITEM_LEVEL_5},
 			{Badge.LEVEL_REACHED_1, Badge.LEVEL_REACHED_2, Badge.LEVEL_REACHED_3, Badge.LEVEL_REACHED_4, Badge.LEVEL_REACHED_5},
-			{Badge.STRENGTH_ATTAINED_1, Badge.STRENGTH_ATTAINED_2, Badge.STRENGTH_ATTAINED_3, Badge.STRENGTH_ATTAINED_4, Badge.STRENGTH_ATTAINED_5},
+			{Badge.STRENGTH_ATTAINED_1, Badge.STRENGTH_ATTAINED_2, Badge.STRENGTH_ATTAINED_3, Badge.STRENGTH_ATTAINED_4, Badge.STRENGTH_ATTAINED_5, Badge.STRENGTH_ATTAINED_6},
 			{Badge.FOOD_EATEN_1, Badge.FOOD_EATEN_2, Badge.FOOD_EATEN_3, Badge.FOOD_EATEN_4, Badge.FOOD_EATEN_5},
 			{Badge.ITEMS_CRAFTED_1, Badge.ITEMS_CRAFTED_2, Badge.ITEMS_CRAFTED_3, Badge.ITEMS_CRAFTED_4, Badge.ITEMS_CRAFTED_5},
 			{Badge.BOSS_SLAIN_1, Badge.BOSS_SLAIN_2, Badge.BOSS_SLAIN_3, Badge.BOSS_SLAIN_4},
 			{Badge.RESEARCHER_1, Badge.RESEARCHER_2, Badge.RESEARCHER_3, Badge.RESEARCHER_4, Badge.RESEARCHER_5},
 			{Badge.HIGH_SCORE_1, Badge.HIGH_SCORE_2, Badge.HIGH_SCORE_3, Badge.HIGH_SCORE_4, Badge.HIGH_SCORE_5},
 			{Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4, Badge.GAMES_PLAYED_5},
-			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3}
+			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3},
+
+            {Badge.VICTORY_WITH_8_CHALLENGES, Badge.VICTORY_WITH_10_CHALLENGES, Badge.VICTORY_WITH_ALL_CHALLENGES},
+            {Badge.STRONG, Badge.MIGHTY, Badge.POWERFUL, Badge.OBLIVION },
+            {Badge.AGAINST_ALL_ODDS, Badge.AGAINST_EVERYTHING_AND_MORE},
+
+            // Legacy vs new hero class unlocks:
+            // Warrior doesnt have a legacy unlock
+            {Badge.UNLOCK_MAGE,    Badge.UNLOCK_MAGE_A},
+            {Badge.UNLOCK_ROGUE,   Badge.UNLOCK_ROGUE_A},
+            {Badge.UNLOCK_HUNTRESS, Badge.UNLOCK_HUNTRESS_A},
+            {Badge.UNLOCK_DUELIST, Badge.UNLOCK_DUELIST_A},
+            {Badge.UNLOCK_CLERIC,  Badge.UNLOCK_CLERIC_A}
 	};
 
 	//don't show the later badge if the earlier one isn't unlocked
@@ -1376,7 +1441,11 @@ public class Badges {
 			{Badge.BOSS_SLAIN_4, Badge.BOSS_CHALLENGE_4},
 			{Badge.VICTORY,      Badge.BOSS_CHALLENGE_5},
 			{Badge.HAPPY_END,    Badge.PACIFIST_ASCENT},
-			{Badge.VICTORY,      Badge.TAKING_THE_MICK}
+			{Badge.VICTORY,      Badge.TAKING_THE_MICK},
+            {Badge.VICTORY, Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge?
+
+            {Badge.VICTORY, Badge.AGAINST_ALL_ODDS},
+
 	};
 
 	//If the summary badge is unlocked, don't show the component badges

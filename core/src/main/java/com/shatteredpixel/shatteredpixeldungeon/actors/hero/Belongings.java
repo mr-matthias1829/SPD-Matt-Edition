@@ -422,6 +422,28 @@ public class Belongings implements Iterable<Item> {
         }
     }
 
+    public int totalItemsCount() {
+        int count = 0;
+        boolean lost = lostInventory();
+
+        // Count equipped items (only if not lost or kept through lost inventory)
+        if (weapon != null && (!lost || weapon.keptThroughLostInventory())) count++;
+        if (armor != null && (!lost || armor.keptThroughLostInventory())) count++;
+        if (artifact != null && (!lost || artifact.keptThroughLostInventory())) count++;
+        if (misc != null && (!lost || misc.keptThroughLostInventory())) count++;
+        if (ring != null && (!lost || ring.keptThroughLostInventory())) count++;
+        if (secondWep != null && (!lost || secondWep.keptThroughLostInventory())) count++;
+
+        // Count items in all bags
+        for (Item item : backpack) {
+            if (!lost || item.keptThroughLostInventory()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
 
 	public int charge( float charge ) {
 		

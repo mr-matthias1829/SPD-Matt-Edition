@@ -21,10 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Greed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -62,12 +60,17 @@ public class Gold extends Item {
 		Catalog.setSeen(getClass());
 		Statistics.itemTypesDiscovered.add(getClass());
 
-		Dungeon.gold += quantity /2;
-		Statistics.goldCollected += (int) (quantity *0.65); // reduce by 35%
+        if (Dungeon.hero.buff(Greed.class) != null && quantity >= 3) {
+            quantity = (int)(quantity * Dungeon.hero.buff(Greed.class).getGoldMultiplier());
+            Dungeon.hero.buff(Greed.class).onGoldCollected();
+        }
+
+		Dungeon.gold += quantity;
+		Statistics.goldCollected += quantity;
 		Badges.validateGoldCollected();
 
 		GameScene.pickUp( this, pos );
-		hero.sprite.showStatusWithIcon( CharSprite.NEUTRAL, Integer.toString(quantity), FloatingText.GOLD );
+		hero.sprite.showStatusWithIcon( CharSprite.NEUTRAL, Integer.toString (quantity), FloatingText.GOLD );
 		hero.spendAndNext( pickupDelay() );
 		
 		Sample.INSTANCE.play( Assets.Sounds.GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );
@@ -89,7 +92,8 @@ public class Gold extends Item {
 	@Override
 	public Item random() {
 		//quantity = Random.IntRange( 30 + Dungeon.depth * 10, 60 + Dungeon.depth * 20 );
-        quantity = Random.IntRange( 10 + Dungeon.depth * 8, 30 + Dungeon.depth * 15 );
+        quantity = (int)(Random.IntRange( 10 + Dungeon.depth * 8, 30 + Dungeon.depth * 15 ) *0.65);
+
 		return this;
 	}
 
