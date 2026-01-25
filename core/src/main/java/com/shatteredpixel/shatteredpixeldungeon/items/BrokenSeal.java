@@ -256,6 +256,7 @@ public class BrokenSeal extends Item {
 
 		private int cooldown = 0;
 		private float turnsSinceEnemies = 0;
+		private int initialShield = 0;
 
 		private static int COOLDOWN_START = 150;
 
@@ -280,7 +281,7 @@ public class BrokenSeal extends Item {
 		@Override
 		public float iconFadePercent() {
 			if (shielding() > 0){
-				return GameMath.gate(0, 1f - shielding()/(float)maxShield(), 1);
+				return GameMath.gate(0, 1f - shielding()/(float)initialShield, 1);
 			} else if (coolingDown()){
 				return GameMath.gate(0, cooldown / (float)COOLDOWN_START, 1);
 			} else {
@@ -319,7 +320,7 @@ public class BrokenSeal extends Item {
 					turnsSinceEnemies += HoldFast.buffDecayFactor(target);
 					if (turnsSinceEnemies >= 5){
 						if (cooldown > 0) {
-							float percentLeft = shielding() / (float)maxShield();
+							float percentLeft = shielding() / (float)initialShield;
 							//max of 50% cooldown refund
 							cooldown = Math.max(0, (int)(cooldown - COOLDOWN_START * (percentLeft / 2f)));
 						}
@@ -342,6 +343,7 @@ public class BrokenSeal extends Item {
 			incShield(maxShield());
 			cooldown = Math.max(0, cooldown+COOLDOWN_START);
 			turnsSinceEnemies = 0;
+			initialShield = maxShield();
 		}
 
 		public boolean coolingDown(){
@@ -372,12 +374,14 @@ public class BrokenSeal extends Item {
 
 		public static final String COOLDOWN = "cooldown";
 		public static final String TURNS_SINCE_ENEMIES = "turns_since_enemies";
+		public static final String INITIAL_SHIELD = "initial_shield";
 
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
 			bundle.put(COOLDOWN, cooldown);
 			bundle.put(TURNS_SINCE_ENEMIES, turnsSinceEnemies);
+			bundle.put(INITIAL_SHIELD, initialShield);
 		}
 
 		@Override
@@ -386,10 +390,12 @@ public class BrokenSeal extends Item {
 			if (bundle.contains(COOLDOWN)) {
 				cooldown = bundle.getInt(COOLDOWN);
 				turnsSinceEnemies = bundle.getFloat(TURNS_SINCE_ENEMIES);
+				initialShield = bundle.getInt(INITIAL_SHIELD);
 
 			//if we have shield from pre-3.1, have it last a bit
 			} else if (shielding() > 0) {
 				turnsSinceEnemies = -100;
+				initialShield = shielding();
 			}
 		}
 	}
