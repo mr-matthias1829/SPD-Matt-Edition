@@ -36,22 +36,23 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.watabou.noosa.Game;
 import com.watabou.utils.Random;
 
 public class WndChooseSubclass extends Window {
+	
+	private static final int WIDTH		= 130;
+	private static final float GAP		= 2;
+	
+	public WndChooseSubclass(final TengusMask tome, final Hero hero ) {
+		
+		super();
 
-    private static final int WIDTH		= 130;
-    private static final float GAP		= 2;
-
-    public WndChooseSubclass(final TengusMask tome, final Hero hero ) {
-
-        super();
-
-        IconTitle titlebar = new IconTitle();
-        titlebar.icon( new ItemSprite( tome.image(), null ) );
-        titlebar.label( tome.name() );
-        titlebar.setRect( 0, 0, WIDTH-16, 0 );
-        add( titlebar );
+		IconTitle titlebar = new IconTitle();
+		titlebar.icon( new ItemSprite( tome.image(), null ) );
+		titlebar.label( tome.name() );
+		titlebar.setRect( 0, 0, WIDTH-16, 0 );
+		add( titlebar );
 
         IconButton random = new IconButton(Icons.SHUFFLE.get()){
             @Override
@@ -74,6 +75,14 @@ public class WndChooseSubclass extends Window {
                     }
                 });
             }
+
+			@Override
+			public void update() {
+				if (Statistics.qualifiedForRandomVictoryBadge){
+					icon.tint(1, 1, 1, (float)Math.abs(Math.cos(1.5f*Math.PI* Game.timeTotal)/2f));
+				}
+				super.update();
+			}
 
             @Override
             protected String hoverText() {
