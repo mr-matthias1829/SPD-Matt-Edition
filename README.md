@@ -32,8 +32,8 @@ Not all regions have been fully reworked yet.
 Currently modified regions include:
 
 * Sewer
-* Prison (partial excluding quest)
-* Caves (excluding boss and quest)
+* Prison (done aside from 2 of the 3 quests)
+* Caves (excluding boss and quests)
 
 Future updates will focus on:
 
