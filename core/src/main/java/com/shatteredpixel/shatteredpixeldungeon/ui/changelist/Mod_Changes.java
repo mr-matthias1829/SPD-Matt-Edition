@@ -23,6 +23,11 @@ public class Mod_Changes {
                         + "2. changed some badge sprites a little\n"
                         + "3. being well-fed now increases passive hp regen, being hungry now decreases passive hp regen\n"
                         + "4. added some new unused OST for a future update\n"
+                        + "5. updated the vanilla SPD version from 3.3.0 to 3.3.5\n"
+                        + "6. updated some mod to match the newly updated code\n"
+                        + "7. attempt to fix a few bugs and errors that instantly showed up after updating the version\n"
+                        + "8. let's hope there are no random crashes or bugs!\n"
+
         ));
 
         list.add(new ChangeInfo("_v1309:_ Sinning", true,

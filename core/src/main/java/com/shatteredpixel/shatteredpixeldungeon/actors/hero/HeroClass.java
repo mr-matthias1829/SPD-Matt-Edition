@@ -257,6 +257,7 @@ public enum HeroClass {
             new ScrollOfMagicUpgrade().identify().collect();
             new PotionOfStrength().identify().collect();
             new PotionOfExperience().identify().collect();
+            new ScrollOfMagicMapping().identify().collect();
         }
          */
 
