@@ -66,6 +66,10 @@ public class Regeneration extends Buff {
 				}
 
 				float delay = REGENERATION_DELAY;
+
+                // NEW: Apply hunger penalty
+                delay /= regenMultiplier();
+
 				if (chaliceLevel != -1 && target.buff(MagicImmune.class) == null) {
 					if (chaliceCursed) {
 						delay *= 1.5f;
@@ -116,6 +120,20 @@ public class Regeneration extends Buff {
 		}
 		return true;
 	}
+
+    public float regenMultiplier() {
+        Hero hero = (Hero)target;
+        Hunger hunger = hero.buff(Hunger.class);
+        if (hunger == null) {
+            return 1f; // No hunger buff means normal regen
+        }
+        switch(hunger.hungerState()) {
+            case 3: return 0.1f;     // Starving: 90% slower
+            case 2: return 0.6f;  // Very hungry: 40% slower
+            case 1: return 1f;   // Hungry: normal regen
+            default: return 1.15f;    // Well-fed: slightly better regen
+        }
+    }
 
 	public static final String PARTIAL_REGEN = "partial_regen";
 

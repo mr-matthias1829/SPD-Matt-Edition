@@ -401,9 +401,13 @@ public class HeroSelectScene extends PixelScene {
         if (!SPDSettings.customSeed().isEmpty()){
             btnOptions.icon().hardlight(1f, 1.5f, 0.67f);
         } else if (SPDSettings.challenges() != 0) {
-            btnOptions.icon().hardlight(2f, 1.33f, 0.5f);
+            if (SPDSettings.sins() != 0) {
+                btnOptions.icon().hardlight(2f, 0.8f, 0.1f);
+            } else {
+                btnOptions.icon().hardlight(2f, 1.33f, 0.5f);
+            }
         } else if (SPDSettings.sins() != 0) {
-            btnOptions.icon().hardlight(1.5f, 1f, 0.5f);
+            btnOptions.icon().hardlight(2f, 0.5f, 0.5f);
         } else {
             btnOptions.icon().resetColor();
         }

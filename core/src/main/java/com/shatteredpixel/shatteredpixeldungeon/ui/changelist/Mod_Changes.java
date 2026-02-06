@@ -8,12 +8,22 @@ public class Mod_Changes {
 
         // Newest versions first (reversed order)
 
-        //notes
+        //notes, these should stay on top
         list.add(new ChangeInfo("_Notes:_", true,
                 "This mod does _NOT_ auto-update or have visible in-game news.\n\n"
                         + "Download the latest github release for new updates and changelogs.\n\n"
                         + "you can find a _link_ to the github on _the about page!_\n\n\n"
-                        + "while this mod does (try) to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
+                        + "while this mod does _try_ to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
+
+
+
+        list.add(new ChangeInfo("_v1312:_ version upgrade", true,
+                "\n_Changes:_\n"
+                        + "1. changed the icon color for when you have a sin enabled, and for when you have sin and challenge enabled.\n"
+                        + "2. changed some badge sprites a little\n"
+                        + "3. being well-fed now increases passive hp regen, being hungry now decreases passive hp regen\n"
+                        + "4. added some new unused OST for a future update\n"
+        ));
 
         list.add(new ChangeInfo("_v1309:_ Sinning", true,
                 "\n_NEW CONTENT:_\n"

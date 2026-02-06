@@ -192,6 +192,24 @@ public class Hunger extends Buff implements Hero.Doom {
 		return (int)Math.ceil(level);
 	}
 
+    public int hungerState(){ // Offers a more specific state than isstarving
+        if (level < hungryThreshold()) { // is fine (0)
+            return 0;
+        } else if (level < starvingThreshold()) { // is hungry
+            // Check if we're in the top half of the hungry range (very hungry)
+            float hungryRange = starvingThreshold() - hungryThreshold();
+            float positionInRange = level - hungryThreshold();
+
+            if (positionInRange >= hungryRange * 0.5f) { // very hungry (2)
+                return 2;
+            } else { // normal hungry (1)
+                return 1;
+            }
+        } else { // is starving (3)
+            return 3;
+        }
+    }
+
     @Override
     public int icon() {
         if (level < hungryThreshold()) { // Use dynamic threshold
