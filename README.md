@@ -17,7 +17,7 @@ It aims to make the game more punishing while also introducing new systems and c
 Some changes include:
 
 * New balance and revisions to enemies, items, and bosses
-* New mechanics such as Sins
+* New mechanics such as Sins, or being hungry reducing health regen rate
 * A harder early game and increased overall difficulty
 * Some new content
 * Tweaks to quests and progression
