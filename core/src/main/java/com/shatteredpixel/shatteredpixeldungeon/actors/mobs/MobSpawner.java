@@ -87,8 +87,8 @@ public class MobSpawner extends Actor {
 				return new ArrayList<>(Arrays.asList(Rat.class,
 						Snake.class,
 						Gnoll.class, Gnoll.class, Gnoll.class,
-                        Crab.class,
-						Swarm.class));
+						Swarm.class,
+						Crab.class));
 			case 4: case 5:
 				//1x gnoll, 1x swarm, 2x crab, 2x slime + 1x snake and 1x thief
 				return new ArrayList<>(Arrays.asList(Gnoll.class,
