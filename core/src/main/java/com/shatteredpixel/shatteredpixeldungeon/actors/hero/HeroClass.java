@@ -232,7 +232,6 @@ public enum HeroClass {
 		knives.identify().collect();
 
         /* FOR TESTING PURPOSES
-         */
 
         Quarterstaff staff = new Quarterstaff();
         staff.identify().collect();
@@ -264,7 +263,6 @@ public enum HeroClass {
             new PotionOfExperience().identify().collect();
             new ScrollOfMagicMapping().identify().collect();
         }
-        /*
          */
 
 		Dungeon.quickslot.setSlot(0, cloak);

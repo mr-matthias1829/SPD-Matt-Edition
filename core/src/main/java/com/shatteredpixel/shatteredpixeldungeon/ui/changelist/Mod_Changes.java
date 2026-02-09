@@ -46,8 +46,7 @@ public class Mod_Changes {
                         "5. added 2 new badges related to winning a game with X sins enabled\n" +
                         "6. all items have a reduced chance to be cursed for the first 3 floors of the dungeon. chance starts halved, increasing to full chance by floor 4\n" +
                         "7. added the wand of elements, which can be obtained through alchemy (check the alchemy guide, the recipe is in there)\n" +
-                        "8. changed a few sprites (kinda minimal, you probably wouldn't even notice)\n" +
-                        "\n"));
+                        "8. changed a few sprites (kinda minimal, you probably wouldn't even notice)\n"));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.SHPX), "v1312: Version Upgrade",
                 "_Changes:_\n" +
