@@ -37,6 +37,13 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(Icons.get(Icons.DISPLAY_PORT), "v1315: Better Android",
+                "_Changes:_\n" +
+                        "1. fixed a ancient old crash on the android version where exiting the settings tab while on the languages sub-tab and reopening settings would completely crash the game\n" +
+                        "2. added a second instance of the cheat mode setting on the mobile interface settings tab. this info only matters to those that debug this game.\n" +
+                        "_Notes:_\n" +
+                        "1. yes i am aware that some of the changelogs are... going very much offscreen on mobile. might fix this in the future by making scrollboxes, but don't expect this to be fixed anytime soon at all\n"));
+
         changes.addButton(new ChangeButton(new ItemSprite(new WandOfElements()), "v1314: Smoothing edges",
                 "_Changes:_\n" +
                         "1. default language is now english, this somehow broke at one point\n" +

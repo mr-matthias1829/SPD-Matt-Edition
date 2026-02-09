@@ -85,9 +85,12 @@ public class WndTabbed extends Window {
 
 		return tab;
 	}
-	
-	public void select( int index ) {
-		select( tabs.get( index ) );
+
+	public void select(int index) {
+		if (index < 0 || index >= tabs.size()) {
+			index = 0; // or tabs.size()-1
+		}
+		select(tabs.get(index));
 	}
 	
 	public void select( Tab tab ) {
@@ -99,7 +102,7 @@ public class WndTabbed extends Window {
 					t.select( true );
 				}
 			}
-			
+
 			selected = tab;
 		}
 	}

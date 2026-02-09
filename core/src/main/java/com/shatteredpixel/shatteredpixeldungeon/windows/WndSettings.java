@@ -369,6 +369,7 @@ public class WndSettings extends WndTabbed {
 		ColorBlock sep1;
 		OptionSlider optUIMode;
 		OptionSlider optUIScale;
+		CheckBox cheatMode;
 		RedButton btnToolbarSettings;
 		CheckBox chkFlipTags;
 		ColorBlock sep2;
@@ -424,6 +425,7 @@ public class WndSettings extends WndTabbed {
 			}
 
 			if (SPDSettings.interfaceSize() == 0) {
+
 				btnToolbarSettings = new RedButton(Messages.get(this, "toolbar_settings"), 9){
 					@Override
 					protected void onClick() {
@@ -607,6 +609,18 @@ public class WndSettings extends WndTabbed {
 				chkVibrate.checked(SPDSettings.vibration());
 			}
 			add(chkVibrate);
+
+			if (DeviceCompat.isDebug()) {
+				cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
+					@Override
+					protected void onClick() {
+						super.onClick();
+						SPDSettings.cheatMode(checked());
+					}
+				};
+				cheatMode.checked(SPDSettings.cheatMode());
+				add(cheatMode);
+			}
 		}
 
 		@Override
@@ -639,6 +653,11 @@ public class WndSettings extends WndTabbed {
 			} else {
 				chkFlipTags.setRect(0, height + GAP, width, BTN_HEIGHT);
 				height = chkFlipTags.bottom();
+			}
+
+			if (cheatMode != null) {
+				cheatMode.setRect(0, height + GAP, width, BTN_HEIGHT);
+				height = cheatMode.bottom();
 			}
 
 			sep2.size(width, 1);
