@@ -819,6 +819,7 @@ public class ItemSpriteSheet {
     // Guns in spd??? Man we have gotten to a new low...
     public static final int GLOCK = MOD+2;
     public static final int GLOCK_BULLET = MOD+3;
+    public static final int WAND_OF_ELEMENTS = MOD+4;
     static{
         assignItemRect(GLOCK_BULLET,11, 11);
     }

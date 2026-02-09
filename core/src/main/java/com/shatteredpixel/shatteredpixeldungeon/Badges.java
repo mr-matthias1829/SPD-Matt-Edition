@@ -229,15 +229,24 @@ public class Badges {
         CHAMPION_2                  ( 126 ),
         CHAMPION_3                  ( 127 ),
 
+
+        // victory with X chal
         VICTORY_WITH_8_CHALLENGES(325),
         VICTORY_WITH_10_CHALLENGES(326),
         VICTORY_WITH_ALL_CHALLENGES(327),
+
+        // victory with X sins
+        VICTORY_WITH_1_SIN(323),
+        VICTORY_WITH_4_SIN(324),
+
+        // damage in one hit
         STRONG (265),
         MIGHTY (267),
         POWERFUL (268),
         OBLIVION (269),
 
 
+        // misc kinda badges
         OUT_OF_TIME (217),
         WHAT_DID_IT_COST_EVERYTHING (218),
         NO_UPGRADE_BOSS3 (296),
@@ -844,7 +853,8 @@ public class Badges {
 				isUnlocked( Badge.DEATH_FROM_ENEMY_MAGIC) &&
 				isUnlocked( Badge.DEATH_FROM_FRIENDLY_MAGIC) &&
 				isUnlocked( Badge.DEATH_FROM_SACRIFICE) &&
-				isUnlocked( Badge.DEATH_FROM_GRIM_TRAP)) {
+				isUnlocked( Badge.DEATH_FROM_GRIM_TRAP) &&
+                isUnlocked( Badge.OUT_OF_TIME )) {
 
 			Badge badge = Badge.DEATH_FROM_ALL;
 			if (!isUnlocked( badge )) {
@@ -1291,7 +1301,24 @@ public class Badges {
 		}
 	}
 
-	public static void validateChampion( int challenges ) {
+    public static void validateChampionSins( int sins){
+        if (sins == 0) return;
+
+        Badge badge = null;
+        if (sins >= 1) {
+            unlock(badge);
+            badge = Badge.VICTORY_WITH_1_SIN;
+        }
+        if (sins >= 4) {
+            unlock(badge);
+            badge = Badge.VICTORY_WITH_4_SIN;
+        }
+
+        local.add(badge);
+        displayBadge( badge );
+    }
+
+	public static void validateChampion( int challenges, int sins ) {
         Badge badge = null;
 
         if (Dungeon.hero.heroClass == HeroClass.PEASANT){
@@ -1419,8 +1446,8 @@ public class Badges {
 			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3},
 
             {Badge.VICTORY_WITH_8_CHALLENGES, Badge.VICTORY_WITH_10_CHALLENGES, Badge.VICTORY_WITH_ALL_CHALLENGES},
+            {Badge.VICTORY_WITH_1_SIN, Badge.VICTORY_WITH_4_SIN},
             {Badge.STRONG, Badge.MIGHTY, Badge.POWERFUL, Badge.OBLIVION },
-            {Badge.AGAINST_ALL_ODDS, Badge.AGAINST_EVERYTHING_AND_MORE},
 
             // Legacy vs new hero class unlocks:
             // Warrior doesnt have a legacy unlock
@@ -1442,9 +1469,10 @@ public class Badges {
 			{Badge.VICTORY,      Badge.BOSS_CHALLENGE_5},
 			{Badge.HAPPY_END,    Badge.PACIFIST_ASCENT},
 			{Badge.VICTORY,      Badge.TAKING_THE_MICK},
-            {Badge.VICTORY, Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge?
+            {Badge.VICTORY, Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge? idk
 
             {Badge.VICTORY, Badge.AGAINST_ALL_ODDS},
+            {Badge.AGAINST_ALL_ODDS, Badge.AGAINST_EVERYTHING_AND_MORE},
 
 	};
 
@@ -1459,6 +1487,7 @@ public class Badges {
 			{Badge.DEATH_FROM_FRIENDLY_MAGIC, Badge.DEATH_FROM_ALL},
 			{Badge.DEATH_FROM_SACRIFICE, Badge.DEATH_FROM_ALL},
 			{Badge.DEATH_FROM_GRIM_TRAP, Badge.DEATH_FROM_ALL},
+            {Badge.OUT_OF_TIME, Badge.DEATH_FROM_ALL},
 
 			{Badge.ALL_WEAPONS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
 			{Badge.ALL_ARMOR_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},

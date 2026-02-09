@@ -58,7 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.CrackedSpyglass;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Glock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
@@ -232,6 +232,7 @@ public enum HeroClass {
 		knives.identify().collect();
 
         /* FOR TESTING PURPOSES
+         */
 
         Quarterstaff staff = new Quarterstaff();
         staff.identify().collect();
@@ -251,6 +252,10 @@ public enum HeroClass {
         k.identify().collect();
 
         new Glock().identify().collect();
+        new WandOfElements().identify().collect();
+        new WandOfFireblast().identify().collect();
+        new WandOfFrost().identify().collect();
+        new WandOfLightning().identify().collect();
 
         for (int s = 2; s < 100; s++) {
             new ScrollOfUpgrade().identify().collect();
@@ -259,6 +264,7 @@ public enum HeroClass {
             new PotionOfExperience().identify().collect();
             new ScrollOfMagicMapping().identify().collect();
         }
+        /*
          */
 
 		Dungeon.quickslot.setSlot(0, cloak);

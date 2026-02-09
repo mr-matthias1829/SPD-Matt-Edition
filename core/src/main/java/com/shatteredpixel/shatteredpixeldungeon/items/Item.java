@@ -618,22 +618,35 @@ public class Item implements Bundlable {
      */
 
     public boolean isEquipmentCursed(boolean soft){
-    float effectRoll = Random.Float();
+        float baseChance;
 
-    if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) {
-        if (effectRoll < 0.7f * ParchmentScrap.curseChanceMultiplier()) {
-            return true;
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) { // challenge, applies to all equipment if active
+            baseChance = 0.7f;
+        } else if (soft){ // rolling for non-common equipment like rings, make them more likely to be cursed
+            baseChance = 0.5f;
+        } else { // common equipement like armor and weapons
+            baseChance = 0.4f;
         }
-    } else if (soft){ // rolling for non-common equipment like rings, make them more likely to be cursed
-        if (effectRoll < 0.5f * ParchmentScrap.curseChanceMultiplier()) {
-            return true;
-        }
-    } else {
-        if (effectRoll < 0.4f * ParchmentScrap.curseChanceMultiplier()) {
-            return true;
-        }
-    }
-    return false;
+
+        // first 3 floors have reduced curse chances
+        // should make the early game less rng punishing
+        float depthMultiplier = 1f;
+
+        if (Dungeon.depth == 1) depthMultiplier = 0.4f; // whole 60% less chance
+        else if (Dungeon.depth == 2) depthMultiplier = 0.65f; // +25%
+        else if (Dungeon.depth == 3) depthMultiplier = 0.85f; // +20%
+        // floor 4 here would have a depth multiplier of 1, doesn't need to be specified
+
+        // soft has more potential, give more curse chance
+        if (soft && Dungeon.depth <= 3) depthMultiplier *= 1.15f;
+
+        baseChance *= depthMultiplier;
+        baseChance *= ParchmentScrap.curseChanceMultiplier();
+
+        if (baseChance <= 0) baseChance = 0.01f; // minimum 1% chance to be cursed
+         else if (baseChance >= 0.95f) baseChance = 0.95f; // cap curse chance at 95%
+
+        return Random.Float() < baseChance;
     }
 
     public boolean isEquipmentEnhanced(boolean soft){

@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -109,7 +105,8 @@ public class Amulet extends Item {
 			@Override
 			public void afterCreate() {
 				Badges.validateVictory();
-				Badges.validateChampion(Challenges.activeChallenges());
+                Badges.validateChampionSins(Sins.activeSins());
+				Badges.validateChampion(Challenges.activeChallenges(), Sins.activeSins());
 				try {
 					Dungeon.saveAll();
 					Badges.saveGlobal();

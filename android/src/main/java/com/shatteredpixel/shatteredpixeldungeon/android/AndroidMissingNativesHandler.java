@@ -66,7 +66,8 @@ public class AndroidMissingNativesHandler extends Activity {
 
 		TextView text = new TextView(this);
 		String message = "Shattered Pixel Dungeon failed to access some of its internal code and cannot start!\n\n" +
-				"Try downloading the game from an official source if you haven't already. You can also screenshot this debug info and send it to the developer (Evan@ShatteredPixel.com):";
+				"Try downloading the game from an official source if you haven't already. You can also screenshot this debug info and send it to the developer at:\n\n" +
+                "https://github.com/mr-matthias1829/SPD-Matt-Edition/issues\n\n" +
 
 		message += "\n\nPackage: " + getPackageName();
 		message += "\nVersion: " + versionName + " (" + versionCode + ")";

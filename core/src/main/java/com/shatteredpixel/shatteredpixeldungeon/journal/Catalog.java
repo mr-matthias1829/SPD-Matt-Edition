@@ -426,5 +426,17 @@ public enum Catalog {
 		}
 
 	}
+
+    public static void unlockAllCatalog() {
+        for (Catalog cat : Catalog.values()) {
+            for (Class<?> item : cat.items()) {
+                if (!cat.seen.get(item)) {
+                    cat.seen.put(item, true);
+                    Journal.saveNeeded = true;
+                }
+            }
+        }
+        Badges.validateCatalogBadges();
+    }
 	
 }

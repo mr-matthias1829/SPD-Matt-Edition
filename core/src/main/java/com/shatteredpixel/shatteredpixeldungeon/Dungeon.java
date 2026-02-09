@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.*;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -256,7 +257,11 @@ public class Dungeon {
 		branch = 0;
 		generatedLevels.clear();
 
-        //Bestiary.unlockAllBestiary();
+        // If matt ever decides to be stupid: uncomment these lines below, and start a new fresh game
+        // This will simply unlock all the bestiary and catalog entries, aka the important savedata for us for easy lookups
+        // If you read this and are not matt, then know that i am stupid and do things in even stupider ways
+       // Bestiary.unlockAllBestiary();
+       // Catalog.unlockAllCatalog();
 
 		gold = 0;
 		energy = 0;
