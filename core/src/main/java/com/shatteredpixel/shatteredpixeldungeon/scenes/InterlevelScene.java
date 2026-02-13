@@ -37,9 +37,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom.IceCavesEntrance;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
@@ -695,29 +698,50 @@ public class InterlevelScene extends PixelScene {
 		Dungeon.switchLevel( level, level.fallCell( fallIntoPit ));
 	}
 
-	private void ascend() throws IOException {
-		if (curTransition.destBranch != Dungeon.branch && Dungeon.depth >= 16 && Dungeon.depth <= 20) {
-			//FIXME avoids holding allies when entering city quest area, this is very sloppy though
-			// perhaps holding allies could be a property of the transition?
-		} else {
-			Mob.holdAllies(Dungeon.level);
-		}
-		Dungeon.saveAll();
+    private void ascend() throws IOException {
+        if (curTransition.destBranch != Dungeon.branch && Dungeon.depth >= 16 && Dungeon.depth <= 20) {
+            //FIXME avoids holding allies when entering city quest area, this is very sloppy though
+            // perhaps holding allies could be a property of the transition?
+        } else {
+            Mob.holdAllies(Dungeon.level);
+        }
+        Dungeon.saveAll();
 
-		Level level;
-		Dungeon.depth = curTransition.destDepth;
-		Dungeon.branch = curTransition.destBranch;
+        Level level;
+        Dungeon.depth = curTransition.destDepth;
+        Dungeon.branch = curTransition.destBranch;
 
-		if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
-			level = Dungeon.loadLevel( GamesInProgress.curSlot );
-		} else {
-			level = Dungeon.newLevel();
-		}
+        if (Dungeon.levelHasBeenGenerated(Dungeon.depth, Dungeon.branch)) {
+            level = Dungeon.loadLevel( GamesInProgress.curSlot );
+        } else {
+            level = Dungeon.newLevel();
+        }
 
-		LevelTransition destTransition = level.getTransition(curTransition.destType);
-		curTransition = null;
-		Dungeon.switchLevel( level, destTransition.cell() );
-	}
+        LevelTransition destTransition = level.getTransition(curTransition.destType);
+        int heroPos = destTransition.cell();
+
+        // CUSTOM ICE CAVES POSITIONING:
+        // When ascending from Ice Caves (B2) to F14 (B0), check if the door is locked
+        if (Dungeon.depth == 14 && Dungeon.branch == 0 &&
+                curTransition.type == LevelTransition.Type.BRANCH_ENTRANCE) {
+
+            // Find the IceCavesEntrance room
+            if (level instanceof RegularLevel) {
+                for (Room r : ((RegularLevel)level).rooms()) {
+                    if (r instanceof IceCavesEntrance) {
+                        int customPos = ((IceCavesEntrance)r).getCustomArrivalPosition(level);
+                        if (customPos != -1) {
+                            heroPos = customPos;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        curTransition = null;
+        Dungeon.switchLevel( level, heroPos );
+    }
 	
 	private void returnTo() throws IOException {
 		Mob.holdAllies( Dungeon.level );

@@ -37,6 +37,23 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(new Image(new ElderGnollSprite()), "v1318: Respect your elders and updated goo",
+                "_Changes:_\n" +
+                        "1. gooplings should now spawn in the 'wandering' state instead of spawning asleep\n" +
+                        "2. goopling hp reduced (12:9 -> 9:7), damage increased (2,4:5 -> 2,4:6), inflicted ooze lasts 33% shorter\n" +
+                        "3. goo should no longer instantly spawn a goopling when it awakes\n" +
+                        "4. goo now loses a bit of hp each time it spawns a goopling\n" +
+                        "5. increased gnoll baby defensive skill (16 -> 24), increased hp (5 -> 8)\n" +
+                        "6. worn key no longer naturally spawns on floor 14, instead being replaced by the new enemy, the elder gnoll, who now drops the worn key\n" +
+                        "7. note: the elder gnoll can spawn on ANY valid tile with no further conditions. this means it can spawn next to the entrance, on the floor like normal, or behind a locked door!\n" +
+                        "8. note 2: the game will LITERALLY error out if it fails to spawn the elder gnoll (due to him not spawning makes beating the game impossible). a fallback might be added in the future!\n" +
+                        "_Fixes:_\n" +
+                        "1. removed a duplicate entry that caused frost trap spawnrate to nearly double its intended spawnrate in the ice caves\n" +
+                        "2. (hopefully) fixed a weird interaction when you ascend from the ice caves back to the main floor 14 without ever unlocking the floor 14 exit door\n" +
+                        "3. fixed the ice caves tilesheet having some colors modified that shouldn't be quite modified (mainly just the locks being off-color)\n"
+                        ));
+
+
         changes.addButton(new ChangeButton(Icons.get(Icons.DISPLAY_PORT), "v1315: Better Android",
                 "_Changes:_\n" +
                         "1. fixed a ancient old crash on the android version where exiting the settings tab while on the languages sub-tab and reopening settings would completely crash the game\n" +

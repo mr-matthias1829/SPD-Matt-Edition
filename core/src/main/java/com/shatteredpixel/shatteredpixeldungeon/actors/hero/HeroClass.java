@@ -231,8 +231,7 @@ public enum HeroClass {
 		ThrowingKnife knives = new ThrowingKnife();
 		knives.identify().collect();
 
-        /* FOR TESTING PURPOSES
-
+        /* man i love cheating (i use this to more easily test stuff, dont mind meeeee)
         Quarterstaff staff = new Quarterstaff();
         staff.identify().collect();
 
@@ -262,8 +261,10 @@ public enum HeroClass {
             new PotionOfStrength().identify().collect();
             new PotionOfExperience().identify().collect();
             new ScrollOfMagicMapping().identify().collect();
+            new PotionOfMindVision().identify().collect();
         }
-         */
+        */
+
 
 		Dungeon.quickslot.setSlot(0, cloak);
 		Dungeon.quickslot.setSlot(1, knives);

@@ -35,19 +35,24 @@ public class Goopling extends Mob {
 	{
 		spriteClass = GooplingSprite.class;
 		
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 12 : 9; //12
+		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 9 : 7; //12
 		defenseSkill = 5;
 
         properties.add(Property.ACIDIC);
-		
+
+        // since they can be spawned infinitely as long as goo is alive,
+        // we don't want a source of infinite xp or loot.
 		EXP = 0;
 		maxLvl = 1;
+
+        WANDERING = new Goopling.Wandering();
+        state = WANDERING; // start wandering/awake
 	}
 	
 	@Override
 	public int damageRoll() {
         if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
-            return Random.NormalIntRange( 2, 5 );
+            return Random.NormalIntRange( 2, 6 );
         }
         return Random.NormalIntRange( 2, 4 );
 	}
@@ -60,7 +65,7 @@ public class Goopling extends Mob {
     @Override
     public int attackProc( Char enemy, int damage ) {
         if (Random.Int( 20 ) == 0) {
-            Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
+            Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION *0.66f );
             enemy.sprite.burst( 0x000000, 5 );
         }
 
@@ -88,4 +93,15 @@ public class Goopling extends Mob {
 		dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
 		super.damage(dmg, src);
 	}
+
+    public class Wandering extends Mob.Wandering {
+
+        // effectively: go to a random tile
+        // this... doesn't matter much, but ensures gooplings spawn awake
+        // if they spot the hero, they will simply ignore this
+        @Override
+        protected int randomDestination() {
+            return super.randomDestination();
+        }
+    }
 }

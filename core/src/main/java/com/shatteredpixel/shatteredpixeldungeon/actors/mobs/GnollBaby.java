@@ -46,10 +46,10 @@ public class GnollBaby extends Mob {
     {
         spriteClass = GnollBabySprite.class;
 
-        HP = HT = 5;
-        defenseSkill = 16;
+        HP = HT = 8; //5
+        defenseSkill = 24; //16
 
-        EXP = 0;
+        EXP = 0; // don't give xp for... ethical reasons, for the few that care
         maxLvl = 1;
 
         viewDistance = 3;

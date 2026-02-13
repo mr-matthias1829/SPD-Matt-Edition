@@ -96,7 +96,7 @@ public class IceCavesLevel extends CavesLevel {
 
     @Override
     public Mob createMob() {
-        // If we're in ice caves, always use our custom rotation
+        // If we're in ice caves, always use our custom mob rotation
         ArrayList<Class<? extends Mob>> iceRotation = new ArrayList<>();
 
 
@@ -168,7 +168,7 @@ public class IceCavesLevel extends CavesLevel {
     protected Class<?>[] trapClasses() {
         // Ice caves has more frost/cold themed traps
         return new Class[]{
-                FrostTrap.class, ChillingTrap.class, FrostTrap.class, StormTrap.class, CorrosionTrap.class,
+                FrostTrap.class, ChillingTrap.class, StormTrap.class, CorrosionTrap.class,
                 GrippingTrap.class, RockfallTrap.class, GuardianTrap.class,
                 ConfusionTrap.class, SummoningTrap.class, WarpingTrap.class, PitfallTrap.class };
     }
@@ -176,7 +176,7 @@ public class IceCavesLevel extends CavesLevel {
     @Override
     protected float[] trapChances() {
         return new float[]{
-                8, 6, 6, 4, 4,
+                8, 6, 4, 4,
                 2, 2, 2,
                 1, 1, 1, 1 };
     }

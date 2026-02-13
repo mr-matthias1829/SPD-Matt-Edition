@@ -2,6 +2,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ElderGnoll;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -11,15 +12,23 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.CaveRoom;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Tilemap;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Point;
+import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class IceCavesEntrance extends CaveRoom {
+
+    private int entranceCell = -1; // Store the locked door position
 
     @Override
     public boolean isExit() {
         return true;
     }
+
     @Override
     public int minWidth() {
         return Math.max(super.minWidth(), 7);
@@ -29,7 +38,6 @@ public class IceCavesEntrance extends CaveRoom {
     public int minHeight() {
         return Math.max(super.minHeight(), 7);
     }
-
 
     @Override
     public void paint(Level level) {
@@ -52,7 +60,7 @@ public class IceCavesEntrance extends CaveRoom {
         Painter.fill(level, c.x - 1, c.y + 1, 3, 1, Terrain.EMPTY_SP);
 
         // Set the center cell as locked exit (requires skeleton key)
-        int entranceCell = level.pointToCell(c);
+        entranceCell = level.pointToCell(c);
         Painter.set(level, entranceCell, Terrain.LOCKED_EXIT);
 
         // Create the level transition for the branch entrance
@@ -71,7 +79,83 @@ public class IceCavesEntrance extends CaveRoom {
         level.transitions.add(entrance);
 
         // Add skeleton key to the level
-        level.addItemToSpawn(new WornKey(Dungeon.depth));
+        //level.addItemToSpawn(new WornKey(Dungeon.depth));
+
+        // Spawn Elder Gnoll - use terrain-based check since passable[] isn't built yet
+        spawnElderGnoll(level);
+    }
+
+    // Custom positioning when hero arrives from Ice Caves
+    // This is called by RegularLevel or wherever you handle hero placement
+    public int getCustomArrivalPosition(Level level) {
+        // Check if the door is still locked
+        if (entranceCell != -1 && level.map[entranceCell] == Terrain.LOCKED_EXIT) {
+            // Door is locked - place hero one tile BELOW the locked door
+            // The tile at entranceCell is the transition, below is safe ground
+            int belowDoor = entranceCell + level.width();
+
+            // Verify it's a valid position
+            if (belowDoor < level.length() &&
+                    level.passable[belowDoor] &&
+                    !level.solid[belowDoor]) {
+                return belowDoor;
+            }
+        }
+
+        // Door is unlocked or position invalid - use default
+        return -1;
+    }
+
+    private void spawnElderGnoll(Level level) {
+        ArrayList<Integer> candidates = new ArrayList<>();
+
+        // Search for walkable terrain types across the entire level
+        for (int i = 0; i < level.length(); i++) {
+            int terrain = level.map[i];
+
+            // Check for terrain types that are walkable
+            if (terrain == Terrain.EMPTY ||
+                    terrain == Terrain.EMPTY_DECO ||
+                    terrain == Terrain.GRASS ||
+                    terrain == Terrain.EMBERS ||
+                    terrain == Terrain.EMPTY_SP) {
+
+                // Skip cells that are transitions (manually check without using inside())
+                // Transitions are typically on ENTRANCE, EXIT, or LOCKED_EXIT terrain
+                if (terrain != Terrain.ENTRANCE &&
+                        terrain != Terrain.EXIT &&
+                        terrain != Terrain.LOCKED_EXIT) {
+                    candidates.add(i);
+                }
+            }
+        }
+
+        GLog.w("Elder Gnoll spawn candidates: " + candidates.size());
+
+        if (!candidates.isEmpty()) {
+            int cell = Random.element(candidates);
+
+            ElderGnoll mob = new ElderGnoll();
+            mob.pos = cell;
+            level.mobs.add(mob);
+
+            //GLog.w("Elder Gnoll spawned at cell " + cell + " (total mobs: " + level.mobs.size() + ")");
+        } else {
+            GLog.w("WARNING: No valid spawn locations found for Elder Gnoll!");
+            throw new IllegalStateException("No valid spawn locations found for Elder Gnoll, making it impossible to complete the game!");
+        }
+    }
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put("entrance_cell", entranceCell);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        entranceCell = bundle.getInt("entrance_cell");
     }
 
     public static class BranchEntrance extends CustomTilemap {

@@ -64,7 +64,7 @@ public class Goo extends Mob {
     private int pumpedUp = 0;
     private int healInc = 1;
     private boolean gooplingsSpawnedThisAttack = false;
-    private int turnsUntilSpawn = 0;
+    private int turnsUntilSpawn = 2; //0
 
 
     private static final int SPAWN_COOLDOWN = 8; //10 //8
@@ -331,6 +331,10 @@ public class Goo extends Mob {
             Goopling g = new Goopling();
             g.pos = pos + ofs;
             GameScene.add(g);
+
+            int damage = (HP*2 <= HT) ? 1 : 2;
+            if (HP < 12) continue; // Don't damage Goo if it's already very low
+            HP = Math.max(HP - damage, 0);
         }
     }
 
