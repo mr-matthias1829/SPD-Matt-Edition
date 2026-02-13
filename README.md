@@ -1,27 +1,100 @@
-# Shattered Pixel Dungeon
+# Shattered Pixel Dungeon – Matt Edition
 
-[Shattered Pixel Dungeon](https://shatteredpixel.com/shatteredpd/) is an open-source traditional roguelike dungeon crawler with randomized levels and enemies, and hundreds of items to collect and use. It's based on the [source code of Pixel Dungeon](https://github.com/00-Evan/pixel-dungeon-gradle), by [Watabou](https://watabou.itch.io/).
+**A challenging rebalancing and systems-focused mod for Shattered Pixel Dungeon.**
 
-Shattered Pixel Dungeon currently compiles for Android, iOS, and Desktop platforms. You can find official releases of the game on:
+> ⚠️ This mod is still in development. Balance changes and mechanics may change between updates.
 
-[![Get it on Google Play](https://shatteredpixel.com/assets/images/badges/gplay.png)](https://play.google.com/store/apps/details?id=com.shatteredpixel.shatteredpixeldungeon)
-[![Download on the App Store](https://shatteredpixel.com/assets/images/badges/appstore.png)](https://apps.apple.com/app/shattered-pixel-dungeon/id1563121109)
-[![Steam](https://shatteredpixel.com/assets/images/badges/steam.png)](https://store.steampowered.com/app/1769170/Shattered_Pixel_Dungeon/)<br>
-[![GOG.com](https://shatteredpixel.com/assets/images/badges/gog.png)](https://www.gog.com/game/shattered_pixel_dungeon)
-[![Itch.io](https://shatteredpixel.com/assets/images/badges/itch.png)](https://shattered-pixel.itch.io/shattered-pixel-dungeon)
-[![Github Releases](https://shatteredpixel.com/assets/images/badges/github.png)](https://github.com/00-Evan/shattered-pixel-dungeon/releases)
+Releases can be found here:
+[https://github.com/mr-matthias1829/SPD-Matt-Edition/releases](https://github.com/mr-matthias1829/SPD-Matt-Edition/releases)
 
-If you like this game, please consider [supporting me on Patreon](https://www.patreon.com/ShatteredPixel)!
+---
 
-There is an official blog for this project at [ShatteredPixel.com](https://www.shatteredpixel.com/blog/).
+## What are the goods?
 
-The game also has a translation project hosted on [Transifex](https://explore.transifex.com/shattered-pixel/shattered-pixel-dungeon/).
+SPD Matt Edition is a difficulty and mechanics overhaul of Shattered Pixel Dungeon.
+It aims to make the game more punishing while also introducing new systems and changes that create different playstyles.
 
-Note that **this repository does not accept pull requests!** The code here is provided in hopes that others may find it useful for their own projects, not to allow community contribution. Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
+Some changes include:
 
-If you'd like to work with the code, you can find the following guides in `/docs`:
-- [Compiling for Android.](docs/getting-started-android.md)
-    - **[If you plan to distribute on Google Play please read the end of this guide.](docs/getting-started-android.md#distributing-your-app)**
-- [Compiling for desktop platforms.](docs/getting-started-desktop.md)
-- [Compiling for iOS.](docs/getting-started-ios.md)
-- [Recommended changes for making your own version.](docs/recommended-changes.md)
+* New balance and revisions to enemies, items, and bosses
+* New mechanics such as Sins, or being hungry reducing health regen rate
+* A harder early game and increased overall difficulty
+* Some new content
+* Tweaks to quests and progression
+
+This is not a total conversion mod. It is still recognizably Shattered Pixel Dungeon, but with a harsher and more volatile experience.
+
+## Development status
+
+This mod is still a **work in progress**.
+Not all regions have been fully reworked yet.
+
+Currently modified regions include:
+
+* Sewer
+* Prison (done aside from 2 of the 3 quests)
+* Caves (excluding boss and quests)
+
+Future updates will focus on:
+
+* Finishing the Caves region
+* Rebalancing early game difficulty
+* Expanding into later regions
+
+Expect many balance changes between releases.
+
+## Important notes
+
+* Only the English translation is modified or extended. Other languages remain 100% vanilla.
+* Not all regions have been modified yet, which is the reason why this mod is considered unfinished.
+* Bugs and crashes may occur. Please report them on the GitHub Issues page.
+
+Vanilla SPD can be found here:
+[https://github.com/00-Evan/shattered-pixel-dungeon/releases](https://github.com/00-Evan/shattered-pixel-dungeon/releases)
+
+All credit for the original game goes to Evan Debenham (Shattered Pixel).
+
+---
+
+## FAQ
+
+### **Q: Why is it called Matt Edition?**
+
+A: I didn’t want to claim this as “the definitive harder SPD”. It’s simply my personal take on a more challenging version of the game, and the name reflects that.
+
+### **Q: Why is it so hard?**
+
+A: Vanilla SPD felt too forgiving in the early game. This mod is meant for players who want a tougher, riskier experience, and it being harder is the general goal of this mod.
+
+### **Q: Looking at the source code, I feel like you used AI here?** 
+
+A: I sometimes use AI as a programming assistant for debugging or technical problems. All ideas, concepts, balance, sprites, music, and descriptions are created by me. AI is never used for creative content.
+
+### **Q: Balance feels extreme sometimes.**
+
+A: This is expected while the mod is in development. Balance will change between updates as systems are refined. It might take several updates before the balance of something is nearly definitive.
+
+### **Q: Is this badge even possible?**
+
+A: A handful of very hard badges are in this mod. These focus on either the ridiculous achievements of the vanilla SPD community or completionism. These may be revised in the future to be more possible
+
+### **Q: Will there be lots of new content?**
+
+A: Mostly rebalancing and mechanical changes. Some new enemies, items, and effects may be added, but new regions, bosses or quests content are unlikely.
+
+### **Q: Can I suggest features or changes?**
+
+A: Suggestions are welcome, but not guaranteed to be implemented. Pull requests are not accepted.
+
+---
+
+## Reporting Issues
+
+If you encounter a bug or crash, please report it here:
+[https://github.com/mr-matthias1829/SPD-Matt-Edition/issues](https://github.com/mr-matthias1829/SPD-Matt-Edition/issues)
+
+Include:
+
+* what happened
+* what version you are using
+* how to reproduce it if possible
