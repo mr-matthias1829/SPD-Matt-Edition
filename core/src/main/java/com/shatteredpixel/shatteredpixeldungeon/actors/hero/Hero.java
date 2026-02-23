@@ -507,7 +507,7 @@ public class Hero extends Char {
 	public int attackSkill( Char target ) {
 		KindOfWeapon wep = belongings.attackingWeapon();
 		
-		float accuracy = 1;
+		float accuracy = 1f;
 		accuracy *= RingOfAccuracy.accuracyMultiplier( this );
 		
 		//precise assault and liquid agility

@@ -364,7 +364,10 @@ public class Wandmaker extends NPC {
 				// decide between 1,2, or 3 for quest type.
 				//if (type == 0) type = Random.Int(3)+1;
                 //if (type == 0) type = Random.Int(2)+2; //disabled corpse dust quest
-                if (type == 0) type = 2; // ALWAYS ritual quest
+                //if (type == 0) type = 2; // ALWAYS ritual quest
+
+                // Modified: Only allow quest types 1 and 2 (corpse dust and elemental)
+                if (type == 0) type = Random.Int(2)+1; // Random between 1 and 2
 				
 				switch (type){
 					case 1: default:

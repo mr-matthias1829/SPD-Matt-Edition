@@ -130,7 +130,7 @@ public class IceCavesEntrance extends CaveRoom {
             }
         }
 
-        GLog.w("Elder Gnoll spawn candidates: " + candidates.size());
+        //GLog.w("Elder Gnoll spawn candidates: " + candidates.size());
 
         if (!candidates.isEmpty()) {
             int cell = Random.element(candidates);
@@ -141,8 +141,18 @@ public class IceCavesEntrance extends CaveRoom {
 
             //GLog.w("Elder Gnoll spawned at cell " + cell + " (total mobs: " + level.mobs.size() + ")");
         } else {
+            // Ok... so we failed to properly spawn the Elder Gnoll...
+            // this should be sort of expected since we were never meant to spawn enemies this way to begin with
+            // to still make the run winnable, we will just randomly spawn the item that the elder drops onto the floor
+            // sad that the player won't get to deal with the elder, but so be it
+
+            // Add worn key to the level
+            level.addItemToSpawn(new WornKey(Dungeon.depth));
+
+            /*
             GLog.w("WARNING: No valid spawn locations found for Elder Gnoll!");
             throw new IllegalStateException("No valid spawn locations found for Elder Gnoll, making it impossible to complete the game!");
+             */
         }
     }
 

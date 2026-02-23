@@ -37,6 +37,19 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton( new ChangeButton(new Image(new WandmakerSprite()), "v1320: Small QOL rebalances + new wandmaker quest",
+                "_Changes:_\n" +
+                        "1. ALL accuracy is increased by +15%, for both hero's, mobs, and anything in between. evasion unchanged\n" +
+                        "2. elder gnoll hp reduced (25 -> 16)\n" +
+                        "3. if the elder gnoll fails to spawn, a skeleton key is randomly spawned on the floor as a fallback (this will only occur in super rare cases)\n" +
+                        "4. reduced wraith hp (5 -> 3)\n" +
+                        "\n_Wandmaker Quest Changes:_\n" +
+                        "1. newborn fire elemental hp reduced (90 -> 70), ranged cooldown increased (1,4 -> 2,5)\n" +
+                        "2. the corpse dust quest is back! while holding the item, wraiths will spawn much more frequently compared to vanilla\n" +
+                        "3. wraith spawned by the corpse dust have random hp compared to normal wraiths (either 1, 2, or 3 hp)\n"
+        ));
+
+
         changes.addButton(new ChangeButton(new Image(new ElderGnollSprite()), "v1318: Respect your elders and updated goo",
                 "_Changes:_\n" +
                         "1. gooplings should now spawn in the 'wandering' state instead of spawning asleep\n" +
@@ -219,7 +232,7 @@ public class Mod_Changes {
                         "1. at least one tier 1 armor now always spawns on floor 3, 50% on floor 2.\n" +
                         "2. let's hope this doesn't cause crashes!\n"));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), "v1288: General Rebalance",
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "v1288: General Rebalance",
                 "_ITEMS:_\n" +
                         "1. reduced nerf to all melee weapons (-18% -> -7%)\n" +
                         "2. reduced tier nerf to all melee weapons\n" +
