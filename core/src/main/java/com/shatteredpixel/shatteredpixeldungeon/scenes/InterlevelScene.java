@@ -144,7 +144,7 @@ public class InterlevelScene extends PixelScene {
 					fadeTime = SLOW_FADE;
 				} else {
 					if (curTransition != null)  loadingDepth = curTransition.destDepth;
-					else                        loadingDepth = Dungeon.depth+1;
+					else                        loadingDepth = Dungeon.depth;
 					if (Statistics.deepestFloor >= loadingDepth) {
 						fadeTime = FAST_FADE;
 					} else if (loadingDepth == 6 || loadingDepth == 11
@@ -154,12 +154,13 @@ public class InterlevelScene extends PixelScene {
 				}
 				break;
             case FALL:
-                    loadingDepth = Dungeon.depth;
+				//not accurate, but you can't ever fall into a new region
+				loadingDepth = Dungeon.depth;
                 break;
 			case ASCEND:
 				fadeTime = FAST_FADE;
 				if (curTransition != null)  loadingDepth = curTransition.destDepth;
-				else                        loadingDepth = Dungeon.depth-1;
+				else                        loadingDepth = Dungeon.depth;
 				break;
 			case RETURN:
 				loadingDepth = returnDepth;
