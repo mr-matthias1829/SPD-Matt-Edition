@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -375,9 +376,26 @@ public class Necromancer extends Mob {
                     }
                 }
 
+                /*
                 if (targetSkeleton != null && !fieldOfView[targetSkeleton.pos]){
+				boolean teleporting = false;
+				//teleport our skeleton to the enemy if..
+				//we can't see it
+				if (!fieldOfView[mySkeleton.pos]){
+					teleporting = true;
 
-                    //if the skeleton is not next to the enemy
+				//it has a relatively long path to reach the hero (e.g. it's blocked in a tunnelway)
+				} else if (!mySkeleton.canAttack(enemy)){
+					PathFinder.Path skelePath = Dungeon.findPath(mySkeleton, enemy.pos, Dungeon.level.passable, fieldOfView, true);
+					*/
+
+					if (skelePath.size() > 2*Dungeon.level.distance(pos, enemy.pos)){
+						teleporting = true;
+					}
+				}
+
+				if (teleporting){
+
                     //teleport them to the closest spot next to the enemy that can be seen
                     if (!Dungeon.level.adjacent(targetSkeleton.pos, enemy.pos)){
                         int telePos = -1;
@@ -400,6 +418,25 @@ public class Necromancer extends Mob {
                                 return false;
                             } else {
                                 onZapComplete();
+                            }
+
+                            // TODO: below is Evan's version
+                            // supposedly this fixes necro's not teleporting skele's?
+                            // look at it and implement it maybe? since we use lists instead of single skele
+                            /*
+							if (sprite != null && sprite.visible) {
+								int finalTelePos = telePos;
+								sprite.zap(finalTelePos, new Callback() {
+									@Override
+									public void call() {
+										ScrollOfTeleportation.appear(mySkeleton, finalTelePos);
+										mySkeleton.teleportSpend();
+										sprite.idle();
+									}
+								});
+							} else {
+								ScrollOfTeleportation.appear(mySkeleton, telePos);
+								mySkeleton.teleportSpend();
                             }
                         }
                     }
