@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -39,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.NecromancerSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -204,6 +206,7 @@ public class Necromancer extends Mob {
         if (targetSkeleton.HP < targetSkeleton.HT){
             if (sprite.visible || targetSkeleton.sprite.visible) {
                 sprite.parent.add(new Beam.HealthRay(sprite.center(), targetSkeleton.sprite.center()));
+                Sample.INSTANCE.play( Assets.Sounds.RAY );
             }
 
             targetSkeleton.HP = Math.min(targetSkeleton.HP + targetSkeleton.HT/5, targetSkeleton.HT);
@@ -215,6 +218,7 @@ public class Necromancer extends Mob {
         } else if (targetSkeleton.buff(Adrenaline.class) == null) {
             if (sprite.visible || targetSkeleton.sprite.visible) {
                 sprite.parent.add(new Beam.HealthRay(sprite.center(), targetSkeleton.sprite.center()));
+                Sample.INSTANCE.play( Assets.Sounds.RAY );
             }
 
             Buff.affect(targetSkeleton, Adrenaline.class, 3f);
