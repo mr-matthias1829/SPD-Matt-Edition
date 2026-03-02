@@ -133,7 +133,7 @@ public enum Icons {
     ALEKS,
     WATA,
     CELESTI,
-    KRISTJAN,
+	LUMINE,
     CUBE_CODE,
 
     DUM_MATT,
@@ -427,7 +427,7 @@ public enum Icons {
                 icon.frame( icon.texture.uvRectBySize( 32, 96, 32, 32 ) );
                 icon.scale.set(PixelScene.align(0.49f));
                 break;
-            case KRISTJAN:
+			case LUMINE:
                 icon.frame( icon.texture.uvRectBySize( 64, 96, 32, 32 ) );
                 icon.scale.set(PixelScene.align(0.49f));
                 break;
