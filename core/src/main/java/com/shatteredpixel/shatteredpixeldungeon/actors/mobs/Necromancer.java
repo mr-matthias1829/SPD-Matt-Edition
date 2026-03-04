@@ -405,7 +405,7 @@ public class Necromancer extends Mob {
 					PathFinder.Path skelePath = Dungeon.findPath(mySkeleton, enemy.pos, Dungeon.level.passable, fieldOfView, true);
 					*/
 
-					if (skelePath.size() > 2*Dungeon.level.distance(pos, enemy.pos)){
+					if (skelePath == null || skelePath.size() > 2*Dungeon.level.distance(pos, enemy.pos)){
 						teleporting = true;
 					}
 				}
