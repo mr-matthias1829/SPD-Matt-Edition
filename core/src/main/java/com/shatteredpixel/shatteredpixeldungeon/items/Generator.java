@@ -195,7 +195,7 @@ public class Generator {
 		WEP_T4	( 0, 0, MeleeWeapon.class),
 		WEP_T5	( 0, 0, MeleeWeapon.class),
         WEP_BLACKSMITH ( 0, 0, BlacksmithWeapon.class),
-		
+
 		ARMOR	( 2, 1, Armor.class ),
 		
 		MISSILE ( 1, 2, MissileWeapon.class ),
@@ -460,7 +460,7 @@ public class Generator {
             };
             WEP_BLACKSMITH.defaultProbs = new float[]{ 4, 3, 4, 0, 4, 4, 4, 3, 2 };
             WEP_BLACKSMITH.probs = WEP_BLACKSMITH.defaultProbs.clone();
-			
+
 			//see Generator.randomArmor
 			ARMOR.classes = new Class<?>[]{
 					ClothArmor.class,
@@ -967,19 +967,18 @@ public class Generator {
 					cat.dropped = bundle.getInt(cat.name().toLowerCase() + CATEGORY_DROPPED);
 				}
 
-				//pre-v3.0.0 conversion for artifacts specifically
+				//pre-v3.3.0 conversion for artifacts (addition of tome and key)
 				if (cat == Category.ARTIFACT && probs.length != cat.defaultProbs.length){
-					int tomeIDX = 5;
+					int keyIDX = 9;
 					int j = 0;
 					for (int i = 0; i < probs.length; i++){
-						if (i == tomeIDX){
-							cat.probs[j] = 0;
+						if (j == keyIDX){
+							cat.probs[j] = 1;
 							j++;
 						}
 						cat.probs[j] = probs[i];
 						j++;
 					}
-
 				}
 
 			}
