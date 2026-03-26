@@ -25,6 +25,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultDM100;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultRat;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -51,7 +52,7 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 		Painter.fill( level, this, Terrain.WALL );
 		Painter.fill( level, this, 1 , Terrain.EMPTY );
 
-		int ratPos = 0;
+		int enemyPos = 0;
 		int treasurePos = 0;
 		switch (Random.Int(4)){
 			case 0:
@@ -59,7 +60,7 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 				Painter.fill(level, left+3, top+3, 4, 4, Terrain.EMPTY_SP );
 				Painter.fill(level, left+4, top+7, 2, 1, Terrain.EMPTY_SP );
 				Painter.fill(level, left+7, top+4, 1, 2, Terrain.EMPTY_SP );
-				ratPos = level.pointToCell(new Point(left+4, top+4));
+				enemyPos = level.pointToCell(new Point(left+4, top+4));
 				treasurePos = level.pointToCell(new Point(left+3, top+3));
 				break;
 			case 1:
@@ -67,7 +68,7 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 				Painter.fill(level, left+4, top+3, 4, 4, Terrain.EMPTY_SP );
 				Painter.fill(level, left+5, top+7, 2, 1, Terrain.EMPTY_SP );
 				Painter.fill(level, left+3, top+4, 1, 2, Terrain.EMPTY_SP );
-				ratPos = level.pointToCell(new Point(right-4, top+4));
+				enemyPos = level.pointToCell(new Point(right-4, top+4));
 				treasurePos = level.pointToCell(new Point(right-3, top+3));
 				break;
 			case 2:
@@ -75,7 +76,7 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 				Painter.fill(level, left+4, top+4, 4, 4, Terrain.EMPTY_SP );
 				Painter.fill(level, left+5, top+3, 2, 1, Terrain.EMPTY_SP );
 				Painter.fill(level, left+3, top+5, 1, 2, Terrain.EMPTY_SP );
-				ratPos = level.pointToCell(new Point(right-4, bottom-4));
+				enemyPos = level.pointToCell(new Point(right-4, bottom-4));
 				treasurePos = level.pointToCell(new Point(right-3, bottom-3));
 				break;
 			case 3:
@@ -83,7 +84,7 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 				Painter.fill(level, left+3, top+4, 4, 4, Terrain.EMPTY_SP );
 				Painter.fill(level, left+4, top+3, 2, 1, Terrain.EMPTY_SP );
 				Painter.fill(level, left+7, top+5, 1, 2, Terrain.EMPTY_SP );
-				ratPos = level.pointToCell(new Point(left+4, bottom-4));
+				enemyPos = level.pointToCell(new Point(left+4, bottom-4));
 				treasurePos = level.pointToCell(new Point(left+3, bottom-3));
 				break;
 		}
@@ -103,9 +104,9 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 			door.set( Door.Type.REGULAR );
 		}
 
-		VaultRat rat = new VaultRat();
-		rat.pos = ratPos;
-		level.mobs.add(rat);
+		VaultDM100 dm100 = new VaultDM100();
+		dm100.pos = enemyPos;
+		level.mobs.add(dm100);
 
 	}
 
