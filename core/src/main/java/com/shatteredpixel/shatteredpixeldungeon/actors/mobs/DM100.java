@@ -41,7 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class DM100 extends Mob implements Callback {
+public class DM100 extends Mob {
 
     protected static float TIME_TO_ZAP	= 0.75f; //1f
 
@@ -155,10 +155,5 @@ public class DM100 extends Mob implements Callback {
 
     //used so resistances can differentiate between melee and magical attacks
     public static class LightningBolt{}
-
-    @Override
-    public void call() {
-        next();
-    }
 
 }

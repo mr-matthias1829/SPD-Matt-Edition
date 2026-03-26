@@ -28,11 +28,11 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 
 public class DM100Sprite extends MobSprite {
@@ -76,9 +76,25 @@ public class DM100Sprite extends MobSprite {
 			origin.x += 1*scale.x;
 		}
 		if (enemy != null) {
-			parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100) ch, true));
+			parent.add(new Lightning(origin,
+					enemy.sprite.destinationCenter(),
+					new Callback() {
+						@Override
+						public void call() {
+							ch.next();
+						}
+					},
+                    true));
 		} else {
-			parent.add(new Lightning(origin, pos, (DM100) ch, true));
+			parent.add(new Lightning(origin,
+					pos,
+					new Callback() {
+						@Override
+						public void call() {
+							ch.next();
+						}
+					},
+                    true));
 		}
 		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 		
