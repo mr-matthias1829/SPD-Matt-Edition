@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
-public class Corruption extends AllyBuff {
+public class Corruption extends AllyBuff implements Buff.DOTbuff {
 
 	{
 		type = buffType.NEGATIVE;
@@ -50,7 +50,16 @@ public class Corruption extends AllyBuff {
 			}
 		}
 	}
-	
+
+	@Override
+	public boolean attachTo(Char target) {
+		if (super.attachTo(target)){
+			target.needsIncomingDOTUpdate = true;
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public boolean act() {
 		buildToDamage += target.HT/100f;
@@ -58,8 +67,9 @@ public class Corruption extends AllyBuff {
 		int damage = (int)buildToDamage;
 		buildToDamage -= damage;
 
-		if (damage > 0)
+		if (damage > 0) {
 			target.damage(damage, this);
+		}
 
 		spend(TICK);
 
@@ -77,4 +87,8 @@ public class Corruption extends AllyBuff {
 		return BuffIndicator.CORRUPT;
 	}
 
+	@Override
+	public int totalIncomingDMG() {
+		return target.HT;
+	}
 }
