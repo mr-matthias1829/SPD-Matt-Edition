@@ -70,7 +70,18 @@ public class ElixirOfHoneyedHealing extends Elixir {
 			}
 		}
 	}
-	
+
+	//lower values, as it's cheaper to make
+	@Override
+	public int value() {
+		return quantity * 40;
+	}
+
+	@Override
+	public int energyVal() {
+		return quantity * 8;
+	}
+
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
