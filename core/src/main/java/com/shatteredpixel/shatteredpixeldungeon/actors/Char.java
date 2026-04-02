@@ -288,6 +288,7 @@ public abstract class Char extends Actor {
 	}
 	
 	protected static final String POS       = "pos";
+	protected static final String PREV_POS  = "prev_pos";
 	protected static final String TAG_HP    = "HP";
 	protected static final String TAG_HT    = "HT";
 	protected static final String TAG_SHLD  = "SHLD";
@@ -299,6 +300,7 @@ public abstract class Char extends Actor {
 		super.storeInBundle( bundle );
 		
 		bundle.put( POS, pos );
+		bundle.put( PREV_POS, previousPos );
 		bundle.put( TAG_HP, HP );
 		bundle.put( TAG_HT, HT );
 		bundle.put( BUFFS, buffs );
@@ -310,6 +312,7 @@ public abstract class Char extends Actor {
 		super.restoreFromBundle( bundle );
 		
 		pos = bundle.getInt( POS );
+		previousPos = bundle.getInt( PREV_POS );
 		HP = bundle.getInt( TAG_HP );
 		HT = bundle.getInt( TAG_HT );
 		
@@ -1267,6 +1270,9 @@ public abstract class Char extends Actor {
 		move( step, true );
 	}
 
+	//used in various bits of gameplay logic to determine the direction of movement
+	protected int previousPos = -1;
+
 	//travelling may be false when a character is moving instantaneously, such as via teleportation
 	public void move( int step, boolean travelling ) {
 
@@ -1287,6 +1293,11 @@ public abstract class Char extends Actor {
 			Door.leave( pos );
 		}
 
+		if (travelling){
+			previousPos = pos;
+		} else {
+			previousPos = -1;
+		}
 		pos = step;
 		
 		if (this != Dungeon.hero) {
