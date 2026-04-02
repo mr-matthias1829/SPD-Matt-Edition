@@ -121,8 +121,6 @@ public class GolemSprite extends MobSprite {
 					public void call() {
 						if (ch instanceof Golem) {
 							((Golem) ch).onZapComplete();
-						} else if (ch instanceof VaultGolem){
-							((VaultGolem) ch).onZapComplete();
 						}
 					}
 				}, true );
