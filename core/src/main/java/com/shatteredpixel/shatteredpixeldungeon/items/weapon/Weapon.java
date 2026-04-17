@@ -61,6 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocki
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blooming;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Eldritch;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
@@ -399,6 +400,11 @@ abstract public class Weapon extends KindOfWeapon {
 			} else if (level() >= 4 && Random.Float(10) < Math.pow(2, level()-4)){
 				enchant(null);
 			}
+
+			//if we still have a crystal enchant, repair it (just like thrown weapon repair)
+			if (enchantment instanceof Crystal){
+				((Crystal) enchantment).repair(this, false, 100);
+			}
 		}
 
         if (!(hasCurseEnchant() && !enchantment.removableByUpgrade())) {
@@ -542,13 +548,13 @@ abstract public class Weapon extends KindOfWeapon {
 		};
 
 		public static final Class<?>[] rare = new Class<?>[]{
-				Corrupting.class, Grim.class, Vampiric.class
+				Corrupting.class, Crystal.class, Grim.class, Vampiric.class
 		};
 
 		public static final float[] typeChances = new float[]{
 				50, //10% each
 				40, //5%  each
-				10  //3.33% each
+				10  //2.5% each
 		};
 
 		public static final Class<?>[] curses = new Class<?>[]{

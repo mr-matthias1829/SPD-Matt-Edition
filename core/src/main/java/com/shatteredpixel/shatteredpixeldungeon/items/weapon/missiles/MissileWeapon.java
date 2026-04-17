@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.NoWeaponAugment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.WeaponAugment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -443,7 +444,13 @@ abstract public class MissileWeapon extends Weapon {
         //augment speed/damage factor still scales durability (speed = more durable, damage = less)
         usages /= augment.delayFactor(1f);
 
-        if (Dungeon.hero != null) usages *= RingOfSharpshooting.durabilityMultiplier( Dungeon.hero );
+		if (Dungeon.hero != null) {
+			usages *= RingOfSharpshooting.durabilityMultiplier( Dungeon.hero );
+		}
+
+		if (enchantment instanceof Crystal){
+			usages = Math.min(usages/2f, 50); //cannot exceed 50 uses with crystal enchant
+		}
 
         //at 100 uses, items just last forever.
         if (usages >= 100f) return 0;
@@ -457,6 +464,16 @@ abstract public class MissileWeapon extends Weapon {
             return MAX_DURABILITY/usages;
         }
     }
+
+	@Override
+	public Weapon enchant(Enchantment ench) {
+		if (ench instanceof Crystal){
+			((Crystal) ench).setThrownWep();
+			//in case weapon was already damaged
+			Buff.affect(Dungeon.hero, Crystal.CrystalRepair.class);
+		}
+		return super.enchant(ench);
+	}
 
     protected void decrementDurability(){
         //if this weapon was thrown from a source stack, degrade that stack.

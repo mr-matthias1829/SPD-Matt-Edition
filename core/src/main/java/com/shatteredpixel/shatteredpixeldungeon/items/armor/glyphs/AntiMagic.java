@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.BattleAxeStormbringer;
@@ -111,6 +112,7 @@ public class AntiMagic extends Armor.Glyph {
 		RESISTS.add( Blazing.class );
 		RESISTS.add( Shocking.class );
 		RESISTS.add( Grim.class );
+		RESISTS.add( Crystal.class );
 
 		RESISTS.add( WarpBeacon.class );
 		
