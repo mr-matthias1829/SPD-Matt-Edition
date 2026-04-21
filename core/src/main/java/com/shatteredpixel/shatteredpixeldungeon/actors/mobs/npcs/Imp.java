@@ -338,5 +338,9 @@ public class Imp extends NPC {
         public static boolean isCompleted() {
             return spawned && completed;
         }
+
+		public static boolean earnedShop() {
+			return completed && (oldQuest || score >= 2000);
+		}
     }
 }

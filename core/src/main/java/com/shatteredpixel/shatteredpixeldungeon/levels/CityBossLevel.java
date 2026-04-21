@@ -125,7 +125,7 @@ public class CityBossLevel extends Level {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		impShop = (ImpShopRoom) bundle.get( IMP_SHOP );
-		if (map[topDoor] != Terrain.LOCKED_DOOR && Imp.Quest.isCompleted() && !impShop.shopSpawned()){
+		if (map[topDoor] != Terrain.LOCKED_DOOR && Imp.Quest.earnedShop() && !impShop.shopSpawned()){
 			spawnShop();
 		}
 	}
@@ -368,7 +368,7 @@ public class CityBossLevel extends Level {
 		set( topDoor, Terrain.DOOR );
 		GameScene.updateMap( topDoor );
 
-		if (Imp.Quest.isCompleted()) {
+		if (Imp.Quest.earnedShop()) {
 			spawnShop();
 		}
 		Dungeon.observe();

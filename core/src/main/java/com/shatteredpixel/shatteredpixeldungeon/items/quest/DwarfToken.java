@@ -25,7 +25,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class DwarfToken extends Item {
@@ -45,5 +47,16 @@ public class DwarfToken extends Item {
 	@Override
 	public boolean isIdentified() {
 		return true;
+	}
+
+
+	@Override
+	public String desc() {
+		if (Imp.Quest.isOld()){
+			return Messages.get(this, "desc_old");
+		} else {
+			return super.desc();
+		}
+
 	}
 }

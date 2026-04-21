@@ -25,6 +25,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultRat;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -58,12 +59,10 @@ public class VaultEnemyCenterRoom extends StandardRoom {
 			door.set( Door.Type.REGULAR );
 		}
 
-		VaultRat rat = new VaultRat();
-		do {
-			rat.pos = level.pointToCell(center());
-		} while (level.solid[rat.pos]);
-		rat.state = rat.WANDERING;
-		level.mobs.add(rat);
+		Mob enemy = level.createMob();
+		enemy.pos = level.pointToCell(center());
+		enemy.state = enemy.WANDERING;
+		level.mobs.add(enemy);
 
 	}
 
