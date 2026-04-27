@@ -4,7 +4,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:9.1.0'
+        //classpath 'com.android.tools.build:gradle:9.1.0'
+        // tbh it should be fair for me to stay at this lower version
+        // in my opinion its actual bs how i'd need to reinstall the whole android studio IDE as
+        //if i haven't installed it before because they decided to not make a updater for the IDE
+        // future me: this is gonna cause merge conflicts and definitely update gradle/android at one point to prevent issues
+        classpath "com.android.tools.build:gradle:8.3.2"
     }
 }
 
