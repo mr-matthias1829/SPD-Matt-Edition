@@ -37,6 +37,17 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(new Image(new DM200Sprite()), "v1333: Final changes before rework",
+                "_NOTE:_\n" +
+                        "I've had a revision of this mod, one I wish to turn to. For that reason, any future versions will be towards turning the difficulty more fairly and easier. _This is the end of the 'difficult' mod_, the future will no longer revolve around making this a harder SPD." +
+                        "_\n\nChanges:_\n" +
+                        "1. DM300 hp increased (300:400 -> 400:500)" +
+                        "2. DM300 has a new attack, allowing them to move a tile and break walls. Has a chance to happen if the hero is unreachable\n" +
+                        "3. DM300 now shoots one of four random gasses. dangerous gasses become more common the lower their hp is" +
+                        "4. updated floor 15 tile sprites to match the ice pallette" +
+                        "5. updated to vanilla 3.3.8"
+        ));
+
         changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "v1324: Return of balances",
                 "_Changes:_\n" +
                         "1. Updated version code to be a bit more readable\n" +
@@ -46,7 +57,7 @@ public class Mod_Changes {
                         "5. challenge 'I hate myself' now also bans scrolls of divination (which you could obtain in some scenario's)\n" +
                         "6. the sin of greed now is a bit softer with it's timed gold multipliers. You're still expected to collect at a fast rate though\n" +
                         "\n_Notes:_\n" +
-                        "I know this whole thing went on a straight hiatus for over 2 months, but don't think i forgor about it!"
+                        "I know this whole thing went on a straight hiatus for over 2 months, but don't think i forgot about it!"
 
         ));
 
