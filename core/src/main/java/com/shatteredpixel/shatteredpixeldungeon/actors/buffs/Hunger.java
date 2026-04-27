@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ public class Hunger extends Buff implements Hero.Doom {
         float base = HUNGRY;
 
         if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) base = 300f;
-        if (Dungeon.isSinActive(Sins.GLUTTONY)) base /= 2.5f;
+        if (Dungeon.isSinActive(Sins.GLUTTONY)) base /= 1.9f;
 
         return Math.max(base, 100f); // floor to keep it reasonable
     }

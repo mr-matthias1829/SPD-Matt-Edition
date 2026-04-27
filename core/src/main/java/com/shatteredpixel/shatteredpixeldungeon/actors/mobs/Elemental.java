@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -258,7 +258,7 @@ public abstract class Elemental extends Mob {
 			spriteClass = ElementalSprite.NewbornFire.class;
 
 			defenseSkill = 12;
-			HT = HP = 90; //60
+			HT = HP = 70; //60
 			properties.add(Property.MINIBOSS);
             properties.add( Property.FIERY );
             properties.add( Property.ICY ); // so it doesnt instantly die when frozen
@@ -380,7 +380,7 @@ public abstract class Elemental extends Mob {
 			}
 
 			targetingPos = -1;
-			rangedCooldown = Random.NormalIntRange( 1, 4 ); //3,5
+			rangedCooldown = Random.NormalIntRange( 2, 5 ); //3,5
 		}
 
 		@Override

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -642,7 +642,7 @@ public abstract class Char extends Actor {
 		}
 		defRoll *= FerretTuft.evasionMultiplier();
 
-		if (acuRoll >= defRoll){
+        if (acuRoll * 1.15f >= defRoll) {
 			hitMissIcon = FloatingText.getHitReasonIcon(attacker, acuRoll, defender, defRoll);
 			return true;
 		} else {

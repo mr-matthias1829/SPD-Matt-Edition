@@ -37,6 +37,43 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(new Image(new DM200Sprite()), "v1333: Final changes before rework",
+                "_NOTE:_\n" +
+                        "I've had a revision of this mod, one I wish to turn to. For that reason, any future versions will be towards turning the difficulty more fairly and easier. _This is the end of the 'difficult' mod_, the future will no longer revolve around making this a harder SPD." +
+                        "_\n\nChanges:_\n" +
+                        "1. DM300 hp increased (300:400 -> 400:500)\n" +
+                        "2. DM300 has a new attack, allowing them to move a tile and break walls. Has a chance to happen if the hero is unreachable\n" +
+                        "3. DM300 now shoots one of four random gasses. dangerous gasses become more common the lower their hp is\n" +
+                        "4. updated floor 15 tile sprites to match the ice pallette\n" +
+                        "5. updated to vanilla 3.3.8\n"
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "v1324: Return of balances",
+                "_Changes:_\n" +
+                        "1. Updated version code to be a bit more readable\n" +
+                        "2. the sin of sloth now makes you start with more time, and you gain more time overall\n" +
+                        "3. the sin of gluttony now heals you a bit when you eat food. Still makes you hungry faster, but less so now. Bulky effect lasts shorter (30 -> 20)\n" +
+                        "4. returned legacy greed effect, but as a challenge instead of a sin, and nerfed effects\n" +
+                        "5. challenge 'I hate myself' now also bans scrolls of divination (which you could obtain in some scenario's)\n" +
+                        "6. the sin of greed now is a bit softer with it's timed gold multipliers. You're still expected to collect at a fast rate though\n" +
+                        "\n_Notes:_\n" +
+                        "I know this whole thing went on a straight hiatus for over 2 months, but don't think i forgot about it!"
+
+        ));
+
+        changes.addButton( new ChangeButton(new Image(new WandmakerSprite()), "v1320: Small QOL rebalances + new wandmaker quest",
+                "_Changes:_\n" +
+                        "1. ALL accuracy is increased by +15%, for both hero's, mobs, and anything in between. evasion unchanged\n" +
+                        "2. elder gnoll hp reduced (25 -> 16)\n" +
+                        "3. if the elder gnoll fails to spawn, a skeleton key is randomly spawned on the floor as a fallback (this will only occur in super rare cases)\n" +
+                        "4. reduced wraith hp (5 -> 3)\n" +
+                        "\n_Wandmaker Quest Changes:_\n" +
+                        "1. newborn fire elemental hp reduced (90 -> 70), ranged cooldown increased (1,4 -> 2,5)\n" +
+                        "2. the corpse dust quest is back! while holding the item, wraiths will spawn much more frequently compared to vanilla\n" +
+                        "3. wraith spawned by the corpse dust have random hp compared to normal wraiths (either 1, 2, or 3 hp)\n"
+        ));
+
+
         changes.addButton(new ChangeButton(new Image(new ElderGnollSprite()), "v1318: Respect your elders and updated goo",
                 "_Changes:_\n" +
                         "1. gooplings should now spawn in the 'wandering' state instead of spawning asleep\n" +
@@ -219,7 +256,7 @@ public class Mod_Changes {
                         "1. at least one tier 1 armor now always spawns on floor 3, 50% on floor 2.\n" +
                         "2. let's hope this doesn't cause crashes!\n"));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), "v1288: General Rebalance",
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "v1288: General Rebalance",
                 "_ITEMS:_\n" +
                         "1. reduced nerf to all melee weapons (-18% -> -7%)\n" +
                         "2. reduced tier nerf to all melee weapons\n" +

@@ -56,10 +56,10 @@ public class Sloth extends Buff implements Hero.Doom {
 
     private int calculateTurnsBehind() { // returns negative number if ahead of expected
         int depth = bestDepth;
-        int expectedTurns = 200 + (depth * 300);
+        int expectedTurns = 325 + (depth * 400);
         int bosses = (int)(Math.floor((double) (depth-1) / 5)); // overcomplicated because i trust this more
 
-        expectedTurns += bosses * 400;
+        expectedTurns += bosses * 500;
 
         if (Dungeon.hero.buff(AscensionChallenge.class) != null){
             expectedTurns += 3000; // extra time when ascending... you'll still need to go quite fast
@@ -83,7 +83,7 @@ public class Sloth extends Buff implements Hero.Doom {
         if (Dungeon.branch != 0) {
             add = "\n\nBeing no longer in the main dungeon, sloth's power over you is reduced, and the timer ticks slower.";
         } else if (Dungeon.depth == 26) {
-            add = "\n\nBeing at the very bottom of the dungeon, sloth is leaving you be, and the timer doesn't tick.";
+            add = "\n\nBeing at the very bottom of the dungeon, sloth is leaving you be.";
         }
         int turnsBehind = calculateTurnsBehind();
 

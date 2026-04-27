@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,6 +150,8 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.challenges;
 
 public class Hero extends Char {
 
@@ -445,6 +447,9 @@ public class Hero extends Char {
         if (Dungeon.isSinActive( Sins.GREED )){
             Buff.affect(this, Greed.class);
         }
+        if (Dungeon.isChallenged(Challenges.CONSUMING_GREED)){
+            Buff.affect(this, ConsumingGreed.class);
+        }
         if (Dungeon.isSinActive( Sins.SLOTH )){
             Buff.affect(this, Sloth.class);
         }
@@ -507,7 +512,7 @@ public class Hero extends Char {
 	public int attackSkill( Char target ) {
 		KindOfWeapon wep = belongings.attackingWeapon();
 		
-		float accuracy = 1;
+		float accuracy = 1f;
 		accuracy *= RingOfAccuracy.accuracyMultiplier( this );
 		
 		//precise assault and liquid agility
@@ -1642,6 +1647,11 @@ public class Hero extends Char {
 		if (buff(TimekeepersHourglass.timeStasis.class) != null
 				|| buff(TimeStasis.class) != null) {
 			return;
+		}
+
+		//TODO hero cannot take damage in the vault tester area
+		if (Dungeon.depth > 15 && Dungeon.branch == 1){
+			dmg = 0;
 		}
 
 		//regular damage interrupt, triggers on any damage except specific mild DOT effects

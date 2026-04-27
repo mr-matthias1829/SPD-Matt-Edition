@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.WraithSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
@@ -117,7 +118,17 @@ public class CorpseDust extends Item {
 			//v0.3.1-v0.6.5: wraith every 1/4/9/16/25/25... turns, basically guaranteed
 			//v0.7.0-v2.1.4: bugged, same rate as above but high (often >50%) chance that spawning fails. failed spawning resets delay!
 			//v2.2.0+: fixed bug, increased summon delay cap to counteract a bit, wraiths also now have to spawn at a slight distance
-			int powerNeeded = Math.min(49, wraiths*wraiths);
+
+            // aaanddd of course it was changed again in this modded version... yeah lets just keep those comments above for nostalgia reasons
+            // not gonna specifically state the changes here though, cuz haha
+			int basePowerNeeded = (int) Math.min(32, wraiths*wraiths/0.88f);
+
+            // Add randomization - sometimes needs less power, sometimes more
+            float randomFactor = Random.Float(0.65f, 1.2f); // 65% to 120% of base
+            int powerNeeded = Math.round(basePowerNeeded * randomFactor);
+            // Ensure powerNeeded is at least 1
+            powerNeeded = Math.max(1, powerNeeded);
+
 			if (powerNeeded <= spawnPower){
 				ArrayList<Integer> candidates = new ArrayList<>();
 				//min distance scales based on hero's view distance
@@ -184,6 +195,10 @@ public class CorpseDust extends Item {
 
 	public static class DustWraith extends Wraith{
 
+        {
+            HP = HT = Random.Int(1,3);
+        }
+
 		private int atkCount = 0;
 
 		@Override
@@ -192,6 +207,7 @@ public class CorpseDust extends Item {
 				atkCount++;
 				//first attack from each wraith is free, max of -200 point penalty per wraith
 				if (atkCount == 2 || atkCount == 3){
+					Statistics.questScores[1] -= 100;
 					Statistics.questScores[1] -= 100;
 				}
 			}

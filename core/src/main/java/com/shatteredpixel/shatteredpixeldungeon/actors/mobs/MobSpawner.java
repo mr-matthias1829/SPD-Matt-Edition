@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,8 +87,8 @@ public class MobSpawner extends Actor {
 				return new ArrayList<>(Arrays.asList(Rat.class,
 						Snake.class,
 						Gnoll.class, Gnoll.class, Gnoll.class,
-                        Crab.class,
-						Swarm.class));
+						Swarm.class,
+						Crab.class));
 			case 4: case 5:
 				//1x gnoll, 1x swarm, 2x crab, 2x slime + 1x snake and 1x thief
 				return new ArrayList<>(Arrays.asList(Gnoll.class,

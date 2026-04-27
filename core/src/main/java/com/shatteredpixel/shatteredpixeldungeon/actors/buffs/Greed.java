@@ -58,6 +58,7 @@ public class Greed extends Buff {
      */
     public float getGoldMultiplier() {
         // Boss floors always return 1x
+        // too bad for you rat king looters!
         if (Dungeon.depth % 5 == 0) {
             return 1f;
         }
@@ -67,29 +68,29 @@ public class Greed extends Buff {
 
         // Side branches use a reduced multiplier
         if (Dungeon.branch != 0) {
-            if (turns <= 12) {
+            if (turns <= 25) {
                 return 1.8f;
-            } else if (turns <= 25) {
-                return 1.25f;
             } else if (turns <= 50) {
-                return 1f;
+                return 1.25f;
             } else if (turns <= 100) {
+                return 1f;
+            } else if (turns <= 140) {
                 return 0.8f;
             }
         }
 
         // TODO: maybe just make this one formula instead of tiers?
-        if (turns <= 8) {
+        if (turns <= 10) { // best case, back to back collection
             return 3f;
-        } else if (turns <= 15) {
-            return 2.5f;
-        } else if (turns <= 20) {
-            return 2f;
         } else if (turns <= 25) {
+            return 2.5f;
+        } else if (turns <= 40) {
+            return 2f;
+        } else if (turns <= 70) {
             return 1.5f;
-        } else if (turns <= 45) {
+        } else if (turns <= 150) {
             return 1f;
-        } else if (turns <= 100) {
+        } else if (turns <= 230) {
             return 0.7f;
         } else {
             return 0.5f;
@@ -110,7 +111,7 @@ public class Greed extends Buff {
         float maxMultiplier = 8f;
         float currentMultiplier = 1; // Starter multiplier
         float remainingTurns = turns;
-        float nextInterval = 1650; // Base turns needed for next +1
+        float nextInterval = 1450; // Base turns needed for next +1
 
         while (remainingTurns >= nextInterval && currentMultiplier < maxMultiplier) {
             currentMultiplier += 1;

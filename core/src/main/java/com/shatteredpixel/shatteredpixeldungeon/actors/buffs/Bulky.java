@@ -29,7 +29,7 @@ public class Bulky extends FlavourBuff {
     }
 
     public static float drMultiplier() {
-        return 1.3f; // 30% more damage reduction
+        return 1.4f; // 40% more damage reduction
     }
 
     @Override

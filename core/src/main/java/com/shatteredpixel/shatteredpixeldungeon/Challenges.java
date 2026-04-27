@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDivination;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 
 public class Challenges {
@@ -46,9 +47,10 @@ public class Challenges {
     public static final int I_HATE_MYSELF       = 1024;
     public static final int GUNS_BLAZING        = 2048;
     public static final int WONKY_STEP       = 4096;
+    public static final int CONSUMING_GREED    = 8192;
 
     public static final int MAX_CHALS           = 13;
-	public static final int MAX_VALUE           = 8191;
+	public static final int MAX_VALUE           = 16383;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -63,7 +65,8 @@ public class Challenges {
             "back_to_origins",
             "i_hate_myself",
             "guns_blazing",
-            "wonky_step"
+            "wonky_step",
+            "consuming_greed"
 	};
 
 	public static final int[] MASKS = {
@@ -71,7 +74,7 @@ public class Challenges {
             NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS,
             NO_SCROLLS,
 
-            BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING, WONKY_STEP
+            BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING, WONKY_STEP, CONSUMING_GREED
 	};
 
     public static int activeChallenges(){
@@ -98,6 +101,9 @@ public class Challenges {
 
 
         if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && (item instanceof ScrollOfIdentify)) {
+            return true;
+        }
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && (item instanceof ScrollOfDivination)) {
             return true;
         }
         if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && item instanceof StoneOfIntuition) {
