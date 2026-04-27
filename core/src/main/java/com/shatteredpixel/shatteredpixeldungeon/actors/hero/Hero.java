@@ -151,6 +151,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.challenges;
+
 public class Hero extends Char {
 
 	{
@@ -444,6 +446,9 @@ public class Hero extends Char {
 
         if (Dungeon.isSinActive( Sins.GREED )){
             Buff.affect(this, Greed.class);
+        }
+        if (Dungeon.isChallenged(Challenges.CONSUMING_GREED)){
+            Buff.affect(this, ConsumingGreed.class);
         }
         if (Dungeon.isSinActive( Sins.SLOTH )){
             Buff.affect(this, Sloth.class);

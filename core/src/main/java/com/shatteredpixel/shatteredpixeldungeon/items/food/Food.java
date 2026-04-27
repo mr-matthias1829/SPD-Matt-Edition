@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.food;
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bulky;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -89,7 +90,9 @@ public class Food extends Item {
 			Badges.validateFoodEaten();
 
             if (Dungeon.isSinActive(Sins.GLUTTONY)) {
-                Buff.affect(hero, Bulky.class, 30f + TIME_TO_EAT); // 30 turns duration
+                Buff.affect(hero, Bulky.class, 20f + TIME_TO_EAT); // 30 turns duration
+                Healing healing = Buff.affect(hero, Healing.class);
+                healing.setHeal((int) (0.1f * hero.HT + 2), 0.1f, 0);
             }
 		}
 	}

@@ -37,6 +37,19 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "v1324: Return of balances",
+                "_Changes:_\n" +
+                        "1. Updated version code to be a bit more readable\n" +
+                        "2. the sin of sloth now makes you start with more time, and you gain more time overall\n" +
+                        "3. the sin of gluttony now heals you a bit when you eat food. Still makes you hungry faster, but less so now. Bulky effect lasts shorter (30 -> 20)\n" +
+                        "4. returned legacy greed effect, but as a challenge instead of a sin, and nerfed effects\n" +
+                        "5. challenge 'I hate myself' now also bans scrolls of divination (which you could obtain in some scenario's)\n" +
+                        "6. the sin of greed now is a bit softer with it's timed gold multipliers. You're still expected to collect at a fast rate though\n" +
+                        "\n_Notes:_\n" +
+                        "I know this whole thing went on a straight hiatus for over 2 months, but don't think i forgor about it!"
+
+        ));
+
         changes.addButton( new ChangeButton(new Image(new WandmakerSprite()), "v1320: Small QOL rebalances + new wandmaker quest",
                 "_Changes:_\n" +
                         "1. ALL accuracy is increased by +15%, for both hero's, mobs, and anything in between. evasion unchanged\n" +

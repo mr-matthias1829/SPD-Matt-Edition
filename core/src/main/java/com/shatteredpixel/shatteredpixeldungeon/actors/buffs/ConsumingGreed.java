@@ -1,6 +1,5 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -8,7 +7,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-public class GreedOLD extends Buff implements Hero.Doom {
+public class ConsumingGreed extends Buff implements Hero.Doom {
 
     {
         type = buffType.NEUTRAL;
@@ -28,9 +27,11 @@ public class GreedOLD extends Buff implements Hero.Doom {
                 int goldLoss = calculateGoldLoss();
 
                 if (Dungeon.gold >= goldLoss) {
-                    Dungeon.gold -= goldLoss;
-                    ticks = 0;
-                } else if (ticks % 2 == 1) {
+                    if (ticks % turnsPerConsumption() == 0) {
+                        Dungeon.gold -= goldLoss;
+                        ticks = 0;
+                    }
+                } else if (ticks % turnsPerConsumption() == 0) {
                     int damage = calculateHealthLoss();
                     Dungeon.gold = 0;
 
@@ -48,11 +49,24 @@ public class GreedOLD extends Buff implements Hero.Doom {
     }
 
     private int calculateGoldLoss() {
-        // 1 base + region level
+        // 1 base + (region level -1)
         if (Dungeon.branch == 0){
-            return 1 + (int)(Math.floor((double) Dungeon.depth / 5));
+            //int gold = 1+ ((int)(Math.floor((double) Dungeon.depth / 5))-1);
+            int gold = 1; // 1
+            if (Dungeon.depth > 5) gold += 1; //2
+            if (Dungeon.depth > 20) gold += 1; //3
+
+            // total gold loss each turn by region:
+            // 1-5: 1/5 = 0.2
+            // 6-10: 2/4 = 0.5
+            // 11-15: 2/3 = 0.66
+            // 16-20: 2/2 = 1
+            // 21+: 3/2 = 1.5 (steep, but its demon halls)
+
+            if (gold < 1) gold = 1;
+            return gold;
         } else {
-            return (int)(Math.floor((double) Dungeon.depth / 10));
+            return (int)(Math.floor((double) Dungeon.depth / 20));
         }
     }
     private int calculateHealthLoss() {
@@ -64,6 +78,22 @@ public class GreedOLD extends Buff implements Hero.Doom {
             if (damage < 1) damage = 1;
             return damage;
         }
+    }
+
+    private int turnsPerConsumption() {
+        if (Dungeon.depth <= 5) {
+            return 5;
+        }
+        if (Dungeon.depth <= 10) {
+            return 4;
+        }
+        if (Dungeon.depth <= 15) {
+            return 3;
+        }
+        if (Dungeon.depth <= 27) {
+            return 2;
+        }
+        return 1; // fallback
     }
 
 
@@ -80,11 +110,17 @@ public class GreedOLD extends Buff implements Hero.Doom {
         if (Dungeon.branch != 0) {
             add = "\n\nBeing no longer in the main dungeon, greed's power over you is reduced.";
         }
+
         int loss = calculateGoldLoss();
+        int tpc = turnsPerConsumption();
 
         if (Dungeon.gold >= loss) {
+            int consumptions = Dungeon.gold / loss;
+            int turns = consumptions * tpc;
+
+
             return "Losing " + loss + " gold per turn. " +
-                    "Turns remaining until you have no gold left: " + Dungeon.gold/loss + "."
+                    "Turns remaining until you have no gold left: " + turns + "."
                     + add;
         } else {
             loss = calculateHealthLoss();

@@ -41,7 +41,7 @@ public class Hunger extends Buff implements Hero.Doom {
         float base = HUNGRY;
 
         if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) base = 300f;
-        if (Dungeon.isSinActive(Sins.GLUTTONY)) base /= 2.5f;
+        if (Dungeon.isSinActive(Sins.GLUTTONY)) base /= 1.9f;
 
         return Math.max(base, 100f); // floor to keep it reasonable
     }
