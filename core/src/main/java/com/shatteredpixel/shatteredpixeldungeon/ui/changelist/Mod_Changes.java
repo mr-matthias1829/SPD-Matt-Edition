@@ -41,11 +41,11 @@ public class Mod_Changes {
                 "_NOTE:_\n" +
                         "I've had a revision of this mod, one I wish to turn to. For that reason, any future versions will be towards turning the difficulty more fairly and easier. _This is the end of the 'difficult' mod_, the future will no longer revolve around making this a harder SPD." +
                         "_\n\nChanges:_\n" +
-                        "1. DM300 hp increased (300:400 -> 400:500)" +
+                        "1. DM300 hp increased (300:400 -> 400:500)\n" +
                         "2. DM300 has a new attack, allowing them to move a tile and break walls. Has a chance to happen if the hero is unreachable\n" +
-                        "3. DM300 now shoots one of four random gasses. dangerous gasses become more common the lower their hp is" +
-                        "4. updated floor 15 tile sprites to match the ice pallette" +
-                        "5. updated to vanilla 3.3.8"
+                        "3. DM300 now shoots one of four random gasses. dangerous gasses become more common the lower their hp is\n" +
+                        "4. updated floor 15 tile sprites to match the ice pallette\n" +
+                        "5. updated to vanilla 3.3.8\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "v1324: Return of balances",
