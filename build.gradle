@@ -7,7 +7,10 @@ buildscript {
         //classpath 'com.android.tools.build:gradle:9.1.0'
         // the current in-use gradle is outdated
         // future me: this is gonna cause merge conflicts and definitely update gradle/android at one point to prevent issues
+        // WHEN CHANGING MAKE SURE TO ALSO CHECK gradlew.bat
+
         classpath "com.android.tools.build:gradle:8.3.2"
+        //classpath 'com.android.tools.build:gradle:9.2.0'
     }
 }
 
