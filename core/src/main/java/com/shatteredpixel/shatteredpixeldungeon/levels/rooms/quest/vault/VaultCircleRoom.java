@@ -34,12 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRo
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
-public class VaultCircleRoom extends StandardRoom {
-
-	@Override
-	public float[] sizeCatProbs() {
-		return new float[]{0, 1, 0};
-	}
+public class VaultCircleRoom extends VaultRoom {
 
 	@Override
 	public void paint(Level level) {
@@ -107,11 +102,5 @@ public class VaultCircleRoom extends StandardRoom {
 			Painter.drawInside(level, this, door, 4, Terrain.EMPTY);
 		}
 	}
-
-	@Override
-	public boolean canMerge(Level l, Room other, Point p, int mergeTerrain) {
-		return false;
-	}
-
 
 }

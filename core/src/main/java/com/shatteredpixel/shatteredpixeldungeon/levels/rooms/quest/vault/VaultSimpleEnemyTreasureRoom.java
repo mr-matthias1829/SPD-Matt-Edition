@@ -43,12 +43,7 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
-public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
-
-	@Override
-	public float[] sizeCatProbs() {
-		return new float[]{0, 1, 0};
-	}
+public class VaultSimpleEnemyTreasureRoom extends VaultRoom {
 
 	@Override
 	public void paint(Level level) {
@@ -113,11 +108,6 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 		enemy.pos = enemyPos;
 		level.mobs.add(enemy);
 
-	}
-
-	@Override
-	public boolean canMerge(Level l, Room other, Point p, int mergeTerrain) {
-		return false;
 	}
 
 	@Override

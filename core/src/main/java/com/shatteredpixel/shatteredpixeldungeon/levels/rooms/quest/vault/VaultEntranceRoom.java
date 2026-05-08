@@ -34,12 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRoom;
 import com.watabou.utils.Point;
 
-public class VaultEntranceRoom extends StandardRoom {
-
-	@Override
-	public float[] sizeCatProbs() {
-		return new float[]{0, 1, 0};
-	}
+public class VaultEntranceRoom extends VaultRoom {
 
 	@Override
 	public void paint(Level level) {
@@ -73,10 +68,5 @@ public class VaultEntranceRoom extends StandardRoom {
 		//max of two connections
 		if (direction == ALL) return 2;
 		return super.maxConnections(direction);
-	}
-
-	@Override
-	public boolean canMerge(Level l, Room other, Point p, int mergeTerrain) {
-		return false;
 	}
 }

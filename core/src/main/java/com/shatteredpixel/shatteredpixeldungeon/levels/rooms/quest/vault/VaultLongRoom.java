@@ -36,14 +36,9 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRo
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
-public class VaultLongRoom extends StandardRoom {
+public class VaultLongRoom extends VaultRoom {
 
 	private boolean wide = Random.Int(2) == 0;
-
-	@Override
-	public float[] sizeCatProbs() {
-		return new float[]{0, 0, 1};
-	}
 
 	@Override
 	public int minWidth() {
@@ -64,6 +59,12 @@ public class VaultLongRoom extends StandardRoom {
 	public int maxHeight() {
 		return minHeight();
 	}
+
+	@Override
+	public int sizeFactor() {
+		return 2;
+	}
+
 
 	@Override
 	public void paint(Level level) {
@@ -109,11 +110,6 @@ public class VaultLongRoom extends StandardRoom {
 			pos = level.pointToCell(random(1));
 		} while (level.map[pos] == Terrain.WALL);
 		return pos;
-	}
-
-	@Override
-	public boolean canMerge(Level l, Room other, Point p, int mergeTerrain) {
-		return false;
 	}
 
 }
