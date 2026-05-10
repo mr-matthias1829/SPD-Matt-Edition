@@ -134,8 +134,9 @@ public class DM100 extends Mob implements Callback {
     }
 
     @Override
+    // this one went through ALOT of damage changes
     public int damageRoll() {
-        return Random.NormalIntRange( 3, 6);//4,8 //3,7 //3,10
+        return Random.NormalIntRange( 3, 6); // 3,6 //4,8 //3,7 //3,10
     }
 
     @Override

@@ -57,7 +57,9 @@ public class BadgesGrid extends Component {
 
 			ArrayList<Badges.Badge> lockedBadges = new ArrayList<>();
 			for (Badges.Badge badge : Badges.Badge.values()) {
-				if (badge.type != Badges.BadgeType.HIDDEN && !Badges.isUnlocked(badge)) {
+                if (badge.type != Badges.BadgeType.HIDDEN
+                        && !(badge.type == Badges.BadgeType.SECRET && !Badges.isUnlocked(badge))
+                        && !Badges.isUnlocked(badge)) {
 					lockedBadges.add(badge);
 				}
 			}

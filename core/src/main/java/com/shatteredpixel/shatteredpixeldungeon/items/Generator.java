@@ -336,8 +336,8 @@ public class Generator {
 					ScrollOfTransmutation.class,
                     ScrollOfMagicUpgrade.class
 			};
-			SCROLL.defaultProbs  = new float[]{ 0, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 0};
-			SCROLL.defaultProbs2 = new float[]{ 0, 2, 0, 2, 1, 2, 1, 1, 1, 1, 1, 0, 0};
+			SCROLL.defaultProbs  = new float[]{ 0, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 0};
+			SCROLL.defaultProbs2 = new float[]{ 0, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 0, 0};
 			SCROLL.probs = SCROLL.defaultProbs.clone();
 			
 			STONE.classes = new Class<?>[]{
@@ -362,7 +362,7 @@ public class Generator {
 					WandOfLightning.class,
 					WandOfDisintegration.class,
 					WandOfFireblast.class,
-					WandOfCorrosion.class,
+					WandOfCorrosion.class, // moved to quest exclusive from wandmaker
 					//WandOfBlastWave.class,
 					WandOfLivingEarth.class,
 					WandOfFrost.class,
@@ -371,8 +371,9 @@ public class Generator {
 					WandOfTransfusion.class,
 					WandOfCorruption.class,
 					WandOfRegrowth.class,
-                    WandOfBlastWave.class,
-                    WandOfElements.class};
+                    WandOfBlastWave.class, // moved to quest exclusive from wandmaker
+                    WandOfElements.class // alchemy
+            };
 			WAND.defaultProbs = new float[]{ 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0 };
 			WAND.probs = WAND.defaultProbs.clone();
 			
@@ -382,7 +383,7 @@ public class Generator {
 			
 			WEP_T1.classes = new Class<?>[]{
 					WornShortsword.class,
-					MagesStaff.class,
+					MagesStaff.class, // mage unique item: don't spawn this.
 					Dagger.class,
 					Gloves.class,
 					Rapier.class,
@@ -398,7 +399,7 @@ public class Generator {
 					Quarterstaff.class,
 					Dirk.class,
 					Sickle.class,
-					Pickaxe.class
+					Pickaxe.class // caves quest unique item: don't spawn this.
 			};
 			WEP_T2.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 0 };
 			WEP_T2.probs = WEP_T2.defaultProbs.clone();
@@ -462,7 +463,7 @@ public class Generator {
 					ThrowingStone.class,
 					ThrowingKnife.class,
 					ThrowingSpike.class,
-					Dart.class
+					Dart.class // shop only
 			};
 			MIS_T1.defaultProbs = new float[]{ 3, 3, 3, 0 };
 			MIS_T1.probs = MIS_T1.defaultProbs.clone();
@@ -502,7 +503,8 @@ public class Generator {
 			FOOD.classes = new Class<?>[]{
 					Food.class,
 					Pasty.class,
-					MysteryMeat.class };
+					MysteryMeat.class // only found as a drop from certain enemies
+            };
 			FOOD.defaultProbs = new float[]{ 4, 1, 0 };
 			FOOD.probs = FOOD.defaultProbs.clone();
 			
@@ -519,16 +521,16 @@ public class Generator {
 					RingOfSharpshooting.class,
 					RingOfTenacity.class,
 					RingOfWealth.class};
-			RING.defaultProbs = new float[]{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
+			RING.defaultProbs = new float[]{ 3, 3, 3, 2, 3, 3, 1, 1, 1, 3, 3, 1 };
 			RING.probs = RING.defaultProbs.clone();
 			
 			ARTIFACT.classes = new Class<?>[]{
 					AlchemistsToolkit.class,
 					ChaliceOfBlood.class,
-					CloakOfShadows.class,
+					CloakOfShadows.class, // rogue unique item
 					DriedRose.class,
 					EtherealChains.class,
-					HolyTome.class,
+					HolyTome.class, // cleric unique item
 					HornOfPlenty.class,
 					MasterThievesArmband.class,
 					SandalsOfNature.class,
@@ -537,7 +539,7 @@ public class Generator {
 					UnstableSpellbook.class,
                     SkeletonKey.class
 			};
-			ARTIFACT.defaultProbs = new float[]{ 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0 };
+			ARTIFACT.defaultProbs = new float[]{ 5, 3, 0, 5, 3, 0, 5, 5, 5, 7, 5, 7, 0 };
 			ARTIFACT.probs = ARTIFACT.defaultProbs.clone();
 
 			//Trinkets are unique like artifacts, but unlike them you can only have one at once
@@ -578,21 +580,29 @@ public class Generator {
 
 	public static final float[][] floorSetTierProbs = new float[][] {
 
+            // after rework
+            {55, 30, 15,  0,  0},
+            {34, 40, 18, 8,  0},
+            {0, 60, 25, 10, 5},
+            {0, 45, 35, 15, 5},
+            {0, 0, 45, 35, 20}
+
+
+            /* before rework
             {93, 5, 2,  0,  0},
             {50, 40, 7, 3,  0},
             {0, 75, 15, 8, 2},
             {0, 57, 25, 15, 3},
             {0, 77, 11, 8, 4}
 
-            /* OLD BUT NEWER
+            OLD BUT NEWER
             {0, 75, 20,  4,  1},
             {0, 50, 35, 12,  3},
             {0, 40, 40, 15, 5},
             {0, 30, 40, 23, 7},
             {0, 70, 15, 10, 5}
-             */
 
-            /* OLD
+            OLD
 			{0, 75, 20,  4,  1},
 			{0, 25, 50, 20,  5},
 			{0,  0, 40, 50, 10},

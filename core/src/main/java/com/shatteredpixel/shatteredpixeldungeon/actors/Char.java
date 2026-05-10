@@ -66,6 +66,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -325,17 +326,19 @@ public abstract class Char extends Actor {
 		
 		boolean visibleFight = Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[enemy.pos];
 
+        boolean magicAttack = buff(MagicInfuse.class) != null;
+
 		if (enemy.isInvulnerable(getClass())) {
 
-			if (visibleFight) {
-				enemy.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "invulnerable") );
+            if (visibleFight) {
+                enemy.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 
-				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1f, Random.Float(0.96f, 1.05f));
-			}
+                Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1f, Random.Float(0.96f, 1.05f));
+            }
 
-			return false;
+            return false;
 
-		} else if (hit( this, enemy, accMulti, false )) {
+        } else if (hit( this, enemy, accMulti, magicAttack )) {
 			
 			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
 			
@@ -350,6 +353,10 @@ public abstract class Char extends Actor {
 				if (h.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
 					dr = 0;
 				}
+
+                if (h.buff(MagicInfuse.class) != null){
+                    dr = 0;
+                }
 			}
 
 			//we use a float here briefly so that we don't have to constantly round while
@@ -474,7 +481,16 @@ public abstract class Char extends Actor {
                 Dungeon.hero.buff(Pride.class).onSuccessfulHit();
             }
 
-			enemy.damage( effectiveDamage, this );
+
+            Object src = this; // place to blabber with the source
+                                // used for weird cases we can have
+
+            if (buff(MagicInfuse.class) != null) {
+                src = buff(MagicInfuse.class);
+            }
+
+            enemy.damage(effectiveDamage, src);
+
 
 			if (buff(FireImbue.class) != null)  buff(FireImbue.class).proc(enemy);
 			if (buff(FrostImbue.class) != null) buff(FrostImbue.class).proc(enemy);
@@ -586,6 +602,8 @@ public abstract class Char extends Actor {
 	public static boolean hit( Char attacker, Char defender, float accMulti, boolean magic ) {
 		float acuStat = attacker.attackSkill( defender );
 		float defStat = defender.defenseSkill( attacker );
+
+        magic =  attacker.buff(MagicInfuse.class) != null;
 
 		if (defender instanceof Hero && ((Hero) defender).damageInterrupt){
 			((Hero) defender).interrupt();

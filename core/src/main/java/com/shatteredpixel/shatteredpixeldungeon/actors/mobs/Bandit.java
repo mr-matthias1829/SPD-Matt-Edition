@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
@@ -76,7 +77,9 @@ public class Bandit extends Thief {
 			//Buff.affect( hero, Poison.class ).set(Random.IntRange(5, 6) );
 			Buff.prolong( hero, Cripple.class, Cripple.DURATION/2f );
 			Dungeon.observe();
-			
+
+            Badges.validateModProgression("dejavu");
+
 			return true;
 		} else {
 			return false;

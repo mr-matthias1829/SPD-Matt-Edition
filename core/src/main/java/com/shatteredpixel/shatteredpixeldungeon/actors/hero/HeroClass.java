@@ -57,11 +57,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPureMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.CrackedSpyglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Glock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.GlovesPurge;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.KatanaDarkness;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
@@ -104,6 +107,46 @@ public enum HeroClass {
 
 		Item i = new ClothArmor().identify();
 		//if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;
+
+
+
+        /* man i love cheating (i use this to more easily test stuff, dont mind meeeee)
+        */
+        Quarterstaff staff = new Quarterstaff();
+        staff.identify().collect();
+
+        ScrollOfMagicMapping map = new ScrollOfMagicMapping();
+        map.identify().collect();
+        ScrollOfMagicMapping map2 = new ScrollOfMagicMapping();
+        map2.identify().collect();
+
+        ClothArmor a = new ClothArmor();
+        a.identify().collect();
+
+        GlovesPurge UW = new GlovesPurge();
+        UW.identify().collect();
+
+        new Glock().identify().collect();
+        new WandOfElements().identify().collect();
+        new WandOfFireblast().identify().collect();
+        new WandOfFrost().identify().collect();
+        new WandOfLightning().identify().collect();
+
+        for (int s = 2; s < 100; s++) {
+            new ScrollOfUpgrade().identify().collect();
+            new ScrollOfMagicUpgrade().identify().collect();
+            new PotionOfStrength().identify().collect();
+            new PotionOfExperience().identify().collect();
+            new ScrollOfMagicMapping().identify().collect();
+            new PotionOfMindVision().identify().collect();
+            new ScrollOfPureMagic().identify().collect();
+        }
+        /*
+        */
+
+
+
+
 
 		i = new Food();
 		if (!Challenges.isItemBlocked(i)) i.collect();
@@ -186,6 +229,10 @@ public enum HeroClass {
 
         Dungeon.quickslot.setSlot(0, stones);
         Dungeon.quickslot.setSlot(1, stones2);
+
+        // post rework, peasant now starts with armor as the only hero
+        Item i = new ClothArmor().identify();
+        i.identify().collect();
     }
 
 	private static void initWarrior( Hero hero ) {
@@ -230,40 +277,6 @@ public enum HeroClass {
 
 		ThrowingKnife knives = new ThrowingKnife();
 		knives.identify().collect();
-
-        /* man i love cheating (i use this to more easily test stuff, dont mind meeeee)
-        Quarterstaff staff = new Quarterstaff();
-        staff.identify().collect();
-
-        ScrollOfMagicMapping map = new ScrollOfMagicMapping();
-        map.identify().collect();
-        ScrollOfMagicMapping map2 = new ScrollOfMagicMapping();
-        map2.identify().collect();
-
-        ClothArmor a = new ClothArmor();
-        a.identify().collect();
-
-        CrackedSpyglass sp = new CrackedSpyglass();
-        sp.identify().collect();
-
-        SkeletonKey k = new SkeletonKey();
-        k.identify().collect();
-
-        new Glock().identify().collect();
-        new WandOfElements().identify().collect();
-        new WandOfFireblast().identify().collect();
-        new WandOfFrost().identify().collect();
-        new WandOfLightning().identify().collect();
-
-        for (int s = 2; s < 100; s++) {
-            new ScrollOfUpgrade().identify().collect();
-            new ScrollOfMagicUpgrade().identify().collect();
-            new PotionOfStrength().identify().collect();
-            new PotionOfExperience().identify().collect();
-            new ScrollOfMagicMapping().identify().collect();
-            new PotionOfMindVision().identify().collect();
-        }
-        */
 
 
 		Dungeon.quickslot.setSlot(0, cloak);

@@ -268,7 +268,6 @@ public class Mimic extends Mob {
         defenseSkill = 5 + level/2;
 
         baseSpeed = 1.2f; //1.5f //1f
-        EXP = 1 + Math.round((float) level /2); //0
 
         enemySeen = true;
     }

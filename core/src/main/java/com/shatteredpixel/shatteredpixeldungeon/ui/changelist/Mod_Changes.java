@@ -32,6 +32,199 @@ public class Mod_Changes {
                         "This does NOT have a separate release for each version. Often one release (update) contains 2 or more new versions\n\n" +
                         "while this mod does _try_ to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
 
+
+        // ===== reworks (v1400) =====
+        changes = new ChangeInfo("The Rework", true, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARMOR_WARRIOR), "Items",
+                "_Changes:_\n" +
+                        "1. level vs magic level reducing each others effect on armor reduced (30% -> 18%)\n" +
+                        "2. all armor tiers now have a higher base max DR\n" +
+                        "3. removed the global -7% damage nerf to all melee weapons, it's instead applied to missile weapons now and increased to -10%\n" +
+                        "4. the tier based nerfs for weapons have been significantly reduced, melee's gain a 5% more damage boost overall\n" +
+                        "5. increased energy cost for creating the wand of elements through alchemy (21 ->36)\n"
+                ));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_LAGUZ), "Other items",
+                "_Changes:_\n" +
+                        "1. potion of levitation now applies levitation with more duration (default -> default*2)\n" +
+                        "2. natural gold spawn quantity nerf reduced (0.65 -> 0.8), and more base gold in general\n" +
+                        "3. (randomized) gold quantity now gains a very small boost based on depth, scaling faster the deeper you go up to a x3 multiplier\n" +
+                        "4. (finally) added the exotic variant to the scroll of magic upgrade, the scroll of pure magic!\n" +
+                        "5. potion of mastery (potion of strength exotic) can no longer be obtained, and is replaced by the potion of vitality, which increases max hp\n" +
+
+                        "\n_Rings:_\n" +
+                        "1. nerfed ring of accuracy effect (15% -> 10%)\n" +
+                        "2. nerfed ring of arcana effect (12.5% -> 10%)\n" +
+                        "3. buffed ring of evasion effect (1% -> 10%)\n" +
+                        "4. nerfed ring of furor effect (6% -> 5%)\n" +
+                        "5. nerfed ring of haste effect (8% -> 5%)\n" +
+                        "6. ring of might now has a base strength bonus of 1 instead of 0.5, making the first level more effective\n" +
+                        "7. ring of sharpshooting now has a base level increase of 1 instead of 0.5\n" +
+                        "8. buffed ring of tenacity effect (6% -> 10%)\n" +
+                        "9. ring of wealth has been restored to vanilla behavior and stats and has been completely renerfed (less nerfed than before)\n"
+
+                ));
+
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.TENGU, 0, 0, 14, 16), "Bosses",
+                "\n_Goo:_\n" +
+                        "1. reduced goopling hp (9:7 -> 5) and no longer increases if the challenge _stronger bosses_ is active\n" +
+                        "2. goo hp reduced (160:120 -> 140:120)\n" +
+                        "3. goopling spawn cooldown increased if challenge _stronger bosses_ is active (8 -> 11) to compensate for double goopling spawns\n" +
+                        "4. initial goopling spawn cooldown increased (2 -> 5)\n" +
+
+                         "\n_Tengu:_\n" +
+                        "1. changed tengu's dialog a bit\n" +
+                        "2. tengu's hp reduced (350:300 -> 285:225)\n" +
+                        "3. tengu's base damage reduced (6,14 -> 5,12)\n" +
+                        "4. tengu in phase 2 starts using traps earlier\n" +
+                        "5. tengu may now use fire trap in challenge _stronger bosses_ as normal\n" +
+                        "6. in challenge _stronger bosses_ tengu still uses the fire trap alongside using any other trap, but at a 33% instead of 100%\n" +
+                        "7. electricity trap is now rarer, unchanged in challenge _stronger bosses_\n" +
+                        "8. tengu's last stand now lasts shorter in challenge _stronger bosses_ (25 -> 18)\n"
+                ));
+
+        changes.addButton(new ChangeButton(new Image(new RatSprite()), "Enemies",
+                        "\n_Sewers:_\n" +
+                        "1. snakes can drop seeds again at a lower chance (vanilla 25% -> 10%)\n" +
+                        "2. gnolls award xp for longer (max lvl 4 -> 8)\n" +
+                        "3. crabs award more xp (2 -> 3), award xp for longer (max lvl 5 -> 9), speed increased (1 -> 1.5), reduced DR (0,4 -> 0,3), reduced damage (3,8 -> 3,7)\n" +
+                        "4. swarm hp increased (30 -> 50), damage reduced (3,7 -> 2,5)\n" +
+                        "5. slime (sewers) damage reduced (4,6 -> 2,5)\n" +
+                        "6. fetid rat (sewers quest) reduced attack proc damage (3,7 -> 2,5), reduced hp (24 -> 20)\n" +
+                        "7. gnoll trickster (sewer quest) xp reduced (7 -> 5), hp reduced (24 -> 18)\n" +
+                        "8. great crab (sewer quest) hp reduced (32 -> 26)\n" +
+
+                        "\n_Prison:_\n" +
+                        "1. slime (prison) damage reduced (5,8 -> 3,6)\n" +
+                        "2. skeleton damage increased (3,9 -> 3,11)\n" +
+                        "3. thief awards more xp (1 -> 4), speed in caves increased (0.9 -> 1), increased DR (0,3 -> 1,4)\n" +
+                        "4. dm100 (and dm151) damage reduced (3,6 -> 2,6), to increase incentive to use magic upgrades on armor\n" +
+                        "5. guard hp reduced (60 -> 40), defensive increased (1 -> 5), damage increased (5,10 -> 5,14), bash dmg multiplier reduced (x1.25 -> x1.1), lowered bash cooldown (12 -> 10), increased DR (0,4 -> 2,7)\n" +
+                        "6. necromancer was fixed, and will now use it's abilities correctly and more often\n" +
+
+                        "\n_Caves:_\n" +
+                        "1. fetid rat (caves) now has a max level cap instead of giving xp forever\n" +
+                        "2. gnoll trickster (caves) now has a max level cap instead of giving xp forever, loot chance reduced (18% -> 8%)\n" +
+
+                        "\n_Rare:_\n" +
+                        "1. albino rat hp reduced (30 -> 15) and awards xp (0 -> 2), bleed inflicted is now equal to half of damage dealt\n" +
+                        "2. hermit crab speed increased (0.9 -> 1)\n" +
+                        "3. dm151 now seeks out the hero\n" +
+
+
+                        "\n_Global:_\n" +
+                        "1. piranha speed reduced (3 -> 2), now deals +1 minimum damage\n" +
+                        "2. mimic's no longer reward xp\n" +
+                        "3. statue defensive skill reduced (depth*2 -> depth), hp reduced (depth*7 -> depth*6)"
+                ));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bug and error fixes",
+                "_Fixes:_\n" +
+                        "1. tengu's defeat message should now correctly show\n" +
+                        "2. stone of enchantment's sprite is no longer blurry (how the hell did it get blurry in the first place???)\n" +
+                        "3. ring of sharpshooting now correctly applies durability bonus, before granting more than it should have and than is stated\n" +
+                        "4. rings of sharpshooting and might direct stats (missile level and additional strength) are no longer deceiving and fixed, being 100% accurate now\n"
+
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.DISPLAY_LAND), "Visuals and UI",
+                "_Changes:_\n" +
+                        "1. small changes to the title screen and other ui like 'boss defeated'\n" +
+                        "2. talents tab is no longer visible for the peasant, including during rankings\n" +
+                        "3. removed all languages apart from english\n" +
+                        "4. updated some messages to be up to date with some changes (ex: POS only saying it gives 1 STR, etc)\n" +
+                        "5. scroll of magic upgrade and debuff _consuming greed_ now have their own distinct icons\n" +
+                        "6. removed the 'unused enemies' tab in the enemy bestiary. They still exist, but will be properly added when their time comes\n" +
+                        "7. updated some guidebook pages to be somewhat more up to date\n"
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_COLOR), "Challenges and sins",
+                "_Changes:_\n" +
+                        "1. nerfed sloth turns gain per floor, sloth damage scales slower\n" +
+                        "2. removed challenges _back to origins_, _guns blazing_, and _wonky step_, mostly for being unfair\n" +
+                        "3. challenge _consuming greed_ now gains a buff in it's difficulty if you have the sin of greed active (_you've been warned_)\n"
+
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "Mechanics and other changes",
+                "_Changes:_\n" +
+                        "1. the peasant now starts with cloth armor as the only hero, but lacks strength to use it\n" +
+                        "2. the warrior needs less enemies defeated in one game to be unlocked (75 -> 30)\n" +
+                        "3. levitation buff default duration is now the same as other buffs (30 -> 20)\n" +
+                        "4. rare enemies spawn chance reduced, becoming twice as rare (1/20 -> 1/40)"
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Generation and traps",
+                "_Changes:_\n" +
+                        "1. ice caves floor now has different odds for it's traps, hopefully offering a bit more variety\n" +
+                        "2. ice caves floor now has its generation adjusted a bit\n" +
+                        "3. "
+
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CATALOG), "Enemy and item spawning",
+                "_Enemies:_\n" +
+                        "1. floor 6 and 7 can no longer spawn snake\n" +
+                        "2. reduced slime spawn chance on floor 8\n" +
+
+                        "\n_Items:_\n" +
+                        "1. scroll of identify is a little more common\n" +
+                        "2. scroll of remove curse is a little more common and spawns in more cases\n" +
+                        "3. the following rings are now rarer compared to other rings: wealth, might, haste, and furor. Energy is made rarer too, but less so\n" +
+                        "4. the following artifacts are now rarer compared to other artifacts: chalice of blood and ethereal chains\n" +
+                        "5. the following artifacts are now a bit more common compared to other artifacts: talisman of foresight and unstable spellbook\n" +
+                        "6. a potion of strength will now always spawn on floor 1\n" +
+
+                        "\n_Item tier distribution:_\n" +
+                        "1. sewers: much more likely to spawn T2 or T3 items, can still not spawn T4 or T5 items\n" +
+                        "2. prison: less likely to spawn T1 items, and more likely for T3, T4 slightly increased as well\n" +
+                        "3. caves: slightly less likely to spawn T2 items, T4 and T5 a bit more likely, T3 much more likely\n" +
+                        "4. city: less likely to spawn T2 items, and more likely for T3 and T5\n" +
+                        "5. halls: can no longer spawn T2 items, significantly more likely for T3, T4, and T5\n"
+
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.BADGES), "Badges",
+                "_Changes:_\n" +
+                        "1. fixed badge 'against everything and more' being rewarded at 1+ challenges instead of 3+\n" +
+                        "2. badge 'against everything and more' is now forever hidden unless achieved\n" +
+                        "3. removed the victory with X sins badges\n" +
+                        "4. stacked all victory with X challenges badges\n" +
+                        "5. fixed some badges\n" +
+                        "6. more badges stack now (including some vanilla badges)\n" +
+                        "7. added some new badges for collective stacking\n" +
+                        "8. added a new badge\n" +
+                        "9. added a new (but unused) badge that will be implemented later (to hell and back)\n" +
+                        "10. added 3 new badges that are almost directly linked to progression and this mod's exlcusive stuff\n" +
+                        "11. added a handful more badges that are all secret (not visible unless achieved), they have a '[secret badge]' in their description. How many can you find?\n"
+                ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.INFO), "Notes",
+                "_Overall:_\n" +
+                        "1. \n" +
+
+                        "\n_Bosses:_\n" +
+                        "1. bosses were made easier to more consistently be able to beat them\n" +
+                        "2. on top of that: changes were made to make the challenge _stronger bosses_ more realistic to be beatable (though, don't expect it to be perfect yet)\n" +
+
+                        "\n_Enemies and Items:_\n" +
+                        "1. before, there was a huge inbalance. enemies were way stronger than the hero and items they had\n" +
+                        "2. many enemies were nerfed, and all items got a general buff to balance it out\n" +
+                        "3. the peasant was buffed a bit, starting with armor so his runs die less often\n" +
+                        "4. don't think that you can now win any run by playing well, rng will still play a major factor. most risks have been reduced, but still are a risk for you to take\n" +
+
+                        "\n_Clean ups and fixes:_\n" +
+                        "1. there were a handful of messes than needed a cleanup, mainly challenges, badges, and the title screen\n" +
+                        "2. the title screen was removed of it's random rainbow effect, replaced by a more fitting color that from now on will be used more frequently as the style color\n" +
+                        "3. badges were (mostly) cleaned up, and will definitely be cleaned up more in the future\n" +
+                        "4. as for language, I removed them all except english. reason being that existing languages would continue using old information and was just very inconvenient to maintain\n"
+                ));
+
+
+
         // ===== v1300 and up =====
         changes = new ChangeInfo("v1300 and up", true, null);
         changes.hardlight(Window.TITLE_COLOR);

@@ -47,12 +47,16 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class FishingRod extends Artifact {
+    // dude this is like, totally the artifact of all time
+    // like, look at how ancient this item is man!
+    // this isn't just some common day to day item, this is like super uber rare!
 
     {
         image = ItemSpriteSheet.FISHING_ROD;
 
         levelCap = 10;
 
+        // TODO: perhaps check if any artifact charges work on this item...? they shouldn't...
         charge = 0; // 0 = no bait, 1 = has bait
         chargeCap = 1;
 
@@ -61,7 +65,7 @@ public class FishingRod extends Artifact {
 
     @Override
     public int value() {
-        return 28 * quantity;
+        return 40 * quantity;
     }
 
     private int storedExp = 0;
@@ -74,7 +78,8 @@ public class FishingRod extends Artifact {
         ArrayList<String> actions = super.actions( hero );
         if (hero.buff(MagicImmune.class) != null) return actions;
 
-        if (isEquipped( hero ) && !cursed) {
+        if (isEquipped( hero ) && !cursed) { // if cursed just... prevent usage, thats all
+                                            // tbh i cant be bothered to add a special cursed effect
             if (charge > 0) {
                 actions.add(AC_USE);
             }
@@ -129,6 +134,7 @@ public class FishingRod extends Artifact {
 
     private void doFish(Hero hero) {
         // Consume bait
+        // if you somehow had more than 1 charge then uhh... haha rip?
         charge = 0;
 
         // Visual effect
@@ -157,7 +163,7 @@ public class FishingRod extends Artifact {
             // Gain exp based on loot rarity - stored in a temporary variable during generation
             gainExp(lastCatchRarity);
         } else {
-            // Caught nothing
+            // Caught nothing, there goes your food, the risk of greeding for items be like:
             GLog.w( Messages.get(this, "nothing_caught") );
         }
 
@@ -171,6 +177,7 @@ public class FishingRod extends Artifact {
         if (level() >= levelCap) return;
 
         // Exp values: common=1, uncommon=3, rare=8, legendary=16
+        // those values are mostly eyeballed not gonna lie
         int expGain = rarity;
         storedExp += expGain;
 
@@ -193,16 +200,14 @@ public class FishingRod extends Artifact {
     }
 
     // Calculate exp needed for a given level
-    // Level 0->1: 1 exp
-    // Level 1->2: 2 exp
-    // Level 2->3: 3 exp
-    // Level 3->4: 4 exp
-    // Level 4->5: 5 exp
-    // Level 5->6: 7 exp (increment goes up by 1)
-    // Level 6->7: 9 exp
-    // etc.
+    // somewhat dynamic and scaling
+    // just know that gained/stored xp goes minus required on level up
+    // so if the req's were: 1, 2, 3, 4, 5
+    // that would mean you would need total 15 xp for level 6 (not 5) which is roughly equal to a legendary catch
+    // also note that each catch costs food, which you most likely do not have a infinite source of
+    // so this is actually just balanced somehow (of course, the example here was not accurate)
     private int getExpNeeded(int currentLevel) {
-        if (currentLevel >= levelCap) return Integer.MAX_VALUE;
+        if (currentLevel >= levelCap) return Integer.MAX_VALUE; // thats like 2 billion xp, there's no way you get to level 11 in one lifetime bro
 
         double multiplier = 1.0 + currentLevel * 0.05; // 5% per level
         return (int) Math.round((currentLevel + 1) * multiplier);
@@ -214,7 +219,7 @@ public class FishingRod extends Artifact {
 
         // Chance to catch nothing decreases with rod level
         // Level 0-4: has a chance to catch nothing
-        // Level 5+: always catches something
+        // Level 5+: always catches something because im so nice like that
         if (rodLevel < 5) {
             float nothingChance = 0.35f - (rodLevel * 0.04f); // 30%, 24%, 18%, 12%, 6%
             if (Random.Float() < nothingChance) {
@@ -224,12 +229,13 @@ public class FishingRod extends Artifact {
         }
 
         // Luck bonus from rod level (1% per level)
+        // 1% sounds very little, but at max level, legendary odds are roughly TRIPLED
         float luckBonus = rodLevel * 0.01f;
 
         // Loot table using Generator - Roll from best to worst!
         float roll = Random.Float();
 
-        // Legendary items (3% base + luck bonus) //5%
+        // Legendary items (3% base + luck bonus)
         if (roll < 0.03f + (luckBonus/1.5)) {
             lastCatchRarity = 20; //16
             // Rings or wands
@@ -239,7 +245,7 @@ public class FishingRod extends Artifact {
                 return Generator.random(Generator.Category.WAND);
             }
         }
-        // Rare items (6% base + luck bonus) //10%
+        // Rare items (6% base + luck bonus)
         else if (roll < 0.6f + (luckBonus/1.5)) {
             lastCatchRarity = 12; //8
             // Armor or melee weapons
@@ -249,7 +255,7 @@ public class FishingRod extends Artifact {
                 return Generator.randomWeapon();
             }
         }
-        // Uncommon items (16% base) //25%
+        // Uncommon items (16% base)
         else if (roll < 0.16f + (luckBonus * 1.5)) {
             lastCatchRarity = 4; // 3
             // Potions or scrolls
@@ -262,12 +268,13 @@ public class FishingRod extends Artifact {
         // Common items (60% base, fills the rest)
         else {
             lastCatchRarity = 1; // 1
-            // Gold, seeds, or runestones
+            // Gold, seeds, or runestones, they all have the same odds here
+            // luck does NOT increase loot here
             int type = Random.Int(3);
             switch (type) {
                 case 0:
                     Gold gold = (Gold) new Gold().random();
-                    gold.quantity((int)(gold.quantity() * 0.8f));
+                    gold.quantity((int)(gold.quantity() * 0.75f)); // nerf gold to somewhat prevent farming a ton
                     return gold;
                 case 1: return Generator.random(Generator.Category.SEED);
                 default: return Generator.random(Generator.Category.STONE);
@@ -328,8 +335,8 @@ public class FishingRod extends Artifact {
     }
 
     public class fishingBuff extends ArtifactBuff {
-        // Passive luck bonus when equipped
-        // You can implement this further if you want passive effects
+        // does nothing
+        // maybe something for the future idk man
     }
 
     protected static WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
@@ -353,12 +360,13 @@ public class FishingRod extends Artifact {
         public void onSelect( Item item ) {
             if (item != null && item instanceof Food) {
                 if (item instanceof Blandfruit && ((Blandfruit) item).potionAttrib == null){
-                    GLog.w( Messages.get(FishingRod.class, "reject") );
+                    GLog.w( Messages.get(FishingRod.class, "reject") ); // just like horn, reject blandfruit
+                                                                            // tbh this is just evil but eh
                 } else {
                     Hero hero = Dungeon.hero;
                     hero.sprite.operate( hero.pos );
                     hero.busy();
-                    hero.spend( Food.TIME_TO_EAT );
+                    hero.spend( Food.TIME_TO_EAT ); // takes awhile to set the bait because... tbh idk either
 
                     // Set bait
                     ((FishingRod)curItem).charge = 1;

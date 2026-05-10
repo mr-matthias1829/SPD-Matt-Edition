@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -93,65 +94,60 @@ public class WndRanking extends WndTabbed {
 			INSTANCE = null;
 		}
 	}
-	
-	private void createControls() {
 
-        if (Dungeon.hero != null) {
-            Icons[] icons;
-            Group[] pages;
+    private void createControls() {
 
-            // If both challenges and sins are active
-            if (Dungeon.challenges != 0 && Dungeon.sins != 0) {
-                icons = new Icons[]{
-                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG,
-                        Icons.BADGES, Icons.CHALLENGE_COLOR, Icons.SIN_COLOR
-                };
-                pages = new Group[]{
-                        new StatsTab(), new TalentsTab(), new ItemsTab(),
-                        new BadgesTab(), new ChallengesTab(), new SinsTab()
-                };
-            }
-            // If only challenges are active
-            else if (Dungeon.challenges != 0) {
-                icons = new Icons[]{
-                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG,
-                        Icons.BADGES, Icons.CHALLENGE_COLOR
-                };
-                pages = new Group[]{
-                        new StatsTab(), new TalentsTab(), new ItemsTab(),
-                        new BadgesTab(), new ChallengesTab()
-                };
-            }
-            // If only sins are active
-            else if (Dungeon.sins != 0) {
-                icons = new Icons[]{
-                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG,
-                        Icons.BADGES, Icons.SIN_COLOR
-                };
-                pages = new Group[]{
-                        new StatsTab(), new TalentsTab(), new ItemsTab(),
-                        new BadgesTab(), new SinsTab()
-                };
-            }
-            // Neither active
-            else {
-                icons = new Icons[]{
-                        Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG, Icons.BADGES
-                };
-                pages = new Group[]{
-                        new StatsTab(), new TalentsTab(), new ItemsTab(), new BadgesTab()
-                };
-            }
+        if (Dungeon.hero == null) return;
 
-            for (int i = 0; i < pages.length; i++) {
-                add(pages[i]);
-                Tab tab = new RankingTab(icons[i], pages[i]);
-                add(tab);
-            }
+        java.util.ArrayList<Icons> icons = new java.util.ArrayList<>();
+        java.util.ArrayList<Group> pages = new java.util.ArrayList<>();
 
-            layoutTabs();
-            select(0);
+        // always present
+        icons.add(Icons.RANKINGS);
+        pages.add(new StatsTab());
+
+        // ONLY add talents if NOT peasant
+        boolean hasTalents = Dungeon.hero.heroClass != HeroClass.PEASANT;
+        if (hasTalents) {
+            icons.add(Icons.TALENT);
+            pages.add(new TalentsTab());
         }
+
+        // inventory
+        icons.add(Icons.BACKPACK_LRG);
+        pages.add(new ItemsTab());
+
+        // badges
+        icons.add(Icons.BADGES);
+        pages.add(new BadgesTab());
+
+        // optional extra tabs
+        if (Dungeon.challenges != 0 && Dungeon.sins != 0) {
+            icons.add(Icons.CHALLENGE_COLOR);
+            pages.add(new ChallengesTab());
+
+            icons.add(Icons.SIN_COLOR);
+            pages.add(new SinsTab());
+
+        } else if (Dungeon.challenges != 0) {
+            icons.add(Icons.CHALLENGE_COLOR);
+            pages.add(new ChallengesTab());
+
+        } else if (Dungeon.sins != 0) {
+            icons.add(Icons.SIN_COLOR);
+            pages.add(new SinsTab());
+        }
+
+        // build UI
+        for (int i = 0; i < pages.size(); i++) {
+            add(pages.get(i));
+            add(new RankingTab(icons.get(i), pages.get(i)));
+        }
+
+        layoutTabs();
+
+        // safe default selection
+        select(0);
     }
 
 	private class RankingTab extends IconTab {

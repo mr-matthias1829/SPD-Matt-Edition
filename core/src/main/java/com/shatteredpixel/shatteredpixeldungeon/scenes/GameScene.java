@@ -1450,9 +1450,14 @@ public class GameScene extends PixelScene {
 
             if (Dungeon.justEnteredFloor){
                 Badges.validateDepth();
+                if (Dungeon.depth == 14 && Dungeon.branch == 2) { // ice caves
+                    Badges.validateModProgression("icecaves");
+                }
             }
             // Trigger GUNS_BLAZING challenge effect - ONLY when just entered floor
-            if (Dungeon.justEnteredFloor && Dungeon.isChallenged(Challenges.GUNS_BLAZING)) {
+            // challenge was removed, but leaving this code here since its actually kinda cool
+            // (also it was a pain to initially make)
+            if (Dungeon.justEnteredFloor && false) { // "false" here was where otherwise challenge status was checked
 
                 // Alert all mobs - they have sprites now
                 for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {

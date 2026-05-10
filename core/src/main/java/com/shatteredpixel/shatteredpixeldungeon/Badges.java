@@ -48,14 +48,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.FileUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class Badges {
 
@@ -63,7 +56,8 @@ public class Badges {
 		HIDDEN, //internal badges used for data tracking
 		LOCAL,  //unlocked on a per-run basis and added to overall player profile
 		GLOBAL, //unlocked for the save profile only, usually over multiple runs
-		JOURNAL //profile-based and also tied to the journal, which means they even unlock in seeded runs
+		JOURNAL, //profile-based and also tied to the journal, which means they even unlock in seeded runs
+        SECRET    // hidden away until achieved
 	}
 
 	public enum Badge {
@@ -88,6 +82,8 @@ public class Badges {
 		UNLOCK_HUNTRESS             ( 3 ),
 		UNLOCK_DUELIST              ( 4 ),
 		UNLOCK_CLERIC               ( 5 ),
+
+        UNLOCK_ALL_HERO_CLASSES     ( 200, BadgeType.SECRET ),
 
 		MONSTERS_SLAIN_1            ( 6 ),
 		MONSTERS_SLAIN_2            ( 7 ),
@@ -154,7 +150,10 @@ public class Badges {
 		BAG_BOUGHT_POTION_BANDOLIER,
 		BAG_BOUGHT_MAGICAL_HOLSTER,
 		ALL_BAGS_BOUGHT             ( 67 ),
+
+        GEARED_UP                   (273, BadgeType.SECRET),
 		MASTERY_COMBO               ( 68 ),
+        MASTERY_COMBO_2             ( 270 ),
 		MONSTERS_SLAIN_5            ( 69 ),
 		GOLD_COLLECTED_5            ( 70 ),
 		ITEM_LEVEL_4                ( 71 ),
@@ -235,10 +234,6 @@ public class Badges {
         VICTORY_WITH_10_CHALLENGES(326),
         VICTORY_WITH_ALL_CHALLENGES(327),
 
-        // victory with X sins
-        VICTORY_WITH_1_SIN(323),
-        VICTORY_WITH_4_SIN(324),
-
         // damage in one hit
         STRONG (265),
         MIGHTY (267),
@@ -251,8 +246,19 @@ public class Badges {
         WHAT_DID_IT_COST_EVERYTHING (218),
         NO_UPGRADE_BOSS3 (296),
         AGAINST_ALL_ODDS (206),
-        AGAINST_EVERYTHING_AND_MORE (207);
+        AGAINST_EVERYTHING_AND_MORE (207, BadgeType.SECRET),
+        TO_HELL_AND_BACK (272),
+        AWKWARD_DM151_UNBALANCE(208, BadgeType.SECRET), // super rare occurance, hence why its hidden
 
+        // PROGRESSIVE misc badges
+        KILL_TITLE_ENEMY     ( 208 ),
+        ICE_CAVE_TOURIST     ( 209 ),
+        THIEF_DEJA_VU     ( 210 ),
+
+
+        // impossible badge, used for some debug testing
+        // also means i dont have to move the ; part, super nice
+        IMPOSSIBLE ( 1, BadgeType.SECRET );
 
 		public boolean meta;
 
@@ -412,10 +418,11 @@ public class Badges {
 			badge = Badge.MONSTERS_SLAIN_3;
 			local.add( badge );
 		}
-        if (!local.contains( Badge.UNLOCK_WARRIOR_A ) && Statistics.enemiesSlain >= 75) {
+        if (!local.contains( Badge.UNLOCK_WARRIOR_A ) && Statistics.enemiesSlain >= 30) {
             if (badge != null) unlock(badge);
             badge = Badge.UNLOCK_WARRIOR_A;
             local.add( badge );
+            validateAllHeroClassesUnlocked();
         }
 		if (!local.contains( Badge.MONSTERS_SLAIN_4 ) && Statistics.enemiesSlain >= 250) {
 			if (badge != null) unlock(badge);
@@ -863,6 +870,20 @@ public class Badges {
 		}
 	}
 
+    public static void validateAllHeroClassesUnlocked() {
+
+        if (!isUnlocked(Badge.UNLOCK_ALL_HERO_CLASSES)
+                && isUnlocked(Badge.UNLOCK_WARRIOR_A)
+                && isUnlocked(Badge.UNLOCK_MAGE_A)
+                && isUnlocked(Badge.UNLOCK_ROGUE_A)
+                && isUnlocked(Badge.UNLOCK_HUNTRESS_A)
+                && isUnlocked(Badge.UNLOCK_DUELIST_A)
+                && isUnlocked(Badge.UNLOCK_CLERIC_A)) {
+
+            displayBadge(Badge.UNLOCK_ALL_HERO_CLASSES);
+        }
+    }
+
     public static void validateShopBadges( int goldSpent ) {
         // goldspend isnt the most useful right now, but for future badges it might be
         Badge badge = null;
@@ -928,6 +949,8 @@ public class Badges {
             badge = Badge.UNLOCK_CLERIC_A;
             local.add(badge);
         }
+
+        validateAllHeroClassesUnlocked(); // safety... mostly
         if (Dungeon.depth == 16 && Statistics.upgradesUsed == 0 && !isUnlocked(Badge.NO_UPGRADE_BOSS3)){
             badge = Badge.NO_UPGRADE_BOSS3;
             local.add( badge );
@@ -1103,18 +1126,24 @@ public class Badges {
         if (Statistics.upgradesUsed >= 14 && !isUnlocked(Badge.UNLOCK_MAGE_A)){
             displayBadge( Badge.UNLOCK_MAGE_A );
         }
+
+        validateAllHeroClassesUnlocked();
 	}
 	
 	public static void validateRogueUnlock(){
 		if (Statistics.sneakAttacks >= 10 && !isUnlocked(Badge.UNLOCK_ROGUE)){
 			displayBadge( Badge.UNLOCK_ROGUE );
 		}
+
+        validateAllHeroClassesUnlocked();
 	}
 	
 	public static void validateHuntressUnlock(){
 		if (Statistics.thrownAttacks >= 10 && !isUnlocked(Badge.UNLOCK_HUNTRESS)){
 			displayBadge( Badge.UNLOCK_HUNTRESS );
 		}
+
+        validateAllHeroClassesUnlocked();
 	}
 
 	public static void validateDuelistUnlock(){
@@ -1147,12 +1176,16 @@ public class Badges {
                 displayBadge(Badge.UNLOCK_DUELIST_A);
             }
         }
+
+        validateAllHeroClassesUnlocked();
 	}
 
 	public static void validateClericUnlock(){
 		if (!isUnlocked(Badge.UNLOCK_CLERIC)){
 			displayBadge( Badge.UNLOCK_CLERIC );
 		}
+
+        validateAllHeroClassesUnlocked();
 	}
 	
 	public static void validateMasteryCombo( int n ) {
@@ -1161,6 +1194,11 @@ public class Badges {
 			local.add( badge );
 			displayBadge( badge );
 		}
+        if (!local.contains( Badge.MASTERY_COMBO_2 ) && n == 100) {
+            Badge badge = Badge.MASTERY_COMBO_2;
+            local.add( badge );
+            displayBadge( badge );
+        }
 	}
 
     public static void validateVictory() {
@@ -1304,24 +1342,26 @@ public class Badges {
     public static void validateChampionSins( int sins){
         if (sins == 0) return;
 
+        /*
         Badge badge = null;
         if (sins >= 1) {
-            unlock(badge);
-            badge = Badge.VICTORY_WITH_1_SIN;
+            //unlock(badge);
+            //badge = Badge.VICTORY_WITH_1_SIN;
         }
         if (sins >= 4) {
-            unlock(badge);
-            badge = Badge.VICTORY_WITH_4_SIN;
+            //unlock(badge);
+           // badge = Badge.VICTORY_WITH_4_SIN;
         }
 
         local.add(badge);
         displayBadge( badge );
+        */
     }
 
 	public static void validateChampion( int challenges, int sins ) {
         Badge badge = null;
 
-        if (Dungeon.hero.heroClass == HeroClass.PEASANT){
+        if (Dungeon.hero.heroClass == HeroClass.PEASANT && challenges >= 3){
             badge = Badge.AGAINST_ALL_ODDS;
             unlock(badge);
         }
@@ -1362,6 +1402,35 @@ public class Badges {
 		local.add(badge);
 		displayBadge( badge );
 	}
+
+    public static void validateModProgression (String S){
+        // honestly, can't be bothered to use correct types so ima just use strings
+        // we have a small order to this though, you can only get up to one each turn
+        Badge badge = null;
+
+
+        if (Objects.equals(S, "dm151") && !isUnlocked(Badge.KILL_TITLE_ENEMY)){
+            badge = Badge.KILL_TITLE_ENEMY;
+            local.add(badge);
+        }
+        if (Objects.equals(S, "dm151_sewer") && !isUnlocked(Badge.AWKWARD_DM151_UNBALANCE)){
+            badge = Badge.AWKWARD_DM151_UNBALANCE;
+            local.add(badge);
+        }
+        if (Objects.equals(S, "icecaves") && !isUnlocked(Badge.ICE_CAVE_TOURIST)){
+            badge = Badge.ICE_CAVE_TOURIST;
+            local.add(badge);
+        }
+        if (Objects.equals(S, "dejavu") && !isUnlocked(Badge.THIEF_DEJA_VU)){
+            badge = Badge.THIEF_DEJA_VU;
+            local.add(badge);
+        }
+
+
+        if (badge != null) {
+            displayBadge(badge);
+        }
+    }
 	
 	private static void displayBadge( Badge badge ) {
 
@@ -1417,12 +1486,18 @@ public class Badges {
 		ArrayList<Badge> badges = new ArrayList<>(global ? Badges.global : Badges.local);
 
 		Iterator<Badge> iterator = badges.iterator();
-		while (iterator.hasNext()) {
-			Badge badge = iterator.next();
-			if ((!global && badge.type != BadgeType.LOCAL) || badge.type == BadgeType.HIDDEN) {
-				iterator.remove();
-			}
-		}
+        while (iterator.hasNext()) {
+            Badge badge = iterator.next();
+
+            // hide secret badges unless unlocked
+            if (badge.type == BadgeType.SECRET && !isUnlocked(badge)) {
+                iterator.remove();
+            }
+
+            if ((!global && badge.type != BadgeType.LOCAL) || badge.type == BadgeType.HIDDEN) {
+                iterator.remove();
+            }
+        }
 
 		Collections.sort(badges);
 
@@ -1443,11 +1518,18 @@ public class Badges {
 			{Badge.RESEARCHER_1, Badge.RESEARCHER_2, Badge.RESEARCHER_3, Badge.RESEARCHER_4, Badge.RESEARCHER_5},
 			{Badge.HIGH_SCORE_1, Badge.HIGH_SCORE_2, Badge.HIGH_SCORE_3, Badge.HIGH_SCORE_4, Badge.HIGH_SCORE_5},
 			{Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4, Badge.GAMES_PLAYED_5},
-			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3},
-
-            {Badge.VICTORY_WITH_8_CHALLENGES, Badge.VICTORY_WITH_10_CHALLENGES, Badge.VICTORY_WITH_ALL_CHALLENGES},
-            {Badge.VICTORY_WITH_1_SIN, Badge.VICTORY_WITH_4_SIN},
+			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3, Badge.VICTORY_WITH_8_CHALLENGES, Badge.VICTORY_WITH_10_CHALLENGES, Badge.VICTORY_WITH_ALL_CHALLENGES},
             {Badge.STRONG, Badge.MIGHTY, Badge.POWERFUL, Badge.OBLIVION },
+            {Badge.AGAINST_ALL_ODDS, Badge.AGAINST_EVERYTHING_AND_MORE},
+
+            {Badge.VICTORY, Badge.HAPPY_END, Badge.PACIFIST_ASCENT},
+            {Badge.MASTERY_COMBO, Badge.MASTERY_COMBO_2},
+
+            // mod progression line
+            // technically contains spoilers, but that's alright
+            // cooouullddd make the badges hidden until rewarded, since you're super likely to get them, but nah
+            {Badge.KILL_TITLE_ENEMY, Badge.ICE_CAVE_TOURIST, Badge.THIEF_DEJA_VU},
+
 
             // Legacy vs new hero class unlocks:
             // Warrior doesnt have a legacy unlock
@@ -1469,11 +1551,12 @@ public class Badges {
 			{Badge.VICTORY,      Badge.BOSS_CHALLENGE_5},
 			{Badge.HAPPY_END,    Badge.PACIFIST_ASCENT},
 			{Badge.VICTORY,      Badge.TAKING_THE_MICK},
-            {Badge.VICTORY, Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge? idk
+            {Badge.VICTORY,      Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge? idk
 
-            {Badge.VICTORY, Badge.AGAINST_ALL_ODDS},
-            {Badge.AGAINST_ALL_ODDS, Badge.AGAINST_EVERYTHING_AND_MORE},
 
+            {Badge.VICTORY, Badge.TO_HELL_AND_BACK},
+
+            {Badge.VICTORY, Badge.AGAINST_ALL_ODDS}
 	};
 
 	//If the summary badge is unlocked, don't show the component badges
@@ -1495,7 +1578,18 @@ public class Badges {
 			{Badge.ALL_RINGS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
 			{Badge.ALL_ARTIFACTS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
 			{Badge.ALL_POTIONS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
-			{Badge.ALL_SCROLLS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED}
+			{Badge.ALL_SCROLLS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
+
+            {Badge.ALL_BAGS_BOUGHT, Badge.GEARED_UP},
+            {Badge.ALL_ITEMS_IDENTIFIED, Badge.GEARED_UP},
+
+
+            {Badge.UNLOCK_WARRIOR_A, Badge.UNLOCK_ALL_HERO_CLASSES},
+            {Badge.UNLOCK_MAGE_A, Badge.UNLOCK_ALL_HERO_CLASSES},
+            {Badge.UNLOCK_ROGUE_A, Badge.UNLOCK_ALL_HERO_CLASSES},
+            {Badge.UNLOCK_HUNTRESS_A, Badge.UNLOCK_ALL_HERO_CLASSES},
+            {Badge.UNLOCK_DUELIST_A, Badge.UNLOCK_ALL_HERO_CLASSES},
+            {Badge.UNLOCK_CLERIC_A, Badge.UNLOCK_ALL_HERO_CLASSES}
 	};
 	
 	public static List<Badge> filterReplacedBadges( List<Badge> badges ) {

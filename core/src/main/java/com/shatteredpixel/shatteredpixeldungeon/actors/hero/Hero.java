@@ -38,10 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HallowedGroun
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Smite;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -199,6 +196,7 @@ public class Hero extends Char {
     public int HTBoost = 0;
     public boolean cheating = false;
     public int baseHP = 30;
+    public int vitalityBonus = 0;
 
 	private ArrayList<Mob> visibleEnemies;
 
@@ -216,12 +214,6 @@ public class Hero extends Char {
             cheating = true;
             Badges.setBadgesDisabled(true);
             Dungeon.rankable = false;
-        }
-        else if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)){
-            HP = HT = 20;
-            baseHP = 20;
-            STR = STARTING_STR;
-            cheating = false;
         }
         else {
             HP = HT = 30; //20
@@ -245,6 +237,7 @@ public class Hero extends Char {
         if (buff(ElixirOfMight.HTBoost.class) != null){
             HT += buff(ElixirOfMight.HTBoost.class).boost();
         }
+        HT += vitalityBonus;
 
         if (boostHP){
             HP += Math.max(HT - curHT, 0);
@@ -285,6 +278,7 @@ public class Hero extends Char {
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
     private static final String CHEATING    = "cheating";
+    private static final String VITBOOST    = "vitboost";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -307,6 +301,7 @@ public class Hero extends Char {
 		bundle.put( HTBOOST, HTBoost );
 
         bundle.put (CHEATING, cheating);
+        bundle.put (VITBOOST, vitalityBonus);
 
 		belongings.storeInBundle( bundle );
 	}
@@ -332,6 +327,7 @@ public class Hero extends Char {
 		STR = bundle.getInt( STRENGTH );
 
         cheating = bundle.getBoolean( CHEATING );
+        vitalityBonus = bundle.getInt( VITBOOST );
 
 		belongings.restoreFromBundle( bundle );
 	}
@@ -2349,6 +2345,9 @@ public class Hero extends Char {
 			}
 		});
 
+        if (cause instanceof DM151 && Dungeon.depth < 6) {
+            Badges.validateModProgression("dm151_sewer");
+        }
 		if (cause instanceof Hero.Doom) {
 			((Hero.Doom)cause).onDeath();
 		}

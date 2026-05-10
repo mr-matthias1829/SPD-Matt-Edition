@@ -93,7 +93,7 @@ public class RingOfMight extends Ring {
 	public String upgradeStat1(int level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
 		//return Integer.toString(level+1);
-        return Integer.toString((int) ((level*0.5)+0.5));
+        return Integer.toString((int) ((level*0.5)+1));
 	}
 
 	@Override
@@ -116,7 +116,14 @@ public class RingOfMight extends Ring {
 		return (float)Math.pow(1.025, getBuffedBonus(target, Might.class));
 	}
 
-	public class Might extends RingBuff {
-	}
+    public class Might extends RingBuff {
+        @Override
+        public int level() {
+            if (RingOfMight.this.cursed) {
+                return Math.min(0, RingOfMight.this.level() - 1);
+            }
+            return (int)(RingOfMight.this.level() * 0.5) + 1;
+        }
+    }
 }
 

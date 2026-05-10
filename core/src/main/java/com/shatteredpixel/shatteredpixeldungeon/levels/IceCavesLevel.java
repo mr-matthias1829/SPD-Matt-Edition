@@ -40,6 +40,9 @@ import java.util.Collections;
 public class IceCavesLevel extends CavesLevel {
     {
 
+        // reduced vision because... honestly no clue
+        // at least makes this one-off floor feel more distinct and a little more challenging
+        // i have a feeling light buffs won't work, but eh
         viewDistance = Math.min( 5, viewDistance );
 
         color1 = 0x48a4c9; // Icy blue
@@ -56,6 +59,7 @@ public class IceCavesLevel extends CavesLevel {
         ArrayList<Room> initRooms = new ArrayList<>();
 
         // Add entrance and exit rooms first
+        // These are unique as they properly transfer branch
         initRooms.add(roomEntrance = new IceCavesBranchEntrance());
         initRooms.add(roomExit = new IceCavesBranchExit());
 
@@ -97,6 +101,7 @@ public class IceCavesLevel extends CavesLevel {
     @Override
     public Mob createMob() {
         // If we're in ice caves, always use our custom mob rotation
+        // faaiirrrlllyyy sure we can't set this in mobspawner.java
         ArrayList<Class<? extends Mob>> iceRotation = new ArrayList<>();
 
 
@@ -144,7 +149,7 @@ public class IceCavesLevel extends CavesLevel {
     protected Builder builder() {
         // Use LoopBuilder instead of FigureEightBuilder
         return new LoopBuilder()
-                .setLoopShape(2, Random.Float(0.3f, 0.7f), Random.Float(0f, 0.5f));
+                .setLoopShape(1, 0.25f, Random.Float(0f, 0.5f));
     }
     @Override
     protected Painter painter() {
@@ -169,16 +174,16 @@ public class IceCavesLevel extends CavesLevel {
         // Ice caves has more frost/cold themed traps
         return new Class[]{
                 FrostTrap.class, ChillingTrap.class, StormTrap.class, CorrosionTrap.class,
-                GrippingTrap.class, RockfallTrap.class, GuardianTrap.class,
-                ConfusionTrap.class, SummoningTrap.class, WarpingTrap.class, PitfallTrap.class };
+                GrippingTrap.class, RockfallTrap.class, GuardianTrap.class, WarpingTrap.class,
+                ConfusionTrap.class, SummoningTrap.class, PitfallTrap.class };
     }
 
     @Override
     protected float[] trapChances() {
         return new float[]{
-                8, 6, 4, 4,
-                2, 2, 2,
-                1, 1, 1, 1 };
+                4, 3, 3, 3,
+                2, 2, 2, 2,
+                1, 1, 1 };
     }
 
     @Override

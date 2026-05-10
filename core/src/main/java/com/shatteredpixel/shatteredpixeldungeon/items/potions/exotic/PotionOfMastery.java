@@ -39,6 +39,10 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
 
+
+// this potion is from vanilla, but goes unused after the rework
+// reason: there's next to no benefit from it since POS give 2 strength
+// plus incrementing this potion to be more effective makes it too powerful, even at just 3
 public class PotionOfMastery extends ExoticPotion {
 	
 	{

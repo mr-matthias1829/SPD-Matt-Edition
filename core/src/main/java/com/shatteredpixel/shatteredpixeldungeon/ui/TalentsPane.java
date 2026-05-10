@@ -103,18 +103,21 @@ public class TalentsPane extends ScrollPane {
 		blocker = new ColorBlock(0, 0, 0xFF222222);
 		content.add(blocker);
 
-		if (tiersAvailable == 1) {
-			blockText = PixelScene.renderTextBlock(Messages.get(this, "unlock_tier2"), 6);
-			content.add(blockText);
-		} else if (tiersAvailable == 2) {
-			blockText = PixelScene.renderTextBlock(Messages.get(this, "unlock_tier3"), 6);
-			content.add(blockText);
-		} else if (tiersAvailable == 3) {
-			blockText = PixelScene.renderTextBlock(Messages.get(this, "unlock_tier4"), 6);
-			content.add(blockText);
-		} else {
-			blockText = null;
-		}
+        if (panes.isEmpty()) {
+            // No talent content at all (e.g. Peasant) — show nothing, no misleading unlock prompt
+            blockText = null;
+        } else if (tiersAvailable == 1) {
+            blockText = PixelScene.renderTextBlock(Messages.get(this, "unlock_tier2"), 6);
+            content.add(blockText);
+        } else if (tiersAvailable == 2) {
+            blockText = PixelScene.renderTextBlock(Messages.get(this, "unlock_tier3"), 6);
+            content.add(blockText);
+        } else if (tiersAvailable == 3) {
+            blockText = PixelScene.renderTextBlock(Messages.get(this, "unlock_tier4"), 6);
+            content.add(blockText);
+        } else {
+            blockText = null;
+        }
 
 		for (int i = panes.size()-1; i >= 0; i--){
 			content.bringToFront(panes.get(i));

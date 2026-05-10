@@ -12,6 +12,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM151Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 
 public class DM151 extends DM100 implements Callback {
 
@@ -75,11 +76,34 @@ public class DM151 extends DM100 implements Callback {
         }
     }
 
+    @Override
+    public void die(Object cause) {
+        super.die(cause);
+        Badges.validateModProgression("dm151");
+        if (Dungeon.depth < 6) Badges.validateModProgression("dm151_sewer");
+    }
+
 
     public class Wandering extends Mob.Wandering {
+        /* just moves to a random direction
         @Override
         protected int randomDestination() {
                 return super.randomDestination();
+        }
+        */
+
+        @Override
+        protected int randomDestination() {
+            //of two potential wander positions, picks the one closest to the hero
+            // this "actively" seeks out the hero in a way
+            int pos1 = super.randomDestination();
+            int pos2 = super.randomDestination();
+            PathFinder.buildDistanceMap(Dungeon.hero.pos, Dungeon.level.passable);
+            if (PathFinder.distance[pos2] < PathFinder.distance[pos1]){
+                return pos2;
+            } else {
+                return pos1;
+            }
         }
     }
 }

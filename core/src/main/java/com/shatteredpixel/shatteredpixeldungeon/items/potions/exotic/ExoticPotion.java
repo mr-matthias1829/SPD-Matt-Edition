@@ -50,8 +50,11 @@ public class ExoticPotion extends Potion {
 	public static final LinkedHashMap<Class<?extends Potion>, Class<?extends ExoticPotion>> regToExo = new LinkedHashMap<>();
 	public static final LinkedHashMap<Class<?extends ExoticPotion>, Class<?extends Potion>> exoToReg = new LinkedHashMap<>();
 	static{
-		regToExo.put(PotionOfStrength.class, PotionOfMastery.class);
-		exoToReg.put(PotionOfMastery.class, PotionOfStrength.class);
+		//regToExo.put(PotionOfStrength.class, PotionOfMastery.class);
+		//exoToReg.put(PotionOfMastery.class, PotionOfStrength.class);
+
+        regToExo.put(PotionOfStrength.class, PotionOfVitality.class);
+        exoToReg.put(PotionOfVitality.class, PotionOfStrength.class);
 
 		regToExo.put(PotionOfHealing.class, PotionOfShielding.class);
 		exoToReg.put(PotionOfShielding.class, PotionOfHealing.class);

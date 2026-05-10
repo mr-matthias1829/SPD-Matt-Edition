@@ -36,13 +36,13 @@ public class Snake extends Mob {
 		spriteClass = SnakeSprite.class;
 		
 		HP = HT = 3; //4
-		defenseSkill = 36; //32 //25
+		defenseSkill = 36; //25
 		
 		EXP = 2;
 		maxLvl = 7;
 		
-		//loot = Generator.Category.SEED;
-		//lootChance = 0.25f;
+		loot = Generator.Category.SEED;
+		lootChance = 0.1f; //0.25f
 	}
 	
 	@Override

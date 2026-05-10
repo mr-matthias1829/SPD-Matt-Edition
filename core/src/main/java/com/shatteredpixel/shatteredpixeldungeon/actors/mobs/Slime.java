@@ -36,7 +36,7 @@ public class Slime extends Mob {
 	{
 		spriteClass = SlimeSprite.class;
 		
-		HP = HT = 20; //32 //20
+		HP = HT = 20;
 		defenseSkill = 5;
 		
 		EXP = 3; //4
@@ -50,9 +50,9 @@ public class Slime extends Mob {
 	public int damageRoll() {
         int depth = Dungeon.scalingDepth();
         if (level >= 5){
-            return Random.NormalIntRange(5, 8);
+            return Random.NormalIntRange(3, 6);
         } else {
-            return Random.NormalIntRange( 4, 6 ); //2,5
+            return Random.NormalIntRange( 2, 5 );
         }
 	}
 

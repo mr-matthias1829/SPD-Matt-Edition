@@ -73,7 +73,7 @@ public class RingOfForce extends Ring {
     private static float tier(int str){
         float tier = Math.max(1, (str - 8) / 2f);
 
-        // each STR point after 14 is half as effective
+        // each STR point after 14 is half as effective here
         if (str > 14) {
             float excess = str - 14;
             tier = 1 + (excess / 4f); // because original was /2f, now halve again

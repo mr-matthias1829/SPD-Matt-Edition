@@ -35,7 +35,7 @@ public class Goopling extends Mob {
 	{
 		spriteClass = GooplingSprite.class;
 		
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 9 : 7; //12
+		HP = HT = 5; //Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 9 : 7; //12
 		defenseSkill = 5;
 
         properties.add(Property.ACIDIC);

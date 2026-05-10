@@ -40,7 +40,6 @@ public class Hunger extends Buff implements Hero.Doom {
     public float hungryThreshold() {
         float base = HUNGRY;
 
-        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) base = 300f;
         if (Dungeon.isSinActive(Sins.GLUTTONY)) base /= 1.9f;
 
         return Math.max(base, 100f); // floor to keep it reasonable
@@ -48,7 +47,6 @@ public class Hunger extends Buff implements Hero.Doom {
 
     public float starvingThreshold() {
         float base = STARVING;
-        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) base = 450f;
         return Math.max(base, hungryThreshold()); // ensure starving is never below hungry
     }
 
@@ -140,11 +138,7 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	public void satisfy( float energy ) {
         //affectHunger( energy, false ); // old one
-        if (Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
-            level -= energy;
-        } else {
             level -= energy * 1.6f;
-        }
 	}
 
 	public void affectHunger(float energy ){

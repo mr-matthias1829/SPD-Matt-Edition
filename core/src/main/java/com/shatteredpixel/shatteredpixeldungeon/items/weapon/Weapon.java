@@ -70,6 +70,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampir
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.BlacksmithWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -358,7 +359,7 @@ abstract public class Weapon extends KindOfWeapon {
 
 	public abstract int STRReq(int lvl);
 
-	protected static int STRReq(int tier, int lvl){
+	protected static int STRReq(int tier, int lvl, Class<?> weaponClass){
 		lvl = Math.max(0, lvl);
 
 		//strength req decreases at +1,+3,+6,+10,etc.
@@ -366,8 +367,14 @@ abstract public class Weapon extends KindOfWeapon {
 
 
         int baseSTR = 8 +  (int)(Math.round((tier-0.5) * 2.5f));
-
         int strIncrease = (int)(lvl / 2f);
+
+        if (BlacksmithWeapon.class.isAssignableFrom(weaponClass)){
+            baseSTR = 8 +  (int)(Math.round((tier+0.5) * 2.5f));
+            // blacksmith weapons scale in STR faster by a bit
+            // only realistically matters long term
+            strIncrease = (int)(lvl / 1.46f);
+        }
 
         return baseSTR + strIncrease;
 	}

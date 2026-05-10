@@ -51,7 +51,7 @@ import com.watabou.utils.Random;
 public class Goo extends Mob {
 
     {
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 160 : 120;
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 140 : 120;
         EXP = 10;
         defenseSkill = 6; //4 //8
         spriteClass = GooSprite.class;
@@ -64,10 +64,10 @@ public class Goo extends Mob {
     private int pumpedUp = 0;
     private int healInc = 1;
     private boolean gooplingsSpawnedThisAttack = false;
-    private int turnsUntilSpawn = 2; //0
+    private int turnsUntilSpawn = 5; //0
 
 
-    private static final int SPAWN_COOLDOWN = 8; //10 //8
+    private static final int SPAWN_COOLDOWN = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 11 : 8;
     private static final int MAX_GOOPLINGS = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 12 : 8;
 
     @Override

@@ -50,7 +50,7 @@ public class RingOfSharpshooting extends Ring {
 	@Override
 	public String upgradeStat1(int level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Integer.toString((int) ((level*0.5)+0.5));
+		return Integer.toString((int) ((level*0.5)+1));
 	}
 
 	@Override
@@ -70,9 +70,16 @@ public class RingOfSharpshooting extends Ring {
 	}
 	
 	public static float durabilityMultiplier( Char target ){
-		return (float)(Math.pow(1.2, getBonus(target, Aim.class)));
+		return (float)(Math.pow(1.09, getBonus(target, Aim.class)));
 	}
 
-	public class Aim extends RingBuff {
-	}
+    public class Aim extends RingBuff {
+        @Override
+        public int buffedLvl() { // sort of a bit cursed and hacky, but this overrides stat 1 scaling
+            if (RingOfSharpshooting.this.cursed) {
+                return Math.min(0, RingOfSharpshooting.this.buffedLvl() - 1);
+            }
+            return (int)(RingOfSharpshooting.this.buffedLvl() * 0.5) + 1;
+        }
+    }
 }

@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -53,10 +54,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class WndHero extends WndTabbed {
-	
+
 	private static final int WIDTH		= 120;
 	private static final int HEIGHT		= 120;
-	
+
 	private StatsTab stats;
 	private TalentsTab talents;
 	private BuffsTab buffs;
@@ -64,23 +65,25 @@ public class WndHero extends WndTabbed {
 	public static int lastIdx = 0;
 
 	public WndHero() {
-		
+
 		super();
-		
+
 		resize( WIDTH, HEIGHT );
-		
+
 		stats = new StatsTab();
 		add( stats );
 
-		talents = new TalentsTab();
-		add(talents);
-		talents.setRect(0, 0, WIDTH, HEIGHT);
+        if (Dungeon.hero.heroClass != HeroClass.PEASANT) {
+            talents = new TalentsTab();
+            add(talents);
+            talents.setRect(0, 0, WIDTH, HEIGHT);
+        }
 
 		buffs = new BuffsTab();
 		add( buffs );
 		buffs.setRect(0, 0, WIDTH, HEIGHT);
 		buffs.setupList();
-		
+
 		add( new IconTab( Icons.get(Icons.RANKINGS) ) {
 			protected void select( boolean value ) {
 				super.select( value );
@@ -93,14 +96,17 @@ public class WndHero extends WndTabbed {
 				stats.visible = stats.active = selected;
 			}
 		} );
-		add( new IconTab( Icons.get(Icons.TALENT) ) {
-			protected void select( boolean value ) {
-				super.select( value );
-				if (selected) lastIdx = 1;
-				if (selected) StatusPane.talentBlink = 0;
-				talents.visible = talents.active = selected;
-			}
-		} );
+        if (Dungeon.hero.heroClass != HeroClass.PEASANT) {
+            add(new IconTab(Icons.get(Icons.TALENT)) {
+                protected void select(boolean value) {
+                    super.select(value);
+                    if (selected) lastIdx = 1;
+                    if (selected) StatusPane.talentBlink = 0;
+                    talents.visible = talents.active = selected;
+                }
+            });
+        }
+
 		add( new IconTab( Icons.get(Icons.BUFFS) ) {
 			protected void select( boolean value ) {
 				super.select( value );
@@ -109,13 +115,23 @@ public class WndHero extends WndTabbed {
 			}
 		} );
 
-		layoutTabs();
+        layoutTabs();
 
-		talents.setRect(0, 0, WIDTH, HEIGHT);
-		talents.pane.scrollTo(0, talents.pane.content().height() - talents.pane.height());
-		talents.layout();
+        if (talents != null) {
+            talents.setRect(0, 0, WIDTH, HEIGHT);
+            talents.layout();
 
-		select( lastIdx );
+            if (talents.pane != null && talents.pane.content() != null) {
+                talents.pane.scrollTo(0,
+                        Math.max(0,
+                                talents.pane.content().height() - talents.pane.height()));
+            }
+        }
+
+        // clamp index so it doesn't point to a removed tab
+        lastIdx = Math.min(lastIdx, tabs.size() - 1);
+
+        select(lastIdx);
 	}
 
 	@Override
@@ -131,16 +147,16 @@ public class WndHero extends WndTabbed {
 	@Override
 	public void offset(int xOffset, int yOffset) {
 		super.offset(xOffset, yOffset);
-		talents.layout();
-		buffs.layout();
+        if (talents != null) talents.layout();
+        buffs.layout();
 	}
 
 	private class StatsTab extends Group {
-		
+
 		private static final int GAP = 6;
-		
+
 		private float pos;
-		
+
 		public StatsTab() {
 			initialize();
 		}
@@ -151,7 +167,7 @@ public class WndHero extends WndTabbed {
 				if (g != null) g.destroy();
 			}
 			clear();
-			
+
 			Hero hero = Dungeon.hero;
 
 			IconTitle title = new IconTitle();
@@ -214,7 +230,7 @@ public class WndHero extends WndTabbed {
 		}
 
 		private void statSlot( String label, String value ) {
-			
+
 			RenderedTextBlock txt = PixelScene.renderTextBlock( label, 8 );
 			txt.setPos(0, pos);
 			add( txt );
@@ -226,42 +242,75 @@ public class WndHero extends WndTabbed {
 			txt.setPos(WIDTH * 0.55f, pos);
 			PixelScene.align(txt);
 			add( txt );
-			
+
 			pos += GAP + txt.height();
 		}
-		
+
 		private void statSlot( String label, int value ) {
 			statSlot( label, Integer.toString( value ) );
 		}
-		
+
 		public float height() {
 			return pos;
 		}
 	}
 
-	public class TalentsTab extends Component {
+    public class TalentsTab extends Component {
 
-		TalentsPane pane;
+        private TalentsPane pane;
+        private RenderedTextBlock noTalentsMsg;
+        private float contentHeight = 0;
 
-		@Override
-		protected void createChildren() {
-			super.createChildren();
-			pane = new TalentsPane(TalentButton.Mode.UPGRADE);
-			add(pane);
-		}
+        @Override
+        protected void createChildren() {
+            super.createChildren();
 
-		@Override
-		protected void layout() {
-			super.layout();
-			pane.setRect(x, y, width, height);
-		}
+            pane = new TalentsPane(TalentButton.Mode.UPGRADE);
+            add(pane);
 
-	}
-	
+            if (Dungeon.hero.heroClass == HeroClass.PEASANT) {
+                noTalentsMsg = PixelScene.renderTextBlock(
+                        Messages.get(WndHero.class, "no_talents"), 6);
+                add(noTalentsMsg);
+            }
+        }
+
+        @Override
+        protected void layout() {
+            super.layout();
+
+            // keep it a normal scrollpane viewport
+            pane.setRect(x, y, width, height);
+
+            if (noTalentsMsg != null) {
+                noTalentsMsg.maxWidth((int) width);
+                noTalentsMsg.setPos(
+                        x + (width - noTalentsMsg.width()) / 2f,
+                        y + (height - noTalentsMsg.height()) / 2f
+                );
+            }
+        }
+
+        private float getTalentsContentHeight() {
+            // Calculate based on hero's unlocked talents
+            // This is approximate - you may need to adjust based on your actual talent layout
+            Hero hero = Dungeon.hero;
+            int talentTiers = 3; // or whatever your max tier is
+            int talentsPerTier = 4; // approximate
+            float tileHeight = 20; // approximate height per talent button
+
+            return (talentTiers * talentsPerTier * tileHeight) + 50; // add padding
+        }
+
+        public float getContentHeight() {
+            return contentHeight;
+        }
+    }
+
 	private class BuffsTab extends Component {
-		
+
 		private static final int GAP = 2;
-		
+
 		private float pos;
 		private ScrollPane buffList;
 		private ArrayList<BuffSlot> slots = new ArrayList<>();
@@ -284,13 +333,13 @@ public class WndHero extends WndTabbed {
 			};
 			add(buffList);
 		}
-		
+
 		@Override
 		protected void layout() {
 			super.layout();
 			buffList.setRect(0, 0, width, height);
 		}
-		
+
 		private void setupList() {
 			Component content = buffList.content();
 			for (Buff buff : Dungeon.hero.buffs()) {
@@ -342,7 +391,7 @@ public class WndHero extends WndTabbed {
 				);
 				PixelScene.align(txt);
 			}
-			
+
 			protected boolean onClick ( float x, float y ) {
 				if (inside( x, y )) {
 					GameScene.show(new WndInfoBuff(buff));

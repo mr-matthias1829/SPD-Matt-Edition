@@ -100,31 +100,28 @@ public class MobSpawner extends Actor {
 
 			// Prison
 			case 6:
-				//3x skeleton, 1x thief, 1x swarm + 1x crab, 1x snake and x1 slime
+				//3x skeleton, 1x thief, 1x swarm + 1x crab and x1 slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
 						Thief.class,
 						Swarm.class,
-                        Crab.class, Snake.class, Slime.class));
+                        Crab.class, Slime.class));
 			case 7:
-				// WAS 3x skeleton, 1x thief, 1x DM-100, 1x guard + 1x snake and x1 slime
-                // IS 2x skeleton, 2x thief, 1x DM-100, 1x guard + 1x snake and x2 slime
+                //2x skeleton, 2x thief, 1x DM-100, 1x guard and x2 slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class,
 						Thief.class, Thief.class,
 						DM100.class,
 						Guard.class,
-                        Snake.class, Slime.class, Slime.class));
+                        Slime.class, Slime.class));
 			case 8:
-				// WAS 2x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 1x slime
-                // IS 1x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 2x slime
+                //1x skeleton, 1x thief, 2x DM-100, 2x guard, 1x necromancer + 1x slime
 				return new ArrayList<>(Arrays.asList(Skeleton.class,
 						Thief.class,
 						DM100.class, DM100.class,
 						Guard.class, Guard.class,
 						Necromancer.class,
-                        Slime.class, Slime.class));
+                        Slime.class));
 			case 9: case 10:
-				// WAS 1x skeleton, 1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x DM100
-                // IS 1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x slime and 1x DM151
+                //1x thief, 2x DM-100, 2x guard, 2x necromancer + 1x slime and 1x DM151
 				return new ArrayList<>(Arrays.asList(
 						Thief.class,
 						DM100.class, DM100.class, DM151.class,
@@ -234,7 +231,7 @@ public class MobSpawner extends Actor {
 
 	//has a chance to add a rarely spawned mobs to the rotation
 	public static void addRareMobs( int depth, ArrayList<Class<?extends Mob>> rotation ){
-
+        float BaseChance = 0.1f;
 		switch (depth){
 
 			// Sewers
@@ -245,7 +242,7 @@ public class MobSpawner extends Actor {
                 if (Random.Float() < 0.02f) rotation.add(GnollMyth.class);
                 return;
             case 4:
-                if (Random.Float() < 0.1f) { // 0.025f
+                if (Random.Float() < BaseChance) { // 0.025f
                     rotation.add(DM100.class);
                 }
                 if (Random.Float() < 0.02f)  rotation.add(GnollMyth.class); // 0.025f
@@ -253,17 +250,17 @@ public class MobSpawner extends Actor {
 
 			// Prison
 			case 9:
-				if (Random.Float() < 0.1f) rotation.add(Bat.class); // 0.025f
+				if (Random.Float() < BaseChance) rotation.add(Bat.class); // 0.025f
 				return;
 
 			// Caves
 			case 14:
-				if (Random.Float() < 0.1f) rotation.add(Ghoul.class); // 0.025f
+				if (Random.Float() < BaseChance) rotation.add(Ghoul.class); // 0.025f
 				return;
 
 			// City
 			case 19:
-				if (Random.Float() < 0.1f) rotation.add(Succubus.class); // 0.025f
+				if (Random.Float() < BaseChance) rotation.add(Succubus.class); // 0.025f
 				return;
 		}
 	}
@@ -271,7 +268,7 @@ public class MobSpawner extends Actor {
 	//switches out regular mobs for their alt versions when appropriate
 	private static void swapMobAlts(ArrayList<Class<?extends Mob>> rotation) {
 		//float altChance = 1 / 50f * RatSkull.exoticChanceMultiplier();
-        float altChance = 1 / 20f * RatSkull.exoticChanceMultiplier();
+        float altChance = 1 / 40f * RatSkull.exoticChanceMultiplier();
 		for (int i = 0; i < rotation.size(); i++) {
 			if (Random.Float() < altChance) {
 				Class<? extends Mob> cl = rotation.get(i);

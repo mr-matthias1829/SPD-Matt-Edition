@@ -65,11 +65,13 @@ public class FetidRat extends Rat {
         adjustStats(level);
     }
     public void adjustStats( int level ) {
-        HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
+        HP = HT = (int) (20 * (1+level * 0.65));// was a set value before //36 //20
         defenseSkill = 8 * (1+level); //5
 
         EXP = (int) (3 * (1+level*0.25)); //4
         properties.add(Property.DEMONIC);
+
+        maxLvl = 10 + level * 5;
 
         if (level == 0) {
             properties.add(Property.MINIBOSS);
@@ -90,7 +92,7 @@ public class FetidRat extends Rat {
 	public int attackProc( Char enemy, int damage ) {
 		//damage = super.attackProc( enemy, damage );
         //damage = Random.NormalIntRange( 2, 5 ); // inherited before, was 1,4
-        damage = Random.NormalIntRange(3 * (1+level), (int) (7 * (1+level * 1.3)));
+        damage = Random.NormalIntRange(2 * (1+level), (int) (5 * (1+level * 1.3)));
 		if (Random.Int(3) == 0) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 			//score loss is on-hit instead of on-attack because it's tied to ooze

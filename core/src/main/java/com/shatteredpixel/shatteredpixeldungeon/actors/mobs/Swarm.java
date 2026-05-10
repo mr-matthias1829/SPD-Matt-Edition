@@ -42,7 +42,7 @@ public class Swarm extends Mob {
 	{
 		spriteClass = SwarmSprite.class;
 		
-		HP = HT = 30; //50
+		HP = HT = 50;
 		defenseSkill = 5;
 
 		EXP = 3;
@@ -81,8 +81,8 @@ public class Swarm extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 3, 7 );
-	} //2,5//1,4
+		return Random.NormalIntRange( 2, 5 );
+	} //1,4
 	
 	@Override
 	public int defenseProc( Char enemy, int damage ) {

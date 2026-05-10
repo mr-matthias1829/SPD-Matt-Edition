@@ -104,6 +104,8 @@ public class Ghoul extends Mob {
 	@Override
 	protected boolean act() {
 		//create a child
+        // we check for instance of nercroghoul here, this is
+        // because we actually dont want ghouls spawned by SN to spawn with a partner
         if (partnerID == -1 && !(this instanceof SpiritualNecromancer.NecroGhoul)) {
 			
 			ArrayList<Integer> candidates = new ArrayList<>();

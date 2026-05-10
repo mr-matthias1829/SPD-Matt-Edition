@@ -80,7 +80,7 @@ public class Tengu extends Mob {
     {
         spriteClass = TenguSprite.class;
 
-        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 350 : 300;
+        HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 285 : 225;
         EXP = 20;
         defenseSkill = 15;
 
@@ -93,13 +93,13 @@ public class Tengu extends Mob {
 
     private boolean lastStandActive = false;
     private int lastStandTurns = 0;
-    private static final int LAST_STAND_DURATION = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 25 : 15;
+    private static final int LAST_STAND_DURATION = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 18 : 15;
 
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 6, 14 );
-    } //6,12
+        return Random.NormalIntRange( 5, 12 );
+    }
 
     @Override
     public int attackSkill( Char target ) {
@@ -142,6 +142,7 @@ public class Tengu extends Mob {
         int beforeHitHP = HP;
 
         // Don't take damage during Last Stand
+        // Despite the mayor dodge change, the smallest % odds ever might still hit him
         if (lastStandActive && !(lastStandTurns >= LAST_STAND_DURATION)) {
             sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
             return;
@@ -228,7 +229,7 @@ public class Tengu extends Mob {
         // Apply Bless buff
         Buff.affect(this, Bless.class, LAST_STAND_DURATION);
 
-        defenseSkill = 1000;
+        defenseSkill = 1000; // basically dodges every attack ever
 
         // Visual feedback
         yell(Messages.get(this, "last_stand"));
@@ -263,7 +264,8 @@ public class Tengu extends Mob {
             beacon.upgrade();
         }
 
-        yell( Messages.get(Dungeon.hero, "defeated") );
+        //yell( Messages.get(Dungeon.hero, "defeated") );
+        yell( Messages.get(this, "defeated") );
     }
 
     @Override
@@ -562,7 +564,9 @@ public class Tengu extends Mob {
             float hpPercent = (float) HP / HT;
             int baseCooldown;
 
-            if (hpPercent > 0.5f) { //0.5
+            if (hpPercent > 0.75f) {
+                baseCooldown = 10; // super early phase 2, so it doesn't feel as empty
+            } else if (hpPercent > 0.5f) { //0.5
                 baseCooldown = 8; // early phase 2
             } else if (hpPercent > 0.35f) { //0.35
                 baseCooldown = 6; // mid phase 2
@@ -591,10 +595,15 @@ public class Tengu extends Mob {
                 abilityToUse = BOMB_ABILITY;
             } else if (abilitiesUsed == 1){
                 abilityToUse = SHOCKER_ABILITY;
-            } else if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
-                abilityToUse = Random.Int(2)*2; //0 or 2, can't roll fire ability with challenge
             } else {
-                abilityToUse = Random.Int(3);
+                // Weighted selection for phase 2+:
+                //   Normal:        BOMB=2, FIRE=2, SHOCKER=1  (total 5)
+                //   Harder bosses: BOMB=2, FIRE=2, SHOCKER=2  (total 6)
+                boolean harderBosses = Dungeon.isChallenged(Challenges.STRONGER_BOSSES);
+                int roll = Random.Int(harderBosses ? 6 : 5);
+                if      (roll < 2) abilityToUse = BOMB_ABILITY;
+                else if (roll < 4) abilityToUse = FIRE_ABILITY;
+                else               abilityToUse = SHOCKER_ABILITY;
             }
 
             //all abilities always target the hero, even if something else is taking Tengu's normal attacks
@@ -622,8 +631,9 @@ public class Tengu extends Mob {
                         }
                         break;
                 }
-                //always use the fire ability with the bosses challenge
-                if (abilityUsed && abilityToUse != FIRE_ABILITY && Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+                // In harder bosses, also throw fire alongside whichever non-fire ability was used
+                if (abilityUsed && abilityToUse != FIRE_ABILITY && Dungeon.isChallenged(Challenges.STRONGER_BOSSES)
+                && Random.Int(3) == 0) {
                     throwFire(Tengu.this, Dungeon.hero);
                 }
             }

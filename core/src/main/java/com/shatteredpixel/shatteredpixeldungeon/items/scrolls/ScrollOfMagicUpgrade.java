@@ -44,10 +44,10 @@ import com.watabou.utils.Random;
 public class ScrollOfMagicUpgrade extends InventoryScroll {
 
     {
-        icon = ItemSpriteSheet.Icons.SCROLL_ENCHANT;
+        icon = ItemSpriteSheet.Icons.SCROLL_MUPGRADE;
         preferredBag = Belongings.Backpack.class;
         unique = true;
-        talentFactor = 2f;
+       // talentFactor = 2f;
     }
 
     @Override

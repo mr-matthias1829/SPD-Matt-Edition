@@ -51,15 +51,19 @@ public class Necromancer extends Mob {
 
     protected boolean firstSummon = true;
 
+    // When non-null, summonMinion() will teleport this skeleton instead of spawning a new one
+    public NecroSkeleton teleportTarget = null;
+
     protected ArrayList<NecroSkeleton> mySkeletons = new ArrayList<>();
     protected ArrayList<Integer> storedSkeletonIDs = new ArrayList<>();
     private int maxSkeletons = 3;
 
     @Override
     protected boolean act() {
-        if (summoning && state != HUNTING){
+        if (summoning && state != HUNTING) {
             summoning = false;
-            if (sprite instanceof NecromancerSprite){
+            teleportTarget = null;
+            if (sprite instanceof NecromancerSprite) {
                 ((NecromancerSprite) sprite).cancelSummoning();
             }
         }
@@ -73,7 +77,7 @@ public class Necromancer extends Mob {
         for (NecroSkeleton skeleton : mySkeletons) {
             if (skeleton != null && skeleton.isAlive()
                     && Dungeon.level.mobs.contains(skeleton)
-                    && skeleton.alignment == alignment){
+                    && skeleton.alignment == alignment) {
                 skeleton.aggro(ch);
             }
         }
@@ -90,7 +94,7 @@ public class Necromancer extends Mob {
     }
 
     @Override
-    public Item createLoot(){
+    public Item createLoot() {
         Dungeon.LimitedDrops.NECRO_HP.count++;
         return super.createLoot();
     }
@@ -112,11 +116,11 @@ public class Necromancer extends Mob {
         return false;
     }
 
-    private static final String SUMMONING = "summoning";
-    private static final String FIRST_SUMMON = "first_summon";
-    private static final String SUMMONING_POS = "summoning_pos";
-    private static final String MY_SKELETONS = "my_skeletons";
-    private static final String MAX_SKELETONS = "max_skeletons";
+    private static final String SUMMONING      = "summoning";
+    private static final String FIRST_SUMMON   = "first_summon";
+    private static final String SUMMONING_POS  = "summoning_pos";
+    private static final String MY_SKELETONS   = "my_skeletons";
+    private static final String MAX_SKELETONS  = "max_skeletons";
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -125,7 +129,7 @@ public class Necromancer extends Mob {
         bundle.put(SUMMONING, summoning);
         bundle.put(FIRST_SUMMON, firstSummon);
 
-        if (summoning){
+        if (summoning) {
             bundle.put(SUMMONING_POS, summoningPos);
         }
 
@@ -136,7 +140,7 @@ public class Necromancer extends Mob {
         skeletonIDs.addAll(storedSkeletonIDs);
 
         int[] arr = new int[skeletonIDs.size()];
-        for (int i = 0; i < skeletonIDs.size(); i++){
+        for (int i = 0; i < skeletonIDs.size(); i++) {
             arr[i] = skeletonIDs.get(i);
         }
 
@@ -149,51 +153,58 @@ public class Necromancer extends Mob {
         super.restoreFromBundle(bundle);
 
         summoning = bundle.getBoolean(SUMMONING);
-        if (bundle.contains(FIRST_SUMMON)){
+        if (bundle.contains(FIRST_SUMMON)) {
             firstSummon = bundle.getBoolean(FIRST_SUMMON);
         }
 
-        if (summoning){
+        if (summoning) {
             summoningPos = bundle.getInt(SUMMONING_POS);
         }
 
-        if (bundle.contains(MY_SKELETONS)){
+        if (bundle.contains(MY_SKELETONS)) {
             int[] ids = bundle.getIntArray(MY_SKELETONS);
-            if (ids != null){
-                for (int id : ids){
+            if (ids != null) {
+                for (int id : ids) {
                     storedSkeletonIDs.add(id);
                 }
             }
         }
 
-        if (bundle.contains(MAX_SKELETONS)){
+        if (bundle.contains(MAX_SKELETONS)) {
             maxSkeletons = bundle.getInt(MAX_SKELETONS);
         }
     }
 
-    public void onZapComplete(){
+    public void onZapComplete() {
 
+        // FIX: only consider skeletons that are visible / in line of sight
         NecroSkeleton target = null;
 
-        for (NecroSkeleton s : mySkeletons){
-            if (s != null && s.isAlive()){
-                if (target == null || s.HP < target.HP){
-                    target = s;
-                }
+        for (NecroSkeleton s : mySkeletons) {
+            if (s == null || !s.isAlive() || s.sprite == null) continue;
+
+            // Skip skeletons we have no sight line to
+            if (!fieldOfView[s.pos]) continue;
+
+            if (target == null || s.HP < target.HP) {
+                target = s;
             }
         }
 
-        if (target == null) return;
+        if (target == null) {
+            next();
+            return;
+        }
 
-        if (target.HP < target.HT){
-            if (sprite.visible || target.sprite.visible){
+        if (target.HP < target.HT) {
+            if (sprite.visible || target.sprite.visible) {
                 sprite.parent.add(new Beam.HealthRay(sprite.center(), target.sprite.center()));
                 Sample.INSTANCE.play(Assets.Sounds.RAY);
             }
 
             target.HP = Math.min(target.HP + target.HT / 5, target.HT);
 
-            if (target.sprite.visible){
+            if (target.sprite.visible) {
                 target.sprite.showStatusWithIcon(
                         CharSprite.POSITIVE,
                         Integer.toString(target.HT / 5),
@@ -201,8 +212,8 @@ public class Necromancer extends Mob {
                 );
             }
 
-        } else if (target.buff(Adrenaline.class) == null){
-            if (sprite.visible || target.sprite.visible){
+        } else if (target.buff(Adrenaline.class) == null) {
+            if (sprite.visible || target.sprite.visible) {
                 sprite.parent.add(new Beam.HealthRay(sprite.center(), target.sprite.center()));
                 Sample.INSTANCE.play(Assets.Sounds.RAY);
             }
@@ -213,26 +224,26 @@ public class Necromancer extends Mob {
         next();
     }
 
-    public void summonMinion(){
+    public void summonMinion() {
 
         if (Actor.findChar(summoningPos) != null || !Dungeon.level.passable[summoningPos]) {
 
             int pushPos = pos;
 
-            for (int c : PathFinder.NEIGHBOURS8){
+            for (int c : PathFinder.NEIGHBOURS8) {
                 if (Actor.findChar(summoningPos + c) == null
                         && Dungeon.level.passable[summoningPos + c]
                         && Dungeon.level.trueDistance(pos, summoningPos + c)
-                        > Dungeon.level.trueDistance(pos, pushPos)){
+                        > Dungeon.level.trueDistance(pos, pushPos)) {
                     pushPos = summoningPos + c;
                 }
             }
 
-            if (pushPos != pos){
+            if (pushPos != pos) {
 
                 Char ch = Actor.findChar(summoningPos);
 
-                if (ch == null || Char.hasProp(ch, Property.IMMOVABLE)){
+                if (ch == null || Char.hasProp(ch, Property.IMMOVABLE)) {
                     summoningPos = pushPos;
                 } else {
                     Actor.add(new Pushing(ch, ch.pos, pushPos));
@@ -243,10 +254,10 @@ public class Necromancer extends Mob {
             } else {
 
                 Char blocker = Actor.findChar(summoningPos);
-                if (blocker != null && blocker.alignment != alignment){
+                if (blocker != null && blocker.alignment != alignment) {
                     blocker.damage(Random.NormalIntRange(2, 10), new SummoningBlockDamage());
 
-                    if (blocker == Dungeon.hero && !blocker.isAlive()){
+                    if (blocker == Dungeon.hero && !blocker.isAlive()) {
                         Badges.validateDeathFromEnemyMagic();
                         Dungeon.fail(this);
                         GLog.n(Messages.capitalize(Messages.get(Char.class, "kill", name())));
@@ -256,6 +267,15 @@ public class Necromancer extends Mob {
                 spend(TICK);
                 return;
             }
+        }
+
+        // FIX: if we flagged a skeleton for teleporting, move it instead of spawning
+        if (teleportTarget != null && teleportTarget.isAlive()) {
+            ScrollOfTeleportation.appear(teleportTarget, summoningPos);
+            teleportTarget = null;
+            summoning = false;
+            ((NecromancerSprite) sprite).finishSummoning();
+            return;
         }
 
         summoning = firstSummon = false;
@@ -268,13 +288,13 @@ public class Necromancer extends Mob {
 
         mySkeletons.add(newSkeleton);
 
-        for (Buff b : buffs()){
-            if (b.revivePersists){
+        for (Buff b : buffs()) {
+            if (b.revivePersists) {
                 Buff.affect(newSkeleton, b.getClass());
             }
         }
 
-        ((NecromancerSprite)sprite).finishSummoning();
+        ((NecromancerSprite) sprite).finishSummoning();
     }
 
     public static class SummoningBlockDamage {}
@@ -286,16 +306,17 @@ public class Necromancer extends Mob {
 
             enemySeen = enemyInFOV;
 
-            if (enemySeen){
+            if (enemySeen) {
                 target = enemy.pos;
             }
 
-            if (!storedSkeletonIDs.isEmpty()){
+            // Restore skeletons from saved IDs after a load
+            if (!storedSkeletonIDs.isEmpty()) {
                 ArrayList<Integer> remove = new ArrayList<>();
 
-                for (int id : storedSkeletonIDs){
+                for (int id : storedSkeletonIDs) {
                     Actor ch = Actor.findById(id);
-                    if (ch instanceof NecroSkeleton){
+                    if (ch instanceof NecroSkeleton) {
                         mySkeletons.add((NecroSkeleton) ch);
                         remove.add(id);
                     }
@@ -304,17 +325,17 @@ public class Necromancer extends Mob {
                 storedSkeletonIDs.removeAll(remove);
             }
 
-            if (summoning){
+            if (summoning) {
                 summonMinion();
                 return true;
             }
 
-            mySkeletons.removeIf(s ->
-                    s == null || !s.isAlive()
-            );
+            // Prune dead / missing skeletons
+            mySkeletons.removeIf(s -> s == null || !s.isAlive());
 
+            // --- Summon a new skeleton if we're under the cap and enemy is in range ---
             if (enemySeen && Dungeon.level.distance(pos, enemy.pos) <= 4
-                    && mySkeletons.size() < maxSkeletons){
+                    && mySkeletons.size() < maxSkeletons) {
 
                 summoningPos = -1;
 
@@ -324,24 +345,24 @@ public class Necromancer extends Mob {
                 PathFinder.buildDistanceMap(pos, passable,
                         Dungeon.level.distance(pos, enemy.pos) + 3);
 
-                for (int c : PathFinder.NEIGHBOURS8){
+                for (int c : PathFinder.NEIGHBOURS8) {
                     int cell = enemy.pos + c;
 
                     if (Actor.findChar(cell) == null
                             && PathFinder.distance[cell] != Integer.MAX_VALUE
                             && Dungeon.level.passable[cell]
-                            && Dungeon.level.heroFOV[cell]){
+                            && Dungeon.level.heroFOV[cell]) {
 
                         summoningPos = cell;
                         break;
                     }
                 }
 
-                if (summoningPos != -1){
+                if (summoningPos != -1) {
                     summoning = true;
                     sprite.zap(summoningPos);
 
-                    if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[summoningPos]){
+                    if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[summoningPos]) {
                         Dungeon.hero.interrupt();
                     }
 
@@ -353,24 +374,76 @@ public class Necromancer extends Mob {
                 return true;
             }
 
-            if (enemySeen && !mySkeletons.isEmpty()){
+            // --- Manage existing skeletons when enemy is in sight ---
+            if (enemySeen && !mySkeletons.isEmpty()) {
 
                 spend(TICK);
 
+                // FIX: check each skeleton — teleport any that are stuck or out of FOV
+                for (NecroSkeleton s : mySkeletons) {
+                    if (s == null || !s.isAlive()) continue;
+
+                    boolean needsTeleport = false;
+
+                    if (!fieldOfView[s.pos]) {
+                        // Skeleton is completely out of our sight — teleport it
+                        needsTeleport = true;
+                    } else if (!s.canAttack(enemy)) {
+                        // Skeleton can't reach the enemy — check path length
+                        PathFinder.Path skelePath = Dungeon.findPath(
+                                s, enemy.pos, Dungeon.level.passable, fieldOfView, true);
+
+                        if (skelePath == null
+                                || skelePath.size() > 2 * Dungeon.level.distance(pos, enemy.pos)) {
+                            needsTeleport = true;
+                        }
+                    }
+
+                    if (needsTeleport && !Dungeon.level.adjacent(s.pos, enemy.pos)) {
+
+                        int telePos = -1;
+                        for (int c : PathFinder.NEIGHBOURS8) {
+                            int cell = enemy.pos + c;
+                            if (Actor.findChar(cell) == null
+                                    && Dungeon.level.passable[cell]
+                                    && fieldOfView[cell]
+                                    && Dungeon.level.trueDistance(pos, cell)
+                                    < Dungeon.level.trueDistance(pos, telePos)) {
+                                telePos = cell;
+                            }
+                        }
+
+                        if (telePos != -1 && sprite != null && sprite.visible) {
+                            summoning = true;
+                            summoningPos = telePos;
+                            teleportTarget = s; // remember which skeleton we're relocating
+                            sprite.zap(telePos);
+
+                            if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[summoningPos]) {
+                                Dungeon.hero.interrupt();
+                            }
+
+                            spend(TICK);
+                        }
+
+                        return true;
+                    }
+                }
+
+                // FIX: only zap a skeleton we actually have line of sight to
                 NecroSkeleton targetSkeleton = null;
 
-                for (NecroSkeleton s : mySkeletons){
-                    if (s != null && s.isAlive()){
-                        if (s.HP < s.HT || s.buff(Adrenaline.class) == null){
+                for (NecroSkeleton s : mySkeletons) {
+                    if (s != null && s.isAlive() && fieldOfView[s.pos]) {
+                        if (s.HP < s.HT || s.buff(Adrenaline.class) == null) {
                             targetSkeleton = s;
                             break;
                         }
                     }
                 }
 
-                if (targetSkeleton != null){
-
-                    if (sprite.visible){
+                if (targetSkeleton != null) {
+                    if (sprite.visible) {
                         sprite.zap(targetSkeleton.pos);
                         return false;
                     } else {
@@ -382,6 +455,7 @@ public class Necromancer extends Mob {
                 return true;
             }
 
+            // Default hunting behaviour (move toward enemy, etc.)
             return super.act(enemyInFOV, justAlerted);
         }
     }
@@ -393,9 +467,10 @@ public class Necromancer extends Mob {
             spriteClass = NecroSkeletonSprite.class;
             maxLvl = -5;
 
-            if (Random.Int(2) == 0){
+            // funny variance
+            if (Random.Int(2) == 0) {
                 HP = HT = 25;
-                if (Random.Int(3) == 0){
+                if (Random.Int(3) == 0) {
                     HP = HT = 30;
                 }
             } else {
@@ -404,18 +479,19 @@ public class Necromancer extends Mob {
         }
 
         @Override
-        public float spawningWeight(){
+        public float spawningWeight() {
             return 0;
         }
 
         public static class NecroSkeletonSprite extends SkeletonSprite {
-            public NecroSkeletonSprite(){
+
+            public NecroSkeletonSprite() {
                 super();
                 brightness(0.75f);
             }
 
             @Override
-            public void resetColor(){
+            public void resetColor() {
                 super.resetColor();
                 brightness(0.75f);
             }

@@ -603,7 +603,7 @@ public class WandOfElements extends DamageWand {
 
 
 
-    private static int AlchemyCost = 21;
+    private static int AlchemyCost = 36;
 
     public static class RecipeFireFrost extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
         {

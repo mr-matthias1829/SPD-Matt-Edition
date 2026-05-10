@@ -141,6 +141,8 @@ public class BuffIndicator extends Component {
     public static final int GREED = 96;
     public static final int SLOTH = 97;
     public static final int BULKY = 98;
+    public static final int CONSUMING_GREED = 99;
+    public static final int MAGIC_INFUSE = 100;
 
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;

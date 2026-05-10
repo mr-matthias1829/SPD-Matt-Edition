@@ -43,7 +43,7 @@ public class RingOfEvasion extends Ring {
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 1f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 10f));
 		}
 	}
 

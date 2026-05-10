@@ -29,7 +29,7 @@ public class ItemSpriteSheet {
 	public static final int SIZE = 16;
 
 	private static final int TX_WIDTH = 256;
-	private static final int TX_HEIGHT = 544; //512
+	private static final int TX_HEIGHT = 560; //512
 
 	private static final int WIDTH = TX_WIDTH / SIZE;
 
@@ -824,7 +824,28 @@ public class ItemSpriteSheet {
         assignItemRect(GLOCK_BULLET,11, 11);
     }
 
-	//for smaller 8x8 icons that often accompany an item sprite
+
+    private static final int UNQIUEWEP =                                   xy(1, 35); //16 slots
+    public static final int DARKNESS_KATANA  = UNQIUEWEP+0;
+    public static final int PURGE_GLOVES  = UNQIUEWEP+1;
+    public static final int EMERALD_ROUND_SHIELD  = UNQIUEWEP+2;
+    public static final int MIDAS_GREAT_SWORD  = UNQIUEWEP+3;
+    public static final int FIRECRACKER_WHIP  = UNQIUEWEP+4;
+    public static final int STORMBRINGER_BATTLE_AXE  = UNQIUEWEP+5;
+    public static final int BLOODLETTER_SICKLE  = UNQIUEWEP+6;
+    public static final int AMETHYST_SPEAR  = UNQIUEWEP+7;
+    static{
+        assignItemRect(DARKNESS_KATANA,          15, 16);
+        assignItemRect(PURGE_GLOVES,          12, 16);
+        assignItemRect(EMERALD_ROUND_SHIELD,    16, 16);
+        assignItemRect(MIDAS_GREAT_SWORD,  16, 16);
+        assignItemRect(FIRECRACKER_WHIP,            14, 14);
+        assignItemRect(STORMBRINGER_BATTLE_AXE,      16, 16);
+        assignItemRect(BLOODLETTER_SICKLE,          15, 15);
+        assignItemRect(AMETHYST_SPEAR,           16, 16);
+    }
+
+    //for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
 
 		private static final int WIDTH = 16;
@@ -886,6 +907,7 @@ public class ItemSpriteSheet {
 		public static final int SCROLL_RETRIB   = SCROLLS+9;
 		public static final int SCROLL_TERROR   = SCROLLS+10;
 		public static final int SCROLL_TRANSMUTE= SCROLLS+11;
+        public static final int SCROLL_MUPGRADE= SCROLLS+12;
 		static {
 			assignIconRect( SCROLL_UPGRADE,     7, 7 );
 			assignIconRect( SCROLL_IDENTIFY,    4, 7 );
@@ -899,6 +921,7 @@ public class ItemSpriteSheet {
 			assignIconRect( SCROLL_RETRIB,      5, 6 );
 			assignIconRect( SCROLL_TERROR,      5, 7 );
 			assignIconRect( SCROLL_TRANSMUTE,   7, 7 );
+            assignIconRect( SCROLL_MUPGRADE,     7, 7 );
 		}
 
 		private static final int EXOTIC_SCROLLS =                            xy(1, 4);  //16 slots
@@ -914,6 +937,7 @@ public class ItemSpriteSheet {
 		public static final int SCROLL_PSIBLAST = EXOTIC_SCROLLS+9;
 		public static final int SCROLL_DREAD    = EXOTIC_SCROLLS+10;
 		public static final int SCROLL_METAMORPH= EXOTIC_SCROLLS+11;
+        public static final int SCROLL_PUREMG= EXOTIC_SCROLLS+12;
 		static {
 			assignIconRect( SCROLL_ENCHANT,     7, 7 );
 			assignIconRect( SCROLL_DIVINATE,    7, 6 );
@@ -927,6 +951,7 @@ public class ItemSpriteSheet {
 			assignIconRect( SCROLL_PSIBLAST,    5, 6 );
 			assignIconRect( SCROLL_DREAD,       5, 7 );
 			assignIconRect( SCROLL_METAMORPH,   7, 7 );
+            assignIconRect( SCROLL_PUREMG,   7, 7 );
 		}
 
 		                                                                                //16 free slots

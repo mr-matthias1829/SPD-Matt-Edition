@@ -43,14 +43,12 @@ public class Challenges {
 	public static final int STRONGER_BOSSES 	= 256;
 
 
-    public static final int BACK_TO_ORIGINS     = 512; // Next power of 2
-    public static final int I_HATE_MYSELF       = 1024;
-    public static final int GUNS_BLAZING        = 2048;
-    public static final int WONKY_STEP       = 4096;
-    public static final int CONSUMING_GREED    = 8192;
 
-    public static final int MAX_CHALS           = 13;
-	public static final int MAX_VALUE           = 16383;
+    public static final int I_HATE_MYSELF       = 512;
+    public static final int CONSUMING_GREED    = 1024;
+
+    public static final int MAX_CHALS           = 11;
+	public static final int MAX_VALUE           = 2047;
 
 	public static final String[] NAME_IDS = {
 			"champion_enemies",
@@ -62,10 +60,7 @@ public class Challenges {
 			"swarm_intelligence",
 			"darkness",
 			"no_scrolls",
-            "back_to_origins",
             "i_hate_myself",
-            "guns_blazing",
-            "wonky_step",
             "consuming_greed"
 	};
 
@@ -74,7 +69,7 @@ public class Challenges {
             NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS,
             NO_SCROLLS,
 
-            BACK_TO_ORIGINS, I_HATE_MYSELF, GUNS_BLAZING, WONKY_STEP, CONSUMING_GREED
+            I_HATE_MYSELF, CONSUMING_GREED
 	};
 
     public static int activeChallenges(){

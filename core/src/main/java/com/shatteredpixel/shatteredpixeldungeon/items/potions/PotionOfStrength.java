@@ -46,9 +46,8 @@ public class PotionOfStrength extends Potion {
 		identify();
 
 		hero.STR++;
-        if (!Dungeon.isChallenged(Challenges.BACK_TO_ORIGINS)) {
-            hero.STR++; // twice muehehehehe
-        }
+        hero.STR++; // twice muehehehehe
+
 		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
 
 		GLog.p( Messages.get(this, "msg", hero.STR()) );

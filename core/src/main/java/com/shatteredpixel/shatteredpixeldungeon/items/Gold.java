@@ -60,7 +60,7 @@ public class Gold extends Item {
 		Catalog.setSeen(getClass());
 		Statistics.itemTypesDiscovered.add(getClass());
 
-        if (Dungeon.hero.buff(Greed.class) != null && quantity >= 3) {
+        if (Dungeon.hero.buff(Greed.class) != null && quantity >= 3) { // do we have greed active and is there enough gold?
             quantity = (int)(quantity * Dungeon.hero.buff(Greed.class).getGoldMultiplier());
             Dungeon.hero.buff(Greed.class).onGoldCollected();
         }
@@ -92,7 +92,13 @@ public class Gold extends Item {
 	@Override
 	public Item random() {
 		//quantity = Random.IntRange( 30 + Dungeon.depth * 10, 60 + Dungeon.depth * 20 );
-        quantity = (int)(Random.IntRange( 10 + Dungeon.depth * 8, 30 + Dungeon.depth * 15 ) *0.65);
+
+        float t = Dungeon.depth / 25f; // how much for a 1. in our case, 1 = max mult
+        float multiplier = 1f + 2f * (float)(Math.pow(t, 1.6f));
+        if (multiplier > 3f) multiplier = 3f;
+        if (multiplier < 1f) multiplier = 1f;
+
+        quantity = (int)(Random.IntRange( 25 + Dungeon.depth * 8, 45 + Dungeon.depth * 15 ) * (0.8*multiplier));
 
 		return this;
 	}

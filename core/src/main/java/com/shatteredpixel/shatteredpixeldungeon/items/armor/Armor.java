@@ -393,7 +393,7 @@ public class Armor extends EquipableItem {
         }
 
         // Calculate effective level after magic upgrade penalty
-        int magicPenalty = (int)(magicLevel * 0.3f);
+        int magicPenalty = (int)(magicLevel * 0.18f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
         // NEW: Tier multiplier scales linearly with tier
@@ -403,10 +403,10 @@ public class Armor extends EquipableItem {
         // NEW: Scaling increases slightly with each level
         // Base formula: tierMultiplier * (base + effectiveLevel * (1 + effectiveLevel * 0.03))
         // This gives slightly accelerating returns per level
-        int baseValue = 2;
-        float levelScaling = effectiveLevel * (1f + effectiveLevel * 0.0145f);
+        int baseValue = 3;
+        float levelScaling = effectiveLevel * (1f + effectiveLevel * 0.015f);
 
-        int baseDR = Math.round(tierMultiplier * (baseValue + levelScaling));
+        int baseDR = Math.round(tierMultiplier * ((baseValue*tierMultiplier) + levelScaling));
         int augmentBonus = augment.defenseFactor(effectiveLevel);
 
         int maxDR = baseDR + augmentBonus;
@@ -432,7 +432,7 @@ public class Armor extends EquipableItem {
         }
 
         // Calculate effective level after magic upgrade penalty
-        int magicPenalty = (int)(magicLevel * 0.3f);
+        int magicPenalty = (int)(magicLevel * 0.18f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
         int maxDR = DRMax(lvl);
@@ -489,7 +489,7 @@ public class Armor extends EquipableItem {
         }
 
         // Calculate effective magic level after physical upgrade penalty
-        int physicalPenalty = (int)(level() * 0.3f);
+        int physicalPenalty = (int)(level() * 0.18f);
         int effectiveMagicLevel = Math.max(0, magicLvl - physicalPenalty);
 
         // Base magic DR formula (more complex than physical)
@@ -523,7 +523,7 @@ public class Armor extends EquipableItem {
         }
 
         // Calculate effective magic level after physical upgrade penalty
-        int physicalPenalty = (int) (level() * 0.3f);
+        int physicalPenalty = (int) (level() * 0.18f);
         int magicLevelAfterPenalty = magicLvl - physicalPenalty;
 
         // Effective level is half of post-penalty level, rounding up for odd numbers

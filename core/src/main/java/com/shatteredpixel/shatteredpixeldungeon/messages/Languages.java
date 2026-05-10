@@ -25,6 +25,7 @@ import java.util.Locale;
 
 public enum Languages {
 	ENGLISH("english",      "en", Status.O_COMPLETE, null, null),
+
 	CHI_SMPL("简体中文",     "zh", Status.__UNREVIEW, new String[]{"Chronie_Lynn_Iwa", "Jinkeloid(zdx00793)", "endlesssolitude"}, new String[]{"931451545", "Budding", "DM_216", "Fatir", "Fishbone", "Hcat", "HoofBumpBlurryface", "Horr_lski", "Lery", "Lyn_0401", "Lyx0527", "Ooooscar", "RainSlide", "ShatteredFlameBlast", "SpaceAnchor", "SunsetGlowTheDOGE", "Teller", "hmdzl001", "leo", "tempest102", "tequilasunset", "户方狸奴"}),
 	KOREAN("한국어",         "ko", Status.O_COMPLETE, new String[]{"Cocoa", "Flameblast12", "GameConqueror", "Korean2017"}, new String[]{"AFS", "N8fall", "WondarRabb1t", "benepaper", "chlrhwnstkd", "ddojin0115", "eeeei", "enjuxx", "hancyel", "linterpreteur", "lemonam", "lsiebnie", "sora0430"}),
 	RUSSIAN("русский",      "ru", Status.__UNREVIEW, new String[]{"AprilRain(Vadzim Navumaû)", "ConsideredHamster", "Dominowood371", "Inevielle", "apxwn", "yarikonline"}, new String[]{"5r", "Alternative15", "AngryPotato", "AttHawk46", "BlueberryShortcake", "CatGirlSasha", "Enwviun", "HerrGotlieb", "HoloTheWise", "Ilbko", "JleHuBbluKoT", "KirStaLong", "MrXantar", "Nikets", "OneDuo", "Originalej0name", "Provitia", "Raymundo", "Roycce", "Shamahan", "Thomasg63", "XAutumn", "Ya6lo4ko", "chelikchelik", "dasfan123", "ifritdiezel", "katyp2005", "kirusyaga", "kptmx", "leondorus", "long_live_the_9", "pancreper1", "perefrazz", "ponfertato", "roman.yagodin", "tibby", "un_logic", "vivatimperia", "wntrau", "xenrun", "Вoвa"}),
@@ -51,6 +52,7 @@ public enum Languages {
 	//GALICIAN("galego",    "gl", Status.X_UNFIN, new String[]{"xecarballido"}, null),
 	//BASQUE("euskara",     "eu", Status.X_UNFIN, new String[]{"Deathrevenge", "Osoitz"}, null),
 	ESPERANTO("esperanto",  "eo", Status.O_COMPLETE, new String[]{"Verdulo"}, new String[]{"Raizin", "Rwelean", "kameluloj"});
+
 
 	public enum Status{
 		//below 80% translated languages are not added or removed
@@ -95,6 +97,7 @@ public enum Languages {
 		else return translators.clone();
 	}
 
+
 	public static Languages matchLocale(Locale locale){
 		//special case for chinese traditional, which matches more specifically than other languages
 		if (locale.getLanguage().equals("zh") && locale.toString().contains("Hant")){
@@ -102,6 +105,7 @@ public enum Languages {
 		}
 		return matchCode(locale.getLanguage());
 	}
+
 
 	public static Languages matchCode(String code){
 		for (Languages lang : Languages.values()){

@@ -44,10 +44,6 @@ public class GnollTrickster extends Gnoll {
 	{
 		spriteClass = GnollTricksterSprite.class;
 
-		HP = HT = 24; //36  //20
-		defenseSkill = 5;
-        baseSpeed = 1.2f; // 1f
-
 		EXP = 7; //5
 	}
     public void setLevel( int depth ){
@@ -68,11 +64,13 @@ public class GnollTrickster extends Gnoll {
         }
     }
     public void adjustStats( int level ) {
-        HP = HT = (int) (24 * (1+level * 0.65));// was a set value before //36 //20
+        HP = HT = (int) (18 * (1+level * 0.65));// was a set value before //36 //20
         defenseSkill = 5 * (1+level);
-        baseSpeed = 1f; // 1.2f 1f
+        baseSpeed = 1f;
 
-        EXP = (int) (7 * (1+level*0.25)); //5
+        EXP = (int) (5 * (1+level*0.25)); //5
+
+        maxLvl = 10 + level * 5;
 
         loot = Generator.Category.MISSILE; // only loot when killed as quest
         if (level == 0) {
@@ -80,7 +78,7 @@ public class GnollTrickster extends Gnoll {
             lootChance = 1f; // only loot guaranteed when killed as quest
             baseSpeed = 1f;
         } else {
-            lootChance = 0.18f;
+            lootChance = 0.08f;
         }
     }
 

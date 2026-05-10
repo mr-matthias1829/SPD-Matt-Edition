@@ -100,7 +100,7 @@ import java.util.LinkedHashMap;
 public enum Bestiary {
 
     //SPECIAL,
-    SPECIALUNUSED,
+    //SPECIALUNUSED,
 	REGIONAL,
 	BOSSES,
 	UNIVERSAL,
@@ -155,12 +155,14 @@ public enum Bestiary {
         );
          */
 
+        /*
         SPECIALUNUSED.addEntities( // sorted on region/first (possible) appearance
                 // CURRENTLY UNUSED:
                 SpiritualNecromancer.class,
                 DM166.class, Warden.class,
                 DarkKing.class
         );
+         */
 
 		REGIONAL.addEntities(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class,
 				Skeleton.class, Thief.class, DM100.class, Guard.class, Necromancer.class,
@@ -173,8 +175,8 @@ public enum Bestiary {
 				Tengu.class,
 				Pylon.class, DM300.class,
 				DwarfKing.class,
-				YogDzewa.Larva.class, YogFist.BurningFist.class, YogFist.SoiledFist.class, YogFist.RottingFist.class, YogFist.RustedFist.class,YogFist.BrightFist.class, YogFist.DarkFist.class, YogDzewa.class,
-                DarkKing.class);
+				YogDzewa.Larva.class, YogFist.BurningFist.class, YogFist.SoiledFist.class, YogFist.RottingFist.class, YogFist.RustedFist.class,YogFist.BrightFist.class, YogFist.DarkFist.class, YogDzewa.class
+        );
 
 		UNIVERSAL.addEntities(Wraith.class, Piranha.class, Mimic.class, GoldenMimic.class, EbonyMimic.class, Statue.class, GuardianTrap.Guardian.class, SentryRoom.Sentry.class);
 

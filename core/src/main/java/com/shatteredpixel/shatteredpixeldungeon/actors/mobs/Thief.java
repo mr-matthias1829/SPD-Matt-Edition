@@ -46,7 +46,7 @@ public class Thief extends Mob {
 		HP = HT = 32; //25 //20
 		defenseSkill = 12;
 		
-		EXP = 1; //5
+		EXP = 4;
 		maxLvl = 11;
 
 		loot = Random.oneOf(Generator.Category.RING, Generator.Category.ARTIFACT);
@@ -71,13 +71,13 @@ public class Thief extends Mob {
         adjustStats(level);
     }
     public void adjustStats( int level ) {
-        if (level >= 3){
-            baseSpeed = 0.9f;
+        if (level >= 3){ // caves+
+            baseSpeed = 1f;
         }
-        else if (level >= 2){
+        else if (level >= 2){ // prisons
             baseSpeed = 0.8f;
         }
-        else{
+        else{ // sewers
             baseSpeed = 0.75f;
             HP = HT = 20;
         }
@@ -149,7 +149,7 @@ public class Thief extends Mob {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 3);
+		return super.drRoll() + Random.NormalIntRange(1, 4);
 	}
 
 	@Override

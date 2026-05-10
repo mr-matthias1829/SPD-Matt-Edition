@@ -44,7 +44,7 @@ public class Piranha extends Mob {
 	{
 		spriteClass = PiranhaSprite.class;
 
-		baseSpeed = 3f; //2f
+		baseSpeed = 2f;
 		
 		EXP = 0;
 		
@@ -84,7 +84,7 @@ public class Piranha extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( Dungeon.depth, 2 + Dungeon.depth * 2 );
+		return Random.NormalIntRange( 1 + Dungeon.depth, 2 + Dungeon.depth * 2 );
 	}
 	
 	@Override

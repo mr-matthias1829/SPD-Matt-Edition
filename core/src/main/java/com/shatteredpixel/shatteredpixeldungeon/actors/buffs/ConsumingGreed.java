@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Sins;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -63,6 +64,20 @@ public class ConsumingGreed extends Buff implements Hero.Doom {
             // 16-20: 2/2 = 1
             // 21+: 3/2 = 1.5 (steep, but its demon halls)
 
+            // making this formula, i ASSUME you'll spend around 1200 turns per region
+            // for demon halls: thats total -1800 gold, if you can safely gobble that up, you must be insane
+            // also im not taking bosses into account, this is why im working on the sword of midas
+
+            // but wait! what if the sin of greed is active as well?
+            // welllll... we tick 1 turn faster, turning the total gold loss into:
+            // 1-5: 1/4 = 0.25
+            // 6-10: 2/3 = 0.66
+            // 11-15: 2/2 = 1
+            // 16-20: 2/1 = 2
+            // 21+: 3/1 = 3
+            // you want to greed? go ahead buddy, i'm not stopping you :)
+            // would also ruin your chances for buying anything in any shop, but hey, you do you
+
             if (gold < 1) gold = 1;
             return gold;
         } else {
@@ -81,24 +96,28 @@ public class ConsumingGreed extends Buff implements Hero.Doom {
     }
 
     private int turnsPerConsumption() {
+        int bonusReduction = 0;
+        if (Dungeon.isSinActive(Sins.GREED)){
+            bonusReduction = 1;
+        }
         if (Dungeon.depth <= 5) {
-            return 5;
+            return 5-bonusReduction;
         }
         if (Dungeon.depth <= 10) {
-            return 4;
+            return 4-bonusReduction;
         }
         if (Dungeon.depth <= 15) {
-            return 3;
+            return 3-bonusReduction;
         }
         if (Dungeon.depth <= 27) {
-            return 2;
+            return 2-bonusReduction;
         }
         return 1; // fallback
     }
 
 
     @Override
-    public String desc() {
+    public String desc() { // suprise suprise, the description here is actually super dynamic
         if (Dungeon.depth < 2) {
             return "Until you descend deeper, greed will not affect you...";
         }
@@ -132,7 +151,7 @@ public class ConsumingGreed extends Buff implements Hero.Doom {
 
     @Override
     public int icon() {
-        return BuffIndicator.GREED;
+        return BuffIndicator.CONSUMING_GREED;
     }
 
     @Override

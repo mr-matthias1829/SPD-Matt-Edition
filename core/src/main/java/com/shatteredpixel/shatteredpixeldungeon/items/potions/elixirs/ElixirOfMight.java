@@ -35,6 +35,10 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
+// very similar to pot. of vitality
+// i've considered removing or changing this elixir
+// instead it stays, granting both effects of POS and POV, at a reduced rate
+// effectively acting as a middle ground for both potions
 public class ElixirOfMight extends Elixir {
 
 	{

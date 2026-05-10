@@ -184,6 +184,7 @@ public class Dungeon {
 
 	public static int gold;
 	public static int energy;
+    public static int vitalityPotionsUsed = 0;
 	
 	public static HashSet<Integer> chapters;
 
@@ -265,6 +266,7 @@ public class Dungeon {
 
 		gold = 0;
 		energy = 0;
+        vitalityPotionsUsed = 0;
 
         rankable = true;
 
@@ -304,7 +306,7 @@ public class Dungeon {
 		Actor.clear();
 		
 		Level level;
-		if (branch == 0) {
+		if (branch == 0) { // main progression path
 			switch (depth) {
 				case 1:
 				case 2:
@@ -352,12 +354,12 @@ public class Dungeon {
 					level = new HallsBossLevel();
 					break;
 				case 26:
-					level = new LastLevel();
+					level = new LastLevel(); // note: some classes have depth 26 hardcoded assuming its the last floor
 					break;
 				default:
 					level = new DeadEndLevel();
 			}
-		} else if (branch == 1) {
+		} else if (branch == 1) { // reserved for quests and Evan's vanilla shenanigans
 			switch (depth) {
 				case 11:
 				case 12:
@@ -374,11 +376,17 @@ public class Dungeon {
 				default:
 					level = new DeadEndLevel();
 			}
-        } else if (branch == 2) {
+        } else if (branch == 2) { // reserved for "special" floors
             switch (depth) {
                 case 14:
                     level = new IceCavesLevel();
                     break;
+                default:
+                    level = new DeadEndLevel();
+                    break;
+            }
+        } else if (branch == 3) { // reserved for new/exclusive/special regions
+            switch (depth) {
                 default:
                     level = new DeadEndLevel();
                     break;
@@ -545,6 +553,11 @@ public class Dungeon {
 	}
 
 	public static boolean posNeeded() {
+
+        // ALWAYS spawn a POS on the first floor
+        // peasant benefits by far the most from this
+        if (depth == 1) return true;
+
 		//2 POS each floor set
 		int posLeftThisSet = 2 - (LimitedDrops.STRENGTH_POTIONS.count - (depth / 5) * 2);
 		if (posLeftThisSet <= 0) return false;
@@ -563,7 +576,7 @@ public class Dungeon {
 	public static boolean souNeeded() {
 		int souLeftThisSet;
 		//3 SOU each floor set (now 4)
-        int totalSOU = 4; //yes i added this myself --matt
+        int totalSOU = 4;
 
 		souLeftThisSet = totalSOU - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * totalSOU);
 		if (souLeftThisSet <= 0) return false;
@@ -575,8 +588,10 @@ public class Dungeon {
 
     public static boolean msouNeeded() {
         int souLeftThisSet;
-        //3 SOU each floor set (now 5)
-        int totalMSOU = 2; //yes i added this myself --matt
+        //2 mSOU each floor set
+        // has limit per region like SOU because it functions nearly the same
+        // just adjusts different stats and items than SOU
+        int totalMSOU = 2;
 
         souLeftThisSet = totalMSOU - (LimitedDrops.MAGIC_UPGRADE_SCROLLS.count - (depth / 5) * totalMSOU);
         if (souLeftThisSet <= 0) return false;
@@ -648,6 +663,9 @@ public class Dungeon {
 	private static final String GENERATED_LEVELS    = "generated_levels";
 	private static final String GOLD		= "gold";
 	private static final String ENERGY		= "energy";
+
+    private static final String VITUSES	= "vituses";
+
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
 	private static final String LEVEL		= "level";
@@ -678,6 +696,7 @@ public class Dungeon {
 
 			bundle.put( GOLD, gold );
 			bundle.put( ENERGY, energy );
+            bundle.put( VITUSES, vitalityPotionsUsed );
 
 			for (int d : droppedItems.keyArray()) {
 				bundle.put(Messages.format(DROPPED, d), droppedItems.get(d));
@@ -864,6 +883,7 @@ public class Dungeon {
 
 		gold = bundle.getInt( GOLD );
 		energy = bundle.getInt( ENERGY );
+        vitalityPotionsUsed = bundle.getInt(VITUSES);
 
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );

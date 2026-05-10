@@ -48,8 +48,8 @@ public class Guard extends Mob {
     {
         spriteClass = GuardSprite.class;
 
-        HP = HT = 60; //50 //40
-        defenseSkill = 1; //10
+        HP = HT = 40; //50 //40
+        defenseSkill = 5; //10
 
         EXP = 7;
         maxLvl = 14;
@@ -97,7 +97,7 @@ public class Guard extends Mob {
         if (enemy == null || !enemy.isAlive()) return;
 
         // stronger damage than normal damageRoll()
-        int dmg = (int) (damageRoll() * 1.25f); // 1.5f
+        int dmg = (int) (damageRoll() * 1.1f); // 1.5f
 
         // apply damage and cripple
         enemy.damage(dmg, this);
@@ -110,7 +110,7 @@ public class Guard extends Mob {
             GameScene.updateFog();
         }
 
-        bashCooldown = 12;
+        bashCooldown = 10;
     }
 
     private boolean bashInProgress = false;
@@ -204,7 +204,7 @@ public class Guard extends Mob {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(0, 4);
+        return super.drRoll() + Random.NormalIntRange(2, 7);
     } //0,5 //0,7
 
     @Override
