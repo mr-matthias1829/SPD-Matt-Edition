@@ -42,11 +42,11 @@ public class TrapMechanism extends Trinket {
 
 	@Override
 	protected int upgradeEnergyCost() {
-		//6 -> 8(14) -> 10(24) -> 12(36)
+		//6 -> 6(12) -> 8(20) -> 10(30)
 		//return 6+2*level();
 
-        //6 -> 10(16) -> 15(31) -> 20(51)
-        return 10+5*level();
+        //6 -> 6(12) -> 11(23) -> 16(39)
+        return 6+5*level();
 	}
 
 	@Override
