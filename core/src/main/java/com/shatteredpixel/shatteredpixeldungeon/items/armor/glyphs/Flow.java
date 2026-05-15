@@ -44,7 +44,11 @@ public class Flow extends Armor.Glyph {
 		if (level == -1 || !Dungeon.level.water[owner.pos]){
 			return 1;
 		} else {
-			return (2f + 0.1f*level) * genericProcChanceMultiplier(owner);
+			if (owner.sprite != null && owner.sprite.visible){
+				int particles = 2 + (int) Random.Float(1+level/2f);
+				owner.sprite.emitter().startDelayed(Speck.factory(Speck.BLUE_LIGHT), 0.02f, particles, 0.05f);
+			}
+			return (2f + 0.5f*level) * genericProcChanceMultiplier(owner);
 		}
 	}
 
