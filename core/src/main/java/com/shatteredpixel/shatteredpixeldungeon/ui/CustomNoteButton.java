@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -59,6 +61,8 @@ public class CustomNoteButton extends IconButton {
 
 	@Override
 	protected void onClick() {
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) return;
+
 		super.onClick();
 
 		if (Notes.getRecords(Notes.CustomRecord.class).size() >= Notes.customRecordLimit()){
@@ -94,6 +98,8 @@ public class CustomNoteButton extends IconButton {
 
 		@Override
 		protected void onSelect(int index) {
+            if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) return;
+
 			if (index == 0){
 				Notes.CustomRecord custom = new Notes.CustomRecord("", "");
 				addNote(null, custom,
@@ -366,7 +372,9 @@ public class CustomNoteButton extends IconButton {
 	}
 
 	private static void addNote(Window parentWindow, Notes.CustomRecord note, String promptTitle, String prompttext){
-		GameScene.show(new WndTextInput(promptTitle,
+
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) return;
+        GameScene.show(new WndTextInput(promptTitle,
 				prompttext,
 				"",
 				50,

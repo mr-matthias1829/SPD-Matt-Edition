@@ -639,7 +639,7 @@ public class HeroSelectScene extends PixelScene {
 
             buttons = new ArrayList<>();
             spacers = new ArrayList<>();
-            /*
+
             StyledButton seedButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "custom_seed"), 6){
                 @Override
                 protected void onClick() {
@@ -692,7 +692,7 @@ public class HeroSelectScene extends PixelScene {
             if (!SPDSettings.customSeed().isEmpty()) seedButton.icon().hardlight(1f, 1.5f, 0.67f);;
             buttons.add(seedButton);
             add(seedButton);
-            */
+
 
             StyledButton dailyButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "daily"), 6){
 

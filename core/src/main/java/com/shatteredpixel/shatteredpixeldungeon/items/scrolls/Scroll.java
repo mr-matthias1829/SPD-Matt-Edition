@@ -234,8 +234,10 @@ public abstract class Scroll extends Item {
     public Item identify( boolean byHero ) {
         super.identify(byHero);
 
-        if (!isKnown()) {
-            setKnown();
+        if (!Dungeon.isChallenged(Challenges.I_HATE_MYSELF) && byHero) {
+            if (!isKnown()) {
+                setKnown();
+            }
         }
         return this;
     }

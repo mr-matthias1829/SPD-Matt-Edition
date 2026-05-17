@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.BattleAxeStormbringer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.HolyDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
@@ -116,6 +117,7 @@ public class AntiMagic extends Armor.Glyph {
 		RESISTS.add( YogFist.DarkFist.DarkBolt.class );
 
         RESISTS.add (MagicInfuse.class);
+        RESISTS.add(BattleAxeStormbringer.Electricity.class);
 	}
 
     public int proc(Armor armor, Char attacker, Char defender, int damage) {
@@ -128,10 +130,10 @@ public class AntiMagic extends Armor.Glyph {
 
             // Check if the attack class is in the RESISTS list
             if (RESISTS.contains(attacker.getClass())) {
-                float procChance = (armor.getLevel()+6f)/(armor.getLevel()+50f) * procChanceMultiplier(defender);
+                float procChance = (armor.getLevel()+4f)/(armor.getLevel()+30f) * procChanceMultiplier(defender);
                 if (Random.Float() < procChance) {
                     defender.sprite.showStatus(TEAL.color,"antimagic!"); // visual feedback
-                    return damage /4; // reduce damage to 25%
+                    return damage /2; // reduce damage to 50% (half)
                 }
             }
         }

@@ -46,14 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Annoying;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Dazzling;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Displacing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Friendly;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Polarized;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Sacrificial;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blooming;
@@ -406,15 +399,19 @@ abstract public class Weapon extends KindOfWeapon {
 
 			//chance to remove curse is a static 33%
 			} else if (hasCurseEnchant()) {
-				if (Random.Int(3) == 0) enchant(null);
+                    if (enchantment.removableByUpgrade() && Random.Int(3) == 0) {
+                        enchant(null);
+                    }
 
 			//otherwise chance to lose enchant is 10/20/40/80/100% when upgrading from +4/5/6/7/8
 			} else if (level() >= 4 && Random.Float(10) < Math.pow(2, level()-4)){
 				enchant(null);
 			}
 		}
-		
-		cursed = false;
+
+        if (!(hasCurseEnchant() && !enchantment.removableByUpgrade())) {
+            cursed = false;
+        }
 
 		return super.upgrade();
 	}
@@ -532,7 +529,8 @@ abstract public class Weapon extends KindOfWeapon {
 
 		public static final Class<?>[] curses = new Class<?>[]{
 				Annoying.class, Displacing.class, Dazzling.class, Explosive.class,
-				Sacrificial.class, Wayward.class, Polarized.class, Friendly.class
+				Sacrificial.class, Wayward.class, Polarized.class, Friendly.class,
+                Binding.class
 		};
 		
 			
@@ -593,6 +591,13 @@ abstract public class Weapon extends KindOfWeapon {
 		public boolean curse() {
 			return false;
 		}
+
+        // only does something if curse is true
+        // if this is set to false, then upgrades dont have a chance to remove/weaken the curse
+        // default is true
+        public boolean removableByUpgrade() {
+            return true;
+        }
 
 		@Override
 		public void restoreFromBundle( Bundle bundle ) {

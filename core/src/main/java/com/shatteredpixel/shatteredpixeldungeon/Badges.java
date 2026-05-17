@@ -247,13 +247,15 @@ public class Badges {
         NO_UPGRADE_BOSS3 (296),
         AGAINST_ALL_ODDS (206),
         AGAINST_EVERYTHING_AND_MORE (207, BadgeType.SECRET),
-        TO_HELL_AND_BACK (272),
+        TO_HELL_AND_BACK (272, BadgeType.SECRET),
         AWKWARD_DM151_UNBALANCE(208, BadgeType.SECRET), // super rare occurance, hence why its hidden
 
         // PROGRESSIVE misc badges
         KILL_TITLE_ENEMY     ( 208 ),
         ICE_CAVE_TOURIST     ( 209 ),
         THIEF_DEJA_VU     ( 210 ),
+
+        YENDORS_KEY         (323, BadgeType.SECRET), // unob as of now. ALOT will need to be done for this one
 
 
         // impossible badge, used for some debug testing
@@ -1514,7 +1516,7 @@ public class Badges {
 			{Badge.STRENGTH_ATTAINED_1, Badge.STRENGTH_ATTAINED_2, Badge.STRENGTH_ATTAINED_3, Badge.STRENGTH_ATTAINED_4, Badge.STRENGTH_ATTAINED_5, Badge.STRENGTH_ATTAINED_6},
 			{Badge.FOOD_EATEN_1, Badge.FOOD_EATEN_2, Badge.FOOD_EATEN_3, Badge.FOOD_EATEN_4, Badge.FOOD_EATEN_5},
 			{Badge.ITEMS_CRAFTED_1, Badge.ITEMS_CRAFTED_2, Badge.ITEMS_CRAFTED_3, Badge.ITEMS_CRAFTED_4, Badge.ITEMS_CRAFTED_5},
-			{Badge.BOSS_SLAIN_1, Badge.BOSS_SLAIN_2, Badge.BOSS_SLAIN_3, Badge.BOSS_SLAIN_4},
+			{Badge.BOSS_SLAIN_1, Badge.BOSS_SLAIN_2, Badge.BOSS_SLAIN_3, Badge.BOSS_SLAIN_4, Badge.VICTORY, Badge.HAPPY_END},
 			{Badge.RESEARCHER_1, Badge.RESEARCHER_2, Badge.RESEARCHER_3, Badge.RESEARCHER_4, Badge.RESEARCHER_5},
 			{Badge.HIGH_SCORE_1, Badge.HIGH_SCORE_2, Badge.HIGH_SCORE_3, Badge.HIGH_SCORE_4, Badge.HIGH_SCORE_5},
 			{Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4, Badge.GAMES_PLAYED_5},
@@ -1522,8 +1524,9 @@ public class Badges {
             {Badge.STRONG, Badge.MIGHTY, Badge.POWERFUL, Badge.OBLIVION },
             {Badge.AGAINST_ALL_ODDS, Badge.AGAINST_EVERYTHING_AND_MORE},
 
-            {Badge.VICTORY, Badge.HAPPY_END, Badge.PACIFIST_ASCENT},
             {Badge.MASTERY_COMBO, Badge.MASTERY_COMBO_2},
+            {Badge.BOSS_SLAIN_REMAINS, Badge.HAPPY_END_REMAINS},
+            {Badge.NO_MONSTERS_SLAIN, Badge.PACIFIST_ASCENT},
 
             // mod progression line
             // technically contains spoilers, but that's alright
@@ -1554,8 +1557,11 @@ public class Badges {
             {Badge.VICTORY,      Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge? idk
 
 
+            // evan might not be strict, i sure as hell am
+            {Badge.BOSS_CHALLENGE_3, Badge.NO_UPGRADE_BOSS3},
             {Badge.VICTORY, Badge.TO_HELL_AND_BACK},
-
+            {Badge.VICTORY, Badge.HAPPY_END},
+            {Badge.HAPPY_END, Badge.HAPPY_END_REMAINS},
             {Badge.VICTORY, Badge.AGAINST_ALL_ODDS}
 	};
 
@@ -1579,6 +1585,7 @@ public class Badges {
 			{Badge.ALL_ARTIFACTS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
 			{Badge.ALL_POTIONS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
 			{Badge.ALL_SCROLLS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED},
+
 
             {Badge.ALL_BAGS_BOUGHT, Badge.GEARED_UP},
             {Badge.ALL_ITEMS_IDENTIFIED, Badge.GEARED_UP},

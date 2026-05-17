@@ -47,12 +47,6 @@ public class GlovesPurge extends BlacksmithWeapon {
     int cooldown = 0;
 
 	@Override
-	public int max(int lvl) {
-		return  Math.round(2.5f*(tier+1)) +     //5 base, down from 10
-				lvl*Math.round(0.5f*(tier+1));  //+1 per level, down from +2
-	}
-
-	@Override
 	public String targetingPrompt() {
 		return Messages.get(this, "prompt");
 	}

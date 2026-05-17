@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 
 /**
@@ -35,8 +37,23 @@ public abstract class BlacksmithWeapon extends MeleeWeapon {
     }
 
     @Override
+    public int max(int lvl) {
+        return  3*(tier+1) +    // 3*4 = 12 base
+                lvl*(tier);   // +3 per level, at lvl 6: 30 max
+    }
+
+    @Override
     public String statsInfo() {
         // fallback if subclasses don't define their own stats_desc
         return super.statsInfo();
+    }
+
+
+    public void callBeforeAbilityUsed(Hero hero, Char target) {
+        beforeAbilityUsed(hero, target);
+    }
+
+    public void callAfterAbilityUsed(Hero hero) {
+        afterAbilityUsed(hero);
     }
 }

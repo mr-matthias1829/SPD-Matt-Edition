@@ -20,7 +20,7 @@ public class ElderGnoll extends Mob {
     {
         spriteClass = ElderGnollSprite.class;
 
-        HP = HT = 16; //25
+        HP = HT = 30; //25
         defenseSkill = 8;
 
         EXP = 12;

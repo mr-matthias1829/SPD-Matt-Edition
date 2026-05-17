@@ -57,7 +57,7 @@ public class EyeOfNewt extends Trinket {
 		if (level < 0){
 			return 1;
 		} else {
-			return 0.875f - 0.125f*level;
+			return 0.9f - 0.15f*level;
 		}
 	}
 
@@ -69,8 +69,7 @@ public class EyeOfNewt extends Trinket {
 		if (level < 0){
 			return 0;
 		} else {
-			//return 2+level;
-            return 1+level;
+			return 2+level;
 		}
 	}
 

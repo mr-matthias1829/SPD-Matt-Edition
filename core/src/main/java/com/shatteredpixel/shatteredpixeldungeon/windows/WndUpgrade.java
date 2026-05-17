@@ -537,6 +537,8 @@ public class WndUpgrade extends Window {
 	public WndBag.ItemSelector getItemSelector(){
 		if (upgrader instanceof ScrollOfUpgrade) {
 			return ((ScrollOfUpgrade) upgrader).getSelector(force);
+        } else if (upgrader instanceof ScrollOfMagicUpgrade) {
+            return ((ScrollOfMagicUpgrade) upgrader).getSelector(force);
 		} else if (upgrader instanceof MagicalInfusion){
 			return ((MagicalInfusion)upgrader).getSelector();
 		}

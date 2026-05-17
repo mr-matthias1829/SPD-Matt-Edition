@@ -834,6 +834,7 @@ public class ItemSpriteSheet {
     public static final int STORMBRINGER_BATTLE_AXE  = UNQIUEWEP+5;
     public static final int BLOODLETTER_SICKLE  = UNQIUEWEP+6;
     public static final int AMETHYST_SPEAR  = UNQIUEWEP+7;
+    public static final int ARROW_SIGN = UNQIUEWEP+8;
     static{
         assignItemRect(DARKNESS_KATANA,          15, 16);
         assignItemRect(PURGE_GLOVES,          12, 16);
@@ -843,6 +844,7 @@ public class ItemSpriteSheet {
         assignItemRect(STORMBRINGER_BATTLE_AXE,      16, 16);
         assignItemRect(BLOODLETTER_SICKLE,          15, 15);
         assignItemRect(AMETHYST_SPEAR,           16, 16);
+        assignItemRect(ARROW_SIGN,              16, 16);
     }
 
     //for smaller 8x8 icons that often accompany an item sprite

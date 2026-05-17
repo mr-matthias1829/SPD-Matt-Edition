@@ -191,6 +191,7 @@ public enum Catalog {
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T3.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T4.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T5.classes);
+        MELEE_WEAPONS.addItems(Generator.Category.WEP_BLACKSMITH.classes);
 
 		ARMOR.addItems(Generator.Category.ARMOR.classes);
 

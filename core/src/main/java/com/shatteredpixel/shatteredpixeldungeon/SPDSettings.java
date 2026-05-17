@@ -254,7 +254,7 @@ public class SPDSettings extends GameSettings {
     }
     public static int sins(){return getInt(KEY_SINS, 0, 0, Sins.MAX_VALUE);}
 
-    /*
+
 	public static void customSeed( String value ){
 		put( KEY_CUSTOM_SEED, value );
 	}
@@ -262,8 +262,9 @@ public class SPDSettings extends GameSettings {
 	public static String customSeed() {
 		return getString( KEY_CUSTOM_SEED, "", 20);
 	}
-     */
 
+
+    /*
     public static void customSeed(String value) {
         // intentionally ignored
     }
@@ -271,6 +272,7 @@ public class SPDSettings extends GameSettings {
     public static String customSeed() {
         return "";
     }
+     */
 
 
     public static void lastDaily( long value ){

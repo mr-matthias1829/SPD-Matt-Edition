@@ -90,12 +90,14 @@ public class Blacksmith extends NPC {
 			String msg2 = "";
 
 			switch (Dungeon.hero.heroClass){
+                case PEASANT:   msg1 += Messages.get(Blacksmith.this, "intro_quest_peasant"); break;
 				case WARRIOR:   msg1 += Messages.get(Blacksmith.this, "intro_quest_warrior"); break;
 				case MAGE:      msg1 += Messages.get(Blacksmith.this, "intro_quest_mage"); break;
 				case ROGUE:     msg1 += Messages.get(Blacksmith.this, "intro_quest_rogue"); break;
 				case HUNTRESS:  msg1 += Messages.get(Blacksmith.this, "intro_quest_huntress"); break;
 				case DUELIST:   msg1 += Messages.get(Blacksmith.this, "intro_quest_duelist"); break;
 				case CLERIC:    msg1 += Messages.get(Blacksmith.this, "intro_quest_cleric"); break;
+                default:        msg1 += Messages.get(Blacksmith.this, "intro_quest_default"); break;
 			}
 
 			msg1 += "\n\n" + Messages.get(Blacksmith.this, "intro_quest_start");
@@ -219,6 +221,8 @@ public class Blacksmith extends NPC {
 		public static int hardens;
 		public static int upgrades;
 		public static int smiths;
+        public static int extracts;
+        public static int liquidizes;
 
 		//pre-generate these so they are consistent between seeds
 		public static ArrayList<Item> smithRewards;
@@ -265,6 +269,8 @@ public class Blacksmith extends NPC {
 		private static final String HARDENS	    = "hardens";
 		private static final String UPGRADES	= "upgrades";
 		private static final String SMITHS	    = "smiths";
+        private static final String EXTRACTS     = "extracts";
+        private static final String LIQUIDIZES   = "liquidizes";
 		private static final String SMITH_REWARDS = "smith_rewards";
 		private static final String ENCHANT		= "enchant";
 		private static final String GLYPH		= "glyph";
@@ -290,6 +296,8 @@ public class Blacksmith extends NPC {
 				node.put( HARDENS, hardens );
 				node.put( UPGRADES, upgrades );
 				node.put( SMITHS, smiths );
+                node.put( EXTRACTS, extracts );
+                node.put( LIQUIDIZES, liquidizes );
 
 				if (smithRewards != null) {
 					node.put( SMITH_REWARDS, smithRewards );
@@ -335,6 +343,8 @@ public class Blacksmith extends NPC {
 				hardens = node.getInt( HARDENS );
 				upgrades = node.getInt( UPGRADES );
 				smiths = node.getInt( SMITHS );
+                extracts = node.getInt( EXTRACTS );
+                liquidizes = node.getInt( LIQUIDIZES );
 
 				if (node.contains( SMITH_REWARDS )){
 					smithRewards = new ArrayList<>((Collection<Item>) ((Collection<?>) node.getCollection( SMITH_REWARDS )));
@@ -383,39 +393,30 @@ public class Blacksmith extends NPC {
 			smithRewards.add(Generator.randomMissile(3, useDecks));
 			smithRewards.add(Generator.randomArmor(3));
 
-			//30%:+0, 45%:+1, 20%:+2, 5%:+3
-			int rewardLevel;
-			float itemLevelRoll = Random.Float();
-			if (itemLevelRoll < 0.3f){
-				rewardLevel = 0;
-			} else if (itemLevelRoll < 0.75f){
-				rewardLevel = 1;
-			} else if (itemLevelRoll < 0.95f){
-				rewardLevel = 2;
-			} else {
-				rewardLevel = 3;
-			}
 
-			for (Item i : smithRewards){
-				i.level(rewardLevel);
-				if (i instanceof Weapon) {
-					((Weapon) i).enchant(null);
-				} else if (i instanceof Armor){
-					((Armor) i).inscribe(null);
-				}
-				i.cursed = false;
-			}
+            //100% = +0
+            int rewardLevel = 0;
 
-			// 30% base chance to be enchanted, stored separately so status isn't revealed early
-			//we generate first so that the outcome doesn't affect the number of RNG rolls
-			smithEnchant = Weapon.Enchantment.random();
-			smithGlyph = Armor.Glyph.random();
+            for (Item i : smithRewards){
+                i.level(rewardLevel);
+                if (i instanceof Weapon) {
+                    ((Weapon) i).enchant(null);
+                } else if (i instanceof Armor){
+                    ((Armor) i).inscribe(null);
+                }
+                i.cursed = false; // never cursed, because im nice
+            }
 
-			float enchantRoll = Random.Float();
-			if (enchantRoll > 0.3f * ParchmentScrap.enchantChanceMultiplier()){
-				smithEnchant = null;
-				smithGlyph = null;
-			}
+            // 10% base chance to be enchanted, stored separately so status isn't revealed early
+            //we generate first so that the outcome doesn't affect the number of RNG rolls
+            smithEnchant = Weapon.Enchantment.randomCommon();
+            smithGlyph = Armor.Glyph.randomCommon();
+
+            float enchantRoll = Random.Float();
+            if (enchantRoll > 0.1f * ParchmentScrap.enchantChanceMultiplier()){
+                smithEnchant = null;
+                smithGlyph = null;
+            }
 
 		}
 

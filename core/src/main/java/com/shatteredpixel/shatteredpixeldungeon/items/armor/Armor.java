@@ -43,14 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.AntiEntropy;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Corrosion;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Displacement;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Metabolism;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Multiplicity;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Overgrowth;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Stench;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Affection;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
@@ -611,8 +604,11 @@ public class Armor extends EquipableItem {
 				}
 
 			//chance to remove curse is a static 33%
-			} else if (hasCurseGlyph()){
-				if (Random.Int(3) == 0) inscribe(null);
+                // ... given it can be removed this way
+            } else if (hasCurseGlyph()) {
+                if (glyph.removableByUpgrade() && Random.Int(3) == 0) {
+                    inscribe(null);
+                }
 
 			//otherwise chance to lose glyph is 10/20/40/80/100% when upgrading from +4/5/6/7/8
 			} else {
@@ -628,8 +624,10 @@ public class Armor extends EquipableItem {
 				}
 			}
 		}
-		
-		cursed = false;
+
+        if (!(hasCurseGlyph() && !glyph.removableByUpgrade())) {
+            cursed = false;
+        }
 
 		if (seal != null && seal.level() == 0)
 			seal.upgrade();
@@ -925,7 +923,8 @@ public class Armor extends EquipableItem {
 
 		public static final Class<?>[] curses = new Class<?>[]{
 				AntiEntropy.class, Corrosion.class, Displacement.class, Metabolism.class,
-				Multiplicity.class, Stench.class, Overgrowth.class, Bulk.class
+				Multiplicity.class, Stench.class, Overgrowth.class, Bulk.class,
+                Binding.class
 		};
 		
 		public abstract int proc( Armor armor, Char attacker, Char defender, int damage );
@@ -964,6 +963,13 @@ public class Armor extends EquipableItem {
 		public boolean curse() {
 			return false;
 		}
+
+        // only does something if curse is true
+        // if this is set to false, then upgrades dont have a chance to remove/weaken the curse
+        // default is true
+        public boolean removableByUpgrade() {
+            return true;
+        }
 		
 		@Override
 		public void restoreFromBundle( Bundle bundle ) {

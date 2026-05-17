@@ -138,6 +138,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WarScythe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube;
@@ -189,6 +190,7 @@ public class Generator {
 		WEP_T3	( 0, 0, MeleeWeapon.class),
 		WEP_T4	( 0, 0, MeleeWeapon.class),
 		WEP_T5	( 0, 0, MeleeWeapon.class),
+        WEP_BLACKSMITH ( 0, 0, BlacksmithWeapon.class),
 		
 		ARMOR	( 2, 1, Armor.class ),
 		
@@ -438,6 +440,20 @@ public class Generator {
 			};
 			WEP_T5.defaultProbs = new float[]{ 2, 2, 2, 2, 2, 2, 2 };
 			WEP_T5.probs = WEP_T5.defaultProbs.clone();
+
+            WEP_BLACKSMITH.classes = new Class<?>[]{
+                    KatanaDarkness.class,
+                    GlovesPurge.class, // uncommon
+                    EmeraldRoundShield.class,
+                    SwordMidas.class, // conditional
+                    WhipFirecracker.class,
+                    BattleAxeStormbringer.class,
+                    SickleBloodLetter.class,
+                    SpearAmethystPiercer.class, // uncommon
+                    ArrowSign.class // rarer
+            };
+            WEP_BLACKSMITH.defaultProbs = new float[]{ 4, 3, 4, 0, 4, 4, 4, 3, 2 };
+            WEP_BLACKSMITH.probs = WEP_BLACKSMITH.defaultProbs.clone();
 			
 			//see Generator.randomArmor
 			ARMOR.classes = new Class<?>[]{

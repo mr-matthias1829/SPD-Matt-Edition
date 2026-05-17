@@ -55,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
@@ -106,6 +107,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.EmeraldRoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -1713,6 +1715,29 @@ public class Hero extends Char {
 		int effectiveDamage = preHP - postHP;
 
 		if (effectiveDamage <= 0) return;
+
+        if (src instanceof Char) {
+            Char attacker = (Char) src;
+            KindOfWeapon wep = belongings.weapon();
+            if (wep == null) wep = belongings.secondWep();
+
+            if (wep instanceof EmeraldRoundShield && attacker.isAlive() && !AntiMagic.RESISTS.contains(src.getClass())) {
+                int reflectDmg = Math.round(effectiveDamage * 0.25f);
+
+                // reflect damage cant be more than 33% of attacker's max HP
+                reflectDmg = Math.min(reflectDmg, Math.round(attacker.HT * 0.33f));
+
+                // reflect damage cant reduce attacker below 10% of max HP
+                int floor = Math.round(attacker.HT * 0.10f);
+                if (attacker.HP - reflectDmg < floor) {
+                    reflectDmg = attacker.HP - floor;
+                }
+
+                if (reflectDmg > 0) {
+                    attacker.damage(reflectDmg, this);
+                }
+            }
+        }
 
 		if (buff(Challenge.DuelParticipant.class) != null){
 			buff(Challenge.DuelParticipant.class).addDamage(effectiveDamage);

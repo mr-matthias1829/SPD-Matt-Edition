@@ -42,7 +42,6 @@ public class IceCavesLevel extends CavesLevel {
 
         // reduced vision because... honestly no clue
         // at least makes this one-off floor feel more distinct and a little more challenging
-        // i have a feeling light buffs won't work, but eh
         viewDistance = Math.min( 5, viewDistance );
 
         color1 = 0x48a4c9; // Icy blue
@@ -64,7 +63,7 @@ public class IceCavesLevel extends CavesLevel {
         initRooms.add(roomExit = new IceCavesBranchExit());
 
         // Add standard rooms
-        int standards = standardRooms(false)*4;
+        int standards = (int)(standardRooms(false)*2.5);
         //int standards = 27;
         for (int i = 0; i < standards; i++) {
             StandardRoom s = StandardRoom.createRoom();
@@ -74,7 +73,7 @@ public class IceCavesLevel extends CavesLevel {
 
         // Add special rooms - DON'T FORGET TO INITIALIZE!
         SpecialRoom.initForFloor();
-        int specials = (int)(specialRooms(false)*2);
+        int specials = (int)(specialRooms(false)*1.5);
         //int specials = 5;
         for (int i = 0; i < specials; i++) {
             SpecialRoom s = SpecialRoom.createRoom();
@@ -114,7 +113,7 @@ public class IceCavesLevel extends CavesLevel {
             iceRotation.add(FrozenSwarm.class);
         }
 
-        // 7, so they are slightly more common
+        // 5, so they are slightly more common
         for (int i = 0; i < 7; i++) {
             iceRotation.add(DM100F.class);
             iceRotation.add(IceSnake.class);
@@ -142,7 +141,7 @@ public class IceCavesLevel extends CavesLevel {
     @Override
     public float respawnCooldown() {
         //normal enemies respawn slower here
-        return 2*TIME_TO_RESPAWN;
+        return (int)(1.8*TIME_TO_RESPAWN);
     }
 
     @Override
@@ -154,8 +153,8 @@ public class IceCavesLevel extends CavesLevel {
     @Override
     protected Painter painter() {
         return new CavesPainter()
-                .setWater(feeling == Feeling.WATER ? 0.85f : 0.30f, 6)
-                .setGrass(feeling == Feeling.GRASS ? 0.65f : 0.15f, 3)
+                .setWater(feeling == Feeling.WATER ? 0.60f : 0.30f, 6)
+                .setGrass(feeling == Feeling.GRASS ? 0.45f : 0.15f, 3)
                 .setTraps(nTraps(), trapClasses(), trapChances());
     }
 

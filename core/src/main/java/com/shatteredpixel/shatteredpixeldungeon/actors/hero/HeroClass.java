@@ -57,14 +57,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDivination;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPureMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.CrackedSpyglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Glock;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.GlovesPurge;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.KatanaDarkness;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
@@ -115,22 +115,16 @@ public enum HeroClass {
         Quarterstaff staff = new Quarterstaff();
         staff.identify().collect();
 
-        ScrollOfMagicMapping map = new ScrollOfMagicMapping();
-        map.identify().collect();
-        ScrollOfMagicMapping map2 = new ScrollOfMagicMapping();
-        map2.identify().collect();
-
         ClothArmor a = new ClothArmor();
         a.identify().collect();
 
-        GlovesPurge UW = new GlovesPurge();
+        /*
+        SpearAmethystPiercer UW = new SpearAmethystPiercer();
         UW.identify().collect();
+         */
 
         new Glock().identify().collect();
         new WandOfElements().identify().collect();
-        new WandOfFireblast().identify().collect();
-        new WandOfFrost().identify().collect();
-        new WandOfLightning().identify().collect();
 
         for (int s = 2; s < 100; s++) {
             new ScrollOfUpgrade().identify().collect();
@@ -139,7 +133,7 @@ public enum HeroClass {
             new PotionOfExperience().identify().collect();
             new ScrollOfMagicMapping().identify().collect();
             new PotionOfMindVision().identify().collect();
-            new ScrollOfPureMagic().identify().collect();
+            new ScrollOfDivination().identify().collect();
         }
         /*
         */

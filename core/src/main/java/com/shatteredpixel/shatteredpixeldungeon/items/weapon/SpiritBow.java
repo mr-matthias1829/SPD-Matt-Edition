@@ -182,7 +182,7 @@ public class SpiritBow extends Weapon {
 	
 	@Override
 	public int STRReq(int lvl) {
-		return STRReq(1, lvl*2); //tier 1
+		return STRReq(1, lvl*2, getClass()); //tier 1
 	}
 	
 	@Override

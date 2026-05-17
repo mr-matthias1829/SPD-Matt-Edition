@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
@@ -45,6 +47,8 @@ public class ItemJournalButton extends IconButton {
 
 	@Override
 	protected void onClick() {
+
+        if (Dungeon.isChallenged(Challenges.I_HATE_MYSELF)) return;
 
 		customNote();
 

@@ -44,7 +44,10 @@ public class Mod_Changes {
                         "2. all armor tiers now have a higher base max DR\n" +
                         "3. removed the global -7% damage nerf to all melee weapons, it's instead applied to missile weapons now and increased to -10%\n" +
                         "4. the tier based nerfs for weapons have been significantly reduced, melee's gain a 5% more damage boost overall\n" +
-                        "5. increased energy cost for creating the wand of elements through alchemy (21 ->36)\n"
+                        "5. increased energy cost for creating the wand of elements through alchemy (21 ->36)\n" +
+                        "6. glyph of antimagic has a much better chance to proc, but less effect now\n" +
+                        "7. glyph of thorns now has less chance to proc\n" +
+                        "8. "
                 ));
 
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_LAGUZ), "Other items",
@@ -52,8 +55,8 @@ public class Mod_Changes {
                         "1. potion of levitation now applies levitation with more duration (default -> default*2)\n" +
                         "2. natural gold spawn quantity nerf reduced (0.65 -> 0.8), and more base gold in general\n" +
                         "3. (randomized) gold quantity now gains a very small boost based on depth, scaling faster the deeper you go up to a x3 multiplier\n" +
-                        "4. (finally) added the exotic variant to the scroll of magic upgrade, the scroll of pure magic!\n" +
-                        "5. potion of mastery (potion of strength exotic) can no longer be obtained, and is replaced by the potion of vitality, which increases max hp\n" +
+                        "4. potion of mastery (potion of strength exotic) can no longer be obtained\n" +
+                        "5. eye of newt (trinket) base mind vision tiles increased (1 -> 2), reduces vision less with each upgrade (12.5% -> 15%), first level vision reduction reduced (12.5% -> 10%)\n" +
 
                         "\n_Rings:_\n" +
                         "1. nerfed ring of accuracy effect (15% -> 10%)\n" +
@@ -108,6 +111,12 @@ public class Mod_Changes {
                         "\n_Caves:_\n" +
                         "1. fetid rat (caves) now has a max level cap instead of giving xp forever\n" +
                         "2. gnoll trickster (caves) now has a max level cap instead of giving xp forever, loot chance reduced (18% -> 8%)\n" +
+                        "3. elder gnoll hp increased (16 -> 30)\n" +
+
+                        "\n_Ice Caves:_\n" +
+                        "1. dm100f\n" +
+                        "2. ice snake\n" +
+                        "3. frozen swarm hp increased (105 -> 150)\n" +
 
                         "\n_Rare:_\n" +
                         "1. albino rat hp reduced (30 -> 15) and awards xp (0 -> 2), bleed inflicted is now equal to half of damage dealt\n" +
@@ -126,7 +135,10 @@ public class Mod_Changes {
                         "1. tengu's defeat message should now correctly show\n" +
                         "2. stone of enchantment's sprite is no longer blurry (how the hell did it get blurry in the first place???)\n" +
                         "3. ring of sharpshooting now correctly applies durability bonus, before granting more than it should have and than is stated\n" +
-                        "4. rings of sharpshooting and might direct stats (missile level and additional strength) are no longer deceiving and fixed, being 100% accurate now\n"
+                        "4. rings of sharpshooting and might direct stats (missile level and additional strength) are no longer deceiving and fixed, being 100% accurate now\n" +
+                        "5. seeds now actually work, always having the same dungeon/item generation for the same seed. this was broken and hidden away before\n" +
+                        "6. blacksmith now has a greeting for the peasant and a in-code default, should no longer crash\n" +
+                        "7. challenge _I hate myself_ now no longer identifies scrolls. previously, it mistakenly did\n"
 
         ));
 
@@ -138,14 +150,17 @@ public class Mod_Changes {
                         "4. updated some messages to be up to date with some changes (ex: POS only saying it gives 1 STR, etc)\n" +
                         "5. scroll of magic upgrade and debuff _consuming greed_ now have their own distinct icons\n" +
                         "6. removed the 'unused enemies' tab in the enemy bestiary. They still exist, but will be properly added when their time comes\n" +
-                        "7. updated some guidebook pages to be somewhat more up to date\n"
+                        "7. updated some guidebook pages to be somewhat more up to date\n" +
+                        "8. readded the option to input a generation seed\n" +
+                        "9. changed elder gnoll sprite slightly\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_COLOR), "Challenges and sins",
                 "_Changes:_\n" +
                         "1. nerfed sloth turns gain per floor, sloth damage scales slower\n" +
                         "2. removed challenges _back to origins_, _guns blazing_, and _wonky step_, mostly for being unfair\n" +
-                        "3. challenge _consuming greed_ now gains a buff in it's difficulty if you have the sin of greed active (_you've been warned_)\n"
+                        "3. challenge _consuming greed_ now gains a buff in it's difficulty if you have the sin of greed active (you've been warned)\n" +
+                        "4. challenge _I hate myself_ now disables the creation of notes for items and depths\n"
 
         ));
 
@@ -160,7 +175,7 @@ public class Mod_Changes {
         changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Generation and traps",
                 "_Changes:_\n" +
                         "1. ice caves floor now has different odds for it's traps, hopefully offering a bit more variety\n" +
-                        "2. ice caves floor now has its generation adjusted a bit\n" +
+                        "2. ice caves floor now has its generation adjusted and generates a bit smaller\n" +
                         "3. "
 
         ));
@@ -197,14 +212,35 @@ public class Mod_Changes {
                         "6. more badges stack now (including some vanilla badges)\n" +
                         "7. added some new badges for collective stacking\n" +
                         "8. added a new badge\n" +
-                        "9. added a new (but unused) badge that will be implemented later (to hell and back)\n" +
-                        "10. added 3 new badges that are almost directly linked to progression and this mod's exlcusive stuff\n" +
-                        "11. added a handful more badges that are all secret (not visible unless achieved), they have a '[secret badge]' in their description. How many can you find?\n"
+                        "9. added 3 new badges that are almost directly linked to progression and this mod's exclusive stuff\n" +
+                        "10. added a handful more badges that are all secret (not visible unless achieved), they have a '[secret badge]' in their description. How many can you find?\n"
                 ));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARROW_SIGN), "brand new content",
+                "_Additions:_\n" +
+                        "1. replaced potion of mastery with the potion of vitality, which increases max hp\n" +
+                        "2. added exotic variant to scroll of magic upgrade, the scroll of pure magic\n" +
+                        "3. added 9 new weapons, considered unique and only obtainable through the blacksmith. some of these are references to other games!\n" +
+                        // while you're here anyway: here are the exact references
+                        // shadow = not based on a reference
+                        // purge = not based on a reference
+                        // emerald shield = not (directly) based on a reference
+                        // midas sword = not (directly) based on a reference
+                        // firecracker = based on "experienced pixel dungeon"'s firing snapper
+                        // stormbringer = not (directly) based on a reference, but inspired by thor's hammer
+                        // bloodletter = reference to the mobile game "backpack heroes", where a weapon with the same name, nearly same behavior, and (almost) same look exists
+                        // amethyst piercer = not (directly) based on a reference, but vaguely inspired by the minecraft mace
+                        // arrow sign = reference to the roblox game "super cube cavern", where in it's shops the "helpful arrow" can be bought and used. in that game it's a unusual weapon, and in here it's too.
+                        "4. the blacksmith has a new option for you to spend favor on: extract. this will destroy the item, but give you half of their upgrades as scrolls\n" +
+                        "5. the blacksmith has a new option for you to spend favor on: liquidize. this will destroy the item, but give you some favor in return, can only be done once per run. max favor (3000 -> 3800)\n" +
+                        "6. added a new curse for both weapons and armor: the curse of binding. this curse has no effect on it's own, but can't be removed using scrolls of upgrade\n"
+        ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.INFO), "Notes",
                 "_Overall:_\n" +
-                        "1. \n" +
+                        "1. this rework has mostly focussed on completely rebalancing the difficulty to be far less extreme\n" +
+                        "2. the secondary focus, and future focus will be on adding new content or changing existing content\n" +
+                        "3. compared to vanilla, the difficulty will likely stay a bit higher, but still at a point where it's bearable\n" +
 
                         "\n_Bosses:_\n" +
                         "1. bosses were made easier to more consistently be able to beat them\n" +

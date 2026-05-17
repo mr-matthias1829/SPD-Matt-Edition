@@ -44,7 +44,7 @@ public class FrozenSwarm extends Mob {
 	{
 		spriteClass = FrozenSwarmSprite.class;
 		
-		HP = HT = 105;
+		HP = HT = 150;
 		defenseSkill = 9;
 
         EXP = 8;

@@ -193,7 +193,7 @@ public class Glock extends Weapon {
 
     @Override
     public int STRReq(int lvl) {
-        return STRReq(4, lvl+1); // tier 1
+        return STRReq(4, lvl+1, getClass()); // tier 1
     }
 
     @Override
