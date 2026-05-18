@@ -564,7 +564,9 @@ public class CavesBossLevel extends Level {
                 LevelTransition.Type.BRANCH_ENTRANCE,
                 14,
                 2,
-                LevelTransition.Type.REGULAR_EXIT));
+                LevelTransition.Type.REGULAR_EXIT,
+                "caves_boss_entrance",
+                "icecaves_branch_exit"));
 	}
 
 	private static short[] corner1 = {

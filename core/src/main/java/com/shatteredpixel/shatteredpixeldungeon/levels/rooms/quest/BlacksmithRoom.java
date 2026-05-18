@@ -95,7 +95,9 @@ public class BlacksmithRoom extends StandardRoom {
 				LevelTransition.Type.BRANCH_EXIT,
 				Dungeon.depth,
 				Dungeon.branch + 1,
-				LevelTransition.Type.BRANCH_ENTRANCE));
+				LevelTransition.Type.BRANCH_ENTRANCE,
+                "blacksmith", // who am i
+                "blacksmith_quest")); // who to look for
 		Painter.set(level, entrancePos, Terrain.EXIT);
 
 		for(Point p : getPoints()) {

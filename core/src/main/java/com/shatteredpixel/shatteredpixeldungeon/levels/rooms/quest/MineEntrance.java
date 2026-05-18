@@ -98,7 +98,9 @@ public class MineEntrance extends CaveRoom {
 				LevelTransition.Type.BRANCH_ENTRANCE,
 				Dungeon.depth,
 				0,
-				LevelTransition.Type.BRANCH_EXIT));
+				LevelTransition.Type.BRANCH_EXIT,
+                "blacksmith_quest",
+                "blacksmith"));
 
 		if (Blacksmith.Quest.Type() == Blacksmith.Quest.CRYSTAL){
 			for (int i = 0; i < width()*height()/2; i ++){

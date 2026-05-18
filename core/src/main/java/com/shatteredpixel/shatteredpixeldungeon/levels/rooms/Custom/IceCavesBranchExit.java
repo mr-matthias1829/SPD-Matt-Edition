@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.IceCavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -33,7 +34,7 @@ public class IceCavesBranchExit extends CaveRoom {
 
     @Override
     public boolean isExit() {
-        return true;
+        return false;
     }
 
     @Override
@@ -64,10 +65,12 @@ public class IceCavesBranchExit extends CaveRoom {
         LevelTransition exit = new LevelTransition(
                 level,
                 exitCell,
-                LevelTransition.Type.REGULAR_EXIT,
-                15, // NEXT floor - progress forward
-                0, // Main branch
-                LevelTransition.Type.REGULAR_ENTRANCE
+                LevelTransition.Type.BRANCH_EXIT,
+                Dungeon.depth + 1,
+                0,
+                LevelTransition.Type.BRANCH_ENTRANCE,
+                "icecaves_branch_exit",
+                "caves_boss_entrance"
         );
         exit.top--;
         exit.left--;

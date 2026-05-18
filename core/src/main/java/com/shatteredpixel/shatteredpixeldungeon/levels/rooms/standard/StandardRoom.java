@@ -185,10 +185,16 @@ public abstract class StandardRoom extends Room {
 		chances[21] = new float[]{0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 10,10,10,5,5,  1,1,1,1,1,1,1,1,1,1};
 		chances[26] = chances[25] = chances[24] = chances[23] = chances[22] = chances[21];
 	}
-	
-	
-	public static StandardRoom createRoom(){
-		return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
-	}
+
+
+    // you may now optionally override which pool it takes from
+    // IM SUPRISED THIS WASNT ALREADY A SUPPORTED THING, LIKE WTH
+    public static StandardRoom createRoom() {
+        return createRoom(-999);
+    }
+    public static StandardRoom createRoom(int override){
+        int depth = override != -999 ? override : Dungeon.depth;
+        return Reflection.newInstance(rooms.get(Random.chances(chances[depth])));
+    }
 	
 }

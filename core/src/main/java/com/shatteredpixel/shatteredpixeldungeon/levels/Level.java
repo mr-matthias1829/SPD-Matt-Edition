@@ -569,23 +569,74 @@ public abstract class Level implements Bundlable {
 		return 0;
 	}
 
-	public LevelTransition getTransition(LevelTransition.Type type){
-		if (transitions.isEmpty()){
-			return null;
-		}
-		for (LevelTransition transition : transitions){
-			//if we don't specify a type, prefer to return any entrance
-			if (type == null &&
-					(transition.type == LevelTransition.Type.REGULAR_ENTRANCE
-							|| transition.type == LevelTransition.Type.BRANCH_ENTRANCE
-							|| transition.type == LevelTransition.Type.SURFACE)){
-				return transition;
-			} else if (transition.type == type){
-				return transition;
-			}
-		}
-		return type != null ? getTransition(null) : transitions.get(0);
-	}
+    public LevelTransition getTransition(LevelTransition.Type type) {
+        return getTransition(type, null);
+    }
+
+    /**
+     * Look up a transition by destination type and optional target ID.
+     *
+     * targetId == null
+     *   Pass 1 – correct type, null transitionId   (ideal: unambiguous vanilla transition)
+     *   Pass 2 – correct type, any  transitionId   (safe fallback / old saves)
+     *   (null type still uses the "prefer entrance" logic from before)
+     *
+     * targetId != null
+     *   Pass 1 – correct type AND matching transitionId   (exact)
+     *   Pass 2 – matching transitionId, any type          (type-mismatch fallback)
+     *   Else   – RuntimeException (id is unknown on this level)
+     */
+    public LevelTransition getTransition(LevelTransition.Type type, String targetId) {
+        if (transitions.isEmpty()) return null;
+
+        if (targetId == null) {
+            // ── Pass 1: ideal match (type correct, id null) ──────────────────────
+            for (LevelTransition t : transitions) {
+                if (t.transitionId != null) continue; // skip named transitions
+                if (type == null) {
+                    if (t.type == LevelTransition.Type.REGULAR_ENTRANCE
+                            || t.type == LevelTransition.Type.BRANCH_ENTRANCE
+                            || t.type == LevelTransition.Type.SURFACE) {
+                        return t;
+                    }
+                } else if (t.type == type) {
+                    return t;
+                }
+            }
+            // ── Pass 2: type correct, any id ─────────────────────────────────────
+            for (LevelTransition t : transitions) {
+                if (type == null) {
+                    if (t.type == LevelTransition.Type.REGULAR_ENTRANCE
+                            || t.type == LevelTransition.Type.BRANCH_ENTRANCE
+                            || t.type == LevelTransition.Type.SURFACE) {
+                        return t;
+                    }
+                } else if (t.type == type) {
+                    return t;
+                }
+            }
+            // ── original ultimate fallback ─────────────────────────────────────
+            return type != null ? getTransition(null, null) : transitions.get(0);
+
+        } else {
+            // ── Pass 1: exact match (type + id) ──────────────────────────────────
+            for (LevelTransition t : transitions) {
+                if (t.type == type && targetId.equals(t.transitionId)) {
+                    return t;
+                }
+            }
+            // ── Pass 2: id match, ignore type ─────────────────────────────────────
+            for (LevelTransition t : transitions) {
+                if (targetId.equals(t.transitionId)) {
+                    return t;
+                }
+            }
+            // ── nothing found – this is a hard error ──────────────────────────────
+            throw new RuntimeException(
+                    "No transition found with id '" + targetId
+                            + "' on depth " + Dungeon.depth + " branch " + Dungeon.branch);
+        }
+    }
 
 	public LevelTransition getTransition(int cell){
 		for (LevelTransition transition : transitions){

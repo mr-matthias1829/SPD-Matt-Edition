@@ -253,7 +253,7 @@ public class Dungeon {
 		QuickSlotButton.reset();
 		Toolbar.swappedQuickslots = false;
 		
-		depth = 12;
+		depth = 14;
         lastEnteredDepth = depth;
 		branch = 0;
 		generatedLevels.clear();
@@ -378,7 +378,11 @@ public class Dungeon {
 			}
         } else if (branch == 2) { // reserved for "special" floors
             switch (depth) {
-                case 14:
+                case 14: // main
+                case 15:
+                case 16:
+                case 17:
+                case 18:
                     level = new IceCavesLevel();
                     break;
                 default:

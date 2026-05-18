@@ -70,7 +70,9 @@ public class IceCavesEntrance extends CaveRoom {
                 LevelTransition.Type.BRANCH_EXIT,
                 Dungeon.depth,
                 2, // target branch id (your ice caves branch)
-                LevelTransition.Type.BRANCH_ENTRANCE
+                LevelTransition.Type.BRANCH_ENTRANCE,
+                "ice_caves_entrance", // custom name for the transition
+                "ice_caves_branch_entrance" // custom name for the destination tile
         );
         // Expand the transition area to match the visual size
         entrance.top--;

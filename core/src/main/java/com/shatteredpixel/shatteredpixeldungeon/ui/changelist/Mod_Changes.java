@@ -175,8 +175,9 @@ public class Mod_Changes {
         changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Generation and traps",
                 "_Changes:_\n" +
                         "1. ice caves floor now has different odds for it's traps, hopefully offering a bit more variety\n" +
-                        "2. ice caves floor now has its generation adjusted and generates a bit smaller\n" +
-                        "3. "
+                        "2. ice caves floor now has its generation adjusted and generates a bit smaller on floor 14\n" +
+                        "3. ice caves now stretches down from floor 14 to floor 18 on it's branch\n" +
+                        "4. fixed issues with exits/entrances overlapping (including for blacksmith) and some generation generating the wrong types of level\n"
 
         ));
 
