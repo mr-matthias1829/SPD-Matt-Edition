@@ -149,8 +149,7 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom {
 		Item treasureItem = ((VaultLevel)level).createEquipment(1);
 		level.drop(treasureItem, treasurePos).type = Heap.Type.CHEST;
 
-		//TODO prefer generating with a solution potion
-		treasureItem = level.findPrizeItem();
+		treasureItem = ((VaultLevel) level).findT2SolveItem();
 		if (treasureItem == null){
 			treasureItem = ((VaultLevel)level).createConsumabe(1);
 		}
