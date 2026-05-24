@@ -54,18 +54,19 @@ public abstract class ElementalSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 12, 14 );
 		
-		idle = new Animation( 10, true );
+		idle = createAnimation("idle", 10, true);
 		idle.frames( frames, c+0, c+1, c+2 );
 		
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, c+0, c+1, c+3 );
 		
-		attack = new Animation( 15, false );
+		attack = createAnimation("attack", 15, false);
 		attack.frames( frames, c+4, c+5, c+6 );
 		
-		zap = attack.clone();
+		zap = createAnimation("zap", 15, false);
+		zap.frames( frames, c+4, c+5, c+6 );
 		
-		die = new Animation( 15, false );
+		die = createAnimation("die", 15, false);
 		die.frames( frames, c+7, c+8, c+9, c+10, c+11, c+12, c+13, c+12 );
 		
 		play( idle );
@@ -117,7 +118,7 @@ public abstract class ElementalSprite extends MobSprite {
 					public void call() {
 						((Elemental)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 	
@@ -209,7 +210,7 @@ public abstract class ElementalSprite extends MobSprite {
 			super.zap( cell, null );
 			
 			((Elemental)ch).onZapComplete();
-			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell)));
+			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell), true));
 			Sample.INSTANCE.play( Assets.Sounds.RAY );
 		}
 		

@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.CorrosionParticle;
@@ -275,15 +276,24 @@ public class MagicMissile extends Emitter {
 	}
 
 	//convenience method for the common case of a bolt going from a character to a tile or enemy
-	public static MagicMissile boltFromChar(Group group, int type, Visual sprite, int to, Callback callback){
-		MagicMissile missile = ((MagicMissile)group.recycle( MagicMissile.class ));
-		if (Actor.findChar(to) != null){
-			missile.reset(type, sprite.center(), Actor.findChar(to).sprite.destinationCenter(), callback);
-		} else {
-			missile.reset(type, sprite, to, callback);
-		}
-		return missile;
-	}
+    public static MagicMissile boltFromChar(Group group, int type, Visual sprite, int to, Callback callback){
+        return boltFromChar(group, type, sprite, to, callback, false);
+    }
+    public static MagicMissile boltFromChar(Group group, int type, Visual sprite, int to, Callback callback, boolean isMob){
+        MagicMissile missile = ((MagicMissile)group.recycle( MagicMissile.class ));
+        if (Actor.findChar(to) != null){
+            missile.reset(type, sprite.center(), Actor.findChar(to).sprite.destinationCenter(), callback);
+        } else {
+            missile.reset(type, sprite, to, callback);
+        }
+        float speed = SPDSettings.animSpeed();
+
+        if (speed > 1 && isMob) {
+            missile.setSpeed((float) (SPEED * Math.max(speed/1.5, 1)));
+        }
+
+        return missile;
+    }
 
 	@Override
 	protected boolean isFrozen() {
@@ -390,8 +400,11 @@ public class MagicMissile extends Emitter {
 		
 		public EarthParticle() {
 			super();
-			
-			lifespan = 0.5f;
+
+            float speed = SPDSettings.animSpeed();
+
+
+            lifespan = 0.5f / speed;
 			
 			acc.set( 0, +40 );
 		}
@@ -463,8 +476,11 @@ public class MagicMissile extends Emitter {
 		
 		public ShamanParticle() {
 			super();
+
+            float speed = SPDSettings.animSpeed();
+
 			
-			lifespan = 0.6f;
+			lifespan = 0.6f / speed;
 			acc.set( 0, 0 );
 		}
 		
@@ -523,8 +539,11 @@ public class MagicMissile extends Emitter {
 		
 		public WhiteParticle() {
 			super();
-			
-			lifespan = 0.4f;
+
+            float speed = SPDSettings.animSpeed();
+
+
+            lifespan = 0.4f / speed;
 			
 			am = 0.5f;
 		}
@@ -579,8 +598,11 @@ public class MagicMissile extends Emitter {
 		
 		public SlowParticle() {
 			super();
-			
-			lifespan = 0.6f;
+
+            float speed = SPDSettings.animSpeed();
+
+
+            lifespan = 0.6f / speed;
 			
 			color( 0x664422 );
 			size( 2 );
@@ -659,8 +681,11 @@ public class MagicMissile extends Emitter {
 		
 		public WardParticle() {
 			super();
-			
-			lifespan = 0.6f;
+
+            float speed = SPDSettings.animSpeed();
+
+
+            lifespan = 0.6f / speed;
 			
 			color( 0x8822FF );
 		}

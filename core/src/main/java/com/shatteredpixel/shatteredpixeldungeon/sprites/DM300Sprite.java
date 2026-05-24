@@ -56,27 +56,28 @@ public class DM300Sprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 25, 22 );
 
-		idle = new Animation( enraged ? 15 : 10, true );
+		idle = createAnimation("idle", enraged ? 15 : 10, true, true, true);
 		idle.frames( frames, c+0, c+1 );
 
-		run = new Animation( enraged ? 15 : 10, true );
+		run = createAnimation("run", enraged ? 15 : 10, true, true, true);
 		run.frames( frames, c+0, c+2 );
 
-		attack = new Animation( 15, false );
+		attack = createAnimation("attack", 15, false, true, true);
 		attack.frames( frames, c+3, c+4, c+5 );
 
 		//unaffected by enrage state
 
 		if (charge == null) {
-			charge = new Animation(4, true);
+			charge = createAnimation("charge", 4, true, true, true);
 			charge.frames(frames, 0, 10);
 
-			slam = attack.clone();
+			slam = createAnimation("slam", 15, false, true, true);
+			slam.frames( frames, c+3, c+4, c+5 );
 
-			zap = new Animation(15, false);
+			zap = createAnimation("zap", 15, false, true, true);
 			zap.frames(frames, 6, 7, 7, 6);
 
-			die = new Animation(20, false);
+			die = createAnimation("die", 20, false, true, true);
 			die.frames(frames, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10);
 		}
 
@@ -96,7 +97,7 @@ public class DM300Sprite extends MobSprite {
 					public void call() {
 						((DM300)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.GAS );
 	}
 

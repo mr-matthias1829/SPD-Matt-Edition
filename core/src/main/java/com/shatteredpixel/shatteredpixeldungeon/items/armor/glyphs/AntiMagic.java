@@ -100,6 +100,8 @@ public class AntiMagic extends Armor.Glyph {
 		RESISTS.add( WandOfTransfusion.class );
 		RESISTS.add( WandOfWarding.Ward.class );
         RESISTS.add (WandOfElements.class);
+        RESISTS.add (WandOfExplosion.class);
+        RESISTS.add (WandOfFireball.class);
 
 		RESISTS.add( ElementalStrike.class );
 		RESISTS.add( Blazing.class );

@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -81,15 +77,15 @@ public class CavesBossLevel extends Level {
 	public void playLevelMusic() {
 		if (locked){
 			if (BossHealthBar.isBleeding()){
-				Music.INSTANCE.play(Assets.Music.CAVES_BOSS_FINALE, true);
+				MusicAnnouncer.play(Assets.Music.CAVES_BOSS_FINALE, true);
 			} else {
-				Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
+				MusicAnnouncer.play(Assets.Music.CAVES_BOSS, true);
 			}
 		//if wall isn't broken
 		} else if (map[14 + 13*width()] == Terrain.CUSTOM_DECO){
-			Music.INSTANCE.end();
+			MusicAnnouncer.end();
 		} else {
-			Music.INSTANCE.playTracks(CavesLevel.CAVES_TRACK_LIST, CavesLevel.CAVES_TRACK_CHANCES, false);
+			MusicAnnouncer.playTracks(CavesLevel.CAVES_TRACK_LIST, CavesLevel.CAVES_TRACK_CHANCES, false);
 		}
 	}
 
@@ -335,7 +331,7 @@ public class CavesBossLevel extends Level {
 		Game.runOnRenderThread(new Callback() {
 			@Override
 			public void call() {
-				Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
+				MusicAnnouncer.play(Assets.Music.CAVES_BOSS, true);
 			}
 		});
 
@@ -364,10 +360,10 @@ public class CavesBossLevel extends Level {
 		Game.runOnRenderThread(new Callback() {
 			@Override
 			public void call() {
-				Music.INSTANCE.fadeOut(5f, new Callback() {
+				MusicAnnouncer.fadeOut(5f, new Callback() {
 					@Override
 					public void call() {
-						Music.INSTANCE.end();
+						MusicAnnouncer.end();
 					}
 				});
 			}

@@ -109,7 +109,7 @@ public class WornDartTrap extends Trap {
 										finalTarget.sprite.flash();
 										next();
 									}
-								});
+								}, true);
 						return false;
 					} else {
 						finalTarget.damage(Random.NormalIntRange(4, 8) - finalTarget.drRoll(), WornDartTrap.this);

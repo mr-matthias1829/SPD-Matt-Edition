@@ -202,7 +202,7 @@ public class SpiritualNecromancer extends Mob {
         //heal skeleton first
         if (targetSkeleton.HP < targetSkeleton.HT){
             if (sprite.visible || targetSkeleton.sprite.visible) {
-                sprite.parent.add(new Beam.HealthRay(sprite.center(), targetSkeleton.sprite.center()));
+                sprite.parent.add(new Beam.HealthRay(sprite.center(), targetSkeleton.sprite.center(), true));
             }
 
             targetSkeleton.HP = Math.min(targetSkeleton.HP + targetSkeleton.HT/5, targetSkeleton.HT);
@@ -213,7 +213,7 @@ public class SpiritualNecromancer extends Mob {
             //otherwise give it adrenaline
         } else if (targetSkeleton.buff(Adrenaline.class) == null) {
             if (sprite.visible || targetSkeleton.sprite.visible) {
-                sprite.parent.add(new Beam.HealthRay(sprite.center(), targetSkeleton.sprite.center()));
+                sprite.parent.add(new Beam.HealthRay(sprite.center(), targetSkeleton.sprite.center(), true));
             }
 
             Buff.affect(targetSkeleton, Adrenaline.class, 3f);

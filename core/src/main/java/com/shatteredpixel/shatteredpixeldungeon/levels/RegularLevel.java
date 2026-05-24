@@ -119,8 +119,8 @@ public abstract class RegularLevel extends Level {
 		ArrayList<Room> initRooms = new ArrayList<>();
 		initRooms.add ( roomEntrance = EntranceRoom.createEntrance());
 
-
-        if (Dungeon.depth == 14 && Dungeon.branch == 0) {
+        // TODO: dude just, just like move this to cave level class. it takes less than 5 mins to do so
+        if (Dungeon.depth == 14 && Dungeon.branch == 0) { // i love hardcoding in all the wrong places
             initRooms.add(roomExit = new IceCavesEntrance());
         } else {
             initRooms.add(roomExit = ExitRoom.createExit());
@@ -376,7 +376,7 @@ public abstract class RegularLevel extends Level {
 	
 	@Override
 	protected void createItems() {
-
+        if (!canSpawnItems) return;
 
 		// drops 3/4/5 items 60%/30%/10% of the time
 		int nItems = 3 + Random.chances(new float[]{6, 3, 1});
@@ -384,9 +384,13 @@ public abstract class RegularLevel extends Level {
 		if (feeling == Feeling.LARGE){
 			nItems += 2;
 		}
+        /* used in old versions
         if (Dungeon.branch == 2){
             nItems += 4;
         }
+        */
+
+        nItems += additionalItemsToSpawn;
 		
 		for (int i=0; i < nItems; i++) {
 
@@ -460,6 +464,7 @@ public abstract class RegularLevel extends Level {
 
 
         // GUARANTEED TIER 1 ARMOR ON FLOOR 3
+        // TODO: this works, but isnt very clean to be in here. perhaps use Level.addItemToSpawn() method?
         Random.pushGenerator(Random.Long());
         if (Dungeon.depth == 3) {
             Item tier1Armor = null;

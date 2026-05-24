@@ -124,7 +124,7 @@ public class SpectralBlades extends ArmorAbility {
 			};
 
 			MissileSprite m = ((MissileSprite)hero.sprite.parent.recycle( MissileSprite.class ));
-			m.reset( hero.sprite, ch.pos, proto, callback );
+			m.reset( hero.sprite, ch.pos, proto, callback, false );
 			m.hardlight(0.6f, 1f, 1f);
 			m.alpha(0.8f);
 

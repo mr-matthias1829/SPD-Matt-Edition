@@ -41,16 +41,16 @@ public class RotHeartSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 
-		idle = new MovieClip.Animation( 1, true );
+        idle = createAnimation("idle", 1, true);
 		idle.frames( frames, 0);
 
-		run = new MovieClip.Animation( 1, true );
+        run = createAnimation("run", 1, true);
 		run.frames( frames, 0 );
 
-		attack = new MovieClip.Animation( 1, false );
+        attack = createAnimation("attack", 1, false);
 		attack.frames( frames, 0 );
 
-		die = new MovieClip.Animation( 8, false );
+        die = createAnimation("die", 8, false);
 		die.frames( frames, 1, 2, 3, 4, 5, 6, 7, 7, 7 );
 
 		play( idle );

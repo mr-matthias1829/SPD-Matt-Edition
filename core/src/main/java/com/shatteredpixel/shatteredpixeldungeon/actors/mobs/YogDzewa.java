@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
@@ -197,7 +193,7 @@ public class YogDzewa extends Mob {
 				for (int i : targetedCells) {
 					Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
 					//shoot beams
-					sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+					sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos), true));
 					for (int p : b.path) {
 						Char ch = Actor.findChar(p);
 						if (ch != null && (ch.alignment != alignment || ch instanceof Bee)) {
@@ -364,10 +360,10 @@ public class YogDzewa extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.fadeOut(0.5f, new Callback() {
+					MusicAnnouncer.fadeOut(0.5f, new Callback() {
 						@Override
 						public void call() {
-							Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
+							MusicAnnouncer.play(Assets.Music.HALLS_BOSS_FINALE, true);
 						}
 					});
 				}
@@ -559,7 +555,7 @@ public class YogDzewa extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.play(Assets.Music.HALLS_BOSS, true);
+					MusicAnnouncer.play(Assets.Music.HALLS_BOSS, true);
 				}
 			});
 			if (phase == 0) {

@@ -32,17 +32,17 @@ public class WraithSprite extends MobSprite {
 		texture( Assets.Sprites.WRAITH );
 		
 		TextureFilm frames = new TextureFilm( texture, 14, 15 );
-		
-		idle = new Animation( 5, true );
+
+        idle = createAnimation("idle", 5, true);
 		idle.frames( frames, 0, 1 );
-		
-		run = new Animation( 10, true );
+
+        run = createAnimation("run", 10, true);
 		run.frames( frames, 0, 1 );
-		
-		attack = new Animation( 10, false );
+
+        attack = createAnimation("attack", 10, false);
 		attack.frames( frames, 0, 2, 3 );
-		
-		die = new Animation( 8, false );
+
+        die = createAnimation("die", 8, false);
 		die.frames( frames, 0, 4, 5, 6, 7 );
 		
 		play( idle );

@@ -44,22 +44,23 @@ public class SpectralNecromancerSprite extends MobSprite {
 
 		int c = 16;
 
-		idle = new Animation( 1, true );
+		idle = createAnimation("idle", 1, true);
 		idle.frames( film, c+0, c+0, c+0, c+1, c+0, c+0, c+0, c+0, c+1 );
 
-		run = new Animation( 8, true );
+		run = createAnimation("run", 8, true);
 		run.frames( film, c+0, c+0, c+0, c+2, c+3, c+4 );
 
-		zap = new Animation( 10, false );
+		zap = createAnimation("zap", 10, false);
 		zap.frames( film, c+5, c+6, c+7, c+8 );
 
-		charging = new Animation( 5, true );
+		charging = createAnimation("charging", 5, true);
 		charging.frames( film, c+7, c+8 );
 
-		die = new Animation( 10, false );
+		die = createAnimation("die", 10, false);
 		die.frames( film, c+9, c+10, c+11, c+12 );
 
-		attack = zap.clone();
+		attack = createAnimation("attack", 10, false);
+		attack.frames( film, c+5, c+6, c+7, c+8 );
 
 		idle();
 	}

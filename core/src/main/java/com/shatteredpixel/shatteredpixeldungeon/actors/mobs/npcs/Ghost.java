@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
@@ -195,7 +196,7 @@ public class Ghost extends NPC {
 							@Override
 							public void hide() {
 								super.hide();
-								Music.INSTANCE.fadeOut(1f, new Callback() {
+								MusicAnnouncer.fadeOut(1f, new Callback() {
 									@Override
 									public void call() {
 										if (Dungeon.level != null) {
@@ -441,7 +442,7 @@ public class Ghost extends NPC {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						Music.INSTANCE.fadeOut(1f, new Callback() {
+						MusicAnnouncer.fadeOut(1f, new Callback() {
 							@Override
 							public void call() {
 								if (Dungeon.level != null) {

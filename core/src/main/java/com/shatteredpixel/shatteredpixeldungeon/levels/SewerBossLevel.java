@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -61,7 +62,7 @@ public class SewerBossLevel extends SewerLevel {
 	@Override
 	public void playLevelMusic() {
 		if (locked){
-			Music.INSTANCE.play(Assets.Music.SEWERS_BOSS, true);
+			MusicAnnouncer.play(Assets.Music.SEWERS_BOSS, true);
 			return;
 		}
 
@@ -74,9 +75,9 @@ public class SewerBossLevel extends SewerLevel {
 		}
 
 		if (gooAlive){
-			Music.INSTANCE.end();
+			MusicAnnouncer.end();
 		} else {
-			Music.INSTANCE.playTracks(SewerLevel.SEWER_TRACK_LIST, SewerLevel.SEWER_TRACK_CHANCES, false);
+			MusicAnnouncer.playTracks(SewerLevel.SEWER_TRACK_LIST, SewerLevel.SEWER_TRACK_CHANCES, false);
 		}
 
 	}
@@ -188,7 +189,7 @@ public class SewerBossLevel extends SewerLevel {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.play(Assets.Music.SEWERS_BOSS, true);
+					MusicAnnouncer.play(Assets.Music.SEWERS_BOSS, true);
 				}
 			});
 		}
@@ -205,10 +206,10 @@ public class SewerBossLevel extends SewerLevel {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.fadeOut(5f, new Callback() {
+					MusicAnnouncer.fadeOut(5f, new Callback() {
 						@Override
 						public void call() {
-							Music.INSTANCE.end();
+							MusicAnnouncer.end();
 						}
 					});
 				}

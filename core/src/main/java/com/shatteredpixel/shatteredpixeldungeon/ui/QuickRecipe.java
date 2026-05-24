@@ -67,6 +67,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.spells.WildEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfElements;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfExplosion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireball;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
@@ -349,29 +351,6 @@ public class QuickRecipe extends Component {
 				result.add(new QuickRecipe( new ArcaneResin.Recipe(),
 						new ArrayList<Item>(Arrays.asList(new Wand.PlaceHolder())),
 						new ArcaneResin()));
-
-                result.add(null);
-                result.add(null); // double line break, since these technically are MUCH different than the recipes above
-
-                result.add(new QuickRecipe(new WandOfElements.RecipeFireFrost(),
-                        new ArrayList<>(Arrays.asList(
-                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast(),
-                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost()
-                        )),
-                        new WandOfElements()));
-                result.add(new QuickRecipe(new WandOfElements.RecipeFireLightning(),
-                        new ArrayList<>(Arrays.asList(
-                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast(),
-                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning()
-                        )),
-                        new WandOfElements()));
-                result.add(new QuickRecipe(new WandOfElements.RecipeFrostLightning(),
-                        new ArrayList<>(Arrays.asList(
-                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost(),
-                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning()
-                        )),
-                        new WandOfElements()));
-
 				return result;
 			case 7:
 				result.add(new QuickRecipe(new UnstableBrew.Recipe(), new ArrayList<>(Arrays.asList(new Potion.PlaceHolder(), new  Plant.Seed.PlaceHolder())), new UnstableBrew()));
@@ -408,6 +387,36 @@ public class QuickRecipe extends Component {
 				result.add(new QuickRecipe(new SummonElemental.Recipe()));
 				result.add(new QuickRecipe(new BeaconOfReturning.Recipe()));
 				return result;
+
+
+            case 9:
+                result.add(new QuickRecipe(new WandOfElements.RecipeFireFrost(),
+                        new ArrayList<>(Arrays.asList(
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast(),
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost()
+                        )),
+                        new WandOfElements()));
+                result.add(new QuickRecipe(new WandOfElements.RecipeFireLightning(),
+                        new ArrayList<>(Arrays.asList(
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast(),
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning()
+                        )),
+                        new WandOfElements()));
+                result.add(new QuickRecipe(new WandOfElements.RecipeFrostLightning(),
+                        new ArrayList<>(Arrays.asList(
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost(),
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning()
+                        )),
+                        new WandOfElements()));
+                result.add(null);
+                result.add(new QuickRecipe(new WandOfFireball.RecipeWand(),
+                        new ArrayList<>(Arrays.asList(
+                                new WandOfExplosion(),
+                                new com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast(),
+                                new com.shatteredpixel.shatteredpixeldungeon.items.ArcaneResin()
+                        )),
+                        new WandOfFireball()));
+                return result;
 		}
 	}
 	

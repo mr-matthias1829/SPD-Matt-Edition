@@ -35,16 +35,16 @@ public class TormentedSpiritSprite extends MobSprite {
 
 		int c = 9;
 
-		idle = new Animation( 5, true );
+        idle = createAnimation("idle", 5, true);
 		idle.frames( frames, c+0, c+1 );
 
-		run = new Animation( 10, true );
+        run = createAnimation("run", 10, true);
 		run.frames( frames, c+0, c+1 );
 
-		attack = new Animation( 10, false );
+        attack = createAnimation("attack", 10, false);
 		attack.frames( frames, c+0, c+2, c+3 );
 
-		die = new Animation( 8, false );
+        die = createAnimation("die", 8, false);
 		die.frames( frames, c+0, c+4, c+5, c+6, c+7 );
 
 		play( idle );

@@ -741,7 +741,7 @@ public class GnollGeomancer extends Mob {
 							knockedChars.clear();
 						}
 					}
-				} );
+				}, true );
 		rocksInFlight++;
 	}
 

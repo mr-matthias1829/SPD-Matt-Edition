@@ -41,18 +41,19 @@ public class FungalSpinnerSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 
-		idle = new MovieClip.Animation( 10, true );
+		idle = createAnimation("idle", 10, true);
 		idle.frames( frames, 0, 0, 0, 0, 0, 1, 0, 1 );
 
-		run = new MovieClip.Animation( 15, true );
+		run = createAnimation("run", 15, true);
 		run.frames( frames, 0, 2, 0, 3 );
 
-		attack = new MovieClip.Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 0, 4, 5, 0 );
 
-		zap = attack.clone();
+		zap = createAnimation("zap", 12, false);
+		zap.frames( frames, 0, 4, 5, 0 );
 
-		die = new MovieClip.Animation( 12, false );
+		die = createAnimation("die", 12, false);
 		die.frames( frames, 6, 7, 8, 9 );
 
 		play( idle );
@@ -83,7 +84,7 @@ public class FungalSpinnerSprite extends MobSprite {
 					public void call() {
 						((Spinner)ch).shootWeb();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.MISS );
 	}
 

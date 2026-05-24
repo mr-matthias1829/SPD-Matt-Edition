@@ -46,20 +46,21 @@ public class EyeSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 16, 18 );
 		
-		idle = new Animation( 8, true );
+		idle = createAnimation("idle", 8, true);
 		idle.frames( frames, 0, 1, 2 );
 
-		charging = new Animation( 12, true);
+		charging = createAnimation("charging", 12, true);
 		charging.frames( frames, 3, 4 );
 		
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, 5, 6 );
 		
-		attack = new Animation( 8, false );
+		attack = createAnimation("attack", 8, false);
 		attack.frames( frames, 4, 3 );
-		zap = attack.clone();
-		
-		die = new Animation( 8, false );
+		zap = createAnimation("zap", 8, false);
+		zap.frames( frames, 4, 3 );
+
+		die = createAnimation("die", 8, false);
 		die.frames( frames, 7, 8, 9 );
 		
 		play( idle );
@@ -127,9 +128,9 @@ public class EyeSprite extends MobSprite {
 		if (anim == zap) {
 			idle();
 			if (Actor.findChar(zapPos) != null){
-				parent.add(new Beam.DeathRay(center(), Actor.findChar(zapPos).sprite.center()));
+				parent.add(new Beam.DeathRay(center(), Actor.findChar(zapPos).sprite.center(), true));
 			} else {
-				parent.add(new Beam.DeathRay(center(), DungeonTilemap.raisedTileCenterToWorld(zapPos)));
+				parent.add(new Beam.DeathRay(center(), DungeonTilemap.raisedTileCenterToWorld(zapPos), true));
 			}
 			Sample.INSTANCE.play( Assets.Sounds.RAY );
 			((Eye)ch).deathGaze();

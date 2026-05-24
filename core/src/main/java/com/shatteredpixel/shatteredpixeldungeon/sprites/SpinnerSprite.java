@@ -41,18 +41,19 @@ public class SpinnerSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
-		idle = new Animation( 10, true );
+		idle = createAnimation("idle", 10, true);
 		idle.frames( frames, 0, 0, 0, 0, 0, 1, 0, 1 );
 		
-		run = new Animation( 15, true );
+		run = createAnimation("run", 15, true);
 		run.frames( frames, 0, 2, 0, 3 );
 		
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 0, 4, 5, 0 );
 		
-		zap = attack.clone();
-		
-		die = new Animation( 12, false );
+		zap = createAnimation("zap", 12, false);
+		zap.frames( frames, 0, 4, 5, 0 );
+
+		die = createAnimation("die", 12, false);
 		die.frames( frames, 6, 7, 8, 9 );
 		
 		play( idle );
@@ -83,7 +84,7 @@ public class SpinnerSprite extends MobSprite {
 					public void call() {
 						((Spinner)ch).shootWeb();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.MISS );
 	}
 	

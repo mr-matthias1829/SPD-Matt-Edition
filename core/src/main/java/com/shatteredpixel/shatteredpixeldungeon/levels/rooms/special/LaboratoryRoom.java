@@ -39,99 +39,111 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class LaboratoryRoom extends SpecialRoom {
 
-	public void paint( Level level ) {
-		
-		Painter.fill( level, this, Terrain.WALL );
-		Painter.fill( level, this, 1, Terrain.EMPTY_SP );
-		
-		Door entrance = entrance();
-		
-		Point pot = null;
-		if (entrance.x == left) {
-			pot = new Point( right-1, Random.Int( 2 ) == 0 ? top + 1 : bottom - 1 );
-		} else if (entrance.x == right) {
-			pot = new Point( left+1, Random.Int( 2 ) == 0 ? top + 1 : bottom - 1 );
-		} else if (entrance.y == top) {
-			pot = new Point( Random.Int( 2 ) == 0 ? left + 1 : right - 1, bottom-1 );
-		} else if (entrance.y == bottom) {
-			pot = new Point( Random.Int( 2 ) == 0 ? left + 1 : right - 1, top+1 );
-		}
-		Painter.set( level, pot, Terrain.ALCHEMY );
-		
-		int chapter = 1 + Dungeon.depth/5;
-		Blob.seed( pot.x + level.width() * pot.y, 1, Alchemy.class, level );
+    // page name → minimum chapter required (1=sewers, 2=prison, 3=caves, 4=city, 5=halls)
+    private static final String[] PAGE_ORDER = {
+            "Potions",
+            "Stones",
+            "Energy_Food",
+            "Exotic_Potions",
+            "Exotic_Scrolls",
+            "Bombs",
+            "Weapons",
+            "Brews_Elixirs",
+            "Spells",
+            "Weapon_Crafting"
+    };
+    private static final int[] PAGE_CHAPTER = {
+            1,  // Potions        — sewers+
+            1,  // Stones         — sewers+
+            1,  // Energy_Food    — sewers+
+            2,  // Exotic_Potions — prison+
+            2,  // Exotic_Scrolls — prison+
+            2,  // Bombs          — prison+
+            3,  // Weapons        — caves+
+            4,  // Brews_Elixirs  — city+
+            4,  // Spells         — city+
+            3   // Weapon_Crafting  — caves+
+    };
 
-		int pos;
-		do {
-			pos = level.pointToCell(random());
-		} while (
-				level.map[pos] != Terrain.EMPTY_SP ||
-						level.heaps.get( pos ) != null);
-		level.drop( new EnergyCrystal().quantity(5), pos );
+    public void paint( Level level ) {
 
-		int n = Random.NormalIntRange( 1, 2 );
-		for (int i=0; i < n; i++) {
-			do {
-				pos = level.pointToCell(random());
-			} while (
-				level.map[pos] != Terrain.EMPTY_SP ||
-				level.heaps.get( pos ) != null);
-			level.drop( prize( level ), pos );
-		}
-		
-		//guide pages
-		Collection<String> allPages = Document.ALCHEMY_GUIDE.pageNames();
-		ArrayList<String> missingPages = new ArrayList<>();
-		for ( String page : allPages){
-			if (!Document.ALCHEMY_GUIDE.isPageFound(page)){
-				missingPages.add(page);
-			}
-		}
-		
-		//5 pages in sewers, 10 in prison+
-		int chapterTarget;
-		if (missingPages.size() <= 5){
-			chapterTarget = 2;
-		} else {
-			chapterTarget = 1;
-		}
-		
-		if(!missingPages.isEmpty() && chapter >= chapterTarget){
-			
-			//for each chapter ahead of the target chapter, drop 1 additional page
-			int pagesToDrop = Math.min(missingPages.size(), (chapter - chapterTarget) + 1);
-			
-			for (int i = 0; i < pagesToDrop; i++) {
-				AlchemyPage p = new AlchemyPage();
-				p.page(missingPages.remove(0));
-				do {
-					pos = level.pointToCell(random());
-				} while (
-						level.map[pos] != Terrain.EMPTY_SP ||
-								level.heaps.get(pos) != null);
-				level.drop(p, pos);
-			}
-		}
+        Painter.fill( level, this, Terrain.WALL );
+        Painter.fill( level, this, 1, Terrain.EMPTY_SP );
 
-		entrance.set( Door.Type.LOCKED );
-		level.addItemToSpawn( new IronKey( Dungeon.depth ) );
-		
-	}
-	
-	private static Item prize( Level level ) {
+        Door entrance = entrance();
 
-		Item prize = level.findPrizeItem( TrinketCatalyst.class );
-		if (prize == null){
-			prize = level.findPrizeItem( PotionOfStrength.class );
-			if (prize == null) {
-				prize = Generator.random(Random.oneOf(Generator.Category.POTION, Generator.Category.STONE));
-			}
-		}
+        Point pot = null;
+        if (entrance.x == left) {
+            pot = new Point( right-1, Random.Int( 2 ) == 0 ? top + 1 : bottom - 1 );
+        } else if (entrance.x == right) {
+            pot = new Point( left+1, Random.Int( 2 ) == 0 ? top + 1 : bottom - 1 );
+        } else if (entrance.y == top) {
+            pot = new Point( Random.Int( 2 ) == 0 ? left + 1 : right - 1, bottom-1 );
+        } else if (entrance.y == bottom) {
+            pot = new Point( Random.Int( 2 ) == 0 ? left + 1 : right - 1, top+1 );
+        }
+        Painter.set( level, pot, Terrain.ALCHEMY );
 
-		return prize;
-	}
+        int chapter = 1 + Dungeon.depth/5;
+        Blob.seed( pot.x + level.width() * pot.y, 1, Alchemy.class, level );
+
+        int pos;
+        do {
+            pos = level.pointToCell(random());
+        } while (
+                level.map[pos] != Terrain.EMPTY_SP ||
+                        level.heaps.get( pos ) != null);
+        level.drop( new EnergyCrystal().quantity(5), pos );
+
+        int n = Random.NormalIntRange( 1, 2 );
+        for (int i=0; i < n; i++) {
+            do {
+                pos = level.pointToCell(random());
+            } while (
+                    level.map[pos] != Terrain.EMPTY_SP ||
+                            level.heaps.get( pos ) != null);
+            level.drop( prize( level ), pos );
+        }
+
+        // guide pages — drop the earliest eligible unfound page
+        ArrayList<String> eligiblePages = new ArrayList<>();
+        for (int i = 0; i < PAGE_ORDER.length; i++) {
+            String page = PAGE_ORDER[i];
+            if (!Document.ALCHEMY_GUIDE.isPageFound(page) && chapter >= PAGE_CHAPTER[i]) {
+                eligiblePages.add(page);
+            }
+        }
+
+        int pagesToDrop = Math.min(eligiblePages.size(), 3);
+        for (int i = 0; i < pagesToDrop; i++) {
+            AlchemyPage p = new AlchemyPage();
+            p.page(eligiblePages.get(i));
+            do {
+                pos = level.pointToCell(random());
+            } while (
+                    level.map[pos] != Terrain.EMPTY_SP ||
+                            level.heaps.get(pos) != null);
+            level.drop(p, pos);
+        }
+
+        entrance.set( Door.Type.LOCKED );
+        level.addItemToSpawn( new IronKey( Dungeon.depth ) );
+
+    }
+
+    private static Item prize( Level level ) {
+
+        Item prize = level.findPrizeItem( TrinketCatalyst.class );
+        if (prize == null){
+            prize = level.findPrizeItem( PotionOfStrength.class );
+            if (prize == null) {
+                prize = Generator.random(Random.oneOf(Generator.Category.POTION, Generator.Category.STONE));
+            }
+        }
+
+        return prize;
+    }
 }

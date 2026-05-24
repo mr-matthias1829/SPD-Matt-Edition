@@ -15,16 +15,16 @@ public class GooplingSprite extends MobSprite {
 
         int offset = 9;
 
-        idle = new Animation(3, true);
+        idle = createAnimation("idle", 3, true);
         idle.frames(frames, offset + 0, offset + 1, offset + 1, offset + 0);
 
-        run = new Animation(10, true);
+        run = createAnimation("run", 10, true);
         run.frames(frames, offset + 0, offset + 2, offset + 3, offset + 3, offset + 2, offset + 0);
 
-        attack = new Animation(15, false);
+        attack = createAnimation("attack", 15, false);
         attack.frames(frames, offset + 2, offset + 3, offset + 4, offset + 6, offset + 5);
 
-        die = new Animation(10, false);
+        die = createAnimation("die", 10, false);
         die.frames(frames, offset + 0, offset + 5, offset + 6, offset + 7);
 
         play(idle);

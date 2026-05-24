@@ -46,14 +46,17 @@ public abstract class CrystalSpireSprite extends MobSprite {
 
 		int c = texOffset();
 
-		idle = new Animation(1, true);
+		idle = createAnimation("idle", 1, true);
 		idle.frames( frames, 0+c );
 
-		run = idle.clone();
-		attack = idle.clone();
-		zap = idle.clone();
+		run = createAnimation("run", 1, true);
+		run.frames( frames, 0+c );
+		attack = createAnimation("attack", 1, true);
+		attack.frames( frames, 0+c );
+		zap = createAnimation("zap", 1, true);
+		zap.frames( frames, 0+c );
 
-		die = new Animation(1, false);
+		die = createAnimation("die", 1, false);
 		die.frames( frames, 4+c );
 
 		play(idle);

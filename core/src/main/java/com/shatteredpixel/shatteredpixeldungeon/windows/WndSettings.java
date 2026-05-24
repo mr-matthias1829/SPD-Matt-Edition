@@ -53,6 +53,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static com.shatteredpixel.shatteredpixeldungeon.SPDSettings.animSpeedSlider;
+
 public class WndSettings extends WndTabbed {
 
 	private static final int WIDTH_P	    = 122;
@@ -68,6 +70,7 @@ public class WndSettings extends WndTabbed {
 	private DataTab     data;
 	private AudioTab    audio;
 	private LangsTab    langs;
+    private MiscTab      misc;
 
 	public static int last_index = 0;
 
@@ -159,6 +162,20 @@ public class WndSettings extends WndTabbed {
 			}
 		});
 
+        misc = new MiscTab();
+        misc.setSize(width, 0);
+        height = Math.max(height, misc.height());
+        add(misc);
+
+        add(new IconTab(Icons.get(Icons.CHALLENGE_GREY)) {   // swap icon to taste
+            @Override
+            protected void select(boolean value) {
+                super.select(value);
+                misc.visible = misc.active = value;
+                if (value) last_index = 5;
+            }
+        });
+
 		langs = new LangsTab();
 		langs.setSize(width, 0);
 		height = Math.max(height, langs.height());
@@ -193,7 +210,9 @@ public class WndSettings extends WndTabbed {
 
 		layoutTabs();
 
-		if (tabs.size() == 5 && last_index >= 3){
+        // funny confusing piece of code because i refuse to remove the unused tabs
+        // TODO: make this cleaner pretty pretty please
+		if (tabs.size() == 6 && last_index >= 3){
 			//input tab isn't visible
 			select(last_index-1);
 		} else {
@@ -610,6 +629,7 @@ public class WndSettings extends WndTabbed {
 			}
 			add(chkVibrate);
 
+
 			if (DeviceCompat.isDebug()) {
 				cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
 					@Override
@@ -621,6 +641,7 @@ public class WndSettings extends WndTabbed {
 				cheatMode.checked(SPDSettings.cheatMode());
 				add(cheatMode);
 			}
+
 		}
 
 		@Override
@@ -729,7 +750,8 @@ public class WndSettings extends WndTabbed {
 			sep2 = new ColorBlock(1, 1, 0xFF000000);
 			add(sep2);
 
-            // Add your checkbox here
+            // disabled: moved to interface settings to prevent duplicate entry
+            /*
             if (DeviceCompat.isDebug()) {
                 cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
                     @Override
@@ -741,6 +763,7 @@ public class WndSettings extends WndTabbed {
                 cheatMode.checked(SPDSettings.cheatMode());
                 add(cheatMode);
             }
+             */
 
 
 			optControlSens = new OptionSlider(
@@ -1073,6 +1096,115 @@ public class WndSettings extends WndTabbed {
 		}
 
 	}
+
+    private static class MiscTab extends Component {
+
+        RenderedTextBlock title;
+        ColorBlock sep1;
+        OptionSlider optAnimSpeed;
+        RenderedTextBlock desc;
+
+        // debug-only
+        CheckBox cheatMode;
+        CheckBox chkCheatBadges;
+        OptionSlider optStartFloor;
+
+        @Override
+        protected void createChildren() {
+            title = PixelScene.renderTextBlock(Messages.get(this, "title"), 9);
+            title.hardlight(TITLE_COLOR);
+            add(title);
+
+            if (DeviceCompat.isDebug()) {
+                cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
+                    @Override
+                    protected void onClick() {
+                        super.onClick();
+                        SPDSettings.cheatMode(checked());
+                    }
+                };
+                cheatMode.checked(SPDSettings.cheatMode());
+                add(cheatMode);
+
+                chkCheatBadges = new CheckBox(Messages.get(this, "cheat_badges")) {
+                    @Override
+                    protected void onClick() {
+                        super.onClick();
+                        SPDSettings.cheatBadges(checked());
+                    }
+                };
+                chkCheatBadges.checked(SPDSettings.cheatBadges());
+                add(chkCheatBadges);
+
+                optStartFloor = new OptionSlider(Messages.get(this, "start_floor"), "1", "26", 1, 26) {
+                    @Override
+                    protected void onChange() {
+                        SPDSettings.startFloor(getSelectedValue());
+                    }
+                };
+                optStartFloor.setSelectedValue(SPDSettings.startFloor());
+                add(optStartFloor);
+            }
+
+            sep1 = new ColorBlock(1, 1, 0xFF000000);
+            add(sep1);
+
+            desc = PixelScene.renderTextBlock(Messages.get(this, "anim_speed_desc"), 6);
+            desc.hardlight(0x888888);
+            add(desc);
+
+            optAnimSpeed = new OptionSlider(
+                    Messages.get(this, "anim_speed"),
+                    "1×",
+                    "4×",
+                    1,
+                    7
+            ) {
+                @Override
+                protected void onChange() {
+                    SPDSettings.animSpeed(getSelectedValue());
+                }
+            };
+            optAnimSpeed.setSelectedValue(animSpeedSlider());
+            add(optAnimSpeed);
+        }
+
+        @Override
+        protected void layout() {
+            title.setPos((width - title.width()) / 2, y + GAP);
+
+            float bottom = title.bottom() + 3 * GAP;
+
+            if (cheatMode != null) {
+                // cheatMode and chkCheatBadges share a row
+                float halfW = (width - GAP) / 2f;
+                cheatMode.setRect(0,            bottom + GAP, halfW, BTN_HEIGHT);
+                chkCheatBadges.setRect(halfW + GAP, bottom + GAP, halfW, BTN_HEIGHT);
+                bottom = cheatMode.bottom();
+
+                optStartFloor.setRect(0, bottom + GAP, width, SLIDER_HEIGHT);
+                bottom = optStartFloor.bottom();
+            }
+
+            sep1.size(width, 1);
+            sep1.y = bottom + GAP;
+            bottom = sep1.y + 1;
+
+            optAnimSpeed.setRect(0, bottom + GAP, width, SLIDER_HEIGHT);
+            bottom = optAnimSpeed.bottom();
+
+            desc.maxWidth((int) width);
+            desc.setPos(0, bottom + GAP);
+            bottom = desc.bottom();
+
+            height = bottom;
+        }
+    }
+
+
+
+
+
 
 	private static class LangsTab extends Component{
 

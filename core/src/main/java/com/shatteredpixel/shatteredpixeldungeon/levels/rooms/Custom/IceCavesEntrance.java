@@ -108,6 +108,9 @@ public class IceCavesEntrance extends CaveRoom {
         return -1;
     }
 
+
+    // neat fact about this guy: the code can place him on any walkable tile, including behind locked doors!
+    // ... doing it this way was a bad idea
     private void spawnElderGnoll(Level level) {
         ArrayList<Integer> candidates = new ArrayList<>();
 
@@ -151,7 +154,7 @@ public class IceCavesEntrance extends CaveRoom {
             // Add worn key to the level
             level.addItemToSpawn(new WornKey(Dungeon.depth));
 
-            /*
+            /* debug
             GLog.w("WARNING: No valid spawn locations found for Elder Gnoll!");
             throw new IllegalStateException("No valid spawn locations found for Elder Gnoll, making it impossible to complete the game!");
              */

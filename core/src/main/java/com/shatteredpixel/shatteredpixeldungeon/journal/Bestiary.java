@@ -106,6 +106,7 @@ public enum Bestiary {
 	UNIVERSAL,
 	RARE,
     RECURRING,
+    BRANCHING,
 	QUEST,
 	NEUTRAL,
 	ALLY,
@@ -167,7 +168,7 @@ public enum Bestiary {
 		REGIONAL.addEntities(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class,
 				Skeleton.class, Thief.class, DM100.class, Guard.class, Necromancer.class,
 				Bat.class, Brute.class, Shaman.RedShaman.class, Shaman.BlueShaman.class, Shaman.PurpleShaman.class, GnollBaby.class, Spinner.class, DM200.class,
-                ElderGnoll.class, DM100F.class, IceSnake.class, FrozenSwarm.class,
+                ElderGnoll.class,
 				Ghoul.class, Bandit.class, Elemental.FireElemental.class, Elemental.FrostElemental.class, Elemental.ShockElemental.class, Warlock.class, Monk.class, Golem.class,
 				RipperDemon.class, DemonSpawner.class, Succubus.class, Eye.class, Scorpio.class);
 
@@ -189,6 +190,10 @@ public enum Bestiary {
 
         RECURRING.addEntities(
                 FetidRat.class, GnollTrickster.class);
+
+        BRANCHING.addEntities(
+                DM100F.class, IceSnake.class, FrozenSwarm.class, IceGolem.class
+        );
 
 		QUEST.addEntities(GreatCrab.class,
 				Elemental.NewbornFireElemental.class, RotLasher.class, RotHeart.class,

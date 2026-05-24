@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -92,11 +88,11 @@ public class PrisonBossLevel extends Level {
 	@Override
 	public void playLevelMusic() {
 		if (state == State.START){
-			Music.INSTANCE.end();
+			MusicAnnouncer.end();
 		} else if (state == State.WON) {
-			Music.INSTANCE.playTracks(PrisonLevel.PRISON_TRACK_LIST, PrisonLevel.PRISON_TRACK_CHANCES, false);
+			MusicAnnouncer.playTracks(PrisonLevel.PRISON_TRACK_LIST, PrisonLevel.PRISON_TRACK_CHANCES, false);
 		} else {
-			Music.INSTANCE.play(Assets.Music.PRISON_BOSS, true);
+			MusicAnnouncer.play(Assets.Music.PRISON_BOSS, true);
 		}
 	}
 
@@ -451,7 +447,7 @@ public class PrisonBossLevel extends Level {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						Music.INSTANCE.play(Assets.Music.PRISON_BOSS, true);
+						MusicAnnouncer.play(Assets.Music.PRISON_BOSS, true);
 					}
 				});
 				break;
@@ -550,10 +546,10 @@ public class PrisonBossLevel extends Level {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						Music.INSTANCE.fadeOut(5f, new Callback() {
+						MusicAnnouncer.fadeOut(5f, new Callback() {
 							@Override
 							public void call() {
-								Music.INSTANCE.end();
+								MusicAnnouncer.end();
 							}
 						});
 					}
@@ -949,23 +945,21 @@ public class PrisonBossLevel extends Level {
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1
 		};
-		
-		@Override
-		public Tilemap create() {
-			Tilemap v = super.create();
-			int[] data = mapSimpleImage(0, 10, TEX_WIDTH);
-			for (int i = 0; i < data.length; i++){
-				if (render[i] == 0) data[i] = -1;
-			}
-			v.map(data, tileW);
-			return v;
-		}
+
+        @Override
+        public Tilemap create() {
+            Tilemap v = super.create();
+            int[] data = mapSimpleImage(0, 10, TEX_WIDTH);
+
+            for (int i = 0; i < Math.min(data.length, render.length); i++) {
+                if (render[i] == 0) data[i] = -1;
+            }
+
+            v.map(data, tileW);
+            return v;
+        }
 		
 		@Override
 		public void restoreFromBundle(Bundle bundle) {

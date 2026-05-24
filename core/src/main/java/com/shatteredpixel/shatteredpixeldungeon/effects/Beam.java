@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
@@ -36,7 +38,7 @@ public class Beam extends Image {
 	
 	private float timeLeft;
 
-	private Beam(PointF s, PointF e, Effects.Type asset, float duration) {
+	private Beam(PointF s, PointF e, Effects.Type asset, float duration, boolean isMob) {
 		super( Effects.get( asset ) );
 		
 		origin.set( 0, height / 2 );
@@ -48,32 +50,36 @@ public class Beam extends Image {
 		float dy = e.y - s.y;
 		angle = (float)(Math.atan2( dy, dx ) * A);
 		scale.x = (float)Math.sqrt( dx * dx + dy * dy ) / width;
-		
-		timeLeft = this.duration = duration;
+
+        if (isMob) {
+            timeLeft = this.duration = (float) (duration / (Math.max(SPDSettings.animSpeed() / 1.5, 1)));
+        } else {
+            timeLeft = this.duration = duration;
+        }
 	}
 
 	public static class DeathRay extends Beam{
-		public DeathRay(PointF s, PointF e){
-			super(s, e, Effects.Type.DEATH_RAY, 0.5f);
+		public DeathRay(PointF s, PointF e, boolean isMob){
+			super(s, e, Effects.Type.DEATH_RAY, 0.5f, isMob);
 		}
 	}
 
 	public static class LightRay extends Beam{
-		public LightRay(PointF s, PointF e){
-			super(s, e, Effects.Type.LIGHT_RAY, 1f);
+		public LightRay(PointF s, PointF e, boolean isMob){
+			super(s, e, Effects.Type.LIGHT_RAY, 1f, isMob);
 		}
 	}
 
 	public static class SunRay extends Beam{
-		public SunRay(PointF s, PointF e){
-			super(s, e, Effects.Type.LIGHT_RAY, 1f);
+		public SunRay(PointF s, PointF e, boolean isMob){
+			super(s, e, Effects.Type.LIGHT_RAY, 1f, isMob);
 			tint(1, 1, 0.25f, 1);
 		}
 	}
 
 	public static class HealthRay extends Beam{
-		public HealthRay(PointF s, PointF e){
-			super(s, e, Effects.Type.HEALTH_RAY, 0.75f);
+		public HealthRay(PointF s, PointF e, boolean isMob){
+			super(s, e, Effects.Type.HEALTH_RAY, 0.75f, isMob);
 		}
 	}
 	

@@ -176,7 +176,7 @@ public class Necromancer extends Mob {
     }
 
     public void onZapComplete() {
-
+        System.out.println("ZAP COMPLETE");
         // FIX: only consider skeletons that are visible / in line of sight
         NecroSkeleton target = null;
 
@@ -198,7 +198,7 @@ public class Necromancer extends Mob {
 
         if (target.HP < target.HT) {
             if (sprite.visible || target.sprite.visible) {
-                sprite.parent.add(new Beam.HealthRay(sprite.center(), target.sprite.center()));
+                sprite.parent.add(new Beam.HealthRay(sprite.center(), target.sprite.center(), true));
                 Sample.INSTANCE.play(Assets.Sounds.RAY);
             }
 
@@ -214,13 +214,14 @@ public class Necromancer extends Mob {
 
         } else if (target.buff(Adrenaline.class) == null) {
             if (sprite.visible || target.sprite.visible) {
-                sprite.parent.add(new Beam.HealthRay(sprite.center(), target.sprite.center()));
+                sprite.parent.add(new Beam.HealthRay(sprite.center(), target.sprite.center(), true));
                 Sample.INSTANCE.play(Assets.Sounds.RAY);
             }
 
             Buff.affect(target, Adrenaline.class, 3f);
         }
 
+        System.out.println("HIT NEXT");
         next();
     }
 

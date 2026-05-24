@@ -788,7 +788,7 @@ public class Item implements Bundlable {
 								user.spendAndNext(delay);
 							}
 						}
-					});
+					}, false);
 		} else {
 			((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
 					reset(user.sprite,
@@ -803,7 +803,7 @@ public class Item implements Bundlable {
 							if (i != null) i.onThrow(cell);
 							user.next();
 						}
-					});
+					}, false);
 		}
 	}
 	

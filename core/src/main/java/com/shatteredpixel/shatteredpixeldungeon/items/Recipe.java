@@ -59,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfElements;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireball;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.utils.Reflection;
 
@@ -222,7 +223,9 @@ public abstract class Recipe {
 	private static Recipe[] threeIngredientRecipes = new Recipe[]{
 		new Potion.SeedToPotion(),
 		new StewedMeat.threeMeat(),
-		new MeatPie.Recipe()
+		new MeatPie.Recipe(),
+
+            new WandOfFireball.RecipeWand()
 	};
 	
 	public static ArrayList<Recipe> findRecipes(ArrayList<Item> ingredients){

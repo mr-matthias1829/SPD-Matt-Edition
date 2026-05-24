@@ -42,18 +42,19 @@ public class GolemSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 17, 19 );
 		
-		idle = new Animation( 4, true );
+		idle = createAnimation("idle", 4, true);
 		idle.frames( frames, 0, 1 );
 		
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, 2, 3, 4, 5 );
 		
-		attack = new Animation( 10, false );
+		attack = createAnimation("attack", 10, false);
 		attack.frames( frames, 6, 7, 8 );
 
-		zap = attack.clone();
-		
-		die = new Animation( 15, false );
+		zap = createAnimation("zap", 10, false);
+		zap.frames( frames, 6, 7, 8 );
+
+		die = createAnimation("die", 15, false);
 		die.frames( frames, 9, 10, 11, 12, 13 );
 		
 		play( idle );
@@ -115,7 +116,7 @@ public class GolemSprite extends MobSprite {
 					public void call() {
 						((Golem)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 

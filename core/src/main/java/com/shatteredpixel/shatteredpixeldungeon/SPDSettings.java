@@ -117,6 +117,31 @@ public class SPDSettings extends GameSettings {
 	public static int screenShake() {
 		return getInt( KEY_SCREEN_SHAKE, 2, 0, 4 );
 	}
+
+    // Animation Speed
+    public static final String KEY_ANIM_SPEED = "anim_speed";
+
+    public static void animSpeed(int value) {
+        put(KEY_ANIM_SPEED, value);
+    }
+
+    /** Returns 1–7. 1 = normal, 7 = 4× faster enemy combat/death animations. */
+    public static float animSpeed() {
+        switch(getInt(KEY_ANIM_SPEED, 1, 1, 7)) {
+            case 1: return 1f;
+            case 2: return 1.5f;
+            case 3: return 2f;
+            case 4: return 2.5f;
+            case 5: return 3f;
+            case 6: return 3.5f;
+            case 7: return 4f;
+            default: return 1f;
+        }
+    }
+
+    public static int animSpeedSlider() {
+        return (int) ((animSpeed()*2)-1);
+    }
 	
 	//Interface
 
@@ -333,6 +358,36 @@ public class SPDSettings extends GameSettings {
             return false;          // Hard-disable cheat mode outside debug
         }
         return getBoolean(KEY_CHEAT_MODE, false);
+    }
+
+    // Debug: starting floor
+    public static final String KEY_START_FLOOR = "start_floor";
+
+    public static void startFloor(int value) {
+        if (DeviceCompat.isDebug()) {
+            put(KEY_START_FLOOR, value);
+        }
+    }
+
+    /** Returns 1–26. Always 1 outside debug builds. */
+    public static int startFloor() {
+        if (!DeviceCompat.isDebug()) return 1;
+        return getInt(KEY_START_FLOOR, 1, 1, 26);
+    }
+
+    // Debug: allow badges while cheat mode is active
+    public static final String KEY_CHEAT_BADGES = "cheat_badges";
+
+    public static void cheatBadges(boolean value) {
+        if (DeviceCompat.isDebug()) {
+            put(KEY_CHEAT_BADGES, value);
+        }
+    }
+
+    /** When true, badges are NOT suppressed even with cheat mode on. Debug only. */
+    public static boolean cheatBadges() {
+        if (!DeviceCompat.isDebug()) return false;
+        return getBoolean(KEY_CHEAT_BADGES, false);
     }
 
 	//Connectivity

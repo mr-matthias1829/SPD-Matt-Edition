@@ -353,7 +353,7 @@ public class DarkKing extends Mob {
 			Buff.append(furthest, LifeLink.class, 100f).object = id();
 			Buff.append(this, LifeLink.class, 100f).object = furthest.id();
 			yell(Messages.get(this, "lifelink_" + Random.IntRange(1, 2)));
-			sprite.parent.add(new Beam.HealthRay(sprite.destinationCenter(), furthest.sprite.destinationCenter()));
+			sprite.parent.add(new Beam.HealthRay(sprite.destinationCenter(), furthest.sprite.destinationCenter(), true));
 			return true;
 
 		}
@@ -512,10 +512,10 @@ public class DarkKing extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.fadeOut(0.5f, new Callback() {
+					MusicAnnouncer.fadeOut(0.5f, new Callback() {
 						@Override
 						public void call() {
-							Music.INSTANCE.play(Assets.Music.CITY_BOSS_FINALE, true);
+							MusicAnnouncer.play(Assets.Music.CITY_BOSS_FINALE, true);
 						}
 					});
 				}

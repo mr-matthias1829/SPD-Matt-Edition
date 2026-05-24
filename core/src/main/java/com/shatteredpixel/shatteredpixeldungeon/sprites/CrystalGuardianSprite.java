@@ -40,19 +40,20 @@ public abstract class CrystalGuardianSprite extends MobSprite {
 
 		int c = texOffset();
 
-		idle = new MovieClip.Animation( 2, true );
+		idle = createAnimation("idle", 2, true);
 		idle.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 1+c );
 
-		run = new MovieClip.Animation( 15, true );
+		run = createAnimation("run", 15, true);
 		run.frames( frames, 2+c, 3+c, 4+c, 5+c, 6+c, 7+c );
 
-		attack = new MovieClip.Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 8+c, 9+c, 10+c );
 
-		die = new MovieClip.Animation( 5, false );
+		die = createAnimation("die", 5, false);
 		die.frames( frames, 11+c, 12+c, 13+c, 14+c, 15+c, 15+c );
 
-		crumple = die.clone();
+		crumple = createAnimation("crumple", 5, false);
+		crumple.frames( frames, 11+c, 12+c, 13+c, 14+c, 15+c, 15+c );
 
 		//this is temporary, as ideally the sprite itself should be scaled to 15x19 or so
 		scale.set(1.25f);

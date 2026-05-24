@@ -287,19 +287,20 @@ public class WndJournal extends WndTabbed {
 	public static class AlchemyTab extends Component {
 		
 		private RedButton[] pageButtons;
-		private static final int NUM_BUTTONS = 9;
-		
-		private static final int[] sprites = {
-				ItemSpriteSheet.SEED_HOLDER,
-				ItemSpriteSheet.STONE_HOLDER,
-				ItemSpriteSheet.FOOD_HOLDER,
-				ItemSpriteSheet.POTION_HOLDER,
-				ItemSpriteSheet.SCROLL_HOLDER,
-				ItemSpriteSheet.BOMB_HOLDER,
-				ItemSpriteSheet.MISSILE_HOLDER,
-				ItemSpriteSheet.ELIXIR_HOLDER,
-				ItemSpriteSheet.SPELL_HOLDER
-		};
+        private static final int NUM_BUTTONS = 10;
+
+        private static final int[] sprites = {
+                ItemSpriteSheet.SEED_HOLDER,
+                ItemSpriteSheet.STONE_HOLDER,
+                ItemSpriteSheet.FOOD_HOLDER,
+                ItemSpriteSheet.POTION_HOLDER,
+                ItemSpriteSheet.SCROLL_HOLDER,
+                ItemSpriteSheet.BOMB_HOLDER,
+                ItemSpriteSheet.MISSILE_HOLDER,
+                ItemSpriteSheet.ELIXIR_HOLDER,
+                ItemSpriteSheet.SPELL_HOLDER,
+                ItemSpriteSheet.WEAPON_HOLDER
+        };
 		
 		public static int currentPageIdx   = 0;
 		
@@ -362,7 +363,7 @@ public class WndJournal extends WndTabbed {
 					if (i == 4){
 						y += ITEM_HEIGHT;
 						x = 0;
-						buttonWidth = width()/4;
+						//buttonWidth = width()/4;
 					}
 				}
 			}

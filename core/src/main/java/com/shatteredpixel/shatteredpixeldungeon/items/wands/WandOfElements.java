@@ -60,6 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
@@ -85,30 +86,92 @@ public class WandOfElements extends DamageWand {
     // Damage ranges will vary based on which effect activates
     @Override
     public int min(int lvl) {
-        // Return average of all wands' minimum damage
         return 2 + lvl;
     }
 
     @Override
     public int max(int lvl) {
-        // Return average of all wands' maximum damage
         return 12 + 3 * lvl;
     }
 
 
-
-
-    // Tracks which effect was last used for fx
-    private EffectType lastEffect = null;
-    private Ballistica currentBolt = null;
+    // ===================== ELEMENT SEQUENCE =====================
+    // A fixed, randomly-ordered cycle of the three effects, created when
+    // the wand is first used and saved/loaded with the item from that point on.
 
     private enum EffectType {
         LIGHTNING, FROST, FIREBLAST
     }
 
+    private static final String SEQUENCE       = "sequence";
+    private static final String SEQUENCE_INDEX = "sequence_index";
+
+    private EffectType[] sequence      = null;   // null until first use
+    private int          sequenceIndex = 0;
+
+    /** Returns the wand's unique fixed order (e.g. FROST → FIREBLAST → LIGHTNING). */
+    private void initSequence() {
+        // Fisher-Yates shuffle over the three values
+        EffectType[] values = EffectType.values();
+        for (int i = values.length - 1; i > 0; i--) {
+            int j = Random.Int(i + 1);
+            EffectType tmp = values[i];
+            values[i] = values[j];
+            values[j] = tmp;
+        }
+        sequence      = values;
+        sequenceIndex = 0;
+    }
+
+    /** The element that will fire on the next cast. */
+    private EffectType currentEffect() {
+        if (sequence == null) initSequence();
+        return sequence[sequenceIndex % sequence.length];
+    }
+
+    /** Step to the next element in the cycle. */
+    private void advanceSequence() {
+        if (sequence == null) initSequence();
+        sequenceIndex = (sequenceIndex + 1) % sequence.length;
+    }
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        if (sequence != null) {
+            // Store as comma-separated names so it survives enum order changes
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < sequence.length; i++) {
+                if (i > 0) sb.append(',');
+                sb.append(sequence[i].name());
+            }
+            bundle.put(SEQUENCE, sb.toString());
+        }
+        bundle.put(SEQUENCE_INDEX, sequenceIndex);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        if (bundle.contains(SEQUENCE)) {
+            String raw = bundle.getString(SEQUENCE);
+            String[] parts = raw.split(",");
+            sequence = new EffectType[parts.length];
+            for (int i = 0; i < parts.length; i++) {
+                sequence[i] = EffectType.valueOf(parts[i].trim());
+            }
+        }
+        sequenceIndex = bundle.getInt(SEQUENCE_INDEX);
+    }
+
+
+    // Tracks which effect was last used (shared between fx() and onZap())
+    private EffectType lastEffect  = null;
+    private Ballistica currentBolt = null;
+
     // ===================== LIGHTNING EFFECT =====================
-    private ArrayList<Char> affected = new ArrayList<>();
-    private ArrayList<Lightning.Arc> arcs = new ArrayList<>();
+    private ArrayList<Char>          affected = new ArrayList<>();
+    private ArrayList<Lightning.Arc> arcs     = new ArrayList<>();
 
     // ===================== FIREBLAST EFFECT =====================
     private ConeAOE cone;
@@ -118,8 +181,7 @@ public class WandOfElements extends DamageWand {
         currentBolt = bolt;
 
         if (lastEffect == null) {
-            // Shouldn't happen, but just in case
-            lastEffect = Random.element(EffectType.values());
+            lastEffect = currentEffect();
         }
 
         switch (lastEffect) {
@@ -130,20 +192,21 @@ public class WandOfElements extends DamageWand {
                 frostEffect(bolt);
                 break;
             case FIREBLAST:
-                // The cone should already be created in fx() method
                 if (cone != null) {
                     fireblastEffect(bolt);
                 } else {
-                    // Fallback to lightning if cone wasn't created properly
                     lightningEffect(bolt);
                 }
                 break;
         }
 
-        // Reset for next use
-        lastEffect = null;
+        // Advance the cycle
+        advanceSequence();
+
+        // Reset per-cast state
+        lastEffect  = null;
         currentBolt = null;
-        cone = null;
+        cone        = null;
     }
 
     private void lightningEffect(Ballistica bolt) {
@@ -172,9 +235,7 @@ public class WandOfElements extends DamageWand {
             CellEmitter.center(cell).burst(SparkParticle.FACTORY, 3);
         }
 
-        // Lightning deals less damage per-target, the more targets that are hit.
         float multiplier = 0.4f + (0.6f / affected.size());
-        // If the main target is in water, all affected take full damage
         if (Dungeon.level.water[bolt.collisionPos]) multiplier = 1f;
 
         for (Char target : affected) {
@@ -208,7 +269,6 @@ public class WandOfElements extends DamageWand {
             if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                 Char n = Actor.findChar(i);
                 if (n == Dungeon.hero && PathFinder.distance[i] > 1)
-                    // The hero is only zapped if they are adjacent
                     continue;
                 else if (n != null && !affected.contains(n)) {
                     hitThisArc.add(n);
@@ -238,7 +298,6 @@ public class WandOfElements extends DamageWand {
         MagicalFireRoom.EternalFire eternalFire = (MagicalFireRoom.EternalFire) Dungeon.level.blobs.get(MagicalFireRoom.EternalFire.class);
         if (eternalFire != null && eternalFire.volume > 0) {
             eternalFire.clear(bolt.collisionPos);
-            // Bolt ends 1 tile short of fire, so check next tile too
             if (bolt.path.size() > bolt.dist + 1) {
                 eternalFire.clear(bolt.path.get(bolt.dist + 1));
             }
@@ -249,10 +308,9 @@ public class WandOfElements extends DamageWand {
             int damage = damageRoll();
 
             if (ch.buff(Frost.class) != null) {
-                return; // Do nothing, can't affect a frozen target
+                return;
             }
             if (ch.buff(Chill.class) != null) {
-                // 6.67% less damage per turn of chill remaining, to a max of 10 turns (50% dmg)
                 float chillturns = Math.min(10, ch.buff(Chill.class).cooldown());
                 damage = (int) Math.round(damage * Math.pow(0.9333f, chillturns));
             } else {
@@ -277,7 +335,6 @@ public class WandOfElements extends DamageWand {
     // ===================== FIREBLAST EFFECT =====================
     private void fireblastEffect(Ballistica bolt) {
         if (cone == null) {
-            // Create cone if it wasn't created in fx()
             int maxDist = 3 + 2 * chargesPerCast();
             cone = new ConeAOE(bolt,
                     maxDist,
@@ -285,26 +342,20 @@ public class WandOfElements extends DamageWand {
                     Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID);
         }
 
-        ArrayList<Char> affectedChars = new ArrayList<>();
-        ArrayList<Integer> adjacentCells = new ArrayList<>();
+        ArrayList<Char>    affectedChars  = new ArrayList<>();
+        ArrayList<Integer> adjacentCells  = new ArrayList<>();
 
         for (int cell : cone.cells) {
-            // Ignore caster cell
-            if (cell == bolt.sourcePos) {
-                continue;
-            }
+            if (cell == bolt.sourcePos) continue;
 
-            // Knock doors open
             if (Dungeon.level.map[cell] == Terrain.DOOR) {
                 Level.set(cell, Terrain.OPEN_DOOR);
                 GameScene.updateMap(cell);
             }
 
-            // Only ignite cells directly near caster if they are flammable or solid
             if (Dungeon.level.adjacent(bolt.sourcePos, cell)
                     && !(Dungeon.level.flamable[cell] || Dungeon.level.solid[cell])) {
                 adjacentCells.add(cell);
-                // Do burn any heaps located here though
                 if (Dungeon.level.heaps.get(cell) != null) {
                     Dungeon.level.heaps.get(cell).burn();
                 }
@@ -318,13 +369,10 @@ public class WandOfElements extends DamageWand {
             }
         }
 
-        // If wand was shot right at a wall
         if (cone.cells.isEmpty()) {
             adjacentCells.add(bolt.sourcePos);
         }
 
-        // Ignite cells that share a side with an adjacent cell, are flammable, and are closer to the collision pos
-        // This prevents short-range casts not igniting barricades or bookshelves
         for (int cell : adjacentCells) {
             for (int i : PathFinder.NEIGHBOURS8) {
                 if (Dungeon.level.trueDistance(cell + i, bolt.collisionPos) < Dungeon.level.trueDistance(cell, bolt.collisionPos)
@@ -341,14 +389,9 @@ public class WandOfElements extends DamageWand {
             if (ch.isAlive()) {
                 Buff.affect(ch, Burning.class).reignite(ch);
                 switch (chargesPerCast()) {
-                    case 1:
-                        break; // No effects
-                    case 2:
-                        Buff.affect(ch, Cripple.class, 4f);
-                        break;
-                    case 3:
-                        Buff.affect(ch, Paralysis.class, 4f);
-                        break;
+                    case 1: break;
+                    case 2: Buff.affect(ch, Cripple.class, 4f);    break;
+                    case 3: Buff.affect(ch, Paralysis.class, 4f);  break;
                 }
             }
         }
@@ -357,12 +400,11 @@ public class WandOfElements extends DamageWand {
     // ===================== FX METHODS =====================
     @Override
     public void fx(final Ballistica bolt, final Callback callback) {
-        // Randomly select which effect to use
-        lastEffect = Random.element(EffectType.values());
+        // Use the sequence, not a random pick
+        lastEffect = currentEffect();
 
         switch (lastEffect) {
             case LIGHTNING:
-                // Need to set up affected and arcs for lightning
                 affected.clear();
                 arcs.clear();
 
@@ -381,9 +423,8 @@ public class WandOfElements extends DamageWand {
                     public void call() {
                         callback.call();
                     }
-                }));
+                }, false));
                 Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
-                // Don't call callback here, let lightning animation handle it
                 break;
 
             case FROST:
@@ -396,14 +437,12 @@ public class WandOfElements extends DamageWand {
                 break;
 
             case FIREBLAST:
-                // Need to create cone here for the visual effect
                 int maxDist = 3 + 2 * chargesPerCast();
                 cone = new ConeAOE(bolt,
                         maxDist,
                         30 + 20 * chargesPerCast(),
                         Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID);
 
-                // Cast to cells at the tip, rather than all cells, better performance.
                 Ballistica longestRay = null;
                 for (Ballistica ray : cone.outerRays) {
                     if (longestRay == null || ray.dist > longestRay.dist) {
@@ -422,7 +461,6 @@ public class WandOfElements extends DamageWand {
                     return;
                 }
 
-                // Final zap at half distance of the longest ray, for timing of the actual wand effect
                 MagicMissile.boltFromChar(curUser.sprite.parent,
                         MagicMissile.FIRE_CONE,
                         curUser.sprite,
@@ -434,98 +472,53 @@ public class WandOfElements extends DamageWand {
         }
     }
 
-    // ===================== STAFF HIT EFFECTS =====================
+    // ===================== BATTLEMAGE EFFECT =====================
+    // Peeks at the next element in the sequence (does NOT advance it).
+    // All three cases share the same proc chance formula as WandOfLightning:
+    //   lvl 0 → ~25%, lvl 1 → ~40%, lvl 2 → ~50%
     @Override
     public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-        // Randomly choose one of the three wand's on-hit effects
-        int choice = Random.Int(3);
+        EffectType next = currentEffect(); // peek only — sequence does not advance on hit
 
-        switch (choice) {
-            case 0: // Lightning
-                // lvl 0 - 25%
-                // lvl 1 - 40%
-                // lvl 2 - 50%
-                float procChance = (buffedLvl() + 1f) / (buffedLvl() + 4f) * procChanceMultiplier(attacker);
-                if (Random.Float() < procChance) {
-                    float powerMulti = Math.min(1f, procChance);
-                    FlavourBuff.prolong(attacker, LightningCharge.class, powerMulti * LightningCharge.DURATION);
-                    attacker.sprite.centerEmitter().burst(SparkParticle.FACTORY, 10);
-                    attacker.sprite.flash();
-                    Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
-                }
+        float procChance = (buffedLvl() + 1f) / (buffedLvl() + 4f) * procChanceMultiplier(attacker);
+        if (Random.Float() >= procChance) return;
+
+        switch (next) {
+
+            case FIREBLAST:
+                // Ignite the enemy for a short 1–2 turns.
+                Buff.affect(defender, Burning.class).reignite(defender, 1f + Random.Int(2));
                 break;
 
-            case 1: // Frost
-                Chill chill = defender.buff(Chill.class);
-                if (chill != null) {
-                    // 1/9 at 2 turns of chill, scaling to 9/9 at 10 turns
-                    float procChanceFrost = ((int) Math.floor(chill.cooldown()) - 1) / 9f;
-                    procChanceFrost *= procChanceMultiplier(attacker);
-
-                    if (Random.Float() < procChanceFrost) {
-                        float powerMulti = Math.max(1f, procChanceFrost);
-                        // Need to delay this through an actor so that the freezing isn't broken by taking damage from the staff hit.
-                        new FlavourBuff() {
-                            {
-                                actPriority = VFX_PRIO;
-                            }
-
-                            public boolean act() {
-                                Buff.affect(target, Frost.class, Math.round(Frost.DURATION * powerMulti));
-                                return super.act();
-                            }
-                        }.attachTo(defender);
-                    }
-                }
-                break;
-
-            case 2: // Fireblast
-                // Proc chance is initially 0..
-                float procChanceFire = 0;
-                for (int i : PathFinder.NEIGHBOURS9) {
-                    // +25% proc chance per burning char within 3x3 of target
-                    // This includes the attacker and defender
-                    if (Actor.findChar(defender.pos + i) != null
-                            && Actor.findChar(defender.pos + i).buff(Burning.class) != null) {
-                        procChanceFire += 0.25f;
-                        // Otherwise +5% proc chance per burning tile within 3x3 of target
-                    } else if (Fire.volumeAt(defender.pos + i, Fire.class) > 0) {
-                        procChanceFire += 0.05f;
-                    }
-                }
-
-                procChanceFire = Math.min(1f, procChanceFire);
-                procChanceFire *= Wand.procChanceMultiplier(attacker);
-
-                if (Random.Float() < procChanceFire) {
-                    float powerMulti = Math.max(1f, procChanceFire);
-                    Blob fire = Dungeon.level.blobs.get(Fire.class);
-
-                    // Explode, dealing damage to enemies in 3x3, and clearing all fire
-                    CellEmitter.center(defender.pos).burst(BlastParticle.FACTORY, 30);
-                    if (fire != null) {
-                        for (int i : PathFinder.NEIGHBOURS9) {
-                            CellEmitter.get(defender.pos + i).burst(SmokeParticle.FACTORY, 4);
-                            if (Fire.volumeAt(defender.pos + i, Fire.class) > 0) {
-                                Dungeon.level.destroy(defender.pos + i);
-                                GameScene.updateMap(defender.pos + i);
-                                fire.clear(defender.pos + i);
-                            }
-
-                            Char ch = Actor.findChar(defender.pos + i);
-                            if (ch != null) {
-                                if (ch.buff(Burning.class) != null) {
-                                    ch.buff(Burning.class).detach();
-                                }
-                                if (ch.alignment == Char.Alignment.ENEMY) {
-                                    // Damage of a 2-charge zap
-                                    ch.damage(Math.round(powerMulti * Random.NormalIntRange(2 + 2 * buffedLvl(), 8 + 4 * buffedLvl())), this);
-                                }
-                            }
+            case FROST:
+                if (defender.buff(Chill.class) != null) {
+                    // Already chilled: consume the chill and freeze for 2 turns.
+                    // Delayed through a FlavourBuff so the freeze isn't immediately
+                    // broken by the staff hit damage (same pattern as WandOfFrost.onHit).
+                    defender.buff(Chill.class).detach();
+                    new FlavourBuff() {
+                        {
+                            actPriority = VFX_PRIO;
                         }
-                    }
-                    Sample.INSTANCE.play(Assets.Sounds.BLAST);
+                        public boolean act() {
+                            Buff.affect(target, Frost.class, 2f);
+                            return super.act();
+                        }
+                    }.attachTo(defender);
+                } else {
+                    // Not yet chilled: apply chill for 3 turns.
+                    Buff.affect(defender, Chill.class, 3f);
+                    defender.sprite.burst(0xFF99CCFF, 3);
                 }
+                break;
+
+            case LIGHTNING:
+                // Same as WandOfLightning.onHit but half the charge duration.
+                float power = Math.min(1f, procChance);
+                FlavourBuff.prolong(attacker, LightningCharge.class, power * LightningCharge.DURATION * 0.5f);
+                attacker.sprite.centerEmitter().burst(SparkParticle.FACTORY, 10);
+                attacker.sprite.flash();
+                Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
                 break;
         }
     }
@@ -533,18 +526,39 @@ public class WandOfElements extends DamageWand {
     // ===================== CHARGE CONSUMPTION =====================
     @Override
     protected int chargesPerCast() {
-        // Average charge consumption across wands
         return 1;
+    }
+
+    @Override
+    public String desc() {
+        String base = super.desc();
+        if (sequence != null) {
+            // Only show next-cast info once the sequence has been initialised
+            // (i.e. after the first use), so unidentified wands stay clean.
+            switch (currentEffect()) {
+                case FIREBLAST:
+                    base += "\n\n" + Messages.get(this, "desc_next_fire");
+                    break;
+                case FROST:
+                    base += "\n\n" + Messages.get(this, "desc_next_frost");
+                    break;
+                case LIGHTNING:
+                    base += "\n\n" + Messages.get(this, "desc_next_lightning");
+                    break;
+            }
+        }
+        return base;
     }
 
     // ===================== STAFF FX =====================
     @Override
     public void staffFx(MagesStaff.StaffParticle particle) {
-        // Random particle effect based on which wand effect we might use
-        int choice = Random.Int(3);
+        // Colour the particle based on whichever element comes next,
+        // giving a subtle visual hint about the upcoming cast.
+        EffectType next = currentEffect();
 
-        switch (choice) {
-            case 0: // Lightning
+        switch (next) {
+            case LIGHTNING:
                 particle.color(0xFFFFFF);
                 particle.am = 0.6f;
                 particle.setLifespan(0.6f);
@@ -558,7 +572,7 @@ public class WandOfElements extends DamageWand {
                 particle.y += dst;
                 break;
 
-            case 1: // Frost
+            case FROST:
                 particle.color(0x88CCFF);
                 particle.am = 0.6f;
                 particle.setLifespan(2f);
@@ -569,7 +583,7 @@ public class WandOfElements extends DamageWand {
                 particle.radiateXY(Random.Float(1f));
                 break;
 
-            case 2: // Fireblast
+            case FIREBLAST:
                 particle.color(0xEE7722);
                 particle.am = 0.5f;
                 particle.setLifespan(0.6f);
@@ -600,52 +614,35 @@ public class WandOfElements extends DamageWand {
     }
 
 
-
-
-
-    private static int AlchemyCost = 36;
+    // ===================== ALCHEMY RECIPES =====================
+    private static int AlchemyCost = 30;
 
     public static class RecipeFireFrost extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
         {
-            inputs = new Class[]{
-                    WandOfFireblast.class,
-                    WandOfFrost.class
-            };
-            inQuantity = new int[]{1, 1};
-
-            cost = AlchemyCost;
-
-            output = WandOfElements.class;
+            inputs    = new Class[]{ WandOfFireblast.class, WandOfFrost.class };
+            inQuantity = new int[]{ 1, 1 };
+            cost      = AlchemyCost;
+            output    = WandOfElements.class;
             outQuantity = 1;
         }
     }
 
     public static class RecipeFrostLightning extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
         {
-            inputs = new Class[]{
-                    WandOfFrost.class,
-                    WandOfLightning.class
-            };
-            inQuantity = new int[]{1, 1};
-
-            cost = AlchemyCost;
-
-            output = WandOfElements.class;
+            inputs    = new Class[]{ WandOfFrost.class, WandOfLightning.class };
+            inQuantity = new int[]{ 1, 1 };
+            cost      = AlchemyCost;
+            output    = WandOfElements.class;
             outQuantity = 1;
         }
     }
 
     public static class RecipeFireLightning extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
         {
-            inputs = new Class[]{
-                    WandOfFireblast.class,
-                    WandOfLightning.class
-            };
-            inQuantity = new int[]{1, 1};
-
-            cost = AlchemyCost;
-
-            output = WandOfElements.class;
+            inputs    = new Class[]{ WandOfFireblast.class, WandOfLightning.class };
+            inQuantity = new int[]{ 1, 1 };
+            cost      = AlchemyCost;
+            output    = WandOfElements.class;
             outQuantity = 1;
         }
     }

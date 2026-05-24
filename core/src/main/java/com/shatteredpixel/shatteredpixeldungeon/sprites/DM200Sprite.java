@@ -40,19 +40,19 @@ public class DM200Sprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 21, 18 );
 
-		idle = new Animation( 10, true );
+		idle = createAnimation("idle", 10, true);
 		idle.frames( frames, 0, 1 );
 
-		run = new Animation( 10, true );
+		run = createAnimation("run", 10, true);
 		run.frames( frames, 2, 3 );
 
-		attack = new Animation( 15, false );
+		attack = createAnimation("attack", 15, false);
 		attack.frames( frames, 4, 5, 6 );
 
-		zap = new Animation( 15, false );
+		zap = createAnimation("zap", 15, false);
 		zap.frames( frames, 7, 8, 8, 7 );
 
-		die = new Animation( 8, false );
+		die = createAnimation("die", 8, false);
 		die.frames( frames, 9, 10, 11 );
 
 		play( idle );
@@ -71,7 +71,7 @@ public class DM200Sprite extends MobSprite {
 					public void call() {
 						((DM200)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.GAS );
 		GLog.w(Messages.get(DM200.class, "vent"));
 	}

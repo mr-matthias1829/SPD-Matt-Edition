@@ -42,18 +42,19 @@ public class DM201Sprite extends MobSprite {
 
 		int c = 12;
 
-		idle = new Animation( 2, true );
+		idle = createAnimation("idle", 2, true);
 		idle.frames( frames, c+0, c+1 );
 
-		run = idle.clone();
+		run = createAnimation("run", 2, true);
+		run.frames( frames, c+0, c+1 );
 
-		attack = new Animation( 15, false );
+		attack = createAnimation("attack", 15, false);
 		attack.frames( frames, c+4, c+5, c+6 );
 
-		zap = new Animation( 15, false );
+		zap = createAnimation("zap", 15, false);
 		zap.frames( frames, c+7, c+8, c+8, c+7 );
 
-		die = new Animation( 8, false );
+		die = createAnimation("die", 8, false);
 		die.frames( frames, c+9, c+10, c+11 );
 
 		play( idle );
@@ -85,7 +86,7 @@ public class DM201Sprite extends MobSprite {
 						Sample.INSTANCE.play( Assets.Sounds.GAS );
 						((DM201)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.MISS, 1f, 1.5f );
 		GLog.w(Messages.get(DM201.class, "vent"));
 	}

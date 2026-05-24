@@ -39,6 +39,7 @@ import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,9 +56,9 @@ public class LastLevel extends Level {
 	@Override
 	public void playLevelMusic() {
 		if (Statistics.amuletObtained) {
-			Music.INSTANCE.end();
+			MusicAnnouncer.end();
 		} else {
-			Music.INSTANCE.play(Assets.Music.THEME_FINALE, true);
+			MusicAnnouncer.play(Assets.Music.THEME_FINALE, true);
 		}
 	}
 

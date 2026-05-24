@@ -43,18 +43,19 @@ public abstract class ShamanSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 12, 15 );
 		
-		idle = new Animation( 2, true );
+		idle = createAnimation("idle", 2, true);
 		idle.frames( frames, c+0, c+0, c+0, c+1, c+0, c+0, c+1, c+1 );
 		
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, c+4, c+5, c+6, c+7 );
 		
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, c+2, c+3, c+0 );
 		
-		zap = attack.clone();
-		
-		die = new Animation( 12, false );
+		zap = createAnimation("zap", 12, false);
+		zap.frames( frames, c+2, c+3, c+0 );
+
+		die = createAnimation("die", 12, false);
 		die.frames( frames, c+8, c+9, c+10 );
 		
 		play( idle );
@@ -73,7 +74,7 @@ public abstract class ShamanSprite extends MobSprite {
 					public void call() {
 						((Shaman)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 

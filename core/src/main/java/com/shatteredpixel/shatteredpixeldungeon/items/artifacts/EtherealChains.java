@@ -210,7 +210,7 @@ public class EtherealChains extends Artifact {
 				}));
 				hero.next();
 			}
-		}));
+		}, false));
 	}
 	
 	//pulls the hero along the chain to the collisionPos, if possible.
@@ -276,7 +276,7 @@ public class EtherealChains extends Artifact {
 				}));
 				hero.next();
 			}
-		}));
+		}, false));
 	}
 
 	@Override

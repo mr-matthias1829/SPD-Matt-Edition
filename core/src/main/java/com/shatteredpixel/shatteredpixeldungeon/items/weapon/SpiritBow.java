@@ -469,7 +469,7 @@ public class SpiritBow extends Weapon {
 											flurryActor = null;
 										}
 									}
-								});
+								}, false);
 				
 			} else {
 

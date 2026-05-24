@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.quest;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -166,7 +167,7 @@ public class CorpseDust extends Item {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.fadeOut(1f, new Callback() {
+					MusicAnnouncer.fadeOut(1f, new Callback() {
 						@Override
 						public void call() {
 							if (Dungeon.level != null) {

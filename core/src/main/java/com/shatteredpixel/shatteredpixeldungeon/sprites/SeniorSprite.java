@@ -36,19 +36,19 @@ public class SeniorSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 15, 14 );
 		
-		idle = new Animation( 6, true );
+		idle = createAnimation("idle", 6, true);
 		idle.frames( frames, 18, 17, 18, 19 );
 		
-		run = new Animation( 15, true );
+		run = createAnimation("run", 15, true);
 		run.frames( frames, 28, 29, 30, 31, 32, 33 );
 		
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 20, 21, 20, 21 );
 		
-		kick = new Animation( 10, false );
+		kick = createAnimation("kick", 10, false);
 		kick.frames( frames, 22, 23, 22 );
 		
-		die = new Animation( 15, false );
+		die = createAnimation("die", 15, false);
 		die.frames( frames, 18, 24, 25, 25, 26, 27 );
 		
 		play( idle );

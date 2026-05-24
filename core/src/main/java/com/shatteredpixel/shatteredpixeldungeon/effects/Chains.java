@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
@@ -44,14 +45,16 @@ public class Chains extends Group {
 
 	private PointF from, to;
 
-	public Chains(int from, int to, Effects.Type type, Callback callback){
+	public Chains(int from, int to, Effects.Type type, Callback callback, boolean isMob){
 		this(DungeonTilemap.tileCenterToWorld(from),
 				DungeonTilemap.tileCenterToWorld(to),
 				type,
-				callback);
+				callback,
+                isMob);
 	}
 
-	public Chains(PointF from, PointF to, Effects.Type type, Callback callback){
+	public Chains(PointF from, PointF to, Effects.Type type, Callback callback, boolean isMob){
+
 		super();
 
 		this.callback = callback;
@@ -65,6 +68,12 @@ public class Chains extends Group {
 
 		//base of 200ms, plus 50ms per tile travelled
 		duration = distance/320f + 0.2f;
+
+        float speed = SPDSettings.animSpeed();
+
+        if (speed > 1 && isMob) {
+            duration /= (float) Math.max(speed/1.5, 1);
+        }
 
 		rotation = (float)(Math.atan2( dy, dx ) * A) + 90f;
 

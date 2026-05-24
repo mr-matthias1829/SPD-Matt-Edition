@@ -171,7 +171,7 @@ public class Guard extends Mob {
                                     }));
                                     next();
                                 }
-                            }));
+                            }, true));
                 } else {
                     pullEnemy(enemy, newPos);
                 }

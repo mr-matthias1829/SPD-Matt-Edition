@@ -530,9 +530,9 @@ public class CursedWand {
 		public void FX(Item origin, Char user, Ballistica bolt, Callback callback) {
 			Char ch = Actor.findChar( bolt.collisionPos );
 			if (ch != null){
-				user.sprite.parent.addToFront(new Lightning(user.sprite.center(), ch.sprite.center(), null));
+				user.sprite.parent.addToFront(new Lightning(user.sprite.center(), ch.sprite.center(), null, false));
 			} else {
-				user.sprite.parent.addToFront(new Lightning(user.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos), null));
+				user.sprite.parent.addToFront(new Lightning(user.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos), null, false));
 			}
 			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 			callback.call();
@@ -543,10 +543,10 @@ public class CursedWand {
 
 			ArrayList<Char> affected = new ArrayList<>();
 
-			user.sprite.parent.add(new Lightning(user.pos - 1, user.pos + 1, null));
-			user.sprite.parent.add(new Lightning(user.pos - Dungeon.level.width(), user.pos + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(user.pos - 1 - Dungeon.level.width(), user.pos + 1 + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(user.pos - 1 + Dungeon.level.width(), user.pos + 1 - Dungeon.level.width(), null));
+			user.sprite.parent.add(new Lightning(user.pos - 1, user.pos + 1, null, false));
+			user.sprite.parent.add(new Lightning(user.pos - Dungeon.level.width(), user.pos + Dungeon.level.width(), null, false));
+			user.sprite.parent.add(new Lightning(user.pos - 1 - Dungeon.level.width(), user.pos + 1 + Dungeon.level.width(), null, false));
+			user.sprite.parent.add(new Lightning(user.pos - 1 + Dungeon.level.width(), user.pos + 1 - Dungeon.level.width(), null, false));
 			for (int i : PathFinder.NEIGHBOURS9){
 				if (Actor.findChar(user.pos+i) != null){
 					affected.add(Actor.findChar(user.pos+i));
@@ -554,10 +554,10 @@ public class CursedWand {
 			}
 
 			int pos = bolt.collisionPos;
-			user.sprite.parent.add(new Lightning(pos - 1, user.pos + 1, null));
-			user.sprite.parent.add(new Lightning(pos - Dungeon.level.width(), pos + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(pos - 1 - Dungeon.level.width(), pos + 1 + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(pos - 1 + Dungeon.level.width(), pos + 1 - Dungeon.level.width(), null));
+			user.sprite.parent.add(new Lightning(pos - 1, user.pos + 1, null, false));
+			user.sprite.parent.add(new Lightning(pos - Dungeon.level.width(), pos + Dungeon.level.width(), null, false));
+			user.sprite.parent.add(new Lightning(pos - 1 - Dungeon.level.width(), pos + 1 + Dungeon.level.width(), null, false));
+			user.sprite.parent.add(new Lightning(pos - 1 + Dungeon.level.width(), pos + 1 - Dungeon.level.width(), null, false));
 			for (int i : PathFinder.NEIGHBOURS9){
 				if (Actor.findChar(pos+i) != null && !affected.contains(Actor.findChar(pos+i))){
 					affected.add(Actor.findChar(pos+i));

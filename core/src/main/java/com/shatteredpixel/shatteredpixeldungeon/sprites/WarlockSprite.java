@@ -37,18 +37,19 @@ public class WarlockSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 12, 15 );
 		
-		idle = new Animation( 2, true );
+		idle = createAnimation("idle", 2, true);
 		idle.frames( frames, 0, 0, 0, 1, 0, 0, 1, 1 );
 		
-		run = new Animation( 15, true );
+		run = createAnimation("run", 15, true);
 		run.frames( frames, 0, 2, 3, 4 );
 		
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 0, 5, 6 );
 		
-		zap = attack.clone();
-		
-		die = new Animation( 15, false );
+		zap = createAnimation("zap", 12, false);
+		zap.frames( frames, 0, 5, 6 );
+
+		die = createAnimation("die", 15, false);
 		die.frames( frames, 0, 7, 8, 8, 9, 10 );
 		
 		play( idle );
@@ -67,7 +68,7 @@ public class WarlockSprite extends MobSprite {
 					public void call() {
 						((Warlock)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 	

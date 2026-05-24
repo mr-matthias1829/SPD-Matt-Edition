@@ -23,7 +23,15 @@ import java.util.ArrayList;
 
 public class IceCavesDeepExit extends SpecialRoom {
 
-    @Override // actually it is a exit, we just dont want it to generate like one
+
+    // actually it is a exit, we just dont want it to generate like one
+    // if we did, it would generate as far as possible from entrance (mostly)
+    // and if you have multiple exits, you get funny conflict and one just generates NEXT to the entrance
+    // this room is a mix of a special room with a exit, so false here is correct and fine
+    // when using this room, make sure it's not the only exit since it's still a puzzle room you can softlock yourself out of
+
+    // also: note that this room will NOT guarantee the floor with a liquid flame potion
+    @Override
     public boolean isExit() { return false; }
 
     @Override
@@ -52,6 +60,6 @@ public class IceCavesDeepExit extends SpecialRoom {
         level.transitions.add(exit);
 
         entrance().set(Door.Type.BARRICADE);
-        level.addItemToSpawn(new PotionOfLiquidFlame());
+        //level.addItemToSpawn(new PotionOfLiquidFlame());
     }
 }

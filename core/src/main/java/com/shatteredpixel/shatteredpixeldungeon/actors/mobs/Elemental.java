@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -419,7 +420,7 @@ public abstract class Elemental extends Mob {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						Music.INSTANCE.fadeOut(1f, new Callback() {
+						MusicAnnouncer.fadeOut(1f, new Callback() {
 							@Override
 							public void call() {
 								if (Dungeon.level != null) {
@@ -539,7 +540,7 @@ public abstract class Elemental extends Mob {
 			}
 
 			if (visible) {
-				sprite.parent.addToFront(new Lightning(arcs, null));
+				sprite.parent.addToFront(new Lightning(arcs, null, true));
 				Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
 			}
 		}

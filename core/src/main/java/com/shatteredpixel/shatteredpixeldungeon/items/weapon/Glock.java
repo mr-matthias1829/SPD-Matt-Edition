@@ -331,7 +331,7 @@ public class Glock extends Weapon {
                                     onThrow(cell);
                                     user.spendAndNext(castDelay(user, cell));
                                 }
-                            });
+                            }, false);
         }
     }
 

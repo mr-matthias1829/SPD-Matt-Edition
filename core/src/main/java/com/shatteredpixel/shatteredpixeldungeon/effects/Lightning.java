@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.Game;
@@ -35,7 +37,8 @@ import java.util.List;
 
 public class Lightning extends Group {
 
-	private static final float DURATION = 0.3f;
+	private final float DURATION = 0.3f;
+    private final float MOB_DURATION;
 	
 	private float life;
 
@@ -43,23 +46,23 @@ public class Lightning extends Group {
 	
 	private Callback callback;
 
-	public Lightning(int from, int to, Callback callback){
-		this(Arrays.asList(new Arc(from, to)), callback);
+	public Lightning(int from, int to, Callback callback, boolean isMob){
+		this(Arrays.asList(new Arc(from, to)), callback, isMob);
 	}
 
-	public Lightning(PointF from, int to, Callback callback){
-		this(Arrays.asList(new Arc(from, to)), callback);
+	public Lightning(PointF from, int to, Callback callback, boolean isMob){
+		this(Arrays.asList(new Arc(from, to)), callback, isMob);
 	}
 
-	public Lightning(int from, PointF to, Callback callback){
-		this(Arrays.asList(new Arc(from, to)), callback);
+	public Lightning(int from, PointF to, Callback callback, boolean isMob){
+		this(Arrays.asList(new Arc(from, to)), callback, isMob);
 	}
 
-	public Lightning(PointF from, PointF to, Callback callback){
-		this(Arrays.asList(new Arc(from, to)), callback);
+	public Lightning(PointF from, PointF to, Callback callback, boolean isMob){
+		this(Arrays.asList(new Arc(from, to)), callback, isMob);
 	}
 	
-	public Lightning( List<Arc> arcs, Callback callback ) {
+	public Lightning( List<Arc> arcs, Callback callback, boolean isMob ) {
 		
 		super();
 
@@ -68,8 +71,12 @@ public class Lightning extends Group {
 			add(arc);
 
 		this.callback = callback;
-		
-		life = DURATION;
+        if (isMob){
+            MOB_DURATION = (float) (DURATION / (Math.max(SPDSettings.animSpeed()/1.5, 1))); // reduced effect since its already quite short
+        } else {
+            MOB_DURATION = DURATION;
+        }
+        life = MOB_DURATION;
 	}
 	
 	private static final double A = 180 / Math.PI;
@@ -85,7 +92,7 @@ public class Lightning extends Group {
 			
 		} else {
 			
-			float alpha = life / DURATION;
+			float alpha = life / MOB_DURATION;
 			
 			for (Arc arc : arcs) {
 				arc.alpha(alpha);

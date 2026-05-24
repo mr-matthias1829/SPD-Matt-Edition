@@ -42,16 +42,16 @@ public class SpiritualNecromancerSprite extends MobSprite {
 		texture( Assets.Sprites.NECRO2 );
 		TextureFilm film = new TextureFilm( texture, 16, 16 );
 		
-		idle = new Animation( 1, true );
+		idle = createAnimation("idle", 1, true);
 		idle.frames( film, 0, 0, 0, 1, 0, 0, 0, 0, 1 );
 		
-		run = new Animation( 8, true );
+		run = createAnimation("run", 8, true);
 		run.frames( film, 0, 0, 0, 2, 3, 4 );
 		
-		zap = new Animation( 10, false );
+		zap = createAnimation("zap", 10, false);
 		zap.frames( film, 5, 6, 7, 8 );
 		
-		charging = new Animation( 5, true );
+		charging = createAnimation("charging", 5, true);
 		charging.frames( film, 7, 8 );
 		
 		die = new Animation( 10, false );

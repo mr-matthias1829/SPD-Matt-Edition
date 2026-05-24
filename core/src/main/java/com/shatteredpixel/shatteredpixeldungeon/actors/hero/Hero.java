@@ -210,11 +210,12 @@ public class Hero extends Char {
         super();
 
         if (SPDSettings.cheatMode()){
-            HT = HP = 999030;
+            HT = HP = 999030; // + 30 base so we can still track what max hp we WOULD have
             baseHP = HT;
             STR = 25;
             cheating = true;
-            Badges.setBadgesDisabled(true);
+            lvl = MAX_LEVEL;
+            Badges.setBadgesDisabled(SPDSettings.cheatBadges());
             Dungeon.rankable = false;
         }
         else {

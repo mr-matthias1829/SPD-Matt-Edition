@@ -40,19 +40,19 @@ public class DM151Sprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 16, 14 );
 		
-		idle = new Animation( 1, true );
+		idle = createAnimation("idle", 1, true);
 		idle.frames( frames, 0, 1 );
 
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, 6, 7, 8, 9 );
 		
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 2, 3, 4, 0 );
 
-		zap = new Animation( 8, false );
+		zap = createAnimation("zap", 8, false);
 		zap.frames( frames, 5, 5, 1 );
 
-		die = new Animation( 12, false );
+		die = createAnimation("die", 12, false);
 		die.frames( frames, 10, 11, 12, 13, 14, 15 );
 		
 		play( idle );
@@ -72,9 +72,9 @@ public class DM151Sprite extends MobSprite {
 			origin.x += 1*scale.x;
 		}
 		if (enemy != null) {
-			parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100) ch));
+			parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100) ch, true));
 		} else {
-			parent.add(new Lightning(origin, pos, (DM100) ch));
+			parent.add(new Lightning(origin, pos, (DM100) ch, true));
 		}
 		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 		

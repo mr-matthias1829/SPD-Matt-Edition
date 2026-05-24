@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Ripple;
@@ -59,6 +55,7 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.ColorMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 
 public class SewerLevel extends RegularLevel {
 
@@ -75,13 +72,13 @@ public class SewerLevel extends RegularLevel {
 	public void playLevelMusic(){
 		if (Ghost.Quest.active() || Statistics.amuletObtained){
 			if (Statistics.amuletObtained && Dungeon.depth == 1){
-				Music.INSTANCE.play(Assets.Music.THEME_FINALE, true);
+				MusicAnnouncer.play(Assets.Music.THEME_FINALE, true);
 			} else {
-				Music.INSTANCE.play(Assets.Music.SEWERS_TENSE, true);
+				MusicAnnouncer.play(Assets.Music.SEWERS_TENSE, true);
 			}
 		} else {
-			Music.INSTANCE.playTracks(SEWER_TRACK_LIST, SEWER_TRACK_CHANCES, false);
-		}
+            MusicAnnouncer.playTracks(SEWER_TRACK_LIST, SEWER_TRACK_CHANCES, false);
+        }
 	}
 	
 	@Override

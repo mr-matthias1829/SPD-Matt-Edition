@@ -62,13 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.BArray;
-import com.watabou.utils.Bundlable;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.FileUtils;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
-import com.watabou.utils.SparseArray;
+import com.watabou.utils.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -252,17 +246,22 @@ public class Dungeon {
 		quickslot.reset();
 		QuickSlotButton.reset();
 		Toolbar.swappedQuickslots = false;
-		
-		depth = 14;
+
+        if (DeviceCompat.isDebug()) { // safeguard thats a bit unnecessary but guarantees safety
+                                    // for yall debug cheaters, yes this will even work outside of cheat mode
+            depth = SPDSettings.startFloor(); // mostly a debug thing, but returns 1 in normal play
+        } else {
+            depth = 1;
+        }
         lastEnteredDepth = depth;
 		branch = 0;
 		generatedLevels.clear();
 
-        // If matt ever decides to be stupid: uncomment these lines below, and start a new fresh game
-        // This will simply unlock all the bestiary and catalog entries, aka the important savedata for us for easy lookups
-        // If you read this and are not matt, then know that i am stupid and do things in even stupider ways
-       // Bestiary.unlockAllBestiary();
-       // Catalog.unlockAllCatalog();
+        // upon starting a new game, and if on debug, unlock all bestairy and catalog entries
+       if (DeviceCompat.isDebug()) {
+           Bestiary.unlockAllBestiary();
+           Catalog.unlockAllCatalog();
+       }
 
 		gold = 0;
 		energy = 0;
@@ -634,8 +633,8 @@ public class Dungeon {
 	}
 
 	public static boolean trinketCataNeeded(){
-		//one trinket catalyst on floors 1-3
-		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(4-depth) == 0;
+		//one trinket catalyst on floors 2-4
+		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(5-depth) == 0 && depth != 1;
 	}
 
 	public static boolean labRoomNeeded() {

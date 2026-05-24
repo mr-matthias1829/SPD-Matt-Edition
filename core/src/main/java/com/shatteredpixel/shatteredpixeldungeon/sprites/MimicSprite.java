@@ -52,22 +52,22 @@ public class MimicSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 
-		advancedHiding = new Animation( 1, true );
+		advancedHiding = createAnimation("advancedhiding", 1, true, false );
 		advancedHiding.frames( frames, 0+c);
 
-		hiding = new Animation( 1, true );
+		hiding = createAnimation( "hiding", 1, true, false ); // its a mob, but as hidden its a npc
 		hiding.frames( frames, 1+c, 1+c, 1+c, 1+c, 1+c, 2+c);
 
-		idle = new Animation( 5, true );
+        idle = createAnimation("idle", 5, true);
 		idle.frames( frames, 3+c, 3+c, 3+c, 4+c, 4+c );
 
-		run = new Animation( 10, true );
-		run.frames( frames, 3+c, 4+c, 5+c, 6+c, 6+c, 5+c, 4+c );
+        run = createAnimation("run", 10, true);
+        run.frames( frames, 3+c, 4+c, 5+c, 6+c, 6+c, 5+c, 4+c );
 
-		attack = new Animation( 10, false );
+        attack = createAnimation("attack", 10, false);
 		attack.frames( frames, 3+c, 7+c, 8+c, 9+c );
 
-		die = new Animation( 5, false );
+        die = createAnimation("die", 5, false);
 		die.frames( frames, 10+c, 11+c, 12+c );
 
 		play( idle );

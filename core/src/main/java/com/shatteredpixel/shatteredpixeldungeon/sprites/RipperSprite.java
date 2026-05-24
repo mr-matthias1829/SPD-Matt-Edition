@@ -41,25 +41,25 @@ public class RipperSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 15, 14 );
 
-		idle = new Animation( 4, true );
+		idle = createAnimation("idle", 4, true);
 		idle.frames( frames, 1, 0, 1, 2 );
 
-		run = new Animation( 15, true );
+		run = createAnimation("run", 15, true);
 		run.frames( frames, 3, 4, 5, 6, 7, 8 );
 
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 0, 9, 10, 9 );
 
-		stab = new Animation( 12, false );
+		stab = createAnimation("stab", 12, false);
 		stab.frames( frames, 0, 9, 11, 9 );
 
-		prep = new Animation( 1, true );
+		prep = createAnimation("prep", 1, true);
 		prep.frames( frames, 9 );
 
-		leap = new Animation( 1, true );
+		leap = createAnimation("leap", 1, true);
 		leap.frames( frames, 12 );
 
-		die = new Animation( 15, false );
+		die = createAnimation("die", 15, false);
 		die.frames( frames, 1, 13, 14, 15, 16 );
 
 		play( idle );

@@ -68,6 +68,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfExplosion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireball;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -104,6 +107,10 @@ public class ElementalBlast extends ArmorAbility {
 		effectTypes.put(WandOfTransfusion.class,    MagicMissile.BLOOD_CONE);
 		effectTypes.put(WandOfCorruption.class,     MagicMissile.SHADOW_CONE);
 		effectTypes.put(WandOfRegrowth.class,       MagicMissile.FOLIAGE_CONE);
+
+        effectTypes.put(WandOfExplosion.class, MagicMissile.FORCE_CONE);
+        effectTypes.put(WandOfFireball.class,  MagicMissile.FIRE_CONE);
+        effectTypes.put(WandOfElements.class,  MagicMissile.RAINBOW_CONE); // dominant visual
 	}
 
 	private static final HashMap<Class<?extends Wand>, Float> damageFactors = new HashMap<>();
@@ -121,6 +128,10 @@ public class ElementalBlast extends ArmorAbility {
 		damageFactors.put(WandOfTransfusion.class,      0f);
 		damageFactors.put(WandOfCorruption.class,       0f);
 		damageFactors.put(WandOfRegrowth.class,         0f);
+
+        damageFactors.put(WandOfExplosion.class, 1f);
+        damageFactors.put(WandOfFireball.class,  1f);
+        damageFactors.put(WandOfElements.class,  0.5f); // triple-effect, reduced damage
 	}
 
 	{
@@ -159,7 +170,14 @@ public class ElementalBlast extends ArmorAbility {
 			return;
 		}
 
-		int aoeSize = 4 + hero.pointsInTalent(Talent.BLAST_RADIUS);
+		int aoeSize;
+
+        // Large hero-centered blast for explosion-type wands
+        if (wandCls == WandOfExplosion.class || wandCls == WandOfFireball.class) {
+            aoeSize = 6; // effectively 13×13
+        } else {
+            aoeSize = 4 + hero.pointsInTalent(Talent.BLAST_RADIUS);
+        }
 
 		int projectileProps = Ballistica.STOP_SOLID | Ballistica.STOP_TARGET;
 
@@ -272,7 +290,9 @@ public class ElementalBlast extends ArmorAbility {
 									* effectMulti
 									* damageFactors.get(finalWandCls));
 
-							if (mob != null && damage > 0 && mob.alignment != Char.Alignment.ALLY){
+                            if (mob != null && damage > 0 && mob.alignment != Char.Alignment.ALLY
+                                    && !(mob == hero && (finalWandCls == WandOfExplosion.class
+                                    || finalWandCls == WandOfFireball.class))) {
 								mob.damage(damage, Reflection.newInstance(finalWandCls));
 								charsHit++;
 							}
@@ -377,10 +397,37 @@ public class ElementalBlast extends ArmorAbility {
 								//*** Wand of Regrowth ***
 								} else if (finalWandCls == WandOfRegrowth.class){
 									if (mob.alignment != Char.Alignment.ALLY) {
-										Buff.prolong( mob, Roots.class, effectMulti*Roots.DURATION );
-										charsHit++;
-									}
-								}
+                                        Buff.prolong(mob, Roots.class, effectMulti * Roots.DURATION);
+                                        charsHit++;
+                                    }
+
+                                    // *** Wand of Fireball ***
+                                } else if (finalWandCls == WandOfFireball.class) {
+                                    // fire only on cells where an enemy was actually standing
+                                    if (mob != null && mob.isAlive() && mob.alignment != Char.Alignment.ALLY) {
+                                        GameScene.add(Blob.seed(cell, 4, Fire.class));
+                                        Buff.affect(mob, Burning.class).reignite(mob);
+                                    }
+
+                                // *** Wand of Elements ***
+                                } else if (finalWandCls == WandOfElements.class) {
+                                    // cell effects: electricity in water, fire on flamable
+                                    if (Dungeon.level.water[cell]) {
+                                        GameScene.add(Blob.seed(cell, 2, Electricity.class));
+                                    }
+                                    if (Dungeon.level.flamable[cell]) {
+                                        GameScene.add(Blob.seed(cell, 2, Fire.class));
+                                    }
+
+                                    // char effects: all three elements at reduced potency
+                                    if (mob != null && mob.isAlive() && mob != hero
+                                            && mob.alignment != Char.Alignment.ALLY) {
+                                        Buff.affect(mob, Paralysis.class, effectMulti * 2f);          // lightning
+                                        Buff.affect(mob, Burning.class).reignite(mob);                 // fire
+                                        Buff.affect(mob, Frost.class, effectMulti * Frost.DURATION * 0.5f); // frost
+                                        charsHit++;
+                                    }
+                                }
 							}
 
 						}

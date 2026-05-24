@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
@@ -139,6 +140,50 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
         if (curAnim == null || curAnim != die) {
             super.play(anim);
         }
+    }
+
+    // this custom constructor exits to deal with overriding fps and such
+    // primitive and most used constructor
+    // by default: assume mob and no boss, this is the most common case
+    protected Animation createAnimation(String animType, int fps, boolean looped) {
+        return createAnimation(animType, fps, looped, true);
+    }
+    // case: heroes and npcs
+    protected Animation createAnimation(String animType, int fps, boolean looped, boolean mob){
+        return createAnimation(animType, fps, looped, mob, false);
+    }
+    // actual contructor. case: bosses and such
+    // some strange "mobs" like the lotus or pylon do not use this system as there's little reason to
+    // mini-bosses do not have true on the boss bool
+    protected Animation createAnimation(String animType, int fps, boolean looped, boolean mob, boolean boss) {
+        // note: its super annoying to change the animtype in the future, so they're set to their animation name
+        // this means that some very specific cases have their own unique id
+        // think like goo pump attack, being "pumpattack"
+        // this makes it rather annoying, but also allows for excellent control
+        float speed = SPDSettings.animSpeed();
+
+        if (!mob){ // likely a npc or hero
+            return new Animation(1 * fps, looped);
+        }
+
+        if (mob && speed > 1 &&
+                (animType.equals("attack")
+                        || animType.equals("zap")
+                        || animType.equals("operate")))
+        {
+            return new Animation((int) (1 * (fps * speed)), looped);
+        }
+
+        if (speed > 1 && boss &&
+                !animType.equals("idle") &&
+                !animType.equals("run") &&
+                !animType.equals("die"))
+        {
+            return new Animation((int) (1 * (fps * speed)), looped);
+        }
+
+        // default fps
+        return new Animation(1 * fps, looped);
     }
 
     //intended to be used for placing a character in the game world

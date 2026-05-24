@@ -62,18 +62,19 @@ public class GnollGeomancerSprite extends MobSprite {
 		TextureFilm frames = new TextureFilm( texture, 12, 16 );
 
 		int ofs = isStatue ? 21 : 0;
-		idle = new Animation( isStatue ? 1 : 2, true );
+		idle = createAnimation("idle", isStatue ? 1 : 2, true);
 		idle.frames( frames, ofs+0, ofs+0, ofs+0, ofs+1, ofs+0, ofs+0, ofs+1, ofs+1 );
 
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, ofs+4, ofs+5, ofs+6, ofs+7 );
 
-		attack = new Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, ofs+2, ofs+3, ofs+0 );
 
-		zap = attack.clone();
+		zap = createAnimation("zap", 12, false);
+		zap.frames( frames, ofs+2, ofs+3, ofs+0 );
 
-		die = new Animation( 12, false );
+		die = createAnimation("die", 12, false);
 		die.frames( frames, ofs+8, ofs+9, ofs+10 );
 
 		play(idle);

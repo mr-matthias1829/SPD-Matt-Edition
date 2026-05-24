@@ -59,19 +59,19 @@ public abstract class FistSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 24, 17 );
 
-		idle = new Animation( 2, true );
+		idle = createAnimation("idle", 2, true);
 		idle.frames( frames, c+0, c+0, c+1 );
 
-		run = new Animation( 3, true );
+		run = createAnimation("run", 3, true);
 		run.frames( frames, c+0, c+1 );
 
-		attack = new Animation( Math.round(1 / SLAM_TIME), false );
+		attack = createAnimation("attack", Math.round(1 / SLAM_TIME), false);
 		attack.frames( frames, c+0 );
 
-		zap = new Animation( 8, false );
+		zap = createAnimation("zap", 8, false);
 		zap.frames( frames, c+0, c+5, c+6 );
 
-		die = new Animation( 10, false );
+		die = createAnimation("die", 10, false);
 		die.frames( frames, c+0, c+2, c+3, c+4 );
 
 		play( idle );
@@ -132,7 +132,7 @@ public abstract class FistSprite extends MobSprite {
 					public void call() {
 						((YogFist)ch).onZapComplete();
 					}
-				} );
+				}, true );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 
@@ -269,7 +269,7 @@ public abstract class FistSprite extends MobSprite {
 			super.zap( cell, null );
 
 			((YogFist)ch).onZapComplete();
-			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell)));
+			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell), true));
 			Sample.INSTANCE.play( Assets.Sounds.RAY );
 		}
 		@Override

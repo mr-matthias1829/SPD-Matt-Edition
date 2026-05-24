@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
@@ -80,15 +77,15 @@ public class HallsBossLevel extends Level {
 	public void playLevelMusic() {
 		if (locked && BossHealthBar.isAssigned()){
 			if (BossHealthBar.isBleeding()){
-				Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
+				MusicAnnouncer.play(Assets.Music.HALLS_BOSS_FINALE, true);
 			} else {
-				Music.INSTANCE.play(Assets.Music.HALLS_BOSS, true);
+				MusicAnnouncer.play(Assets.Music.HALLS_BOSS, true);
 			}
 		//if exit isn't unlocked
 		} else if (map[exit()] != Terrain.EXIT || Statistics.amuletObtained){
-			Music.INSTANCE.end();
+			MusicAnnouncer.end();
 		} else {
-			Music.INSTANCE.playTracks(HallsLevel.HALLS_TRACK_LIST, HallsLevel.HALLS_TRACK_CHANCES, false);
+			MusicAnnouncer.playTracks(HallsLevel.HALLS_TRACK_LIST, HallsLevel.HALLS_TRACK_CHANCES, false);
 		}
 	}
 
@@ -311,10 +308,10 @@ public class HallsBossLevel extends Level {
 		Game.runOnRenderThread(new Callback() {
 			@Override
 			public void call() {
-				Music.INSTANCE.fadeOut(5f, new Callback() {
+				MusicAnnouncer.fadeOut(5f, new Callback() {
 					@Override
 					public void call() {
-						Music.INSTANCE.play(Assets.Music.THEME_FINALE, true);
+						MusicAnnouncer.play(Assets.Music.THEME_FINALE, true);
 					}
 				});
 			}

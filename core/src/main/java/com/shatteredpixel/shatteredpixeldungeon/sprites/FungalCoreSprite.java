@@ -36,18 +36,19 @@ public class FungalCoreSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 27, 27 );
 
-		idle = new Animation( 0, true );
+		idle = createAnimation("idle", 0, true);
 		idle.frames( frames, 0);
 
-		run = new Animation( 0, true );
+		run = createAnimation("run", 0, true);
 		run.frames( frames, 0);
 
-		attack = new Animation( 24, false );
+		attack = createAnimation("attack", 24, false);
 		attack.frames( frames, 0 );
 
-		zap = attack.clone();
+		zap = createAnimation("zap", 24, false);
+		zap.frames( frames, 0 );
 
-		die = new Animation( 12, false );
+		die = createAnimation("die", 12, false);
 		die.frames( frames, 0 );
 
 		play( idle );

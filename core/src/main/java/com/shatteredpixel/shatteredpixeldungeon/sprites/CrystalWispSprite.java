@@ -47,18 +47,19 @@ public abstract class CrystalWispSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 12, 14 );
 
-		idle = new Animation( 1, true );
+		idle = createAnimation("idle", 1, true);
 		idle.frames( frames, c+0 );
 
-		run = new Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, c+0, c+0, c+0, c+1 );
 
-		attack = new Animation( 16, false );
+		attack = createAnimation("attack", 16, false);
 		attack.frames( frames, c+2, c+3, c+4, c+5 );
 
-		zap = attack.clone();
+		zap = createAnimation("zap", 16, false);
+		zap.frames( frames, c+2, c+3, c+4, c+5 );
 
-		die = new Animation( 15, false );
+		die = createAnimation("die", 15, false);
 		die.frames( frames, c+6, c+7, c+8, c+9, c+10, c+11, c+12, c+11 );
 
 		play( idle );
@@ -73,7 +74,7 @@ public abstract class CrystalWispSprite extends MobSprite {
 			public void onComplete() {
 				light.alpha(0.3f);
 				((CrystalWisp)ch).onZapComplete();
-				Beam ray = new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell));
+				Beam ray = new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell), true);
 				Sample.INSTANCE.play( Assets.Sounds.RAY );
 				ray.hardlight(blood() & 0x00FFFFFF);
 				parent.add( ray );

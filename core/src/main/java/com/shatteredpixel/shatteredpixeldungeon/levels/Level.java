@@ -193,6 +193,12 @@ public abstract class Level implements Bundlable {
 	public int color1 = 0x004400;
 	public int color2 = 0x88CC44;
 
+    public boolean canSpawnItems = true; // bool for spawning anything at all
+    public boolean canSpawnGurItems = true; // bool for spawning items that are normally guaranteed (SOU, POS, etc)
+    public boolean canSpawnFood = true; // bool for rations each floor, very essential to have seperated
+    public int additionalItemsToSpawn = 0; // some levels we might want extra loot
+    public boolean canFeeling = true; // bool for whether this level can have a feeling
+
 	private static final String VERSION     = "version";
 	private static final String WIDTH       = "width";
 	private static final String HEIGHT      = "height";
@@ -209,96 +215,103 @@ public abstract class Level implements Bundlable {
 	private static final String MOBS		= "mobs";
 	private static final String BLOBS		= "blobs";
 	private static final String FEELING		= "feeling";
-
 	public void create() {
 
 		Random.pushGenerator( Dungeon.seedCurDepth() );
 
 		//TODO maybe just make this part of RegularLevel?
-		if (!Dungeon.bossLevel() && Dungeon.branch != 1) {
+		if (!Dungeon.bossLevel() && Dungeon.branch != 1 && canSpawnItems) {
 
-			addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
-			if (Dungeon.posNeeded()) {
-				Dungeon.LimitedDrops.STRENGTH_POTIONS.count++;
-				addItemToSpawn( new PotionOfStrength() );
-			}
-			if (Dungeon.souNeeded()) {
-				Dungeon.LimitedDrops.UPGRADE_SCROLLS.count++;
-				//every 2nd scroll of upgrade is removed with forbidden runes challenge on
-				//TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
-				//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
-				//or give a random scroll (from a separate RNG) instead of every 2nd SOU
-				if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count%2 != 0){
-					addItemToSpawn(new ScrollOfUpgrade());
-				}
-			}
-            if (Dungeon.msouNeeded()) {
-                Dungeon.LimitedDrops.MAGIC_UPGRADE_SCROLLS.count++;
-                //every 2nd scroll of upgrade is removed with forbidden runes challenge on
-                //TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
-                //for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
-                //or give a random scroll (from a separate RNG) instead of every 2nd SOU
-                if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.MAGIC_UPGRADE_SCROLLS.count%2 != 0){
-                    addItemToSpawn(new ScrollOfMagicUpgrade());
+            if (canSpawnFood) {
+                addItemToSpawn(Generator.random(Generator.Category.FOOD));
+            }
+            if (canSpawnGurItems) {
+
+                if (Dungeon.posNeeded()) {
+                    Dungeon.LimitedDrops.STRENGTH_POTIONS.count++;
+                    addItemToSpawn(new PotionOfStrength());
+                }
+                if (Dungeon.souNeeded()) {
+                    Dungeon.LimitedDrops.UPGRADE_SCROLLS.count++;
+                    //every 2nd scroll of upgrade is removed with forbidden runes challenge on
+                    //TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
+                    //for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
+                    //or give a random scroll (from a separate RNG) instead of every 2nd SOU
+                    if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count % 2 != 0) {
+                        addItemToSpawn(new ScrollOfUpgrade());
+                    }
+                }
+                if (Dungeon.msouNeeded()) {
+                    Dungeon.LimitedDrops.MAGIC_UPGRADE_SCROLLS.count++;
+                    //every 2nd scroll of upgrade is removed with forbidden runes challenge on
+                    //TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
+                    //for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
+                    //or give a random scroll (from a separate RNG) instead of every 2nd SOU
+                    if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.MAGIC_UPGRADE_SCROLLS.count % 2 != 0) {
+                        addItemToSpawn(new ScrollOfMagicUpgrade());
+                    }
+                }
+                if (Dungeon.asNeeded()) {
+                    Dungeon.LimitedDrops.ARCANE_STYLI.count++;
+                    addItemToSpawn(new Stylus());
+                }
+                if (Dungeon.enchStoneNeeded()) {
+                    Dungeon.LimitedDrops.ENCH_STONE.drop();
+                    addItemToSpawn(new StoneOfEnchantment());
+                }
+                if (Dungeon.intStoneNeeded()) {
+                    Dungeon.LimitedDrops.INT_STONE.drop();
+                    addItemToSpawn(new StoneOfIntuition());
+                }
+                if (Dungeon.trinketCataNeeded()) {
+                    Dungeon.LimitedDrops.TRINKET_CATA.drop();
+                    addItemToSpawn(new TrinketCatalyst());
                 }
             }
-			if (Dungeon.asNeeded()) {
-				Dungeon.LimitedDrops.ARCANE_STYLI.count++;
-				addItemToSpawn( new Stylus() );
-			}
-			if ( Dungeon.enchStoneNeeded() ){
-				Dungeon.LimitedDrops.ENCH_STONE.drop();
-				addItemToSpawn( new StoneOfEnchantment() );
-			}
-			if ( Dungeon.intStoneNeeded() ){
-				Dungeon.LimitedDrops.INT_STONE.drop();
-				addItemToSpawn( new StoneOfIntuition() );
-			}
-			if ( Dungeon.trinketCataNeeded() ){
-				Dungeon.LimitedDrops.TRINKET_CATA.drop();
-				addItemToSpawn( new TrinketCatalyst());
-			}
 
 
 			if (Dungeon.depth > 1) {
 				//50% chance of getting a level feeling
 				//~7.15% chance for each feeling
-
-				switch (Random.Int( 14 )) {
-					case 0:
-						feeling = Feeling.CHASM;
-						break;
-					case 1:
-						feeling = Feeling.WATER;
-						break;
-					case 2:
-						feeling = Feeling.GRASS;
-						break;
-					case 3:
-						feeling = Feeling.DARK;
-						viewDistance = Math.round(5*viewDistance/8f);
-						break;
-					case 4:
-						feeling = Feeling.LARGE;
-						addItemToSpawn(Generator.random(Generator.Category.FOOD));
-						break;
-					case 5:
-						feeling = Feeling.TRAPS;
-						break;
-					case 6:
-						feeling = Feeling.SECRETS;
-						break;
-					default:
-						//if-else statements are fine here as only one chance can be above 0 at a time
-						if (Random.Float() < MossyClump.overrideNormalLevelChance()){
-							feeling = MossyClump.getNextFeeling();
-						} else if (Random.Float() < TrapMechanism.overrideNormalLevelChance()) {
-							feeling = TrapMechanism.getNextFeeling();
-						} else {
-							feeling = Feeling.NONE;
-						}
-				}
+                if (canFeeling) {
+                    switch (Random.Int(14)) {
+                        case 0:
+                            feeling = Feeling.CHASM;
+                            break;
+                        case 1:
+                            feeling = Feeling.WATER;
+                            break;
+                        case 2:
+                            feeling = Feeling.GRASS;
+                            break;
+                        case 3:
+                            feeling = Feeling.DARK;
+                            viewDistance = Math.round(5 * viewDistance / 8f);
+                            break;
+                        case 4:
+                            feeling = Feeling.LARGE;
+                            addItemToSpawn(Generator.random(Generator.Category.FOOD));
+                            break;
+                        case 5:
+                            feeling = Feeling.TRAPS;
+                            break;
+                        case 6:
+                            feeling = Feeling.SECRETS;
+                            break;
+                        default:
+                            //if-else statements are fine here as only one chance can be above 0 at a time
+                            if (Random.Float() < MossyClump.overrideNormalLevelChance()) {
+                                feeling = MossyClump.getNextFeeling();
+                            } else if (Random.Float() < TrapMechanism.overrideNormalLevelChance()) {
+                                feeling = TrapMechanism.getNextFeeling();
+                            } else {
+                                feeling = Feeling.NONE;
+                            }
+                    }
+                } else {
+                    feeling = Feeling.NONE; // no feeling if cant get one
+                }
 			}
 		}
 		

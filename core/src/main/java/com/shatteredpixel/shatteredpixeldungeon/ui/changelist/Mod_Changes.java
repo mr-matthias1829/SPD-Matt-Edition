@@ -44,7 +44,7 @@ public class Mod_Changes {
                         "2. all armor tiers now have a higher base max DR\n" +
                         "3. removed the global -7% damage nerf to all melee weapons, it's instead applied to missile weapons now and increased to -10%\n" +
                         "4. the tier based nerfs for weapons have been significantly reduced, melee's gain a 5% more damage boost overall\n" +
-                        "5. increased energy cost for creating the wand of elements through alchemy (21 ->36)\n" +
+                        "5. increased energy cost for creating the wand of elements through alchemy (21 -> 30)\n" +
                         "6. glyph of antimagic has a much better chance to proc, but less effect now\n" +
                         "7. glyph of thorns now has less chance to proc\n" +
                         "8. "
@@ -111,7 +111,7 @@ public class Mod_Changes {
                         "\n_Caves:_\n" +
                         "1. fetid rat (caves) now has a max level cap instead of giving xp forever\n" +
                         "2. gnoll trickster (caves) now has a max level cap instead of giving xp forever, loot chance reduced (18% -> 8%)\n" +
-                        "3. elder gnoll hp increased (16 -> 30)\n" +
+                        "3. elder gnoll hp increased (16 -> 30), reworked behavior ai to be better at fleeing and can now wander around like any other mob\n" +
 
                         "\n_Ice Caves:_\n" +
                         "1. dm100f\n" +
@@ -152,7 +152,12 @@ public class Mod_Changes {
                         "6. removed the 'unused enemies' tab in the enemy bestiary. They still exist, but will be properly added when their time comes\n" +
                         "7. updated some guidebook pages to be somewhat more up to date\n" +
                         "8. readded the option to input a generation seed\n" +
-                        "9. changed elder gnoll sprite slightly\n"
+                        "9. changed elder gnoll sprite slightly\n" +
+                        "10. moved ice caves enemies into the new 'branching' sort\n" +
+                        "11. added the new misc settings tab, which will have some settings that don't fit in the other tabs\n" +
+                        "12. added a new setting that speeds up enemy combat related animations up to 4 times their speed. Please use this, it took me like 6+ hours to properly make this.\n" +
+                        "13. if the music ever changes in-game, it's now announced in the game log with the name of the track and it's source or creator\n" +
+                        "14. added a new tab in the alchemy guide for equipment crafting\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_COLOR), "Challenges and sins",
@@ -169,15 +174,18 @@ public class Mod_Changes {
                         "1. the peasant now starts with cloth armor as the only hero, but lacks strength to use it\n" +
                         "2. the warrior needs less enemies defeated in one game to be unlocked (75 -> 30)\n" +
                         "3. levitation buff default duration is now the same as other buffs (30 -> 20)\n" +
-                        "4. rare enemies spawn chance reduced, becoming twice as rare (1/20 -> 1/40)"
+                        "4. rare enemies spawn chance reduced, becoming twice as rare (1/20 -> 1/40)\n" +
+                        "5. alchemy guide pages now drop in a more customized order and some now have a minimum region to appear in\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Generation and traps",
                 "_Changes:_\n" +
                         "1. ice caves floor now has different odds for it's traps, hopefully offering a bit more variety\n" +
                         "2. ice caves floor now has its generation adjusted and generates a bit smaller on floor 14\n" +
-                        "3. ice caves now stretches down from floor 14 to floor 18 on it's branch\n" +
-                        "4. fixed issues with exits/entrances overlapping (including for blacksmith) and some generation generating the wrong types of level\n"
+                        "3. ice caves now has a optional path stretching down from floor 14 to floor 18\n" +
+                        "4. fixed issues with exits/entrances overlapping (including for blacksmith) and some generation generating the wrong types of level\n" +
+                        "5. catalysts floors to spawn on changed (1-3 -> 2-4)\n" +
+                        "6. ice caves no longer generates essential items (scrolls of upgrade, potions of strength, etc)\n"
 
         ));
 
@@ -234,7 +242,10 @@ public class Mod_Changes {
                         // arrow sign = reference to the roblox game "super cube cavern", where in it's shops the "helpful arrow" can be bought and used. in that game it's a unusual weapon, and in here it's too.
                         "4. the blacksmith has a new option for you to spend favor on: extract. this will destroy the item, but give you half of their upgrades as scrolls\n" +
                         "5. the blacksmith has a new option for you to spend favor on: liquidize. this will destroy the item, but give you some favor in return, can only be done once per run. max favor (3000 -> 3800)\n" +
-                        "6. added a new curse for both weapons and armor: the curse of binding. this curse has no effect on it's own, but can't be removed using scrolls of upgrade\n"
+                        "6. added a new curse for both weapons and armor: the curse of binding. this curse has no effect on it's own, but can't be removed using scrolls of upgrade\n" +
+                        "7. the ice caves now has a additional optional path. a new enemy spawns in said path, the ice golem\n" +
+                        "8. reworked wand of elements to be much less random and added a battlemage effect to it\n" +
+                        "9. added wand of explosion, and wand of fireball. fireball is made in alchemy while explosion can be found in the dungeon\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.INFO), "Notes",
@@ -260,6 +271,19 @@ public class Mod_Changes {
                         "4. as for language, I removed them all except english. reason being that existing languages would continue using old information and was just very inconvenient to maintain\n"
                 ));
 
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Dev and debug changes",
+                "_NOTE:_ these changes _ONLY_ matter to those using a debug version of the game or working with the code\n" +
+                "\n_Changes:_\n" +
+                        "1. in the code, theres some new methods and variables to use in level classes for a better config of generation, usage can be seen in ice caves class.\n" + // still lacks documentation because im lazy, but also lacks support for overriding splash screens
+                        "2. running debug now automatically unlocks the full catalog and bestiary (upon starting a run that is). note that this will unlock it on your savefile and not just for debug\n" +
+                        "3. added new optional parameters for entrance and exit transitions, allowing you to specify custom id's for them, granting significantly more control over them. usage can be seen in ice caves and blacksmith quest levels and (exit/entrance) rooms\n" +
+                        "4. removed duplicate entries for cheat mode setting for debug. it can now only be found in the new misc settings\n" + // in the future, likely make a special misc settings tab for cases like these
+                        "5. some weird or unclean code i have created now has some comments explaining why it is as it is or a TODO on how to fix it. in the future i will likely clean them up myself\n" +
+                        "6. so you know enemy sprites? 99% of them use a new constructor now. some effects also had their constructors changed. both went towards making animation speeds faster and is rather... unclean, but working\n" +
+                        "7. added some more debug settings to make testing a handful easier. includes: slider that determines what floor you start on, and a toggle for enabling badges during cheat mode (default is false). cheat mode will now also start with many of the most useful consumables in their inventory.\n" +
+                        "8. added a new document to the document folders with a list of custom constructors and variables for constructors. mainly to serve as a list to reference to. make sure to follow it if merging versions from upstream vanilla spd. the doc will be expanded on if any more is added\n"
+        ));
+
 
 
         // ===== v1300 and up =====
@@ -274,7 +298,7 @@ public class Mod_Changes {
                         "1. DM300 hp increased (300:400 -> 400:500)\n" +
                         "2. DM300 has a new attack, allowing them to move a tile and break walls. Has a chance to happen if the hero is unreachable\n" +
                         "3. DM300 now shoots one of four random gasses. dangerous gasses become more common the lower their hp is\n" +
-                        "4. updated floor 15 tile sprites to match the ice pallette\n" +
+                        "4. updated floor 15 tile sprites to match the ice palette\n" +
                         "5. updated to vanilla 3.3.8\n"
         ));
 

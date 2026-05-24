@@ -133,7 +133,7 @@ public class HolyLance extends TargetedClericSpell {
 									onSpellCast(tome, hero);
 									FlavourBuff.affect(hero, LanceCooldown.class, 30f);
 								}
-							});
+							}, false);
 		} else {
 			((MissileSprite) hero.sprite.parent.recycle(MissileSprite.class)).
 					reset(hero.sprite,
@@ -148,7 +148,7 @@ public class HolyLance extends TargetedClericSpell {
 									onSpellCast(tome, hero);
 									FlavourBuff.affect(hero, LanceCooldown.class, 30f);
 								}
-							});
+							}, false);
 		}
 
 	}

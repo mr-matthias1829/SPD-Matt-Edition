@@ -62,7 +62,7 @@ public class Shocking extends Weapon.Enchantment {
 				}
 			}
 
-			attacker.sprite.parent.addToFront( new Lightning( arcs, null ) );
+			attacker.sprite.parent.addToFront( new Lightning( arcs, null, false ) );
 			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 			
 		}

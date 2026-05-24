@@ -41,13 +41,13 @@ public class BlacksmithSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 13, 16 );
 		
-		idle = new Animation( 15, true );
+		idle = createAnimation("idle", 15, true, false);
 		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 3 );
 		
-		run = new Animation( 20, true );
+		run = createAnimation("run", 20, true, false);
 		run.frames( frames, 0 );
 		
-		die = new Animation( 20, false );
+		die = createAnimation("die", 20, false, false);
 		die.frames( frames, 0 );
 		
 		play( idle );

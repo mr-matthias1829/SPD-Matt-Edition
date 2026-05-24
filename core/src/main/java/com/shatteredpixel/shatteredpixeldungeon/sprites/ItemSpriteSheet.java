@@ -411,6 +411,7 @@ public class ItemSpriteSheet {
     public static final int WAND_WARDING        = WANDS+10;
     public static final int WAND_REGROWTH       = WANDS+11;
     public static final int WAND_TRANSFUSION    = WANDS+12;
+    public static final int WAND_EXPLOSION      = WANDS+13;
     static {
         for (int i = WANDS; i < WANDS+16; i++)
             assignItemRect(i, 14, 14);
@@ -820,8 +821,11 @@ public class ItemSpriteSheet {
     public static final int GLOCK = MOD+2;
     public static final int GLOCK_BULLET = MOD+3;
     public static final int WAND_OF_ELEMENTS = MOD+4;
+    public static final int WAND_OF_FIREBALL = MOD+5;
     static{
         assignItemRect(GLOCK_BULLET,11, 11);
+        assignItemRect(WAND_OF_FIREBALL,14, 14);
+        assignItemRect(WAND_OF_ELEMENTS,15, 15);
     }
 
 

@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -89,9 +90,9 @@ public class CityLevel extends RegularLevel {
 	@Override
 	public void playLevelMusic() {
 		if (Statistics.amuletObtained){
-			Music.INSTANCE.play(Assets.Music.CITY_TENSE, true);
+			MusicAnnouncer.play(Assets.Music.CITY_TENSE, true);
 		} else {
-			Music.INSTANCE.playTracks(CITY_TRACK_LIST, CITY_TRACK_CHANCES, false);
+			MusicAnnouncer.playTracks(CITY_TRACK_LIST, CITY_TRACK_CHANCES, false);
 		}
 	}
 

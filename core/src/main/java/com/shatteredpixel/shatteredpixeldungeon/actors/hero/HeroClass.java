@@ -105,40 +105,39 @@ public enum HeroClass {
             }
         }
 
-		Item i = new ClothArmor().identify();
+		Item i = new ClothArmor().identify(); // not all heroes start with armor unlike vanilla
 		//if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;
 
 
 
-        /* man i love cheating (i use this to more easily test stuff, dont mind meeeee)
-        */
-        Quarterstaff staff = new Quarterstaff();
-        staff.identify().collect();
-
-        ClothArmor a = new ClothArmor();
-        a.identify().collect();
+        // man i love cheating!
+        if (SPDSettings.cheatMode()) {
+            ClothArmor a = new ClothArmor();
+            a.identify().collect();
 
         /*
         SpearAmethystPiercer UW = new SpearAmethystPiercer();
         UW.identify().collect();
          */
 
-        new Glock().identify().collect();
-        new WandOfElements().identify().collect();
+            //new Glock().identify().collect();
+            //new WandOfElements().identify().collect();
+            //new WandOfFireblast().identify().collect();
+            //new WandOfExplosion().identify().collect();
 
-        for (int s = 2; s < 100; s++) {
-            new ScrollOfUpgrade().identify().collect();
-            new ScrollOfMagicUpgrade().identify().collect();
-            new PotionOfStrength().identify().collect();
-            new PotionOfExperience().identify().collect();
-            new ScrollOfMagicMapping().identify().collect();
-            new PotionOfMindVision().identify().collect();
-            new ScrollOfDivination().identify().collect();
-            new PotionOfHealing().identify().collect();
-            new PotionOfLevitation().identify().collect();
+            new TengusMask().collect();
+            for (int s = 2; s < 100; s++) {
+                new ScrollOfUpgrade().identify().collect();
+                new ScrollOfMagicUpgrade().identify().collect();
+                new PotionOfStrength().identify().collect();
+                //new PotionOfExperience().identify().collect();
+                new ScrollOfMagicMapping().identify().collect();
+                new PotionOfMindVision().identify().collect();
+                //new ScrollOfDivination().identify().collect();
+                new PotionOfHealing().identify().collect();
+                new PotionOfLevitation().identify().collect();
+            }
         }
-        /*
-        */
 
 
 

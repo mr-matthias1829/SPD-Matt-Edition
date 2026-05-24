@@ -36,17 +36,17 @@ public class YogSprite extends MobSprite {
 		texture( Assets.Sprites.YOG );
 		
 		TextureFilm frames = new TextureFilm( texture, 20, 19 );
-		
-		idle = new Animation( 10, true );
+
+        idle = createAnimation("idle", 10, true, true, true);
 		idle.frames( frames, 0, 1, 2, 2, 1, 0, 3, 4, 4, 3, 0, 5, 6, 6, 5 );
-		
-		run = new Animation( 12, true );
+
+        run = createAnimation("run", 12, true, true, true);
 		run.frames( frames, 0 );
-		
-		attack = new Animation( 12, false );
+
+        attack = createAnimation("attack", 12, false, true, true);
 		attack.frames( frames, 0 );
-		
-		die = new Animation( 10, false );
+
+        die = createAnimation("die", 10, false, true, true);
 		die.frames( frames, 0, 7, 8, 9 );
 		
 		play( idle );

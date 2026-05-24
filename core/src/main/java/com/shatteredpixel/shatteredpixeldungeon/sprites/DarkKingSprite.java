@@ -33,16 +33,16 @@ public class DarkKingSprite extends MobSprite {
 		
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
-		idle = new Animation( 12, true );
+		idle = createAnimation("idle", 12, true, true, true);
 		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2 );
 		
-		run = new Animation( 15, true );
+		run = createAnimation("run", 15, true, true, true);
 		run.frames( frames, 3, 4, 5, 6, 7, 8 );
 		
-		attack = new Animation( 15, false );
+		attack = createAnimation("attack", 15, false, true, true);
 		attack.frames( frames, 9, 10, 11 );
 		
-		die = new Animation( 8, false );
+		die = createAnimation("die", 8, false, true, true);
 		die.frames( frames, 12, 13, 14, 15 );
 		
 		play( idle );

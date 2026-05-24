@@ -22,11 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
@@ -362,7 +358,7 @@ public class DwarfKing extends Mob {
 			Buff.append(furthest, LifeLink.class, 100f).object = id();
 			Buff.append(this, LifeLink.class, 100f).object = furthest.id();
 			yell(Messages.get(this, "lifelink_" + Random.IntRange(1, 2)));
-			sprite.parent.add(new Beam.HealthRay(sprite.destinationCenter(), furthest.sprite.destinationCenter()));
+			sprite.parent.add(new Beam.HealthRay(sprite.destinationCenter(), furthest.sprite.destinationCenter(), true));
 			Sample.INSTANCE.play( Assets.Sounds.RAY );
 			return true;
 
@@ -522,10 +518,10 @@ public class DwarfKing extends Mob {
 			Game.runOnRenderThread(new Callback() {
 				@Override
 				public void call() {
-					Music.INSTANCE.fadeOut(0.5f, new Callback() {
+					MusicAnnouncer.fadeOut(0.5f, new Callback() {
 						@Override
 						public void call() {
-							Music.INSTANCE.play(Assets.Music.CITY_BOSS_FINALE, true);
+							MusicAnnouncer.play(Assets.Music.CITY_BOSS_FINALE, true);
 						}
 					});
 				}

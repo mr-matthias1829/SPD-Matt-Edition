@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyLance;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -53,29 +54,29 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	
 	private Callback callback;
 	
-	public void reset( int from, int to, Item item, Callback listener ) {
+	public void reset( int from, int to, Item item, Callback listener, boolean isMob ) {
 		reset(Dungeon.level.solid[from] ? DungeonTilemap.raisedTileCenterToWorld(from) : DungeonTilemap.raisedTileCenterToWorld(from),
 				Dungeon.level.solid[to] ? DungeonTilemap.raisedTileCenterToWorld(to) : DungeonTilemap.raisedTileCenterToWorld(to),
-				item, listener);
+				item, listener, isMob );
 	}
 
-	public void reset( Visual from, int to, Item item, Callback listener ) {
+	public void reset( Visual from, int to, Item item, Callback listener, boolean isMob ) {
 		reset(from.center(),
 				Dungeon.level.solid[to] ? DungeonTilemap.raisedTileCenterToWorld(to) : DungeonTilemap.raisedTileCenterToWorld(to),
-				item, listener );
+				item, listener, isMob );
 	}
 
-	public void reset( int from, Visual to, Item item, Callback listener ) {
+	public void reset( int from, Visual to, Item item, Callback listener, boolean isMob ) {
 		reset(Dungeon.level.solid[from] ? DungeonTilemap.raisedTileCenterToWorld(from) : DungeonTilemap.raisedTileCenterToWorld(from),
 				to.center(),
-				item, listener );
+				item, listener, isMob );
 	}
 
-	public void reset( Visual from, Visual to, Item item, Callback listener ) {
-		reset(from.center(), to.center(), item, listener );
+	public void reset( Visual from, Visual to, Item item, Callback listener, boolean isMob ) {
+		reset(from.center(), to.center(), item, listener, isMob );
 	}
 
-	public void reset( PointF from, PointF to, Item item, Callback listener) {
+	public void reset( PointF from, PointF to, Item item, Callback listener, boolean isMob ) {
 		revive();
 
 		if (item == null)   view(0, null);
@@ -84,7 +85,8 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		setup( from,
 				to,
 				item,
-				listener );
+				listener,
+                isMob );
 	}
 	
 	private static final int DEFAULT_ANGULAR_SPEED = 720;
@@ -116,7 +118,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	}
 
 	//TODO it might be nice to have a source and destination angle, to improve thrown weapon visuals
-	private void setup( PointF from, PointF to, Item item, Callback listener ){
+	private void setup( PointF from, PointF to, Item item, Callback listener, boolean isMob ){
 
 		originToCenter();
 
@@ -159,8 +161,15 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 			flipHorizontal = false;
 			updateFrame();
 		}
-		
-		float speed = SPEED;
+
+        float speed;
+        if (isMob) {
+            speed = (float) (SPEED * (Math.max(SPDSettings.animSpeed() / 1.5, 1)));
+        } else {
+            speed = SPEED;
+        }
+
+
 		if (item instanceof Dart
 				&& (Dungeon.hero.belongings.weapon() instanceof Crossbow
 				|| Dungeon.hero.belongings.secondWep() instanceof Crossbow)){

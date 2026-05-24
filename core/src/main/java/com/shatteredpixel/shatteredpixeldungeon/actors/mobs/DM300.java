@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -580,10 +576,10 @@ public class DM300 extends Mob {
             Game.runOnRenderThread(new Callback() {
                 @Override
                 public void call() {
-                    Music.INSTANCE.fadeOut(0.5f, new Callback() {
+                    MusicAnnouncer.fadeOut(0.5f, new Callback() {
                         @Override
                         public void call() {
-                            Music.INSTANCE.play(Assets.Music.CAVES_BOSS_FINALE, true);
+                            MusicAnnouncer.play(Assets.Music.CAVES_BOSS_FINALE, true);
                         }
                     });
                 }

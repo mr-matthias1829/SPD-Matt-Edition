@@ -41,18 +41,19 @@ public class GnollTricksterSprite extends MobSprite {
 
 		int c = 42;
 
-		idle = new MovieClip.Animation( 2, true );
+		idle = createAnimation("idle", 2, true);
 		idle.frames( frames, 0+c, 0+c, 0+c, 1+c, 0+c, 0+c, 1+c, 1+c );
 
-		run = new MovieClip.Animation( 12, true );
+		run = createAnimation("run", 12, true);
 		run.frames( frames, 4+c, 5+c, 6+c, 7+c );
 
-		attack = new MovieClip.Animation( 12, false );
+		attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 2+c, 3+c, 0+c );
 
-		cast = attack.clone();
+		cast = createAnimation("cast", 12, false);
+		cast.frames( frames, 2+c, 3+c, 0+c );
 
-		die = new Animation( 12, false );
+		die = createAnimation("die", 12, false);
 		die.frames( frames, 8+c, 9+c, 10+c );
 
 		play( idle );
@@ -68,7 +69,7 @@ public class GnollTricksterSprite extends MobSprite {
 						public void call() {
 							ch.onAttackComplete();
 						}
-					} );
+					}, true );
 
 			play( cast );
 			turnTo( ch.pos , cell );

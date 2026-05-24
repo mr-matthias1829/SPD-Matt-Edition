@@ -69,7 +69,7 @@ public class BattleAxeStormbringer extends BlacksmithWeapon {
 
             // only fire if something was actually hit by the ricochet
             if (arcs.size() > 0) {
-                attacker.sprite.parent.addToFront(new Lightning(arcs, null));
+                attacker.sprite.parent.addToFront(new Lightning(arcs, null, false));
                 Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
             }
         }
