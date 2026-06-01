@@ -30,13 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
-import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
-import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
+import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
@@ -295,6 +289,12 @@ public class ShopRoom extends SpecialRoom {
         }
 		if (Dungeon.depth != 6) {
             itemsToSpawn.add(TippedDart.randomTipped(2));
+
+            int amount = Random.IntRange(2, 6);
+            itemsToSpawn.add( new ThrowingChains().quantity(amount));
+            if (Random.Float() <= 0.4f && amount <= 3) { // 40% for more chains if amount is low, max of 6 chains per shop
+                itemsToSpawn.add( new ThrowingChains().quantity(amount));
+            }
         }
 
 		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));

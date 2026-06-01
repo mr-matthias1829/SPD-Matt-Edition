@@ -819,6 +819,7 @@ public class ItemSpriteSheet {
 
     private static final int MOD =                                   xy(1, 34);  //16 slots
     public static final int OLD_FISHING_ROD  = MOD+0;
+    public static final int CHAINS = MOD+0;
     public static final int FISHING_ROD  = MOD+1;
 
     // Guns in spd??? Man we have gotten to a new low...

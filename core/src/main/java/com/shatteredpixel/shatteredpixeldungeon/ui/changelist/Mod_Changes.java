@@ -292,7 +292,8 @@ public class Mod_Changes {
                         "7. the ice caves now has a additional optional path. a new enemy spawns in said path, the ice golem. at the end of the path, a new unique rewards awaits you\n" +
                         "8. reworked wand of elements to be much less random and added a battlemage effect to it\n" +
                         "9. added wand of explosion, and wand of fireball. fireball is made in alchemy while explosion can be found in the dungeon\n" +
-                        "10 reworked augments in the background\n"
+                        "10. reworked augments to be more versatile and added icy core\n" +
+                        "11. added throwing chains, a weaker consumable version of the ethereal chains, purchasable in shops starting from the caves\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.INFO), "Notes",

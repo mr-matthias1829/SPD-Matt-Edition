@@ -135,6 +135,7 @@ public enum HeroClass {
 
             new TengusMask().collect();
             for (int s = 2; s < 100; s++) {
+                new ThrowingChains().collect();
                 new IcyCore().collect();
                 new StoneOfAugmentation().collect();
                 new ScrollOfUpgrade().identify().collect();
