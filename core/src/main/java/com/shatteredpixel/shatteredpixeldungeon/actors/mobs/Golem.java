@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
@@ -42,7 +46,7 @@ public class Golem extends Mob {
 	{
 		spriteClass = GolemSprite.class;
 		
-		HP = HT = 120;
+		HP = HT = 75;
 		defenseSkill = 15;
 		
 		EXP = 12;
@@ -60,7 +64,7 @@ public class Golem extends Mob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 25, 30 );
+		return Random.NormalIntRange( 12, 20 );
 	}
 	
 	@Override
@@ -70,7 +74,7 @@ public class Golem extends Mob {
 	
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 12);
+		return super.drRoll() + Random.NormalIntRange(0, 5);
 	}
 
 	@Override
@@ -128,7 +132,7 @@ public class Golem extends Mob {
 			((GolemSprite)sprite).teleParticles(false);
 			if (Actor.findChar(target) == null && Dungeon.level.openSpace[target]) {
 				ScrollOfTeleportation.appear(this, target);
-				selfTeleCooldown = 30;
+				selfTeleCooldown = 15;
 			} else {
 				target = Dungeon.level.randomDestination(this);
 			}
@@ -217,7 +221,7 @@ public class Golem extends Mob {
 
 				int oldPos = pos;
 
-				if (distance(enemy) >= 1 && Random.Int(100/distance(enemy)) == 0
+				if (distance(enemy) >= 1 && Random.Int(50/distance(enemy)) == 0
 						&& !Char.hasProp(enemy, Property.IMMOVABLE) && canTele(target)){
 					if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 						sprite.zap( enemy.pos );

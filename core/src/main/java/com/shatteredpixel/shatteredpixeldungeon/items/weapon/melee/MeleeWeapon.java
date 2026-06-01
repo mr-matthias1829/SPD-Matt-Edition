@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
@@ -42,6 +46,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.DamageAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.NoWeaponAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.SpeedAugment;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -326,14 +333,18 @@ public class MeleeWeapon extends Weapon {
         String statsInfo = statsInfo();
         if (!statsInfo.equals("")) info += "\n\n" + statsInfo;
 
-        switch (augment) {
-            case SPEED:
-                info += " " + Messages.get(Weapon.class, "faster");
-                break;
-            case DAMAGE:
-                info += " " + Messages.get(Weapon.class, "stronger");
-                break;
-            case NONE:
+        if (!(augment instanceof NoWeaponAugment)) {
+            info += "\n\n"; //+ augment.name();
+            if (!augment.desc().isEmpty()) info += " " + augment.desc();
+            if (!augment.statModificationInfo().isEmpty())
+                info += " " + augment.statModificationInfo();
+        }
+
+        if (augment instanceof SpeedAugment){
+            info += " " + Messages.get(Weapon.class, "faster");
+        }
+        else if (augment instanceof DamageAugment){
+            info += " " + Messages.get(Weapon.class, "stronger");
         }
 
         if (isEquipped(Dungeon.hero) && !hasCurseEnchant() && Dungeon.hero.buff(HolyWeapon.HolyWepBuff.class) != null

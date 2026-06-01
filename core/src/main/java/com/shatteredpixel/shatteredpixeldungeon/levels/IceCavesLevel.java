@@ -1,22 +1,45 @@
-// java
+/*
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
+ *
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
+ *
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
+ *
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM100F;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.IceSnake;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
+import com.shatteredpixel.shatteredpixeldungeon.levels.builders.FigureEightBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.LoopBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.CavesPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom.IceCavesDeepExit;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom.IceCavesEntrance;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom.*;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom.IceCavesBranchEntrance;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom.IceCavesBranchExit;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.StorageRoom;
@@ -56,35 +79,54 @@ public class IceCavesLevel extends CavesLevel {
 
     // also, this class mixes the main floor and the branch floors, making this class quite crowded
 
-    private final int mainFloor = 14; // dynamic, so if it ever changes
-    private final int lastFloor = 18; // the floor where the optional part of ice caves ends
+    public static final int mainFloor = 14; // dynamic, so if it ever changes
+    public static final int lastFloor = 18; // the floor where the optional part of ice caves ends
                                     // you'd still need to modify it in dungeon.java
     {
         // reduced vision because... honestly no clue
         viewDistance = Math.min(5, viewDistance);
+        splashRegionOverride = 3;
 
         color1 = 0x48a4c9; // Icy blue
         color2 = 0xe8f7ff; // Light ice blue
 
-        canSpawnItems = true;
+        canSpawnFood = canSpawnItems = Dungeon.depth != lastFloor;
         canSpawnGurItems = false; // no SOU and such, would make no sense to even have here
-        if (Dungeon.depth == mainFloor || Dungeon.depth == lastFloor) {
-            additionalItemsToSpawn = 0;
+
+        if (Dungeon.depth == mainFloor) {
+            setItemsToSpawn = 5 + Random.Int(3); // these are random items, always 5 + 0-2
+        } else if (Dungeon.depth == lastFloor){
+            setItemsToSpawn = 0;
         } else {
-            additionalItemsToSpawn = (Dungeon.depth - mainFloor)+1 % 2; // 1 extra item every 2 floors
+
+            // while there is branch loot, we keep this sparse
+            // mainly because some more rewarding loot lies at the final floor
+            // though, whether players find the final floor loot even good is up to them
+            setItemsToSpawn = Dungeon.depth - lastFloor;
+            setItemsToSpawn += 1;
+
+            setWeaponArmorCount = 1; // always 1 weapon/armor
+            setScrollPotionCount = setItemsToSpawn -1; // rest is always a scroll or potion
+            if (Dungeon.depth == lastFloor-1) {
+                setItemsToSpawn += 1;
+                setMissileCount = 1; // missile weapon on floor before last flor
+            }
         }
-        canSpawnFood = true;
+
         canFeeling = Dungeon.depth != mainFloor; // only branch floors can have feelings
     }
 
-    private float sizeDiv = Math.max(1.0f, 1f*(Dungeon.depth - mainFloor)); // gets smaller the deeper you go
+    private float sizeDiv = 1f+(0.75f*(Dungeon.depth - mainFloor));// gets smaller the deeper you go
     protected Room roomBranchExit;
     private ArrayList<Class<? extends Mob>> iceRotation;
 
     @Override
     public void playLevelMusic() {
-        // TODO: this music fits, but is a bit too intense maybe? perhaps make another so it will follow the format of the other regions.
-        MusicAnnouncer.play(Assets.Music.ICE_CAVES, true);
+        if (Statistics.amuletObtained || Dungeon.depth == mainFloor) {
+            MusicAnnouncer.play(Assets.Music.ICE_CAVES_TENSE, true);
+        } else {
+            MusicAnnouncer.play(Assets.Music.ICE_CAVES, true);
+        }
     }
 
     @Override
@@ -99,14 +141,6 @@ public class IceCavesLevel extends CavesLevel {
             initRooms.add(roomBranchExit = new IceCavesBranchExit());
             // rooms that descends deeper into ice caves
             initRooms.add(roomExit = new IceCavesDeepExit());
-
-        } else if (Dungeon.depth == lastFloor) {
-            // no exit, we shouldnt go any deeper
-            initRooms.add ( roomEntrance = EntranceRoom.createEntrance(14));
-            initRooms.add (new CaveRoom()); // filler room with no pits
-            initRooms.add (new CaveRoom());
-            // TODO: this lacks a ending room. add a special room here with a reward.
-            return initRooms; // don't want any more rooms to generate
         } else {
             // default entrance and exit rooms for non-main ice caves
             initRooms.add(roomEntrance = EntranceRoom.createEntrance(14));
@@ -115,6 +149,9 @@ public class IceCavesLevel extends CavesLevel {
 
         // Add standard rooms
         int standards = (int)(standardRooms(false)*(2.5/sizeDiv));
+        if (Dungeon.depth == lastFloor-1) {
+            standards += 1; // additional standard rooms to make up for no special rooms
+        }
         //int standards = 27;
         for (int i = 0; i < standards; i++) {
             StandardRoom s = StandardRoom.createRoom(14);
@@ -123,15 +160,20 @@ public class IceCavesLevel extends CavesLevel {
         }
 
         // Add special rooms - DON'T FORGET TO INITIALIZE!
-        SpecialRoom.initForFloor();
-        int specials = (int)(specialRooms(false)*(1.5/sizeDiv));
-        for (int i = 0; i < specials; i++) {
-            SpecialRoom s = SpecialRoom.createRoom();
-            // reroll if we get a StorageRoom, ice caves has its own barricade room
-            while (s instanceof StorageRoom) {
-                s = SpecialRoom.createRoom();
+        if (Dungeon.depth != lastFloor-1) {
+            // floor before last floor has no special rooms or secret rooms
+            SpecialRoom.initForFloor();
+            int specials = (int) (specialRooms(false) * (1.5 / sizeDiv));
+            for (int i = 0; i < specials; i++) {
+                SpecialRoom s = SpecialRoom.createRoom();
+                // reroll if we get a StorageRoom, ice caves has its own barricade room
+                while (s instanceof StorageRoom) {
+                    s = SpecialRoom.createRoom();
+                }
+                initRooms.add(s);
             }
-            initRooms.add(s);
+        } else {
+            return initRooms;
         }
 
         // Add secret rooms
@@ -147,6 +189,22 @@ public class IceCavesLevel extends CavesLevel {
 
     @Override
     protected boolean build() {
+
+        if (Dungeon.depth == lastFloor) {
+            setSize(48, 48);
+            rooms = new ArrayList<>();
+            IceShrineRoom shrine = new IceShrineRoom();
+            shrine.set(
+                    5,
+                    5,
+                    30,
+                    30
+            );
+            roomEntrance = shrine;
+            rooms.add(shrine);
+            shrine.paint(this);
+            return true;
+        }
         if (!super.build()) return false;
 
         // methods that make sure both exits are far away enough
@@ -161,7 +219,6 @@ public class IceCavesLevel extends CavesLevel {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -172,7 +229,8 @@ public class IceCavesLevel extends CavesLevel {
         if (Dungeon.depth == lastFloor){
             return 0; // no mobs on the last floor, its more of a reward floor with a special room
         }
-        return (int)(super.mobLimit()*(3/sizeDiv));
+        int add = Dungeon.depth - mainFloor;
+        return (int)((super.mobLimit() + add)*(2/Math.max(1f, sizeDiv/2)));
     }
 
     private void buildMobRotation() {
@@ -270,8 +328,17 @@ public class IceCavesLevel extends CavesLevel {
     @Override
     protected Builder builder() {
         // Use LoopBuilder instead of FigureEightBuilder
-        return new LoopBuilder()
-                .setLoopShape(1, 0.25f, Random.Float(0f, 0.5f));
+        if (Dungeon.depth == lastFloor) {
+            return new Builder() {
+                @Override
+                public ArrayList<Room> build(ArrayList<Room> rooms) {
+                    return rooms;
+                }
+            };
+        } else {
+            return new LoopBuilder()
+                    .setLoopShape(1, 0.25f, Random.Float(0f, 0.5f));
+        }
     }
     @Override
     protected Painter painter() {
@@ -279,6 +346,15 @@ public class IceCavesLevel extends CavesLevel {
                 .setWater(feeling == Feeling.WATER ? 0.60f : 0.30f, 6)
                 .setGrass(feeling == Feeling.GRASS ? 0.45f : 0.15f, 3)
                 .setTraps(nTraps(), trapClasses(), trapChances());
+    }
+
+    protected int nTraps() {
+
+        if (Dungeon.depth == lastFloor) {
+            return 0;
+        } else {
+            return (int) (super.nTraps() * 1.15);
+        }
     }
 
     @Override

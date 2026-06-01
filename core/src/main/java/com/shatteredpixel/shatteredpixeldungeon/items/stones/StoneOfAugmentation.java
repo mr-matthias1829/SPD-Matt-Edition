@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
@@ -25,9 +29,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.ArmorAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.DefenseAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.EvasionAugment;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.DamageAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.SpeedAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.WeaponAugment;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -56,10 +66,9 @@ public class StoneOfAugmentation extends InventoryStone {
 		GameScene.show(new WndAugment( item));
 		
 	}
-	
-	public void apply( Weapon weapon, Weapon.Augment augment ) {
-		
-		weapon.augment = augment;
+
+    public void apply(Weapon weapon, WeaponAugment augment) {
+        weapon.applyAugment(augment);
 		useAnimation();
 		ScrollOfUpgrade.upgrade(curUser);
 		if (!anonymous) {
@@ -68,10 +77,9 @@ public class StoneOfAugmentation extends InventoryStone {
 			Talent.onRunestoneUsed(curUser, curUser.pos, getClass());
 		}
 	}
-	
-	public void apply( Armor armor, Armor.Augment augment ) {
-		
-		armor.augment = augment;
+
+    public void apply(Armor armor, ArmorAugment augment) {
+        armor.applyAugment(augment);
 		useAnimation();
 		ScrollOfUpgrade.upgrade(curUser);
 		if (!anonymous) {
@@ -111,41 +119,58 @@ public class StoneOfAugmentation extends InventoryStone {
 			add( tfMesage );
 			
 			float pos = tfMesage.top() + tfMesage.height();
-			
-			if (toAugment instanceof Weapon){
-				for (final Weapon.Augment aug : Weapon.Augment.values()){
-					if (((Weapon) toAugment).augment != aug){
-						RedButton btnSpeed = new RedButton( Messages.get(this, aug.name()) ) {
-							@Override
-							protected void onClick() {
-								hide();
-								StoneOfAugmentation.this.apply( (Weapon)toAugment, aug );
-							}
-						};
-						btnSpeed.setRect( MARGIN, pos + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT );
-						add( btnSpeed );
-						
-						pos = btnSpeed.bottom();
-					}
-				}
-				
-			} else if (toAugment instanceof Armor){
-				for (final Armor.Augment aug : Armor.Augment.values()){
-					if (((Armor) toAugment).augment != aug){
-						RedButton btnSpeed = new RedButton( Messages.get(this, aug.name()) ) {
-							@Override
-							protected void onClick() {
-								hide();
-								StoneOfAugmentation.this.apply( (Armor) toAugment, aug );
-							}
-						};
-						btnSpeed.setRect( MARGIN, pos + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT );
-						add( btnSpeed );
-						
-						pos = btnSpeed.bottom();
-					}
-				}
-			}
+
+            if (toAugment instanceof Weapon){
+
+                WeaponAugment[] augments = {
+                        new SpeedAugment(),
+                        new DamageAugment()
+                };
+
+                for (final WeaponAugment aug : augments){
+
+                    if (!((Weapon) toAugment).augment.getClass().equals(aug.getClass())){
+
+                        RedButton btn = new RedButton(aug.name()) {
+                            @Override
+                            protected void onClick() {
+                                hide();
+                                StoneOfAugmentation.this.apply((Weapon) toAugment, aug);
+                            }
+                        };
+
+                        btn.setRect(MARGIN, pos + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
+                        add(btn);
+
+                        pos = btn.bottom();
+                    }
+                }
+
+            } else if (toAugment instanceof Armor){
+
+                ArmorAugment[] augments = {
+                        new EvasionAugment(),
+                        new DefenseAugment()
+                };
+
+             for (final ArmorAugment aug : augments){
+                 if (!((Armor) toAugment).augment.getClass().equals(aug.getClass())){
+
+                     RedButton btn = new RedButton(aug.name()) {
+                         @Override
+                            protected void onClick() {
+                             hide();
+                              StoneOfAugmentation.this.apply((Armor) toAugment, aug);
+                            }
+                        };
+
+                     btn.setRect(MARGIN, pos + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT);
+                        add(btn);
+
+                     pos = btn.bottom();
+                    }
+                }
+            }
 			
 			RedButton btnCancel = new RedButton( Messages.get(this, "cancel") ) {
 				@Override

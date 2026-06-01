@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
@@ -27,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.NoWeaponAugment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -160,14 +165,12 @@ public class Glock extends Weapon {
             info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
         }
 
-        switch (augment) {
-            case SPEED:
-                info += "\n\n" + Messages.get(Weapon.class, "faster");
-                break;
-            case DAMAGE:
-                info += "\n\n" + Messages.get(Weapon.class, "stronger");
-                break;
-            case NONE:
+        if (!(augment instanceof NoWeaponAugment)) {
+            info += "\n\n" + augment.name();
+            String augDesc = augment.desc();
+            if (augDesc != null && !augDesc.isEmpty()) {
+                info += ": " + augDesc;
+            }
         }
 
         if (enchantment != null && (cursedKnown || !enchantment.curse())){
@@ -239,7 +242,7 @@ public class Glock extends Weapon {
 
     @Override
     public boolean isUpgradable() {
-       // return false;
+        // return false;
         return true;
     }
 

@@ -1,3 +1,28 @@
+/*
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
+ *
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
+ *
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
+ *
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -112,11 +137,24 @@ public class Mod_Changes {
                         "1. fetid rat (caves) now has a max level cap instead of giving xp forever\n" +
                         "2. gnoll trickster (caves) now has a max level cap instead of giving xp forever, loot chance reduced (18% -> 8%)\n" +
                         "3. elder gnoll hp increased (16 -> 30), reworked behavior ai to be better at fleeing and can now wander around like any other mob\n" +
+                                "4. bat lifesteal a bit reduced, damage reduced (7,18 -> 5,18), increased hp (30 -> 38)\n" +
+                                "5. brute enrage shield increased (33% -> 50%)\n" +
+                                "6. gnoll baby hp increased (8 -> 14), defensive skill increased (24 -> 32), damage increased (1,5 -> 2,7)\n" +
+                                "7. dm200 reduced loot chance (20% -> 12%), reduced gas exhaust cooldown (30 -> 20)\n" +
 
                         "\n_Ice Caves:_\n" +
-                        "1. dm100f\n" +
-                        "2. ice snake\n" +
+                        "1. dm100f DR reduced (0,6 -> 0,4), chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
+                        "2. ice snake chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
                         "3. frozen swarm hp increased (105 -> 150)\n" +
+
+                                "\n_City:_\n" + // yep, we're doing this NOW
+                                "1. ghoul now gets up with more hp (10% -> 33%), but decreases the more times its been downed, take shorter to respawn (base 5 -> 4), reduced defensive (20 -> 16), reduced hp (45 -> 36)\n" +
+                                "2. bandit blindness and cripple duration upon stealing reduced (5 -> 3), hp reduced (45 -> 36)\n" +
+                                "3. elementals... actually they remain unchanged surprisingly\n" +
+                                "4. warlock now has the spirit necromancer as it's rare variant, hp reduced (70 -> 60), chance to degrade reduced (50% -> 25%), damage reduced (12,18 -> 6,13)),will now always cast magic projectile even if adjacent\n" +
+                                "5. monk cooldown to be focussed reduced (6,7 -> 4,6), hp reduced (70 -> 55), reduced loot drop chance (8.3% -> 5%)\n" +
+                                "6. golem self teleport cooldown reduced (30 -> 15), are now twice as likely to shoot a teleport bolt, damage reduced (25,30 -> 12,20), DR reduced (0,12 -> 0,5), hp reduced (120 -> 75)\n" +
+                                "7. spirit necromancer added\n" +
 
                         "\n_Rare:_\n" +
                         "1. albino rat hp reduced (30 -> 15) and awards xp (0 -> 2), bleed inflicted is now equal to half of damage dealt\n" +
@@ -138,7 +176,9 @@ public class Mod_Changes {
                         "4. rings of sharpshooting and might direct stats (missile level and additional strength) are no longer deceiving and fixed, being 100% accurate now\n" +
                         "5. seeds now actually work, always having the same dungeon/item generation for the same seed. this was broken and hidden away before\n" +
                         "6. blacksmith now has a greeting for the peasant and a in-code default, should no longer crash\n" +
-                        "7. challenge _I hate myself_ now no longer identifies scrolls. previously, it mistakenly did\n"
+                        "7. challenge _I hate myself_ now no longer identifies scrolls. previously, it mistakenly did\n" +
+                        "8. fixed a handful of out-of-date or weird text\n" +
+                        "9. FINALLY fixed scroll of magic upgrade after so long... the fix was strangely easy too\n"
 
         ));
 
@@ -157,7 +197,9 @@ public class Mod_Changes {
                         "11. added the new misc settings tab, which will have some settings that don't fit in the other tabs\n" +
                         "12. added a new setting that speeds up enemy combat related animations up to 4 times their speed. Please use this, it took me like 6+ hours to properly make this.\n" +
                         "13. if the music ever changes in-game, it's now announced in the game log with the name of the track and it's source or creator\n" +
-                        "14. added a new tab in the alchemy guide for equipment crafting\n"
+                        "14. added a new tab in the alchemy guide for equipment crafting\n" +
+                        "15. changes scene now has a better split between SPD and ME changes\n" +
+                        "16. shortened version name and such, and the code wants you to use dots and yadayadayade... just deal with it\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_COLOR), "Challenges and sins",
@@ -172,7 +214,7 @@ public class Mod_Changes {
         changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "Mechanics and other changes",
                 "_Changes:_\n" +
                         "1. the peasant now starts with cloth armor as the only hero, but lacks strength to use it\n" +
-                        "2. the warrior needs less enemies defeated in one game to be unlocked (75 -> 30)\n" +
+                        "2. the warrior needs less enemies defeated in one game to be unlocked (75 -> 60), and now has a optional secondary method to be unlocked\n" +
                         "3. levitation buff default duration is now the same as other buffs (30 -> 20)\n" +
                         "4. rare enemies spawn chance reduced, becoming twice as rare (1/20 -> 1/40)\n" +
                         "5. alchemy guide pages now drop in a more customized order and some now have a minimum region to appear in\n"
@@ -185,7 +227,9 @@ public class Mod_Changes {
                         "3. ice caves now has a optional path stretching down from floor 14 to floor 18\n" +
                         "4. fixed issues with exits/entrances overlapping (including for blacksmith) and some generation generating the wrong types of level\n" +
                         "5. catalysts floors to spawn on changed (1-3 -> 2-4)\n" +
-                        "6. ice caves no longer generates essential items (scrolls of upgrade, potions of strength, etc)\n"
+                        "6. ice caves no longer generates essential items (scrolls of upgrade, potions of strength, etc)\n" +
+                        "7. branches should no longer generate alchemy rooms\n" +
+                        "8. ice caves item generation was adjusted\n"
 
         ));
 
@@ -193,6 +237,8 @@ public class Mod_Changes {
                 "_Enemies:_\n" +
                         "1. floor 6 and 7 can no longer spawn snake\n" +
                         "2. reduced slime spawn chance on floor 8\n" +
+                        "3. floor 18 spawns 1 less monk, and can now spawn spirit necromancer\n" +
+                        "4. floor 19 spawns 1 less golem, and can now spawn spirit necromancer\n" +
 
                         "\n_Items:_\n" +
                         "1. scroll of identify is a little more common\n" +
@@ -243,9 +289,10 @@ public class Mod_Changes {
                         "4. the blacksmith has a new option for you to spend favor on: extract. this will destroy the item, but give you half of their upgrades as scrolls\n" +
                         "5. the blacksmith has a new option for you to spend favor on: liquidize. this will destroy the item, but give you some favor in return, can only be done once per run. max favor (3000 -> 3800)\n" +
                         "6. added a new curse for both weapons and armor: the curse of binding. this curse has no effect on it's own, but can't be removed using scrolls of upgrade\n" +
-                        "7. the ice caves now has a additional optional path. a new enemy spawns in said path, the ice golem\n" +
+                        "7. the ice caves now has a additional optional path. a new enemy spawns in said path, the ice golem. at the end of the path, a new unique rewards awaits you\n" +
                         "8. reworked wand of elements to be much less random and added a battlemage effect to it\n" +
-                        "9. added wand of explosion, and wand of fireball. fireball is made in alchemy while explosion can be found in the dungeon\n"
+                        "9. added wand of explosion, and wand of fireball. fireball is made in alchemy while explosion can be found in the dungeon\n" +
+                        "10 reworked augments in the background\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.INFO), "Notes",
@@ -280,8 +327,18 @@ public class Mod_Changes {
                         "4. removed duplicate entries for cheat mode setting for debug. it can now only be found in the new misc settings\n" + // in the future, likely make a special misc settings tab for cases like these
                         "5. some weird or unclean code i have created now has some comments explaining why it is as it is or a TODO on how to fix it. in the future i will likely clean them up myself\n" +
                         "6. so you know enemy sprites? 99% of them use a new constructor now. some effects also had their constructors changed. both went towards making animation speeds faster and is rather... unclean, but working\n" +
-                        "7. added some more debug settings to make testing a handful easier. includes: slider that determines what floor you start on, and a toggle for enabling badges during cheat mode (default is false). cheat mode will now also start with many of the most useful consumables in their inventory.\n" +
-                        "8. added a new document to the document folders with a list of custom constructors and variables for constructors. mainly to serve as a list to reference to. make sure to follow it if merging versions from upstream vanilla spd. the doc will be expanded on if any more is added\n"
+                        "7. added some more debug settings to make testing a handful easier. includes: slider that determines what floor you start on, and a toggle for enabling badges during cheat mode (default is false). cheat mode will now also start with many of the most useful consumables in their inventory.\n"
+                ));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.GUIDE_PAGE, null), "I'm not reading all that",
+                "The short list of important changes:\n" +
+                        "1. overall difficulty reworked, aiming towards a better balance\n" +
+                        "2. blacksmith has new rewards waiting for you\n" +
+                        "3. ice caves now has a new optional path expansion\n" +
+                        "4. ring 'rebalanced', some new items, and handful of item changes\n" +
+                        "5. bosses reworked to be a bit easier and more consistent\n" +
+                        "6. new setting\n" +
+                        "7. handful of fixes, clean ups, and new badges\n"
         ));
 
 

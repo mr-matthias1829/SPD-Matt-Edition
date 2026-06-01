@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
@@ -46,11 +50,11 @@ public class GnollBaby extends Mob {
     {
         spriteClass = GnollBabySprite.class;
 
-        HP = HT = 8; //5
-        defenseSkill = 24; //16
+        HP = HT = 14;
+        defenseSkill = 32;
 
         EXP = 0; // don't give xp for... ethical reasons, for the few that care
-        maxLvl = 1;
+        maxLvl = -1;
 
         viewDistance = 3;
     }
@@ -63,20 +67,20 @@ public class GnollBaby extends Mob {
             screamed = true;
 
             GLog.w("The gnoll baby screams loudly, echoing throughout the floor!");
-            this.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 9 );
+            this.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 5 );
             Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 
             for (Mob mob : Dungeon.level.mobs) {
                 mob.beckon(Dungeon.hero.pos);
             }
 
-            spend(1f); // spend a whole turn just screaming
+            spend(1f); // that was your action for that turn
         }
     }
 
     @Override
     public int damageRoll() {
-        int baseDmg = Random.NormalIntRange(1, 5);
+        int baseDmg = Random.NormalIntRange(2, 7);
 
         // Add enemy's DR to (mostly) ignore it (only if enemy exists)
         if (enemy != null) {
@@ -88,7 +92,7 @@ public class GnollBaby extends Mob {
 
     @Override
     public int attackSkill(Char target) {
-        return 12;
+        return 20;
     }
 
     @Override

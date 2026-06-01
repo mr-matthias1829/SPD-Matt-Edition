@@ -1,3 +1,28 @@
+/*
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
+ *
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
+ *
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
+ *
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -14,9 +39,10 @@ public class MusicAnnouncer {
     // welcome to awesome QOL class
     // genuinely one of the files i actually love
     // the idea is simple: if a new track plays, announce it + credits
-    // was mainly added so if any music gets added, we instantly credit them
-    // will most likely prevent copyright issues in the future
-    // also i really dont feel like making a new scene with all music credits bro
+    // will help prevent copyright issues in the future
+    // i tend to name the tracks as i wish, but always credit the creator
+    // whichever name you put, put the original name in the credits and the alias you gave it + creator
+    // some licenses don't force you to credit them, but we do so anyway because it's simply right
 
     // ── Track IDs ─────────────────────────────────────────────────────────────
     public static final int NONE              = -1;
@@ -37,7 +63,10 @@ public class MusicAnnouncer {
     public static final int DEMON_HALLS_BOSS  = 15;
     public static final int FINALE            = 16;
     public static final int TITLE             = 17;
+
+
     public static final int ICE_CAVES_TENSE   = 18;
+    public static final int ICE_CAVES    = 19;
 
     // ── filename → track ID ───────────────────────────────────────────────────
     private static final HashMap<String, Integer> FILE_TO_ID = new HashMap<>();
@@ -82,6 +111,7 @@ public class MusicAnnouncer {
         FILE_TO_ID.put("music/theme_2.ogg",             TITLE);
 
         FILE_TO_ID.put("music/icecaves.ogg",            ICE_CAVES_TENSE);
+        FILE_TO_ID.put("music/icecaves_calm.ogg",      ICE_CAVES);
     }
 
     // ── track ID → display name ───────────────────────────────────────────────
@@ -112,7 +142,7 @@ public class MusicAnnouncer {
         ID_TO_NAME.put(ICE_CAVES_TENSE,   "Ice Caves Tense - Matt Edition");
 
         // literally any other music
-        // none yet :)
+        ID_TO_NAME.put(ICE_CAVES,          "Ice Caves - Lux-aeterna");
     }
 
     // ── State ─────────────────────────────────────────────────────────────────

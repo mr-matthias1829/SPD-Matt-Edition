@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
@@ -59,9 +63,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Thorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -70,6 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.*;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -78,34 +81,13 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Armor extends EquipableItem {
 
 	protected static final String AC_DETACH       = "DETACH";
-	
-	public enum Augment {
-		EVASION (2f , -1f),
-		DEFENSE (-2f, 1f),
-		NONE	(0f   ,  0f);
-		
-		private float evasionFactor;
-		private float defenceFactor;
-		
-		Augment(float eva, float df){
-			evasionFactor = eva;
-			defenceFactor = df;
-		}
-		
-		public int evasionFactor(int level){
-			return Math.round((2 + level) * evasionFactor);
-		}
-		
-		public int defenseFactor(int level){
-			return Math.round((2 + level) * defenceFactor);
-		}
-	}
-	
-	public Augment augment = Augment.NONE;
+
+    public ArmorAugment augment = new NoArmorAugment();
 	
 	public Glyph glyph;
 	public boolean glyphHardened = false;
@@ -147,7 +129,7 @@ public class Armor extends EquipableItem {
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
 		bundle.put( SEAL, seal);
-		bundle.put( AUGMENT, augment);
+        bundle.put(AUGMENT, augment);
         bundle.put( MAGIC_LEVEL, magicLevel );
 	}
 
@@ -162,7 +144,8 @@ public class Armor extends EquipableItem {
 		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 		seal = (BrokenSeal)bundle.get(SEAL);
 
-		augment = bundle.getEnum(AUGMENT, Augment.class);
+        augment = (ArmorAugment) bundle.get(AUGMENT);
+        if (augment == null) augment = new NoArmorAugment();
 
         magicLevel = bundle.getInt( MAGIC_LEVEL );
 	}
@@ -667,6 +650,9 @@ public class Armor extends EquipableItem {
 				if (trinityGlyph != null){
 					damage = trinityGlyph.proc( this, attacker, defender, damage );
 				}
+                if (augment != null) {
+                    damage = augment.proc(this, attacker, defender, damage);
+                }
 				//so that this effect procs for allies using this armor via aura of protection
 				if (defender.alignment == Dungeon.hero.alignment
 						&& Dungeon.hero.buff(AuraOfProtection.AuraBuff.class) != null
@@ -743,17 +729,15 @@ public class Armor extends EquipableItem {
 			}
 		}
 
-		switch (augment) {
-			case EVASION:
-				info += " " + Messages.get(Armor.class, "evasion");
-				break;
-			case DEFENSE:
-				info += " " + Messages.get(Armor.class, "defense");
-				break;
-			case NONE:
-		}
+        if (!(augment instanceof NoArmorAugment)) {
+            info += "\n\n"; //+ augment.name();
+            if (!augment.desc().isEmpty()) info += " " + augment.desc();
+            if (!augment.statModificationInfo().isEmpty())
+                info += " " + augment.statModificationInfo();
+        }
 
-		if (isEquipped(Dungeon.hero) && !hasCurseGlyph() && Dungeon.hero.buff(HolyWard.HolyArmBuff.class) != null
+
+        if (isEquipped(Dungeon.hero) && !hasCurseGlyph() && Dungeon.hero.buff(HolyWard.HolyArmBuff.class) != null
 				&& (Dungeon.hero.subClass != HeroSubClass.PALADIN || glyph == null)){
 			info += "\n\n" + Messages.capitalize(Messages.get(Armor.class, "inscribed", Messages.get(HolyWard.class, "glyph_name", Messages.get(Glyph.class, "glyph"))));
 			info += " " + Messages.get(HolyWard.class, "glyph_desc");
@@ -902,6 +886,31 @@ public class Armor extends EquipableItem {
 			return glyph != null && (cursedKnown || !glyph.curse()) ? glyph.glowing() : null;
 		}
 	}
+
+    public Armor applyAugment(ArmorAugment augment) {
+        if (!(this.augment instanceof NoArmorAugment)){
+            GLog.i(Messages.get(Armor.class, "removed_augment", this.name(), this.augment.name()));
+        }
+
+        this.augment = augment == null ? new NoArmorAugment() : augment;
+        updateQuickslot();
+        // preserve old visual style log (capitalized item name + message) for compatibility
+        //GLog.i("" + Messages.capitalize(Messages.get(this, "name")) + " " + Messages.get(Armor.class, "got_augment", this.name(), this.augment.name()));
+
+        // announce to the log so players can see the augment application
+        GLog.i(Messages.get(Armor.class, "got_augment", this.name(), this.augment.name()));
+        return this;
+     }
+
+    public boolean hasSpecialAugment() {
+        return !(augment instanceof NoArmorAugment)
+                && !(augment instanceof EvasionAugment)
+                && !(augment instanceof DefenseAugment);
+    }
+
+    public HashSet<Char.Property> augmentProperties(Hero hero) {
+        return augment.augmentProperties(hero);
+    }
 	
 	public static abstract class Glyph implements Bundlable {
 		

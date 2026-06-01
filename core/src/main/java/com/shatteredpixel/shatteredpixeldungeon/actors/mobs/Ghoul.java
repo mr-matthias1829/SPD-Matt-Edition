@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
@@ -45,8 +49,8 @@ public class Ghoul extends Mob {
 	{
 		spriteClass = GhoulSprite.class;
 		
-		HP = HT = 45;
-		defenseSkill = 20;
+		HP = HT = 36;
+		defenseSkill = 16;
 		
 		EXP = 5;
 		maxLvl = 20;
@@ -106,7 +110,7 @@ public class Ghoul extends Mob {
 		//create a child
         // we check for instance of nercroghoul here, this is
         // because we actually dont want ghouls spawned by SN to spawn with a partner
-        if (partnerID == -1 && !(this instanceof SpiritualNecromancer.NecroGhoul)) {
+        if (partnerID == -1 && !(this instanceof SpiritNecromancer.NecroGhoul)) {
 			
 			ArrayList<Integer> candidates = new ArrayList<>();
 			
@@ -149,7 +153,7 @@ public class Ghoul extends Mob {
 		return super.act();
 	}
 
-	private boolean beingLifeLinked = false;
+	protected boolean beingLifeLinked = false;
 
 	@Override
 	public void die(Object cause) {
@@ -160,7 +164,7 @@ public class Ghoul extends Mob {
 				timesDowned++;
 				Actor.remove(this);
 				Dungeon.level.mobs.remove( this );
-				Buff.append(nearby, GhoulLifeLink.class).set(timesDowned*5, this);
+				Buff.append(nearby, GhoulLifeLink.class).set(timesDowned*4, this);
 				((GhoulSprite)sprite).crumple();
 				return;
 			}
@@ -238,6 +242,7 @@ public class Ghoul extends Mob {
 
 		private Ghoul ghoul;
 		private int turnsToRevive;
+        private int timesDowned;
 
 		@Override
 		public boolean act() {
@@ -288,7 +293,10 @@ public class Ghoul extends Mob {
 						return true;
 					}
 				}
-				ghoul.HP = Math.round(ghoul.HT/10f);
+
+                float hpPercent = Math.max (0.05f, 0.33f - (timesDowned*0.06f));
+				ghoul.HP = Math.round(ghoul.HT/hpPercent);
+
 				ghoul.beingLifeLinked = false;
 				Actor.add(ghoul);
 				ghoul.timeToNow();
@@ -316,6 +324,7 @@ public class Ghoul extends Mob {
 		public void set(int turns, Ghoul ghoul){
 			this.ghoul = ghoul;
 			turnsToRevive = turns;
+            timesDowned = ghoul.timesDowned;
 		}
 
 		@Override

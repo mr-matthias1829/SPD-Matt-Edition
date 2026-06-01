@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
@@ -274,7 +278,30 @@ public class AboutScene extends PixelScene {
 		freesound.setRect(transifex.left()-10, transifex.bottom() + 8, colWidth+20, 0);
 		content.add(freesound);
 
-		content.setSize( fullWidth, freesound.bottom()+10 + insets.bottom );
+        addLine(freesound.bottom() + 4, content);
+
+        CreditsBlock modmusic = new CreditsBlock(true,
+                Window.TITLE_COLOR,
+                null,
+                null,
+                "SPD Matt Edition uses the following music and sfx:\n\n" +
+                        "Royalty-free (non-attribution required):\n" +
+                        "_Cold Arctic Ambient_ by _Lux-aeterna_ used as _ice caves_ theme\n\n" + // filename: icecaves_calm.ogg
+
+                        "Creative Commons Attribution (CC BY):\n" +
+                        "_placeholder text_\n\n" +
+
+                        "Creative Commons Zero (CC0):\n" +
+                        "_placeholder text_\n\n" +
+
+                        "Remixed vanilla themes:\n" +
+                        "_Ice caves tense_ remixed from _caves tense_\n", // filename: icecaves.ogg
+                "",
+                "");
+        modmusic.setRect(freesound.left()-10, freesound.bottom() + 8, colWidth+40, 0);
+        content.add(modmusic);
+
+		content.setSize( fullWidth, modmusic.bottom()+10 + insets.bottom );
 
 		list.setRect( 0, 0, w, h );
 		list.scrollTo(0, 0);

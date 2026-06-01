@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
@@ -40,6 +44,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Smite;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.ArmorAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.DefenseAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.EvasionAugment;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.augments.NoArmorAugment;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
@@ -69,6 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.augments.*;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -76,6 +86,7 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 abstract public class Weapon extends KindOfWeapon {
 
@@ -83,33 +94,8 @@ abstract public class Weapon extends KindOfWeapon {
 	public float	DLY	= 1f;	// Speed modifier
 	public int      RCH = 1;    // Reach modifier (only applies to melee hits)
 
-	public enum Augment {
-		SPEED   (0.7f, 2/3f),
-		DAMAGE  (1.5f, 5/3f),
-		NONE	(1.0f, 1f);
 
-		private float damageFactor;
-		private float delayFactor;
-
-		Augment(float dmg, float dly){
-			damageFactor = dmg;
-			delayFactor = dly;
-		}
-
-		public int damageFactor(int dmg){
-			return Math.round(dmg * damageFactor);
-		}
-
-		public float damageFactor(float dmg){
-			return dmg * damageFactor;
-		}
-
-		public float delayFactor(float dly){
-			return dly * delayFactor;
-		}
-	}
-	
-	public Augment augment = Augment.NONE;
+    public WeaponAugment augment = new NoWeaponAugment();
 
 	protected int usesToID(){
 		return 20;
@@ -200,7 +186,9 @@ abstract public class Weapon extends KindOfWeapon {
 			}
 		}
 
-		return damage;
+        damage = augment.proc(this, attacker, defender, damage);
+
+        return damage;
 	}
 	
 	public void onHeroGainExp( float levelPercent, Hero hero ){
@@ -242,7 +230,8 @@ abstract public class Weapon extends KindOfWeapon {
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
 		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 
-		augment = bundle.getEnum(AUGMENT, Augment.class);
+        augment = (WeaponAugment) bundle.get(AUGMENT);
+        if (augment == null) augment = new NoWeaponAugment();
 	}
 	
 	@Override
@@ -508,6 +497,35 @@ abstract public class Weapon extends KindOfWeapon {
 			return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.glowing() : null;
 		}
 	}
+
+    public Weapon applyAugment(WeaponAugment augment){
+        // if we're replacing an existing non-trivial augment, announce its removal
+        if (!(this.augment instanceof NoWeaponAugment)){
+            GLog.i(Messages.get(Weapon.class, "removed_augment", this.name(), this.augment.name()));
+        }
+
+        this.augment = augment == null ? new NoWeaponAugment() : augment;
+        updateQuickslot();
+
+        // preserve old visual style log (capitalized item name + message) for compatibility
+        //GLog.i("" + Messages.capitalize(Messages.get(this, "name")) + " " + Messages.get(Weapon.class, "got_augment", this.name(), this.augment.name()));
+
+        // announce to the log so players can see the augment application and its short description
+        GLog.i(Messages.get(Weapon.class, "got_augment", this.name(), this.augment.name()));
+        return this;
+    }
+
+    public boolean hasSpecialAugment() {
+        return !(augment instanceof NoWeaponAugment)
+                && !(augment instanceof SpeedAugment)
+                && !(augment instanceof DamageAugment);
+    }
+
+    public HashSet<Char.Property> augmentProperties(Hero hero) {
+        HashSet<Char.Property> props = super.augmentProperties(hero);
+        props.addAll(augment.augmentProperties(hero));
+        return props;
+    }
 
 	public static abstract class Enchantment implements Bundlable {
 

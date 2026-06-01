@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
@@ -154,40 +158,55 @@ public abstract class SpecialRoom extends Room {
 	public static void resetPitRoom(int depth){
 		if (pitNeededDepth == depth) pitNeededDepth = -1;
 	}
-	
-	public static SpecialRoom createRoom(){
-		if (Dungeon.depth == pitNeededDepth){
-			pitNeededDepth = -1;
-			
-			useType( PitRoom.class );
-			return new PitRoom();
-			
-		} else if (floorSpecials.contains(LaboratoryRoom.class)) {
-		
-			useType(LaboratoryRoom.class);
-			return new LaboratoryRoom();
-		
-		} else {
-			
-			if (Dungeon.bossLevel(Dungeon.depth + 1)){
-				floorSpecials.remove(WeakFloorRoom.class);
-			}
 
-			//60% chance for front of queue, 30% chance for next, 10% for one after that
-			int index = Random.chances(new float[]{6, 3, 1});
-			while (index >= floorSpecials.size()) index--;
+    public static SpecialRoom createRoom(){
 
-			Room r = Reflection.newInstance(floorSpecials.get( index ));
+        if (Dungeon.depth == pitNeededDepth){
+            pitNeededDepth = -1;
 
-			if (r instanceof WeakFloorRoom){
-				pitNeededDepth = Dungeon.depth + 1;
-			}
-			
-			useType( r.getClass() );
-			return (SpecialRoom)r;
-		
-		}
-	}
+            useType(PitRoom.class);
+            return new PitRoom();
+
+        } else if (floorSpecials.contains(LaboratoryRoom.class)) {
+
+            useType(LaboratoryRoom.class);
+            return new LaboratoryRoom();
+
+        } else {
+
+            if (Dungeon.bossLevel(Dungeon.depth + 1)){
+                floorSpecials.remove(WeakFloorRoom.class);
+            }
+
+            Room r;
+            int safety = 0;
+
+            while (true) {
+
+                int in = Random.chances(new float[]{6, 3, 1});
+                while (in >= floorSpecials.size()) in--;
+
+                r = Reflection.newInstance(floorSpecials.get(in));
+
+                // enforce branch rule
+                if (!(r instanceof LaboratoryRoom && Dungeon.branch != 0)) {
+                    break;
+                }
+
+                // safety fallback
+                if (++safety >= 20) {
+                    break;
+                }
+            }
+
+            if (r instanceof WeakFloorRoom){
+                pitNeededDepth = Dungeon.depth + 1;
+            }
+
+            useType(r.getClass());
+            return (SpecialRoom) r;
+        }
+    }
 	
 	private static final String ROOMS	= "special_rooms";
 	private static final String PIT	    = "pit_needed";

@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
@@ -59,6 +63,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDivination;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPureMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.IcyCore;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.CrackedSpyglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Glock;
@@ -115,6 +121,8 @@ public enum HeroClass {
             ClothArmor a = new ClothArmor();
             a.identify().collect();
 
+
+
         /*
         SpearAmethystPiercer UW = new SpearAmethystPiercer();
         UW.identify().collect();
@@ -127,15 +135,18 @@ public enum HeroClass {
 
             new TengusMask().collect();
             for (int s = 2; s < 100; s++) {
+                new IcyCore().collect();
+                new StoneOfAugmentation().collect();
                 new ScrollOfUpgrade().identify().collect();
                 new ScrollOfMagicUpgrade().identify().collect();
                 new PotionOfStrength().identify().collect();
-                //new PotionOfExperience().identify().collect();
+                new PotionOfExperience().identify().collect();
                 new ScrollOfMagicMapping().identify().collect();
                 new PotionOfMindVision().identify().collect();
                 //new ScrollOfDivination().identify().collect();
                 new PotionOfHealing().identify().collect();
                 new PotionOfLevitation().identify().collect();
+                new PotionOfLiquidFlame().identify().collect();
             }
         }
 

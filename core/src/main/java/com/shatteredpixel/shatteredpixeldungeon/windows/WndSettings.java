@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
@@ -1106,7 +1110,6 @@ public class WndSettings extends WndTabbed {
 
         // debug-only
         CheckBox cheatMode;
-        CheckBox chkCheatBadges;
         OptionSlider optStartFloor;
 
         @Override
@@ -1125,16 +1128,6 @@ public class WndSettings extends WndTabbed {
                 };
                 cheatMode.checked(SPDSettings.cheatMode());
                 add(cheatMode);
-
-                chkCheatBadges = new CheckBox(Messages.get(this, "cheat_badges")) {
-                    @Override
-                    protected void onClick() {
-                        super.onClick();
-                        SPDSettings.cheatBadges(checked());
-                    }
-                };
-                chkCheatBadges.checked(SPDSettings.cheatBadges());
-                add(chkCheatBadges);
 
                 optStartFloor = new OptionSlider(Messages.get(this, "start_floor"), "1", "26", 1, 26) {
                     @Override
@@ -1176,10 +1169,7 @@ public class WndSettings extends WndTabbed {
             float bottom = title.bottom() + 3 * GAP;
 
             if (cheatMode != null) {
-                // cheatMode and chkCheatBadges share a row
-                float halfW = (width - GAP) / 2f;
-                cheatMode.setRect(0,            bottom + GAP, halfW, BTN_HEIGHT);
-                chkCheatBadges.setRect(halfW + GAP, bottom + GAP, halfW, BTN_HEIGHT);
+                cheatMode.setRect(0, bottom + GAP, width, BTN_HEIGHT);
                 bottom = cheatMode.bottom();
 
                 optStartFloor.setRect(0, bottom + GAP, width, SLIDER_HEIGHT);

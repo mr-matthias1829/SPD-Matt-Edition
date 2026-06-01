@@ -1,3 +1,28 @@
+/*
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
+ *
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
+ *
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
+ *
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
@@ -56,7 +81,16 @@ public class IceCavesDeepExit extends SpecialRoom {
         int exitCell = level.pointToCell(c);
         Painter.set(level, exitCell, Terrain.EXIT);
 
-        LevelTransition exit = new LevelTransition(level, exitCell, LevelTransition.Type.REGULAR_EXIT);
+        LevelTransition exit = new LevelTransition(
+                level,
+                exitCell,
+                LevelTransition.Type.REGULAR_EXIT,
+                Dungeon.depth+1,
+                2,
+                LevelTransition.Type.REGULAR_ENTRANCE,
+                "ice_caves_deep_exit",
+                null
+        );
         level.transitions.add(exit);
 
         entrance().set(Door.Type.BARRICADE);

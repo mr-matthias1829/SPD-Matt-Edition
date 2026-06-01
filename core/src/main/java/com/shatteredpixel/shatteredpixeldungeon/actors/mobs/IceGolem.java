@@ -1,22 +1,26 @@
 /*
- * Pixel Dungeon
- * Copyright (C) 2012-2015 Oleg Dolya
+ *  Pixel Dungeon
+ *  Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2026 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2026 Evan Debenham
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Matt Edition
+ *  Copyright (C) 2025-2026 Dum Matt
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
@@ -65,14 +69,18 @@ public class IceGolem extends Mob {
 
         if (Dungeon.level.map[step] == Terrain.DOOR
                 || Dungeon.level.map[step] == Terrain.OPEN_DOOR) {
-            spend(2f);   // doorway costs extra
+            if (Math.random() < 0.5) { // doorway costs extra, 50/50 for a full turn or most of a turn
+                spend (1f);
+            } else {
+                spend(0.75f);
+            }
         }
     }
 
     @Override
     protected boolean doAttack(Char enemy) {
         if (Random.Int(3) == 0) {
-            Buff.prolong(enemy, Chill.class, Chill.DURATION / 2);
+            Buff.prolong(enemy, Chill.class, 4f);
         }
 
         skipNextTurn = true;
@@ -81,7 +89,7 @@ public class IceGolem extends Mob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(14, 40);
+        return Random.NormalIntRange(7, 33);
     }
 
     @Override
@@ -91,7 +99,7 @@ public class IceGolem extends Mob {
 
     @Override
     public int drRoll() {
-        return super.drRoll() + Random.NormalIntRange(4, 11);
+        return super.drRoll() + Random.NormalIntRange(2, 8);
     }
 
     @Override
