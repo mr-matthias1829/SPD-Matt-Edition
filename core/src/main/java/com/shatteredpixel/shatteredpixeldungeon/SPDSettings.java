@@ -146,7 +146,7 @@ public class SPDSettings extends GameSettings {
     public static int animSpeedSlider() {
         return (int) ((animSpeed()*2)-1);
     }
-	
+
 	//Interface
 
 	public static final String KEY_UI_SIZE 	    = "full_ui";
@@ -392,8 +392,10 @@ public class SPDSettings extends GameSettings {
 		put(KEY_NEWS, value);
 	}
 
+	public static boolean newsDefault = false;
+
     public static boolean news(){
-        return false;
+		return getBoolean(KEY_NEWS, newsDefault);
     }
 
 	public static void updates(boolean value){
