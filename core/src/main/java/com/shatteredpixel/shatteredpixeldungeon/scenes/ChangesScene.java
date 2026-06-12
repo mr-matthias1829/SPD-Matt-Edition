@@ -163,6 +163,7 @@ public class ChangesScene extends PixelScene {
                 v0_3_X_Changes.addAllChanges(changeInfos);
                 v0_2_X_Changes.addAllChanges(changeInfos);
                 v0_1_X_Changes.addAllChanges(changeInfos);
+				Pixel_Dungeon_Changes.addAllChanges(changeInfos);
                 break;
 		}
 
