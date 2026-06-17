@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -192,6 +194,7 @@ public abstract class Actor implements Bundlable {
 		for (Actor a : all) {
 			a.fixTime(min);
 		}
+		TargetedCell.fixTime(min);
 
 		if (Dungeon.hero != null && all.contains( Dungeon.hero )) {
 			Statistics.duration += min;

@@ -186,6 +186,7 @@ public class GameScene extends PixelScene {
 	private Group emoicons;
 	private Group overFogEffects;
 	private Group checkedCells;
+	private Group targetedCells;
 	private Group healthIndicators;
 
 	private InventoryPane inventory;
@@ -352,6 +353,13 @@ public class GameScene extends PixelScene {
 
 		checkedCells = new Group();
 		add(checkedCells);
+
+		targetedCells = new Group();
+		add(targetedCells);
+		for (TargetedCell cell : TargetedCell.cells.valueList()){
+			cell.reset(cell.pos, cell.time);
+			targetedCells.add(cell);
+		}
 
 		statuses = new Group();
 		add( statuses );
@@ -1190,6 +1198,28 @@ public class GameScene extends PixelScene {
 			CheckedCell check = (CheckedCell) scene.checkedCells.recycle(CheckedCell.class);
 			check.reset(pos, source);
 			return check;
+		} else {
+			return null;
+		}
+	}
+
+	public static TargetedCell targetedCell(int pos, int color, float delay){
+		return targetedCell(pos, delay);
+	}
+
+	public static TargetedCell targetedCell(int pos, float delay){
+		if (scene != null) {
+			TargetedCell cell;
+			synchronized (TargetedCell.cells) {
+				if (TargetedCell.cells.containsKey(pos)) {
+					cell = TargetedCell.cells.get(pos);
+				} else {
+					cell = (TargetedCell) scene.targetedCells.recycle(TargetedCell.class);
+
+				}
+				cell.reset(pos, delay);
+			}
+			return cell;
 		} else {
 			return null;
 		}
