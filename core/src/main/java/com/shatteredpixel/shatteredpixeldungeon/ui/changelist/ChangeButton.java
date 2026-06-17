@@ -39,7 +39,11 @@ public class ChangeButton extends Component {
 	protected Image icon;
 	protected String title;
 	protected String[] messages;
-	
+
+	public ChangeButton(ChangeIcons icon, String title, String... message){
+		this( icon.get(), title, message );
+	}
+
 	public ChangeButton( Image icon, String title, String... messages){
 		super();
 		
@@ -50,14 +54,6 @@ public class ChangeButton extends Component {
 		this.messages = messages;
 		
 		layout();
-	}
-	
-	public ChangeButton(Item item, String message ){
-		this( new ItemSprite(item), item.name(), message);
-	}
-
-	public ChangeButton(ChangeIcons icon, String title, String... message){
-		this( icon.get(), title, message );
 	}
 	
 	protected void onClick() {
