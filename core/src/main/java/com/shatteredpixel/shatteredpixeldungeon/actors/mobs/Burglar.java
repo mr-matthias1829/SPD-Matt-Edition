@@ -35,31 +35,28 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.BurglarSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ThiefSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class Thief extends Mob {
+public class Burglar extends Thief {
 	
 	public Item item;
 	
 	{
-		spriteClass = ThiefSprite.class;
-		
-		HP = HT = 32; //25 //20
-		defenseSkill = 12;
-		
-		EXP = 4;
-		maxLvl = 11;
+		spriteClass = BurglarSprite.class;
 
-		loot = Random.oneOf(Generator.Category.RING, Generator.Category.ARTIFACT);
-		lootChance = 0.03f; //initially, see lootChance()
+        WANDERING = new Burglar.Wandering();
+        FLEEING = new Burglar.Fleeing();
+		
+		HP = HT = 40;
+		defenseSkill = 10;
+        baseSpeed = 1f;
 
-		WANDERING = new Wandering();
-		FLEEING = new Fleeing();
-        setLevel(Dungeon.scalingDepth());
+		maxLvl = 14; // up from 11 since this is technically post-tengu
 
 		properties.add(Property.UNDEAD);
 	}
@@ -67,35 +64,12 @@ public class Thief extends Mob {
 	private static final String ITEM = "item";
     private int stealAttempts = 0;
     private static final String STEALATTEMPTS = "stealattempts";
-    public void setLevel( int depth ){
-        int lvl = 0;
-        lvl = 1+(int)(Math.floor(depth/5));
 
-
-        this.level = lvl;
-        adjustStats(level);
-    }
-    public void adjustStats( int level ) {
-        if (level >= 3){ // caves+
-            baseSpeed = 1f;
-        }
-        else if (level >= 2){ // prisons
-            baseSpeed = 0.8f;
-        }
-        else{ // sewers
-            baseSpeed = 0.75f;
-            HP = HT = 20;
-        }
-    }
-
-    private int level;
-    private static final String LEVEL	= "level";
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		bundle.put( ITEM, item );
         bundle.put( STEALATTEMPTS, stealAttempts );
-        bundle.put( LEVEL, level );
 	}
 
 	@Override
@@ -103,31 +77,37 @@ public class Thief extends Mob {
 		super.restoreFromBundle( bundle );
 		item = (Item)bundle.get( ITEM );
         stealAttempts = bundle.getInt( STEALATTEMPTS );
-        level = bundle.getInt( LEVEL );
-        adjustStats(level);
 	}
+
+    @Override
+    public float attackDelay() {
+        return super.attackDelay()*1f;
+    }
+
+    @Override
+    public int damageRoll() {
+        return Random.NormalIntRange( 6, 14 );
+    } // same as bandit
+
+    @Override
+    public String description() {
+        String desc = super.description();
+
+        if (item != null) {
+            if (item.stackable && item.quantity() > 1){
+                desc += Messages.get(this, "carries_several", item.quantity(), item.name());
+            } else {
+                desc += Messages.get(this, "carries", item.name());
+            }
+        }
+
+        return desc;
+    }
 
 	@Override
 	public float speed() {
 		if (item != null) return (5*super.speed())/6;
 		else return super.speed();
-	}
-
-	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( 4, 12 );
-	} //1,10
-
-	@Override
-	public float attackDelay() {
-		return super.attackDelay()*0.5f;
-	}
-
-	@Override
-	public float lootChance() {
-		//each drop makes future drops 1/3 as likely
-		// so loot chance looks like: 1/33, 1/100, 1/300, 1/900, etc.
-		return super.lootChance() * (float)Math.pow(1/3f, Dungeon.LimitedDrops.THEIF_MISC.count);
 	}
 
 	@Override
@@ -142,45 +122,20 @@ public class Thief extends Mob {
 	}
 
 	@Override
-	public Item createLoot() {
-		Dungeon.LimitedDrops.THEIF_MISC.count++;
-		return super.createLoot();
-	}
-
-	@Override
 	public int attackSkill( Char target ) {
-		return 12;
-	}
-
-	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(1, 4);
-	}
-
-	@Override
-	public int attackProc( Char enemy, int damage ) {
-		damage = super.attackProc( enemy, damage );
-		
-		if (alignment == Alignment.ENEMY && item == null
-				&& enemy instanceof Hero && steal( (Hero)enemy )) {
-			state = FLEEING;
-		}
-
-		return damage;
+		return 15; // up from 12
 	}
 
 	@Override
 	public int defenseProc(Char enemy, int damage) {
-		if (state == FLEEING) {
-			Dungeon.level.drop( new Gold(), pos ).sprite.drop();
-		}
-
+        // doesnt drop gold when hit unlike a lowly thief
 		return super.defenseProc(enemy, damage);
 	}
 
+    @Override
     protected boolean steal( Hero hero ) {
 
-        if (Random.Int(8) < stealAttempts+1) { // start at 12.5%, increase by 12.5%, and 100% by 7 prior attempts
+        if (Random.Int(10) < stealAttempts+1) { // start at 10%, increase by 10%, and 100% by 9 prior attempts
             stealAttempts++;
             return false;
         }
@@ -188,7 +143,11 @@ public class Thief extends Mob {
         stealAttempts = 0; // Succeeded, reset counter
 
         Item toSteal;
-        if (Random.Int(100) > 68) { // 32%
+        // has two chances to go for equipment instead of one... oh snap
+        boolean StealEq = (Random.Int(100) > 70);
+        if (!StealEq) StealEq = (Random.Int(100) > 70);
+
+        if (StealEq) {
             toSteal = hero.belongings.randomEquipped();
             if (toSteal == null || toSteal.unique || toSteal.cursed) {
                 toSteal = hero.belongings.randomUnequipped();
@@ -199,8 +158,6 @@ public class Thief extends Mob {
         }
 
         if (toSteal != null && !toSteal.unique && toSteal.visiblyUpgraded() <= 4) {
-
-            GLog.w( Messages.get(Thief.class, "stole", toSteal.name()) );
 
             // Check if the item is equipped and unequip it first
             if (hero.belongings.armor == toSteal) {
@@ -219,10 +176,39 @@ public class Thief extends Mob {
             // Now detach from wherever it actually is
             if (toSteal.stackable) {
                 // For stackable items, just take one
-                item = toSteal.detach(hero.belongings.backpack);
+                int TQ = toSteal.quantity();
+
+                // determine first how many to take
+                int Q = (TQ > 1) ? Random.Int(1, TQ) : 1;
+                // halve it if TQ > 5 AND we have over total half to keep it "fair"
+                if (TQ > 5 && Q > TQ/3) Q = Q/3;
+                // clamp safety because im paranoid of another crash
+                Q = Math.max(1, Math.min(Q, TQ));
+                //steal.
+                Item stolen = toSteal.detach(hero.belongings.backpack);
+
+                if (stolen != null) {
+                    stolen.quantity(Q);
+
+                    // reduce original stack
+                    toSteal.quantity(TQ - Q);
+
+                    if (toSteal.quantity() <= 0) {
+                        toSteal.detach(hero.belongings.backpack);
+                    }
+                }
+
+                item = stolen;
+                if (toSteal.quantity() == 1 || toSteal.quantity() == 0){
+                    GLog.w( Messages.get(Burglar.class, "stole", toSteal.name()) );
+                } else {
+                    GLog.w(Messages.get(Burglar.class, "stole_several", stolen.quantity(), toSteal.name()));
+                }
+
             } else {
                 // For non-stackable, take the whole item
                 item = toSteal.detachAll(hero.belongings.backpack);
+                GLog.w( Messages.get(Burglar.class, "stole", toSteal.name()) );
             }
 
             if (!toSteal.stackable) {
@@ -242,75 +228,61 @@ public class Thief extends Mob {
         }
     }
 
-	@Override
-	public String description() {
-		String desc = super.description();
 
-		if (item != null) {
-            if (item.stackable && item.quantity() > 1){
-                desc += Messages.get(this, "carries_several", item.quantity(), item.name());
-            } else {
-                desc += Messages.get(this, "carries", item.name());
+    private class Wandering extends Mob.Wandering {
+
+        @Override
+        public boolean act(boolean enemyInFOV, boolean justAlerted) {
+            super.act(enemyInFOV, justAlerted);
+
+            //if an enemy is just noticed and the thief posses an item, run, don't fight.
+            if (state == HUNTING && item != null){
+                state = FLEEING;
             }
-		}
 
-		return desc;
-	}
-	
-	private class Wandering extends Mob.Wandering {
-		
-		@Override
-		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			super.act(enemyInFOV, justAlerted);
-			
-			//if an enemy is just noticed and the thief posses an item, run, don't fight.
-			if (state == HUNTING && item != null){
-				state = FLEEING;
-			}
-			
-			return true;
-		}
-	}
+            return true;
+        }
+    }
 
-	private class Fleeing extends Mob.Fleeing {
-		@Override
-		protected void escaped() {
-			if (item != null
-					&& !Dungeon.level.heroFOV[pos]
-					&& Dungeon.level.distance(Dungeon.hero.pos, pos) >= 6) {
+    private class Fleeing extends Mob.Fleeing {
+        @Override
+        protected void escaped() {
+            if (item != null
+                    && !Dungeon.level.heroFOV[pos]
+                    && Dungeon.level.distance(Dungeon.hero.pos, pos) >= 9) { // up from 6
 
-				int count = 32;
-				int newPos;
-				do {
-					newPos = Dungeon.level.randomRespawnCell( Thief.this );
-					if (count-- <= 0) {
-						break;
-					}
-				} while (newPos == -1 || Dungeon.level.heroFOV[newPos] || Dungeon.level.distance(newPos, pos) < (count/3));
+                int count = 32;
+                int newPos;
+                do {
+                    newPos = Dungeon.level.randomRespawnCell( Burglar.this );
+                    if (count-- <= 0) {
+                        break;
+                    }
+                } while (newPos == -1 || Dungeon.level.heroFOV[newPos] || Dungeon.level.distance(newPos, pos) < (count/3));
 
-				if (newPos != -1) {
+                if (newPos != -1) {
 
-					pos = newPos;
-					sprite.place( pos );
-					sprite.visible = Dungeon.level.heroFOV[pos];
-					if (Dungeon.level.heroFOV[pos]) CellEmitter.get(pos).burst(Speck.factory(Speck.WOOL), 6);
+                    pos = newPos;
+                    sprite.place( pos );
+                    sprite.visible = Dungeon.level.heroFOV[pos];
+                    if (Dungeon.level.heroFOV[pos]) CellEmitter.get(pos).burst(Speck.factory(Speck.WOOL), 6);
 
-				}
+                }
 
-				if (item != null){
+                if (item != null){
                     if (item.stackable && item.quantity() > 1){
-                        GLog.n( Messages.get(Thief.class, "escapes_several", item.quantity(), item.name()));
+                        GLog.n( Messages.get(Burglar.class, "escapes_several", item.quantity(), item.name()));
                     } else {
-                        GLog.n( Messages.get(Thief.class, "escapes", item.name()));
+                        GLog.n( Messages.get(Burglar.class, "escapes", item.name()));
                     }
                 }
 
 
-				item = null;
-				state = WANDERING;
-			} else {
-				state = WANDERING;
-			}
-		}
-	}
+                item = null;
+                state = WANDERING;
+            } else {
+                state = WANDERING;
+            }
+        }
+    }
 }

@@ -26,6 +26,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Sins;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.SpiritForm;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
@@ -128,15 +129,29 @@ public class Regeneration extends Buff {
     public float regenMultiplier() {
         Hero hero = (Hero)target;
         Hunger hunger = hero.buff(Hunger.class);
+        float hungerMult;
+
         if (hunger == null) {
-            return 1f; // No hunger buff means normal regen
+            hungerMult = 1f; // No hunger buff means normal regen
+        } else {
+            switch (hunger.hungerState()) {
+                case 3:
+                    hungerMult = 0.1f;     // Starving: 90% slower
+                case 2:
+                    hungerMult = 0.6f;  // Very hungry: 40% slower
+                case 1:
+                    hungerMult = 1f;   // Hungry: normal regen
+                default:
+                    hungerMult = 1.15f;    // Well-fed: slightly better regen
+            }
         }
-        switch(hunger.hungerState()) {
-            case 3: return 0.1f;     // Starving: 90% slower
-            case 2: return 0.6f;  // Very hungry: 40% slower
-            case 1: return 1f;   // Hungry: normal regen
-            default: return 1.15f;    // Well-fed: slightly better regen
+
+        float sinMult = 1f;
+        if (Dungeon.isSinActive(Sins.GLUTTONY)){
+            	sinMult = 0.75f; // 25% slower regen with gluttony active
         }
+
+        return hungerMult * sinMult;
     }
 
 	public static final String PARTIAL_REGEN = "partial_regen";

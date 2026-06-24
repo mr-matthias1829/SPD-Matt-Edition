@@ -561,7 +561,7 @@ public class CavesBossLevel extends Level {
 		Painter.set(this, entrance, Terrain.ENTRANCE);
 		transitions.add(new LevelTransition(this,
                 entrance,
-                LevelTransition.Type.BRANCH_ENTRANCE,
+                LevelTransition.Type.REGULAR_ENTRANCE,
                 14,
                 2,
                 LevelTransition.Type.REGULAR_EXIT,

@@ -40,9 +40,9 @@ public class MusicAnnouncer {
     // genuinely one of the files i actually love
     // the idea is simple: if a new track plays, announce it + credits
     // will help prevent copyright issues in the future
-    // i tend to name the tracks as i wish, but always credit the creator
-    // whichever name you put, put the original name in the credits and the alias you gave it + creator
-    // some licenses don't force you to credit them, but we do so anyway because it's simply right
+
+    // whichever name you put, put AT LEAST the original name in the credits and the alias you gave it + creator
+    // some licenses don't force you to credit them, but we do so anyway
 
     // ── Track IDs ─────────────────────────────────────────────────────────────
     public static final int NONE              = -1;
@@ -62,10 +62,10 @@ public class MusicAnnouncer {
     public static final int DEMON_HALLS_TENSE = 14;
     public static final int DEMON_HALLS_BOSS  = 15;
     public static final int FINALE            = 16;
-    public static final int TITLE             = 17;
+    public static final int TITLE             = 17; // pretty sure this will never be used, but since we COULD, list it anyway
 
 
-    public static final int ICE_CAVES_TENSE   = 18;
+    public static final int ICE_CAVES_TENSE   = 18; // created (and used) before calm one, so its above
     public static final int ICE_CAVES    = 19;
 
     // ── filename → track ID ───────────────────────────────────────────────────
@@ -106,7 +106,7 @@ public class MusicAnnouncer {
         FILE_TO_ID.put("music/halls_boss.ogg",          DEMON_HALLS_BOSS);
         FILE_TO_ID.put("music/halls_boss_finale.ogg",   DEMON_HALLS_BOSS);
 
-        FILE_TO_ID.put("music/finale.ogg",              FINALE);
+        FILE_TO_ID.put("music/theme_finale.ogg",        FINALE);
         FILE_TO_ID.put("music/theme_1.ogg",             TITLE);
         FILE_TO_ID.put("music/theme_2.ogg",             TITLE);
 
@@ -117,7 +117,8 @@ public class MusicAnnouncer {
     // ── track ID → display name ───────────────────────────────────────────────
     private static final HashMap<Integer, String> ID_TO_NAME = new HashMap<>();
     static {
-        ID_TO_NAME.put(NONE,            "No Music");
+        // the "help i technically have no category" category
+        ID_TO_NAME.put(NONE,              "No Music");
 
         // vanilla spd
         ID_TO_NAME.put(SEWERS,            "Sewers - SPD");
@@ -138,11 +139,11 @@ public class MusicAnnouncer {
         ID_TO_NAME.put(FINALE,            "Game Finale - SPD");
         ID_TO_NAME.put(TITLE,             "Main Theme - SPD");
 
-        // this modded version's
+        // this modded version
         ID_TO_NAME.put(ICE_CAVES_TENSE,   "Ice Caves Tense - Matt Edition");
 
         // literally any other music
-        ID_TO_NAME.put(ICE_CAVES,          "Ice Caves - Lux-aeterna");
+        ID_TO_NAME.put(ICE_CAVES,          "Cold Arctic Ambient - Lux-aeterna");
     }
 
     // ── State ─────────────────────────────────────────────────────────────────

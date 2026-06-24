@@ -138,9 +138,9 @@ public class IceCavesLevel extends CavesLevel {
         if (Dungeon.depth == mainFloor) {
             // rooms for proper branching
             initRooms.add(roomEntrance = new IceCavesBranchEntrance());
-            initRooms.add(roomBranchExit = new IceCavesBranchExit());
+            initRooms.add(roomExit = new IceCavesBranchExit());
             // rooms that descends deeper into ice caves
-            initRooms.add(roomExit = new IceCavesDeepExit());
+            initRooms.add(roomBranchExit = new IceCavesDeepExit());
         } else {
             // default entrance and exit rooms for non-main ice caves
             initRooms.add(roomEntrance = EntranceRoom.createEntrance(14));

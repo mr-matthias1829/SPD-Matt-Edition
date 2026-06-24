@@ -39,28 +39,34 @@ public class BannerSprites {
 		GAME_OVER,
 	}
 
-	public static Image get( Type type ) {
-		Image icon = new Image( Assets.Interfaces.BANNERS );
-		switch (type) {
-			case TITLE_PORT:
-				icon.frame( icon.texture.uvRect( 0, 0, 139, 100 ) );
-				break;
-			case TITLE_GLOW_PORT:
-				icon.frame( icon.texture.uvRect( 139, 0, 278, 100 ) );
-				break;
-			case TITLE_LAND:
-				icon.frame( icon.texture.uvRect( 0, 100, 240, 157) );
-				break;
-			case TITLE_GLOW_LAND:
-				icon.frame( icon.texture.uvRect( 240, 100, 480, 157 ) );
-				break;
-			case BOSS_SLAIN:
-				icon.frame( icon.texture.uvRect( 0, 157, 127, 225 ) );
-				break;
-			case GAME_OVER:
-				icon.frame( icon.texture.uvRect( 128, 157, 256, 192 ) );
-				break;
-		}
-		return icon;
-	}
+    public static Image get(Type type) {
+        switch (type) {
+
+            case TITLE_PORT:
+                return new Image(Assets.Interfaces.TITLE_PORT);
+
+            case TITLE_LAND:
+                return new Image(Assets.Interfaces.TITLE_LAND);
+
+            case BOSS_SLAIN:
+                return new Image(Assets.Interfaces.BOSS_SLAIN);
+
+            case GAME_OVER:
+                return new Image(Assets.Interfaces.GAME_OVER);
+
+                // legacy logic for glows
+                // ... mostly because their positioning with cuts is... weird
+            case TITLE_GLOW_PORT:
+                Image GP = new Image(Assets.Interfaces.BANNERS);
+                GP.frame( GP.texture.uvRect( 139, 0, 278, 100 ) );
+                return GP;
+
+            case TITLE_GLOW_LAND:
+                Image GL = new Image(Assets.Interfaces.BANNERS);
+                GL.frame( GL.texture.uvRect( 240, 100, 480, 157 ) );
+                return GL;
+        }
+
+        return null;
+    }
 }

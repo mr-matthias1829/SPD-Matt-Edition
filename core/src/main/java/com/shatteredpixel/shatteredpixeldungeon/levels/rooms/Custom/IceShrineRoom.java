@@ -258,7 +258,7 @@ public class IceShrineRoom extends CaveRoom {
                 LevelTransition.Type.REGULAR_EXIT,
                 IceCavesLevel.mainFloor,
                 2,
-                LevelTransition.Type.REGULAR_EXIT,
+                LevelTransition.Type.BRANCH_EXIT, // we place the hero back at origin IC floor branch exit
                 "ice_shrine_exit", // custom name for the transition
                 "ice_caves_deep_exit" // custom name for the destination tile
         );

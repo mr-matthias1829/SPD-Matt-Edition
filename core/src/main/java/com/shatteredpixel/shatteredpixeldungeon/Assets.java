@@ -49,6 +49,7 @@ public class Assets {
 
         public static final String TILES_ICE  = "environment/tiles_ice_no_snow.png";
         public static final String TILES_ICE2  = "environment/tiles_ice_snow.png";
+        public static final String TILES_THIEF_GUILD = "environment/tiles_guild.png";
 
 		public static final String TILES_CAVES_CRYSTAL  = "environment/tiles_caves_crystal.png";
 		public static final String TILES_CAVES_GNOLL    = "environment/tiles_caves_gnoll.png";
@@ -80,6 +81,14 @@ public class Assets {
 		public static final String ARCS_FG  = "interfaces/arcs2.png";
 
 		public static final String BANNERS  = "interfaces/banners.png";
+
+        public static final String BOSS_SLAIN = "interfaces/boss_slain.png";
+        public static final String GAME_OVER = "interfaces/game_over.png";
+        public static final String TITLE_PORT = "interfaces/title_port.png";
+        public static final String TITLE_LAND = "interfaces/title_land.png";
+
+
+
 		public static final String BADGES   = "interfaces/badges.png";
         public static final String BADGES_EXTRA   = "interfaces/badges_extra.png";
 		public static final String LOCKED   = "interfaces/locked_badge.png";
@@ -366,5 +375,6 @@ public class Assets {
 		public static final String FUNGAL_SENTRY    = "sprites/fungal_sentry.png";
 		public static final String FUNGAL_CORE      = "sprites/fungal_core.png";
         public static final String ICEGOLEM = "sprites/ice_golem.png";
+        public static final String THIEF2 = "sprites/thief2.png";
     }
 }

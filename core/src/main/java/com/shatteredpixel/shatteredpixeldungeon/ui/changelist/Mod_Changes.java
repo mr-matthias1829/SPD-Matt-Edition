@@ -55,7 +55,7 @@ public class Mod_Changes {
                 "This mod does _NOT_ auto-update or have visible in-game news.\n\n" +
                         "Download the latest github release for new updates and changelogs. you can find a _link_ to the github on _the about page!_\n\n\n" +
                         "This does NOT have a separate release for each version. Often one release (update) contains 2 or more new versions\n\n" +
-                        "while this mod does _try_ to stay up to date with vanilla SPD... _starting 3.3.0 and higher_, any of those versions are merged if the version code states it, but in a cursed way that _may not include everything from that version!_"));
+                        "This mod _tries_ to stay up to date with vanilla SPD"));
 
 
         // ===== reworks (v1400) =====
@@ -65,217 +65,229 @@ public class Mod_Changes {
 
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARMOR_WARRIOR), "Items",
                 "_Changes:_\n" +
-                        "1. level vs magic level reducing each others effect on armor reduced (30% -> 18%)\n" +
-                        "2. all armor tiers now have a higher base max DR\n" +
-                        "3. removed the global -7% damage nerf to all melee weapons, it's instead applied to missile weapons now and increased to -10%\n" +
-                        "4. the tier based nerfs for weapons have been significantly reduced, melee's gain a 5% more damage boost overall\n" +
-                        "5. increased energy cost for creating the wand of elements through alchemy (21 -> 30)\n" +
-                        "6. glyph of antimagic has a much better chance to proc, but less effect now\n" +
-                        "7. glyph of thorns now has less chance to proc\n" +
-                        "8. "
+                        "_1._ level vs magic level reducing each others effect on armor reduced (30% -> 18%)\n" +
+                        "_2._ all armor tiers now have a higher base max DR\n" +
+                        "_3._ removed the global -7% damage nerf to all melee weapons, it's instead applied to missile weapons now and increased to -10%\n" +
+                        "_4._ the tier based nerfs for weapons have been significantly reduced, melee's gain a 5% more damage boost overall\n" +
+                        "_5._ increased energy cost for creating the wand of elements through alchemy (21 -> 30)\n" +
+                        "_6._ glyph of antimagic has a much better chance to proc, but less effect now\n" +
+                        "_7._ glyph of thorns now has less chance to proc\n" +
+                        "_8._ "
                 ));
 
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_LAGUZ), "Other items",
                 "_Changes:_\n" +
-                        "1. potion of levitation now applies levitation with more duration (default -> default*2)\n" +
-                        "2. natural gold spawn quantity nerf reduced (0.65 -> 0.8), and more base gold in general\n" +
-                        "3. (randomized) gold quantity now gains a very small boost based on depth, scaling faster the deeper you go up to a x3 multiplier\n" +
-                        "4. potion of mastery (potion of strength exotic) can no longer be obtained\n" +
-                        "5. eye of newt (trinket) base mind vision tiles increased (1 -> 2), reduces vision less with each upgrade (12.5% -> 15%), first level vision reduction reduced (12.5% -> 10%)\n" +
+                        "_1._ potion of levitation now applies levitation with more duration (default -> default*2)\n" +
+                        "_2._ natural gold spawn quantity nerf reduced (0.65 -> 0.8), and more base gold in general\n" +
+                        "_3._ (randomized) gold quantity now gains a very small boost based on depth, scaling faster the deeper you go up to a x3 multiplier\n" +
+                        "_4._ potion of mastery (potion of strength exotic) can no longer be obtained\n" +
+                        "_5._ eye of newt (trinket) base mind vision tiles increased (1 -> 2), reduces vision less with each upgrade (12.5% -> 15%), first level vision reduction reduced (12.5% -> 10%)\n",
 
                         "\n_Rings:_\n" +
-                        "1. nerfed ring of accuracy effect (15% -> 10%)\n" +
-                        "2. nerfed ring of arcana effect (12.5% -> 10%)\n" +
-                        "3. buffed ring of evasion effect (1% -> 10%)\n" +
-                        "4. nerfed ring of furor effect (6% -> 5%)\n" +
-                        "5. nerfed ring of haste effect (8% -> 5%)\n" +
-                        "6. ring of might now has a base strength bonus of 1 instead of 0.5, making the first level more effective\n" +
-                        "7. ring of sharpshooting now has a base level increase of 1 instead of 0.5\n" +
-                        "8. buffed ring of tenacity effect (6% -> 10%)\n" +
-                        "9. ring of wealth has been restored to vanilla behavior and stats and has been completely renerfed (less nerfed than before)\n"
+                        "_1._ nerfed ring of accuracy effect (15% -> 10%)\n" +
+                        "_2._ nerfed ring of arcana effect (12.5% -> 10%)\n" +
+                        "_3._ buffed ring of evasion effect (1% -> 10%)\n" +
+                        "_4._ nerfed ring of furor effect (6% -> 5%)\n" +
+                        "_5._ nerfed ring of haste effect (8% -> 5%)\n" +
+                        "_6._ ring of might now has a base strength bonus of 1 instead of 0.5, making the first level more effective\n" +
+                        "_7._ ring of sharpshooting now has a base level increase of 1 instead of 0.5\n" +
+                        "_8._ buffed ring of tenacity effect (6% -> 10%)\n" +
+                        "_9._ ring of wealth has been restored to vanilla behavior and stats and has been completely renerfed (less nerfed than before)\n"
 
                 ));
 
         changes.addButton( new ChangeButton(new Image(Assets.Sprites.TENGU, 0, 0, 14, 16), "Bosses",
                 "\n_Goo:_\n" +
-                        "1. reduced goopling hp (9:7 -> 5) and no longer increases if the challenge _stronger bosses_ is active\n" +
-                        "2. goo hp reduced (160:120 -> 140:120)\n" +
-                        "3. goopling spawn cooldown increased if challenge _stronger bosses_ is active (8 -> 11) to compensate for double goopling spawns\n" +
-                        "4. initial goopling spawn cooldown increased (2 -> 5)\n" +
+                        "_1._ reduced goopling hp (9:7 -> 5) and no longer increases if the challenge _stronger bosses_ is active\n" +
+                        "_2._ goo hp reduced (160:120 -> 140:120)\n" +
+                        "_3._ goopling spawn cooldown increased if challenge _stronger bosses_ is active (8 -> 11) to compensate for double goopling spawns\n" +
+                        "_4._ initial goopling spawn cooldown increased (2 -> 5)\n",
 
                          "\n_Tengu:_\n" +
-                        "1. changed tengu's dialog a bit\n" +
-                        "2. tengu's hp reduced (350:300 -> 285:225)\n" +
-                        "3. tengu's base damage reduced (6,14 -> 5,12)\n" +
-                        "4. tengu in phase 2 starts using traps earlier\n" +
-                        "5. tengu may now use fire trap in challenge _stronger bosses_ as normal\n" +
-                        "6. in challenge _stronger bosses_ tengu still uses the fire trap alongside using any other trap, but at a 33% instead of 100%\n" +
-                        "7. electricity trap is now rarer, unchanged in challenge _stronger bosses_\n" +
-                        "8. tengu's last stand now lasts shorter in challenge _stronger bosses_ (25 -> 18)\n"
+                        "_1._ changed tengu's dialog a bit\n" +
+                        "_2._ tengu's hp reduced (350:300 -> 285:225)\n" +
+                        "_3._ tengu's base damage reduced (6,14 -> 5,12)\n" +
+                        "_4._ tengu in phase 2 starts using traps earlier\n" +
+                        "_5._ tengu may now use fire trap in challenge _stronger bosses_ as normal\n" +
+                        "_6._ in challenge _stronger bosses_ tengu still uses the fire trap alongside using any other trap, but at a 33% instead of 100%\n" +
+                        "_7._ electricity trap is now rarer, unchanged in challenge _stronger bosses_\n" +
+                        "_8._ tengu's last stand now lasts shorter in challenge _stronger bosses_ (25 -> 18)\n"
                 ));
 
         changes.addButton(new ChangeButton(new Image(new RatSprite()), "Enemies",
                         "\n_Sewers:_\n" +
-                        "1. snakes can drop seeds again at a lower chance (vanilla 25% -> 10%)\n" +
-                        "2. gnolls award xp for longer (max lvl 4 -> 8)\n" +
-                        "3. crabs award more xp (2 -> 3), award xp for longer (max lvl 5 -> 9), speed increased (1 -> 1.5), reduced DR (0,4 -> 0,3), reduced damage (3,8 -> 3,7)\n" +
-                        "4. swarm hp increased (30 -> 50), damage reduced (3,7 -> 2,5)\n" +
-                        "5. slime (sewers) damage reduced (4,6 -> 2,5)\n" +
-                        "6. fetid rat (sewers quest) reduced attack proc damage (3,7 -> 2,5), reduced hp (24 -> 20)\n" +
-                        "7. gnoll trickster (sewer quest) xp reduced (7 -> 5), hp reduced (24 -> 18)\n" +
-                        "8. great crab (sewer quest) hp reduced (32 -> 26)\n" +
+                        "_1._ snakes can drop seeds again at a lower chance (vanilla 25% -> 10%)\n" +
+                        "_2._ gnolls award xp for longer (max lvl 4 -> 8)\n" +
+                        "_3._ crabs award more xp (2 -> 3), award xp for longer (max lvl 5 -> 9), speed increased (1 -> 1.5), reduced DR (0,4 -> 0,3), reduced damage (3,8 -> 3,7)\n" +
+                        "_4._ swarm hp increased (30 -> 50), damage reduced (3,7 -> 2,5)\n" +
+                        "_5._ slime (sewers) damage reduced (4,6 -> 2,5)\n" +
+                        "_6._ fetid rat (sewers quest) reduced attack proc damage (3,7 -> 2,5), reduced hp (24 -> 20)\n" +
+                        "_7._ gnoll trickster (sewer quest) xp reduced (7 -> 5), hp reduced (24 -> 18)\n" +
+                        "_8._ great crab (sewer quest) hp reduced (32 -> 26)\n" +
 
                         "\n_Prison:_\n" +
-                        "1. slime (prison) damage reduced (5,8 -> 3,6)\n" +
-                        "2. skeleton damage increased (3,9 -> 3,11)\n" +
-                        "3. thief awards more xp (1 -> 4), speed in caves increased (0.9 -> 1), increased DR (0,3 -> 1,4)\n" +
-                        "4. dm100 (and dm151) damage reduced (3,6 -> 2,6), to increase incentive to use magic upgrades on armor\n" +
-                        "5. guard hp reduced (60 -> 40), defensive increased (1 -> 5), damage increased (5,10 -> 5,14), bash dmg multiplier reduced (x1.25 -> x1.1), lowered bash cooldown (12 -> 10), increased DR (0,4 -> 2,7)\n" +
-                        "6. necromancer was fixed, and will now use it's abilities correctly and more often\n" +
+                        "_1._ slime (prison) damage reduced (5,8 -> 3,6)\n" +
+                        "_2._ skeleton damage increased (3,9 -> 3,11)\n" +
+                        "_3._ thief awards more xp (1 -> 4), speed in caves increased (0.9 -> 1), increased DR (0,3 -> 1,4), less chance to steal equipped equipment (40% -> 32%)\n" +
+                        "_4._ dm100 (and dm151) damage reduced (3,6 -> 2,6), to increase incentive to use magic upgrades on armor\n" +
+                        "_5._ guard hp reduced (60 -> 40), defensive increased (1 -> 5), damage increased (5,10 -> 5,14), bash dmg multiplier reduced (x1.25 -> x1.1), lowered bash cooldown (12 -> 10), increased DR (0,4 -> 2,7)\n" +
+                        "_6._ necromancer was fixed, and will now use it's abilities correctly and more often\n",
 
                         "\n_Caves:_\n" +
-                        "1. fetid rat (caves) now has a max level cap instead of giving xp forever\n" +
-                        "2. gnoll trickster (caves) now has a max level cap instead of giving xp forever, loot chance reduced (18% -> 8%)\n" +
-                        "3. elder gnoll hp increased (16 -> 30), reworked behavior ai to be better at fleeing and can now wander around like any other mob\n" +
-                                "4. bat lifesteal a bit reduced, damage reduced (7,18 -> 5,18), increased hp (30 -> 38)\n" +
-                                "5. brute enrage shield increased (33% -> 50%)\n" +
-                                "6. gnoll baby hp increased (8 -> 14), defensive skill increased (24 -> 32), damage increased (1,5 -> 2,7)\n" +
-                                "7. dm200 reduced loot chance (20% -> 12%), reduced gas exhaust cooldown (30 -> 20)\n" +
+                        "_1._ fetid rat (caves) now has a max level cap instead of giving xp forever\n" +
+                        "_2._ gnoll trickster (caves) now has a max level cap instead of giving xp forever, loot chance reduced (18% -> 8%)\n" +
+                        "_3._ elder gnoll hp increased (16 -> 30), reworked behavior ai to be better at fleeing and can now wander around like any other mob\n" +
+                                "_4._ bat lifesteal a bit reduced, damage reduced (7,18 -> 5,18), increased hp (30 -> 38)\n" +
+                                "_5._ brute enrage shield increased (33% -> 50%)\n" +
+                                "_6._ gnoll baby hp increased (8 -> 14), defensive skill increased (24 -> 32), damage increased (1,5 -> 2,7)\n" +
+                                "_7._ dm200 reduced loot chance (20% -> 12%), reduced gas exhaust cooldown (30 -> 20)\n" +
 
                         "\n_Ice Caves:_\n" +
-                        "1. dm100f DR reduced (0,6 -> 0,4), chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
-                        "2. ice snake chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
-                        "3. frozen swarm hp increased (105 -> 150)\n" +
+                        "_1._ dm100f DR reduced (0,6 -> 0,4), chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
+                        "_2._ ice snake chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
+                        "_3._ frozen swarm hp increased (105 -> 150)\n",
 
                                 "\n_City:_\n" + // yep, we're doing this NOW
-                                "1. ghoul now gets up with more hp (10% -> 33%), but decreases the more times its been downed, take shorter to respawn (base 5 -> 4), reduced defensive (20 -> 16), reduced hp (45 -> 36)\n" +
-                                "2. bandit blindness and cripple duration upon stealing reduced (5 -> 3), hp reduced (45 -> 36)\n" +
-                                "3. elementals... actually they remain unchanged surprisingly\n" +
-                                "4. warlock now has the spirit necromancer as it's rare variant, hp reduced (70 -> 60), chance to degrade reduced (50% -> 25%), damage reduced (12,18 -> 6,13)),will now always cast magic projectile even if adjacent\n" +
-                                "5. monk cooldown to be focussed reduced (6,7 -> 4,6), hp reduced (70 -> 55), reduced loot drop chance (8.3% -> 5%)\n" +
-                                "6. golem self teleport cooldown reduced (30 -> 15), are now twice as likely to shoot a teleport bolt, damage reduced (25,30 -> 12,20), DR reduced (0,12 -> 0,5), hp reduced (120 -> 75)\n" +
-                                "7. spirit necromancer added\n" +
+                                "_1._ ghoul now gets up with more hp (10% -> 33%), but decreases the more times its been downed, take shorter to respawn (base 5 -> 4), reduced defensive (20 -> 16), reduced hp (45 -> 36)\n" +
+                                "_2._ bandit blindness and cripple duration upon stealing reduced (5 -> 3), hp reduced (45 -> 36)\n" +
+                                "_3._ elementals... actually they remain unchanged surprisingly\n" +
+                                "_4._ warlock now has the spirit necromancer as it's rare variant, hp reduced (70 -> 60), chance to degrade reduced (50% -> 25%), damage reduced (12,18 -> 6,13)),will now always cast magic projectile even if adjacent\n" +
+                                "_5._ monk cooldown to be focussed reduced (6,7 -> 4,6), hp reduced (70 -> 55), reduced loot drop chance (8.3% -> 5%)\n" +
+                                "_6._ golem self teleport cooldown reduced (30 -> 15), are now twice as likely to shoot a teleport bolt, damage reduced (25,30 -> 12,20), DR reduced (0,12 -> 0,5), hp reduced (120 -> 75)\n" +
+                                "_7._ spirit necromancer added\n",
 
                         "\n_Rare:_\n" +
-                        "1. albino rat hp reduced (30 -> 15) and awards xp (0 -> 2), bleed inflicted is now equal to half of damage dealt\n" +
-                        "2. hermit crab speed increased (0.9 -> 1)\n" +
-                        "3. dm151 now seeks out the hero\n" +
+                        "_1._ albino rat hp reduced (30 -> 15) and awards xp (0 -> 2), bleed inflicted is now equal to half of damage dealt\n" +
+                        "_2._ hermit crab speed increased (0.9 -> 1)\n" +
+                        "_3._ dm151 now seeks out the hero\n" +
 
 
                         "\n_Global:_\n" +
-                        "1. piranha speed reduced (3 -> 2), now deals +1 minimum damage\n" +
-                        "2. mimic's no longer reward xp\n" +
-                        "3. statue defensive skill reduced (depth*2 -> depth), hp reduced (depth*7 -> depth*6)"
+                        "_1._ piranha speed reduced (3 -> 2), now deals +1 minimum damage\n" +
+                        "_2._ mimic's no longer reward xp\n" +
+                        "_3._ statue defensive skill reduced (depth*2 -> depth), hp reduced (depth*7 -> depth*6)"
                 ));
 
         changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bug and error fixes",
                 "_Fixes:_\n" +
-                        "1. tengu's defeat message should now correctly show\n" +
-                        "2. stone of enchantment's sprite is no longer blurry (how the hell did it get blurry in the first place???)\n" +
-                        "3. ring of sharpshooting now correctly applies durability bonus, before granting more than it should have and than is stated\n" +
-                        "4. rings of sharpshooting and might direct stats (missile level and additional strength) are no longer deceiving and fixed, being 100% accurate now\n" +
-                        "5. seeds now actually work, always having the same dungeon/item generation for the same seed. this was broken and hidden away before\n" +
-                        "6. blacksmith now has a greeting for the peasant and a in-code default, should no longer crash\n" +
-                        "7. challenge _I hate myself_ now no longer identifies scrolls. previously, it mistakenly did\n" +
-                        "8. fixed a handful of out-of-date or weird text\n" +
-                        "9. FINALLY fixed scroll of magic upgrade after so long... the fix was strangely easy too\n"
+                        "_1._ tengu's defeat message should now correctly show\n" +
+                        "_2._ stone of enchantment's sprite is no longer blurry (how the hell did it get blurry in the first place???)\n" +
+                        "_3._ ring of sharpshooting now correctly applies durability bonus, before granting more than it should have and than is stated\n" +
+                        "_4._ rings of sharpshooting and might direct stats (missile level and additional strength) are no longer deceiving and fixed, being 100% accurate now\n" +
+                        "_5._ dungeon seeds now actually work, always having the same dungeon/item generation for the same seed. this was broken and hidden away before\n",
+                        "_6._ blacksmith now has a greeting for the peasant and a in-code default, should no longer crash\n" +
+                        "_7._ challenge _I hate myself_ now no longer identifies scrolls. previously, it mistakenly did\n" +
+                        "_8._ fixed a handful of out-of-date or weird text\n" +
+                        "_9._ FINALLY fixed scroll of magic upgrade after so long... the fix was strangely easy too\n" +
+                        "_10._ sin of gluttony now affects passive health regen like it should. before it didn't\n" +
+                        "_11._ fixed a case where the game would crash when trying to pick up the amulet with at least one or more sins active at once\n"
 
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.DISPLAY_LAND), "Visuals and UI",
                 "_Changes:_\n" +
-                        "1. small changes to the title screen and other ui like 'boss defeated'\n" +
-                        "2. talents tab is no longer visible for the peasant, including during rankings\n" +
-                        "3. removed all languages apart from english\n" +
-                        "4. updated some messages to be up to date with some changes (ex: POS only saying it gives 1 STR, etc)\n" +
-                        "5. scroll of magic upgrade and debuff _consuming greed_ now have their own distinct icons\n" +
-                        "6. removed the 'unused enemies' tab in the enemy bestiary. They still exist, but will be properly added when their time comes\n" +
-                        "7. updated some guidebook pages to be somewhat more up to date\n" +
-                        "8. readded the option to input a generation seed\n" +
-                        "9. changed elder gnoll sprite slightly\n" +
-                        "10. moved ice caves enemies into the new 'branching' sort\n" +
-                        "11. added the new misc settings tab, which will have some settings that don't fit in the other tabs\n" +
-                        "12. added a new setting that speeds up enemy combat related animations up to 4 times their speed. Please use this, it took me like 6+ hours to properly make this.\n" +
-                        "13. if the music ever changes in-game, it's now announced in the game log with the name of the track and it's source or creator\n" +
-                        "14. added a new tab in the alchemy guide for equipment crafting\n" +
-                        "15. changes scene now has a better split between SPD and ME changes\n" +
-                        "16. shortened version name and such, and the code wants you to use dots and yadayadayade... just deal with it\n"
+                        "_1._ small changes to ui like 'boss defeated'\n" +
+                        "_2._ talents tab is no longer visible for the peasant, including during rankings\n" +
+                        "_3._ removed all languages apart from english\n" +
+                        "_4._ updated some messages to be up to date with some changes (ex: POS only saying it gives 1 STR, etc)\n" +
+                        "_5._ scroll of magic upgrade and debuff _consuming greed_ now have their own distinct icons\n" +
+                        "_6._ removed the 'unused enemies' tab in the enemy bestiary. They still exist, but will be properly added when their time comes\n" +
+                        "_7._ updated some guidebook pages to be somewhat more up to date\n" +
+                        "_8._ readded the option to input a generation seed\n" +
+                        "_9._ changed some sprites like the elder gnoll sprite and many others slightly\n",
+
+                        "_10._ moved ice caves enemies into the new 'branching' sort\n" +
+                        "_11._ added the new misc settings tab, which will have some settings that don't fit in the other tabs\n" +
+                        "_12._ added a new setting that speeds up enemy combat related animations up to 4 times their speed. Please use this, it took me like 6+ hours to properly make this.\n" +
+                        "_13._ if the music ever changes in-game, it's now announced in the game log with the name of the track and it's source or creator\n" +
+                        "_14._ added a new tab in the alchemy guide for equipment crafting\n" +
+                        "_15._ changes scene now has a better split between SPD and ME changes\n" +
+                        "_16._ shortened version name and such, and the code wants you to use dots and yadayadayade... just deal with it\n" +
+                        "_17._ a brand new proper title screen change! it sure as heck doesn't look perfect, and i sure as heck won't fix it!"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CHALLENGE_COLOR), "Challenges and sins",
-                "_Changes:_\n" +
-                        "1. nerfed sloth turns gain per floor, sloth damage scales slower\n" +
-                        "2. removed challenges _back to origins_, _guns blazing_, and _wonky step_, mostly for being unfair\n" +
-                        "3. challenge _consuming greed_ now gains a buff in it's difficulty if you have the sin of greed active (you've been warned)\n" +
-                        "4. challenge _I hate myself_ now disables the creation of notes for items and depths\n"
+                "_Challenges:_\n" +
+                        "_1._ removed challenges _back to origins_, _guns blazing_, and _wonky step_, mostly for being unfair\n" +
+                        "_2._ challenge _I hate myself_ now disables the creation of notes for items and depths\n" +
+
+                        "\n_Sins:_\n" +
+                        "_1._ nerfed sloth turns gain per floor, sloth damage scales slower\n" +
+                        "_2._ nerfed sin of desire, no longer being guaranteed +1, and chance to upgrade is no longer a set 33% up to +4. instead now has a increased chance to be upgraded, with the chance still increasing each upgrade\n" +
+                        "_3._ gluttony has a better description and heals for more (10% +2 -> 12% +5)\n",
+
+                        "\n_Challenge Consuming Greed:_\n" +
+                        "_1._ now gains a buff in it's difficulty if you have the sin of greed active\n" +
+                        "_2._ disabled in this version until later notice. is currently in a stasis of whenever it should stay or not\n"
 
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "Mechanics and other changes",
                 "_Changes:_\n" +
-                        "1. the peasant now starts with cloth armor as the only hero, but lacks strength to use it\n" +
-                        "2. the warrior needs less enemies defeated in one game to be unlocked (75 -> 60), and now has a optional secondary method to be unlocked\n" +
-                        "3. levitation buff default duration is now the same as other buffs (30 -> 20)\n" +
-                        "4. rare enemies spawn chance reduced, becoming twice as rare (1/20 -> 1/40)\n" +
-                        "5. alchemy guide pages now drop in a more customized order and some now have a minimum region to appear in\n"
+                        "_1._ the peasant now starts with cloth armor as the only hero, but lacks strength to use it\n" +
+                        "_2._ the warrior needs less enemies defeated in one game to be unlocked (75 -> 60), and now has a optional secondary method to be unlocked\n" +
+                        "_3._ levitation buff default duration is now the same as other buffs (30 -> 20)\n" +
+                        "_4._ rare enemies spawn chance reduced, becoming twice as rare (1/20 -> 1/40)\n" +
+                        "_5._ alchemy guide pages now drop in a more customized order and some now have a minimum region to appear in\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Generation and traps",
                 "_Changes:_\n" +
-                        "1. ice caves floor now has different odds for it's traps, hopefully offering a bit more variety\n" +
-                        "2. ice caves floor now has its generation adjusted and generates a bit smaller on floor 14\n" +
-                        "3. ice caves now has a optional path stretching down from floor 14 to floor 18\n" +
-                        "4. fixed issues with exits/entrances overlapping (including for blacksmith) and some generation generating the wrong types of level\n" +
-                        "5. catalysts floors to spawn on changed (1-3 -> 2-4)\n" +
-                        "6. ice caves no longer generates essential items (scrolls of upgrade, potions of strength, etc)\n" +
-                        "7. branches should no longer generate alchemy rooms\n" +
-                        "8. ice caves item generation was adjusted\n"
+                        "_1._ ice caves floor now has different odds for it's traps, hopefully offering a bit more variety\n" +
+                        "_2._ ice caves floor now has its generation adjusted and generates a bit smaller on floor 14\n" +
+                        "_3._ ice caves now has a optional path stretching down from floor 14 to floor 18\n" +
+                        "_4._ fixed issues with exits/entrances overlapping (including for blacksmith) and some generation generating the wrong types of level\n" +
+                        "_5._ catalysts floors to spawn on changed (1-3 -> 2-4)\n" +
+                        "_6._ ice caves no longer generates essential items (scrolls of upgrade, potions of strength, etc)\n" +
+                        "_7._ branches should no longer generate alchemy rooms\n" +
+                        "_8._ ice caves item generation was adjusted\n"
 
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CATALOG), "Enemy and item spawning",
                 "_Enemies:_\n" +
-                        "1. floor 6 and 7 can no longer spawn snake\n" +
-                        "2. reduced slime spawn chance on floor 8\n" +
-                        "3. floor 18 spawns 1 less monk, and can now spawn spirit necromancer\n" +
-                        "4. floor 19 spawns 1 less golem, and can now spawn spirit necromancer\n" +
+                        "_1._ floor 6 and 7 can no longer spawn snake\n" +
+                        "_2._ reduced slime spawn chance on floor 8\n" +
+                        "_3._ floor 18 spawns 1 less monk, and can now spawn spirit necromancer\n" +
+                        "_4._ floor 19 spawns 1 less golem, and can now spawn spirit necromancer\n" +
 
                         "\n_Items:_\n" +
-                        "1. scroll of identify is a little more common\n" +
-                        "2. scroll of remove curse is a little more common and spawns in more cases\n" +
-                        "3. the following rings are now rarer compared to other rings: wealth, might, haste, and furor. Energy is made rarer too, but less so\n" +
-                        "4. the following artifacts are now rarer compared to other artifacts: chalice of blood and ethereal chains\n" +
-                        "5. the following artifacts are now a bit more common compared to other artifacts: talisman of foresight and unstable spellbook\n" +
-                        "6. a potion of strength will now always spawn on floor 1\n" +
+                        "_1._ scroll of identify is a little more common\n" +
+                        "_2._ scroll of remove curse is a little more common and has a chance to spawn in more cases\n" +
+                        "_3._ the following rings are now rarer compared to other rings: wealth, might, haste, and furor. Energy is made rarer too, but less so\n" +
+                        "_4._ the following artifacts are now rarer compared to other artifacts: chalice of blood and ethereal chains\n" +
+                        "_5._ the following artifacts are now a bit more common compared to other artifacts: talisman of foresight and unstable spellbook\n" +
+                        "_6._ a potion of strength will now always spawn on floor 1\n",
 
                         "\n_Item tier distribution:_\n" +
-                        "1. sewers: much more likely to spawn T2 or T3 items, can still not spawn T4 or T5 items\n" +
-                        "2. prison: less likely to spawn T1 items, and more likely for T3, T4 slightly increased as well\n" +
-                        "3. caves: slightly less likely to spawn T2 items, T4 and T5 a bit more likely, T3 much more likely\n" +
-                        "4. city: less likely to spawn T2 items, and more likely for T3 and T5\n" +
-                        "5. halls: can no longer spawn T2 items, significantly more likely for T3, T4, and T5\n"
+                        "_short version:_ tier distribution is much more manageable\n" +
+                        "_1._ sewers: much more likely to spawn T2 or T3 items, can still not spawn T4 or T5 items\n" +
+                        "_2._ prison: less likely to spawn T1 items, and more likely for T3, T4 slightly increased as well\n" +
+                        "_3._ caves: slightly less likely to spawn T2 items, T4 and T5 a bit more likely, T3 much more likely\n" +
+                        "_4._ city: less likely to spawn T2 items, and more likely for T3 and T5\n" +
+                        "_5._ halls: can no longer spawn T2 items, significantly more likely for T3, T4, and T5\n"
 
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.BADGES), "Badges",
                 "_Changes:_\n" +
-                        "1. fixed badge 'against everything and more' being rewarded at 1+ challenges instead of 3+\n" +
-                        "2. badge 'against everything and more' is now forever hidden unless achieved\n" +
-                        "3. removed the victory with X sins badges\n" +
-                        "4. stacked all victory with X challenges badges\n" +
-                        "5. fixed some badges\n" +
-                        "6. more badges stack now (including some vanilla badges)\n" +
-                        "7. added some new badges for collective stacking\n" +
-                        "8. added a new badge\n" +
-                        "9. added 3 new badges that are almost directly linked to progression and this mod's exclusive stuff\n" +
-                        "10. added a handful more badges that are all secret (not visible unless achieved), they have a '[secret badge]' in their description. How many can you find?\n"
+                        "_1._ fixed badge 'against everything and more' being rewarded at 1+ challenges instead of 3+\n" +
+                        "_2._ badge 'against everything and more' is now forever hidden unless achieved\n" +
+                        "_3._ removed the victory with X sins badges\n" +
+                        "_4._ stacked all victory with X challenges badges\n" +
+                        "_5._ fixed some badges\n" +
+                        "_6._ more badges stack now (including some vanilla badges)\n" +
+                        "_7._ added some new badges for collective stacking\n" +
+                        "_8._ added a new badge\n" +
+                        "_9._ added 3 new badges that are almost directly linked to progression and this mod's exclusive stuff\n" +
+                        "_10._ added a handful more badges that are all secret (not visible unless achieved), they have a '[secret badge]' in their description. How many can you find?\n"
                 ));
 
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARROW_SIGN), "brand new content",
                 "_Additions:_\n" +
-                        "1. replaced potion of mastery with the potion of vitality, which increases max hp\n" +
-                        "2. added exotic variant to scroll of magic upgrade, the scroll of pure magic\n" +
-                        "3. added 9 new weapons, considered unique and only obtainable through the blacksmith. some of these are references to other games!\n" +
+                        "_1._ replaced potion of mastery with the potion of vitality, which increases max hp\n" +
+                        "_2._ added exotic variant to scroll of magic upgrade, the scroll of pure magic\n" +
+                        "_3._ added 9 new weapons, only obtainable through the blacksmith. some of these are references to other games!\n" +
                         // while you're here anyway: here are the exact references
                         // shadow = not based on a reference
                         // purge = not based on a reference
@@ -286,60 +298,54 @@ public class Mod_Changes {
                         // bloodletter = reference to the mobile game "backpack heroes", where a weapon with the same name, nearly same behavior, and (almost) same look exists
                         // amethyst piercer = not (directly) based on a reference, but vaguely inspired by the minecraft mace
                         // arrow sign = reference to the roblox game "super cube cavern", where in it's shops the "helpful arrow" can be bought and used. in that game it's a unusual weapon, and in here it's too.
-                        "4. the blacksmith has a new option for you to spend favor on: extract. this will destroy the item, but give you half of their upgrades as scrolls\n" +
-                        "5. the blacksmith has a new option for you to spend favor on: liquidize. this will destroy the item, but give you some favor in return, can only be done once per run. max favor (3000 -> 3800)\n" +
-                        "6. added a new curse for both weapons and armor: the curse of binding. this curse has no effect on it's own, but can't be removed using scrolls of upgrade\n" +
-                        "7. the ice caves now has a additional optional path. a new enemy spawns in said path, the ice golem. at the end of the path, a new unique rewards awaits you\n" +
-                        "8. reworked wand of elements to be much less random and added a battlemage effect to it\n" +
-                        "9. added wand of explosion, and wand of fireball. fireball is made in alchemy while explosion can be found in the dungeon\n" +
-                        "10. reworked augments to be more versatile and added icy core\n" +
-                        "11. added throwing chains, a weaker consumable version of the ethereal chains, purchasable in shops starting from the caves\n"
+                        "_4._ the blacksmith has a new option for you to spend favor on: extract. this will destroy the item, but give you half of their upgrades as scrolls\n" +
+                        "_5._ the blacksmith has a new option for you to spend favor on: liquidize. this will destroy the item, but give you some favor in return, can only be done once per run. max favor (3000 -> 3800)\n" +
+                        "_6._ added a new curse for both weapons and armor: the curse of binding. this curse has no effect on it's own, but can't be removed using scrolls of upgrade\n",
+                        "_7._ the ice caves now has a additional optional path. a new enemy spawns in said path, the ice golem. at the end of the path, a new unique rewards awaits you\n" +
+                        "_8._ reworked wand of elements to be much less random and added a battlemage effect to it\n" +
+                        "_9._ added wand of explosion, and wand of fireball. fireball is made in alchemy while explosion can be found in the dungeon\n" +
+                        "_10._ reworked augments to be more versatile and added icy core\n" +
+                        "_11._ added throwing chains, a weaker consumable version of the ethereal chains, purchasable in shops starting from the caves\n" +
+                        "_12._ you love thieves? no? too bad! added the thieves guild in the prisons! not gonna explain the details here because have fun!\n"
         ));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.INFO), "Notes",
                 "_Overall:_\n" +
-                        "1. this rework has mostly focussed on completely rebalancing the difficulty to be far less extreme\n" +
-                        "2. the secondary focus, and future focus will be on adding new content or changing existing content\n" +
-                        "3. compared to vanilla, the difficulty will likely stay a bit higher, but still at a point where it's bearable\n" +
-
-                        "\n_Bosses:_\n" +
-                        "1. bosses were made easier to more consistently be able to beat them\n" +
-                        "2. on top of that: changes were made to make the challenge _stronger bosses_ more realistic to be beatable (though, don't expect it to be perfect yet)\n" +
-
-                        "\n_Enemies and Items:_\n" +
-                        "1. before, there was a huge inbalance. enemies were way stronger than the hero and items they had\n" +
-                        "2. many enemies were nerfed, and all items got a general buff to balance it out\n" +
-                        "3. the peasant was buffed a bit, starting with armor so his runs die less often\n" +
-                        "4. don't think that you can now win any run by playing well, rng will still play a major factor. most risks have been reduced, but still are a risk for you to take\n" +
+                        "_1._ this rework has mostly focussed on rebalancing the difficulty\n" +
+                        "_2._ the secondary focus, and future focus will be on adding new content or changing existing content, and less about making the game harder\n" +
+                        "_3._ compared to vanilla, the difficulty will likely stay a bit higher, but still at a point where it's bearable\n",
 
                         "\n_Clean ups and fixes:_\n" +
-                        "1. there were a handful of messes than needed a cleanup, mainly challenges, badges, and the title screen\n" +
-                        "2. the title screen was removed of it's random rainbow effect, replaced by a more fitting color that from now on will be used more frequently as the style color\n" +
-                        "3. badges were (mostly) cleaned up, and will definitely be cleaned up more in the future\n" +
-                        "4. as for language, I removed them all except english. reason being that existing languages would continue using old information and was just very inconvenient to maintain\n"
+                        "_1._ there were a handful of messes than needed a cleanup, mainly challenges, badges, and the title screen\n" +
+                        "_2._ the title screen was removed of it's random rainbow effect, replaced by a more fitting color that from now on will be used more frequently as the style color\n" +
+                        "_3._ badges were (mostly) cleaned up, being much more stackable to leave some space for other badges\n" +
+                        "_4._ as for language, i removed them all except english. reason being that existing languages would continue using old information and was just very inconvenient to maintain\n",
+
+                        "\n_New content:_\n" +
+                                "_1._ a handful of content was added, a huge amount for this mod in one version to be exact\n" +
+                                "_2._ this new content mostly delves into some new exploration and rewards for them\n" +
+                                "_3._ as per usual: will need some rebalancing in the future, nothing starts off perfect\n"
                 ));
 
         changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Dev and debug changes",
                 "_NOTE:_ these changes _ONLY_ matter to those using a debug version of the game or working with the code\n" +
                 "\n_Changes:_\n" +
-                        "1. in the code, theres some new methods and variables to use in level classes for a better config of generation, usage can be seen in ice caves class.\n" + // still lacks documentation because im lazy, but also lacks support for overriding splash screens
-                        "2. running debug now automatically unlocks the full catalog and bestiary (upon starting a run that is). note that this will unlock it on your savefile and not just for debug\n" +
-                        "3. added new optional parameters for entrance and exit transitions, allowing you to specify custom id's for them, granting significantly more control over them. usage can be seen in ice caves and blacksmith quest levels and (exit/entrance) rooms\n" +
-                        "4. removed duplicate entries for cheat mode setting for debug. it can now only be found in the new misc settings\n" + // in the future, likely make a special misc settings tab for cases like these
-                        "5. some weird or unclean code i have created now has some comments explaining why it is as it is or a TODO on how to fix it. in the future i will likely clean them up myself\n" +
-                        "6. so you know enemy sprites? 99% of them use a new constructor now. some effects also had their constructors changed. both went towards making animation speeds faster and is rather... unclean, but working\n" +
-                        "7. added some more debug settings to make testing a handful easier. includes: slider that determines what floor you start on, and a toggle for enabling badges during cheat mode (default is false). cheat mode will now also start with many of the most useful consumables in their inventory.\n"
+                        "_1._ running debug now automatically unlocks the full catalog and bestiary (upon starting a run that is). note that this will unlock it on your savefile and not just for debug\n" +
+                        "_2._ removed duplicate entries for cheat mode setting for debug. it can now only be found in the new misc settings\n" + // in the future, likely make a special misc settings tab for cases like these
+                        "_3._ some weird or unclean code i have created now has some comments explaining why it is as it is or a TODO on how to fix it. in the future i will likely clean them up myself\n" +
+                        "_4._ added some more debug settings to make testing a handful easier. cheat mode will now also start with many of the most useful consumables in their inventory.\n"
                 ));
 
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.GUIDE_PAGE, null), "I'm not reading all that",
                 "The short list of important changes:\n" +
-                        "1. overall difficulty reworked, aiming towards a better balance\n" +
-                        "2. blacksmith has new rewards waiting for you\n" +
-                        "3. ice caves now has a new optional path expansion\n" +
-                        "4. ring 'rebalanced', some new items, and handful of item changes\n" +
-                        "5. bosses reworked to be a bit easier and more consistent\n" +
-                        "6. new setting\n" +
-                        "7. handful of fixes, clean ups, and new badges\n"
+                        "_1._ overall difficulty reworked, aiming towards a better balance\n" +
+                        "_2._ blacksmith has new rewards waiting for you\n" +
+                        "_3._ ice caves now has a new optional path expansion\n" +
+                        "_4._ prison has something new for you to uncover\n" +
+                        "_5._ rings 'rebalanced', some new items, and handful of item changes\n" +
+                        "_6._ (currently changed) bosses reworked to be a bit easier and more consistent\n" +
+                        "_7._ new setting\n" +
+                        "_8._ handful of fixes, clean ups, and new badges\n"
         ));
 
 

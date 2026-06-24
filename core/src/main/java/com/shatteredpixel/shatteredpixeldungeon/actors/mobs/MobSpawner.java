@@ -306,5 +306,12 @@ public class MobSpawner extends Actor {
 		RARE_ALTS.put(Elemental.class,      Elemental.ChaosElemental.class);
 
 		RARE_ALTS.put(Scorpio.class,        Acidic.class);
+
+        // bandit is quite strong for when it appears in the guild
+        // we still want him there, just not as common
+        // so hes a rare enemy
+        // in terms of abilities its a downgrade. in terms of stats a pretty big upgrade.
+        RARE_ALTS.put(Burglar.class,        Bandit.class);
+        RARE_ALTS.put(Snatcher.class,        Bandit.class);
 	}
 }

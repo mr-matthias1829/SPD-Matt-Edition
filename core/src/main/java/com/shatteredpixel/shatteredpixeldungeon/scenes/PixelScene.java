@@ -28,6 +28,7 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 import com.badlogic.gdx.Input;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BadgeBanner;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
@@ -184,6 +185,8 @@ public class PixelScene extends Scene {
 
 	@Override
 	public void update() {
+        MusicAnnouncer.update();
+
 		//we create this here so that it is last in the scene
 		if (DeviceCompat.isDesktop() && fullscreenListener == null){
 			KeyEvent.addKeyListener(fullscreenListener = new Signal.Listener<KeyEvent>() {

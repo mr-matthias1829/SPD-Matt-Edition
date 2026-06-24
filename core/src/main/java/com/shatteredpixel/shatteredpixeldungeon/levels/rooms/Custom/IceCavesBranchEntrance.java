@@ -86,10 +86,10 @@ public class IceCavesBranchEntrance extends CaveRoom {
         LevelTransition entrance = new LevelTransition(
                 level,
                 entranceCell,
-                LevelTransition.Type.BRANCH_ENTRANCE,
+                LevelTransition.Type.REGULAR_ENTRANCE,
                 Dungeon.depth, // Same depth in branch 0
                 0, // Back to main branch
-                LevelTransition.Type.BRANCH_EXIT,
+                LevelTransition.Type.REGULAR_EXIT,
                 "ice_caves_branch_entrance", // Custom name for the transition
                 "ice_caves_entrance"
         );

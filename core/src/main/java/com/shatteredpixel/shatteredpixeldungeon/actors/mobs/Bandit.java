@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BanditSprite;
 import com.watabou.utils.Random;
 
@@ -48,9 +49,7 @@ public class Bandit extends Thief {
 		//guaranteed first drop, then 1/3, 1/9, etc.
 		//lootChance = 1f;
 
-
-
-        HP = HT = 36;
+        HP = HT = 38;
         defenseSkill = 22;
         baseSpeed = 1f; // 0.85f
 
@@ -58,19 +57,34 @@ public class Bandit extends Thief {
         maxLvl = 19;
 
         loot = Random.oneOf(Generator.Category.RING, Generator.Category.ARTIFACT);
-        lootChance = 0.03f; //initially, see lootChance()
+        lootChance = 0.02f; //initially, see lootChance()
 
         properties.add(Property.UNDEAD);
 	}
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( 6, 12 );
+        return Random.NormalIntRange( 6, 14 );
     }
 
     @Override
     public int attackSkill( Char target ) {
         return 20;
+    }
+
+    @Override
+    public String description() {
+        String desc = super.description();
+
+        if (item != null) {
+            if (item.stackable && item.quantity() > 1){
+                desc += Messages.get(this, "carries_several", item.quantity(), item.name());
+            } else {
+                desc += Messages.get(this, "carries", item.name());
+            }
+        }
+
+        return desc;
     }
 	
 	@Override

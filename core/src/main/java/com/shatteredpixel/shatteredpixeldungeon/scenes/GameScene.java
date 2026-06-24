@@ -842,7 +842,7 @@ public class GameScene extends PixelScene {
 
 		super.update();
 
-        MusicAnnouncer.update();
+        //MusicAnnouncer.update();
 
 		if (notifyDelay > 0) notifyDelay -= Game.elapsed;
 

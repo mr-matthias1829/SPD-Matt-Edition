@@ -30,9 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.FriendlyThief;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WindParticle;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.PrisonPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
@@ -85,16 +88,16 @@ public class PrisonLevel extends RegularLevel {
 		wandmakerQuestWasActive = Wandmaker.Quest.active();
 	}
 
-	@Override
-	protected ArrayList<Room> initRooms() {
-		return Wandmaker.Quest.spawnRoom(super.initRooms());
-	}
+    @Override
+    protected ArrayList<Room> initRooms() {
+        return FriendlyThief.Quest.spawnRoom(Wandmaker.Quest.spawnRoom(super.initRooms()));
+    }
 
-	@Override
-	protected void createMobs() {
-		Wandmaker.Quest.spawnWandmaker(this, roomEntrance);
-		super.createMobs();
-	}
+    @Override
+    protected void createMobs() {
+        Wandmaker.Quest.spawnWandmaker(this, roomEntrance);
+        super.createMobs();
+    }
 
 	@Override
 	protected int standardRooms(boolean forceMax) {
@@ -144,13 +147,18 @@ public class PrisonLevel extends RegularLevel {
 				1, 1, 1, 1, 1, 1 };
 	}
 
-	@Override
-	public void occupyCell(Char ch) {
-		super.occupyCell(ch);
-		if (ch == Dungeon.hero) {
-			updateWandmakerQuestMusic();
-		}
-	}
+    @Override
+    public void occupyCell(Char ch) {
+        super.occupyCell(ch);
+        if (ch == Dungeon.hero) {
+            updateWandmakerQuestMusic();
+
+            if (FriendlyThief.Quest.accessed()
+                    && ch.pos == FriendlyThief.Quest.getEntranceCell()) {
+                FriendlyThief.Quest.cleanupTransition();
+            }
+        }
+    }
 
 	private Boolean wandmakerQuestWasActive = null;
 
@@ -251,4 +259,20 @@ public class PrisonLevel extends RegularLevel {
 			}
 		}
 	}
+    // we need this for the friendly thief stuff...?
+    // ... yeah i guess? spd is weeeirrddd man
+    @Override
+    public boolean activateTransition(Hero hero, LevelTransition transition) {
+        if (transition.type == LevelTransition.Type.BRANCH_EXIT
+                && transition.destBranch == 2
+                && !FriendlyThief.Quest.accessed()) {
+
+            FriendlyThief.Quest.markAccessed();
+            return super.activateTransition(hero, transition);
+
+        } else {
+            return super.activateTransition(hero, transition);
+        }
+    }
+
 }

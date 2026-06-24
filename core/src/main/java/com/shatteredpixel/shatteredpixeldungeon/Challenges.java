@@ -65,7 +65,6 @@ public class Challenges {
 			"darkness",
 			"no_scrolls",
             "i_hate_myself",
-            "consuming_greed"
 	};
 
 	public static final int[] MASKS = {
@@ -73,7 +72,7 @@ public class Challenges {
             NO_HEALING, NO_HERBALISM, SWARM_INTELLIGENCE, DARKNESS,
             NO_SCROLLS,
 
-            I_HATE_MYSELF, CONSUMING_GREED
+            I_HATE_MYSELF
 	};
 
     public static int activeChallenges(){

@@ -94,9 +94,9 @@ public class Food extends Item {
 			Badges.validateFoodEaten();
 
             if (Dungeon.isSinActive(Sins.GLUTTONY)) {
-                Buff.affect(hero, Bulky.class, 20f + TIME_TO_EAT); // 30 turns duration
+                Buff.affect(hero, Bulky.class, 20f + TIME_TO_EAT);
                 Healing healing = Buff.affect(hero, Healing.class);
-                healing.setHeal((int) (0.1f * hero.HT + 2), 0.1f, 0);
+                healing.setHeal((int) (0.12f * hero.HT + 5), 0.1f, 1);
             }
 		}
 	}

@@ -290,9 +290,9 @@ public class ShopRoom extends SpecialRoom {
 		if (Dungeon.depth != 6) {
             itemsToSpawn.add(TippedDart.randomTipped(2));
 
-            int amount = Random.IntRange(2, 6);
+            int amount = Random.IntRange(1, 3);
             itemsToSpawn.add( new ThrowingChains().quantity(amount));
-            if (Random.Float() <= 0.4f && amount <= 3) { // 40% for more chains if amount is low, max of 6 chains per shop
+            if (Random.Float() <= 0.4f && amount <= 2) { // 40% for more chains if amount isnt max, max of 4 chains per shop
                 itemsToSpawn.add( new ThrowingChains().quantity(amount));
             }
         }

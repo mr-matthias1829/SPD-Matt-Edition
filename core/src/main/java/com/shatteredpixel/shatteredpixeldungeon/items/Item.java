@@ -576,13 +576,16 @@ public class Item implements Bundlable {
 
     public int rollEquipmentLevel(boolean soft){
         if (Dungeon.isSinActive(Sins.DESIRE)) {
-            //cant be bothered to calcuate each outcome... but uhh... it's in your favor okay?
-           int n = 1;
-            if (Random.Int(3) == 0) {
+            //+0: 50% (1/2)
+            //+1: 30% (3/10)
+            //+2: 15% (3/20)
+            //+3: 5%  (1/20)
+           int n = 0; // was 1 before
+            if (Random.Int(2) == 0) {
                 n++;
                 if (Random.Int(4) == 0){
                     n++;
-                    if (Random.Int(3) == 0){
+                    if (Random.Int(5) == 0){
                         n++;
                     }
                 }

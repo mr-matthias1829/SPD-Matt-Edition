@@ -31,15 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.S
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.ShadowClone;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.SmokeBomb;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
@@ -106,11 +98,11 @@ public enum Bestiary {
     //SPECIAL,
     //SPECIALUNUSED,
 	REGIONAL,
+    BRANCHING,
 	BOSSES,
 	UNIVERSAL,
 	RARE,
     RECURRING,
-    BRANCHING,
 	QUEST,
 	NEUTRAL,
 	ALLY,
@@ -174,7 +166,13 @@ public enum Bestiary {
 				Bat.class, Brute.class, Shaman.RedShaman.class, Shaman.BlueShaman.class, Shaman.PurpleShaman.class, GnollBaby.class, Spinner.class, DM200.class,
                 ElderGnoll.class,
 				Ghoul.class, Bandit.class, Elemental.FireElemental.class, Elemental.FrostElemental.class, Elemental.ShockElemental.class, Warlock.class, Monk.class, Golem.class,
+                SpiritNecromancer.class,
 				RipperDemon.class, DemonSpawner.class, Succubus.class, Eye.class, Scorpio.class);
+
+        BRANCHING.addEntities(
+                Burglar.class, Snatcher.class,
+                DM100F.class, IceSnake.class, FrozenSwarm.class, IceGolem.class
+        );
 
 		BOSSES.addEntities(Goopling.class, Goo.class,
 				Tengu.class,
@@ -193,17 +191,16 @@ public enum Bestiary {
 				TormentedSpirit.class, PhantomPiranha.class, CrystalMimic.class, ArmoredStatue.class);
 
         RECURRING.addEntities(
-                FetidRat.class, GnollTrickster.class);
+                FetidRat.class, GnollTrickster.class
+                //Elemental.FrostElemental.class, Bandit.class // not quite a perfect fit in here, so stays in regional too
 
-        BRANCHING.addEntities(
-                DM100F.class, IceSnake.class, FrozenSwarm.class, IceGolem.class
         );
 
 		QUEST.addEntities(GreatCrab.class,
 				Elemental.NewbornFireElemental.class, RotLasher.class, RotHeart.class,
 				CrystalWisp.class, CrystalGuardian.class, CrystalSpire.class, GnollGuard.class, GnollSapper.class, GnollGeomancer.class);
 
-		NEUTRAL.addEntities(Ghost.class, RatKing.class, Shopkeeper.class, Wandmaker.class, Blacksmith.class, Imp.class, Sheep.class, Bee.class);
+		NEUTRAL.addEntities(Ghost.class, RatKing.class, Shopkeeper.class, Wandmaker.class, FriendlyThief.class, Blacksmith.class, Imp.class, Sheep.class, Bee.class);
 
 		ALLY.addEntities(MirrorImage.class, PrismaticImage.class,
 				DriedRose.GhostHero.class,
@@ -232,6 +229,7 @@ public enum Bestiary {
 		classConversions.put(CorpseDust.DustWraith.class,      Wraith.class);
 
 		classConversions.put(Necromancer.NecroSkeleton.class,  Skeleton.class);
+        classConversions.put(SpiritNecromancer.NecroGhoul.class,  Ghoul.class);
 
 		classConversions.put(TenguDartTrap.class,              PoisonDartTrap.class);
 		classConversions.put(GnollRockfallTrap.class,          RockfallTrap.class);

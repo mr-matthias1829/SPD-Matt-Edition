@@ -92,10 +92,10 @@ public class IceCavesEntrance extends CaveRoom {
         LevelTransition entrance = new LevelTransition(
                 level,
                 entranceCell,
-                LevelTransition.Type.BRANCH_EXIT,
+                LevelTransition.Type.REGULAR_EXIT,
                 Dungeon.depth,
                 2, // target branch id (your ice caves branch)
-                LevelTransition.Type.BRANCH_ENTRANCE,
+                LevelTransition.Type.REGULAR_ENTRANCE,
                 "ice_caves_entrance", // custom name for the transition
                 "ice_caves_branch_entrance" // custom name for the destination tile
         );

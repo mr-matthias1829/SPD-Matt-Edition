@@ -1,10 +1,4 @@
 /*
- *  Pixel Dungeon
- *  Copyright (C) 2012-2015 Oleg Dolya
- *
- *  Shattered Pixel Dungeon
- *  Copyright (C) 2014-2026 Evan Debenham
- *
  *  Matt Edition
  *  Copyright (C) 2025-2026 Dum Matt
  *
@@ -161,6 +155,6 @@ public class ThrowingChains extends Item {
 
     @Override
     public int value() {
-        return Math.round(8.5f * quantity);
+        return Math.round(18f * quantity);
     }
 }

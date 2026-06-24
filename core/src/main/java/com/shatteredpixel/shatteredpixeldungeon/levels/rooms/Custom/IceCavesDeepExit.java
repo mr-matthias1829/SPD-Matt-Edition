@@ -84,7 +84,7 @@ public class IceCavesDeepExit extends SpecialRoom {
         LevelTransition exit = new LevelTransition(
                 level,
                 exitCell,
-                LevelTransition.Type.REGULAR_EXIT,
+                LevelTransition.Type.BRANCH_EXIT,
                 Dungeon.depth+1,
                 2,
                 LevelTransition.Type.REGULAR_ENTRANCE,

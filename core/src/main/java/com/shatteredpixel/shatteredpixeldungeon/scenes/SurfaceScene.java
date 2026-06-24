@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
@@ -91,7 +92,7 @@ public class SurfaceScene extends PixelScene {
 		
 		super.create();
 
-		Music.INSTANCE.playTracks(
+        MusicAnnouncer.playTracks(
 				new String[]{Assets.Music.THEME_2, Assets.Music.THEME_1},
 				new float[]{1, 1},
 				false);
