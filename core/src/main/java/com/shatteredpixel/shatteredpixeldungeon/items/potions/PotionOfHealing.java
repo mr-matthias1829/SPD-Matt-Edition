@@ -67,7 +67,6 @@ public class PotionOfHealing extends Potion {
 			Healing healing = Buff.affect(ch, Healing.class);
 			//healing.setHeal((int) (0.8f * ch.HT + 14), 0.25f, 0);
             healing.setHeal((int) (0.8f * ch.HT + 10), 0.1f, 0, true);
-			healing.applyVialEffect();
 			if (ch == Dungeon.hero){
 				GLog.p( Messages.get(PotionOfHealing.class, "heal") );
 			}

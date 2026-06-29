@@ -35,6 +35,8 @@ import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PointF;
 
+import com.watabou.utils.Callback;
+
 public class DM100FSprite extends MobSprite {
 
 	public DM100FSprite() {
@@ -61,32 +63,51 @@ public class DM100FSprite extends MobSprite {
 		
 		play( idle );
 	}
-	
-	public void zap( int pos ) {
+    public void zap(int pos) {
 
-		Char enemy = Actor.findChar(pos);
+        Char enemy = Actor.findChar(pos);
 
-		//shoot lightning from eye, not sprite center.
-		PointF origin = center();
-		if (flipHorizontal){
-			origin.y -= 6*scale.y;
-			origin.x -= 1*scale.x;
-		} else {
-			origin.y -= 8*scale.y;
-			origin.x += 1*scale.x;
-		}
-		if (enemy != null) {
-			parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100) ch, true));
-		} else {
-			parent.add(new Lightning(origin, pos, (DM100) ch, true));
-		}
-		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
-		
-		super.zap( ch.pos );
-		flash();
-	}
+        // shoot lightning from eye, not sprite center.
+        PointF origin = center();
+        if (flipHorizontal) {
+            origin.y -= 6 * scale.y;
+            origin.x -= 1 * scale.x;
+        } else {
+            origin.y -= 8 * scale.y;
+            origin.x += 1 * scale.x;
+        }
 
-	@Override
+        Callback callback = new Callback() {
+            @Override
+            public void call() {
+                ch.next();
+            }
+        };
+
+        if (enemy != null) {
+            parent.add(new Lightning(
+                    origin,
+                    enemy.sprite.destinationCenter(),
+                    callback,
+                    true
+            ));
+        } else {
+            parent.add(new Lightning(
+                    origin,
+                    pos,
+                    callback,
+                    true
+            ));
+        }
+
+        Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
+
+        super.zap(ch.pos);
+        flash();
+    }
+
+
+    @Override
 	public void die() {
 		emitter().burst( Speck.factory( Speck.WOOL ), 5 );
 		super.die();

@@ -39,7 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 
-public class DM151 extends DM100 implements Callback {
+public class DM151 extends DM100 {
 
     {
         spriteClass = DM151Sprite.class;

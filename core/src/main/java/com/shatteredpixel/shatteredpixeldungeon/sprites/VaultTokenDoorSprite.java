@@ -38,7 +38,7 @@ public class VaultTokenDoorSprite extends MobSprite {
 
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 
-		idle = new Animation( 1, false );
+		idle = createAnimation("idle",1, false, false );
 		idle.frames( frames, 0 );
 
 		run = idle.clone();

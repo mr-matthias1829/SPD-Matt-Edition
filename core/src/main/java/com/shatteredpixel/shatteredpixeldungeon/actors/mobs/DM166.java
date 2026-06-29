@@ -40,7 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class DM166 extends DM100 implements Callback {
+public class DM166 extends DM100 {
 
     //TODO: maybe consider scrapping this enemy
 
@@ -154,10 +154,5 @@ public class DM166 extends DM100 implements Callback {
 
     //used so resistances can differentiate between melee and magical attacks
     public static class LightningBolt{}
-
-    @Override
-    public void call() {
-        next();
-    }
 
 }

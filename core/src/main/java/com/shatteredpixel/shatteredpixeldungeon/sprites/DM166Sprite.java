@@ -35,6 +35,8 @@ import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PointF;
 
+import com.watabou.utils.Callback;
+
 public class DM166Sprite extends MobSprite {
 
 	public DM166Sprite() {
@@ -61,30 +63,49 @@ public class DM166Sprite extends MobSprite {
 		
 		play( idle );
 	}
-	
-	public void zap( int pos ) {
 
-		Char enemy = Actor.findChar(pos);
+    public void zap(int pos) {
 
-		//shoot lightning from eye, not sprite center.
-		PointF origin = center();
-		if (flipHorizontal){
-			origin.y -= 6*scale.y;
-			origin.x -= 1*scale.x;
-		} else {
-			origin.y -= 8*scale.y;
-			origin.x += 1*scale.x;
-		}
-		if (enemy != null) {
-			parent.add(new Lightning(origin, enemy.sprite.destinationCenter(), (DM100) ch, true));
-		} else {
-			parent.add(new Lightning(origin, pos, (DM100) ch, true));
-		}
-		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
-		
-		super.zap( ch.pos );
-		flash();
-	}
+        Char enemy = Actor.findChar(pos);
+
+        // shoot lightning from eye, not sprite center.
+        PointF origin = center();
+        if (flipHorizontal) {
+            origin.y -= 6 * scale.y;
+            origin.x -= 1 * scale.x;
+        } else {
+            origin.y -= 8 * scale.y;
+            origin.x += 1 * scale.x;
+        }
+
+        Callback callback = new Callback() {
+            @Override
+            public void call() {
+                ch.next();
+            }
+        };
+
+        if (enemy != null) {
+            parent.add(new Lightning(
+                    origin,
+                    enemy.sprite.destinationCenter(),
+                    callback,
+                    true
+            ));
+        } else {
+            parent.add(new Lightning(
+                    origin,
+                    pos,
+                    callback,
+                    true
+            ));
+        }
+
+        Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
+
+        super.zap(ch.pos);
+        flash();
+    }
 
 	@Override
 	public void die() {

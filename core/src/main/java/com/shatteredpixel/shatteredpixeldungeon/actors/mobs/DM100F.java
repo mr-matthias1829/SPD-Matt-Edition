@@ -39,7 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class DM100F extends DM100 implements Callback {
+public class DM100F extends DM100 {
 
     {
         spriteClass = DM100FSprite.class;
