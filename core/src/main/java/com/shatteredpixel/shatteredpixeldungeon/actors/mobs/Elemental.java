@@ -26,6 +26,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -535,6 +536,7 @@ public abstract class Elemental extends Mob {
 			for (Char ch : affected) {
 				ch.damage( Math.round( damage * 0.4f ), new Shocking() );
 				if (ch == Dungeon.hero && !ch.isAlive()){
+					Badges.validateDeathFromEnemyMagic();
 					Dungeon.fail(this);
 					GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
 				}
