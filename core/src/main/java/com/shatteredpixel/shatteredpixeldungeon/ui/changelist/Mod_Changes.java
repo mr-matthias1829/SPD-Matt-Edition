@@ -59,7 +59,7 @@ public class Mod_Changes {
 
 
         // ===== reworks (v1400) =====
-        changes = new ChangeInfo("The Rework", true, null);
+        changes = new ChangeInfo("The Rework (v1.400.0)", true, null);
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
@@ -72,7 +72,7 @@ public class Mod_Changes {
                         "_5._ increased energy cost for creating the wand of elements through alchemy (21 -> 30)\n" +
                         "_6._ glyph of antimagic has a much better chance to proc, but less effect now\n" +
                         "_7._ glyph of thorns now has less chance to proc\n" +
-                        "_8._ "
+                        "_8._ all armor's scale slightly less based on upgrade level"
                 ));
 
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_LAGUZ), "Other items",
@@ -108,10 +108,9 @@ public class Mod_Changes {
                         "_2._ tengu's hp reduced (350:300 -> 285:225)\n" +
                         "_3._ tengu's base damage reduced (6,14 -> 5,12)\n" +
                         "_4._ tengu in phase 2 starts using traps earlier\n" +
-                        "_5._ tengu may now use fire trap in challenge _stronger bosses_ as normal\n" +
-                        "_6._ in challenge _stronger bosses_ tengu still uses the fire trap alongside using any other trap, but at a 33% instead of 100%\n" +
-                        "_7._ electricity trap is now rarer, unchanged in challenge _stronger bosses_\n" +
-                        "_8._ tengu's last stand now lasts shorter in challenge _stronger bosses_ (25 -> 18)\n"
+                        "_5._ in challenge _stronger bosses_ tengu still uses the fire trap alongside using any other trap, but at a 40% instead of 100%\n" +
+                        "_6._ electricity trap is now rarer, unchanged in challenge _stronger bosses_\n" +
+                        "_7._ tengu's last stand now lasts shorter in challenge _stronger bosses_ (25 -> 18)\n"
                 ));
 
         changes.addButton(new ChangeButton(new Image(new RatSprite()), "Enemies",
@@ -123,11 +122,11 @@ public class Mod_Changes {
                         "_5._ slime (sewers) damage reduced (4,6 -> 2,5)\n" +
                         "_6._ fetid rat (sewers quest) reduced attack proc damage (3,7 -> 2,5), reduced hp (24 -> 20)\n" +
                         "_7._ gnoll trickster (sewer quest) xp reduced (7 -> 5), hp reduced (24 -> 18)\n" +
-                        "_8._ great crab (sewer quest) hp reduced (32 -> 26)\n" +
+                        "_8._ great crab (sewer quest) hp reduced (32 -> 26)\n",
 
                         "\n_Prison:_\n" +
                         "_1._ slime (prison) damage reduced (5,8 -> 3,6)\n" +
-                        "_2._ skeleton damage increased (3,9 -> 3,11)\n" +
+                        "_2._ skeleton damage increased (3,9 -> 3,11), bone explosion damage reduced (6,12 -> 5,9)\n" +
                         "_3._ thief awards more xp (1 -> 4), speed in caves increased (0.9 -> 1), increased DR (0,3 -> 1,4), less chance to steal equipped equipment (40% -> 32%)\n" +
                         "_4._ dm100 (and dm151) damage reduced (3,6 -> 2,6), to increase incentive to use magic upgrades on armor\n" +
                         "_5._ guard hp reduced (60 -> 40), defensive increased (1 -> 5), damage increased (5,10 -> 5,14), bash dmg multiplier reduced (x1.25 -> x1.1), lowered bash cooldown (12 -> 10), increased DR (0,4 -> 2,7)\n" +
@@ -147,7 +146,7 @@ public class Mod_Changes {
                         "_2._ ice snake chill proc chance reduced (100% -> 33%), procs for 2 turns instead of 3 now\n" +
                         "_3._ frozen swarm hp increased (105 -> 150)\n",
 
-                                "\n_City:_\n" + // yep, we're doing this NOW
+                                "\n_Ruins:_\n" + // yep, we're doing this NOW
                                 "_1._ ghoul now gets up with more hp (10% -> 33%), but decreases the more times its been downed, take shorter to respawn (base 5 -> 4), reduced defensive (20 -> 16), reduced hp (45 -> 36)\n" +
                                 "_2._ bandit blindness and cripple duration upon stealing reduced (5 -> 3), hp reduced (45 -> 36)\n" +
                                 "_3._ elementals... actually they remain unchanged surprisingly\n" +
@@ -324,7 +323,13 @@ public class Mod_Changes {
                         "\n_New content:_\n" +
                                 "_1._ a handful of content was added, a huge amount for this mod in one version to be exact\n" +
                                 "_2._ this new content mostly delves into some new exploration and rewards for them\n" +
-                                "_3._ as per usual: will need some rebalancing in the future, nothing starts off perfect\n"
+                                "_3._ as per usual: will need some rebalancing in the future, nothing starts off perfect\n" +
+
+                        "\n_Balancing:_\n" +
+                                "_1._ maybe you've noticed if you played since the start (or read every changelog), but balancing is hard\n" +
+                                "_2._ i'm not quite satisfied yet with the third, fourth, and fifth region balance, and that will likely be tackled soon\n" +
+                                "_3._ another thing i will look at is the overall power climbing of the hero throughout a run, feeling a little too powerful later on\n"
+
                 ));
 
         changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Dev and debug changes",

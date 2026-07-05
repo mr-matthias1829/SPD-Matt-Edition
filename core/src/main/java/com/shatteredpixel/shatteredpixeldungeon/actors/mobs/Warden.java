@@ -31,6 +31,7 @@ import com.watabou.utils.Random;
 
 public class Warden extends Guard {
 
+    //TODO: maybe consider scrapping this enemy
 
     {
         spriteClass = WardenSprite.class;

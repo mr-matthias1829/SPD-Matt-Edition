@@ -79,7 +79,7 @@ public class Skeleton extends Mob {
 		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
 			Char ch = findChar( pos + PathFinder.NEIGHBOURS8[i] );
 			if (ch != null && ch.isAlive()) {
-				int damage = Math.round(Random.NormalIntRange(6, 12));
+				int damage = Math.round(Random.NormalIntRange(5, 9)); //6,12
 				damage = Math.round( damage * AscensionChallenge.statModifier(this));
 
 				//all sources of DR are 2x effective vs. bone explosion

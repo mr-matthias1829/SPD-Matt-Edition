@@ -602,11 +602,11 @@ public class Tengu extends Mob {
             } else {
                 // Weighted selection for phase 2+:
                 //   Normal:        BOMB=2, FIRE=2, SHOCKER=1  (total 5)
-                //   Harder bosses: BOMB=2, FIRE=2, SHOCKER=2  (total 6)
+                //   Harder bosses: BOMB=2, SHOCKER=2  (total 4)
                 boolean harderBosses = Dungeon.isChallenged(Challenges.STRONGER_BOSSES);
-                int roll = Random.Int(harderBosses ? 6 : 5);
+                int roll = Random.Int(harderBosses ? 4 : 5);
                 if      (roll < 2) abilityToUse = BOMB_ABILITY;
-                else if (roll < 4) abilityToUse = FIRE_ABILITY;
+                else if (roll < 4 && !harderBosses) abilityToUse = FIRE_ABILITY;
                 else               abilityToUse = SHOCKER_ABILITY;
             }
 
@@ -637,7 +637,7 @@ public class Tengu extends Mob {
                 }
                 // In harder bosses, also throw fire alongside whichever non-fire ability was used
                 if (abilityUsed && abilityToUse != FIRE_ABILITY && Dungeon.isChallenged(Challenges.STRONGER_BOSSES)
-                && Random.Int(3) == 0) {
+                && Random.Int(10) < 4) { //40% to keep it balanced... somewhat
                     throwFire(Tengu.this, Dungeon.hero);
                 }
             }

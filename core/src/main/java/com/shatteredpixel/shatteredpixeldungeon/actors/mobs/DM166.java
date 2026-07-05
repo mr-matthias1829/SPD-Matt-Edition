@@ -42,6 +42,8 @@ import com.watabou.utils.Random;
 
 public class DM166 extends DM100 implements Callback {
 
+    //TODO: maybe consider scrapping this enemy
+
     protected static float TIME_TO_ZAP	= (float) (1f/3.7); //0.75f
 
     {
@@ -62,17 +64,17 @@ public class DM166 extends DM100 implements Callback {
     protected boolean getCloser(int target) {
         int dist = Dungeon.level.distance(pos, target);
 
-        // Too close? (adjacent or 1 tile apart) → move away
+        // Too close? (adjacent or 1 tile apart) move away
         if (dist <= 1) {
             return getFurther(target);
         }
 
-        // Perfect range (exactly 2 tiles) → stop moving
+        // Perfect range (exactly 2 tiles) stop moving
         if (dist == 2) {
             return false;
         }
 
-        // Too far (3+ tiles) → move closer
+        // Too far (3+ tiles) move closer
         return super.getCloser(target);
     }
 

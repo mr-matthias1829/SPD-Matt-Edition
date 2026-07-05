@@ -396,7 +396,7 @@ public class Dungeon {
                     level = new DeadEndLevel();
                     break;
             }
-        } else if (branch == 3) { // reserved for new/exclusive/special regions
+        } else if (branch == 3) { // reserved for new/special regions that will be added in the future
             switch (depth) {
                 default:
                     level = new DeadEndLevel();
@@ -407,7 +407,7 @@ public class Dungeon {
         }
 
 		//dead end levels (and vault levels for now!) get cleared, don't count as generated
-		if (!(level instanceof DeadEndLevel || level instanceof VaultLevel || level instanceof ThievesGuildLevel)){
+		if (!(level instanceof DeadEndLevel || level instanceof VaultLevel)){
 			//this assumes that we will never have a depth value outside the range 0 to 999
 			// or -500 to 499, etc.
 			if (!generatedLevels.contains(depth + 1000*branch)) {

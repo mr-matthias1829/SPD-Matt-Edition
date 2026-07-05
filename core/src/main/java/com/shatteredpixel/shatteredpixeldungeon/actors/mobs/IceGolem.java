@@ -89,7 +89,7 @@ public class IceGolem extends Mob {
 
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange(7, 33);
+        return Random.NormalIntRange(8, 36);
     }
 
     @Override

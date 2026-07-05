@@ -372,15 +372,14 @@ public class Armor extends EquipableItem {
         int magicPenalty = (int)(magicLevel * 0.18f);
         int effectiveLevel = Math.max(0, lvl - magicPenalty);
 
-        // NEW: Tier multiplier scales linearly with tier
         // T1: 1.0, T2: 1.25, T3: 1.5, T4: 1.75, T5: 2.0
         float tierMultiplier = 1f + ((tier - 1) * 0.25f);
 
-        // NEW: Scaling increases slightly with each level
+        // Scaling increases slightly with each level
         // Base formula: tierMultiplier * (base + effectiveLevel * (1 + effectiveLevel * 0.03))
         // This gives slightly accelerating returns per level
         int baseValue = 3;
-        float levelScaling = effectiveLevel * (1f + effectiveLevel * 0.015f);
+        float levelScaling = effectiveLevel * (0.5f + (effectiveLevel * 0.017f)*2);
 
         int baseDR = Math.round(tierMultiplier * ((baseValue*tierMultiplier) + levelScaling));
         int augmentBonus = augment.defenseFactor(effectiveLevel);

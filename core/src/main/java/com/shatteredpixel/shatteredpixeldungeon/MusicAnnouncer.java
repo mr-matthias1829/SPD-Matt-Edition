@@ -68,11 +68,13 @@ public class MusicAnnouncer {
     public static final int ICE_CAVES_TENSE   = 18; // created (and used) before calm one, so its above
     public static final int ICE_CAVES    = 19;
 
-    // ── filename → track ID ───────────────────────────────────────────────────
+    // ── filename to track ID ───────────────────────────────────────────────────
     private static final HashMap<String, Integer> FILE_TO_ID = new HashMap<>();
     static {
         FILE_TO_ID.put("none",                 NONE);
 
+        // most tracks have mixed variations picked by rng chained into as one theme
+        // due to this, we list multiple files for the same ID sometimes
         FILE_TO_ID.put("music/sewers_1.ogg",            SEWERS);
         FILE_TO_ID.put("music/sewers_2.ogg",            SEWERS);
         FILE_TO_ID.put("music/sewers_3.ogg",            SEWERS);
@@ -114,13 +116,15 @@ public class MusicAnnouncer {
         FILE_TO_ID.put("music/icecaves_calm.ogg",      ICE_CAVES);
     }
 
-    // ── track ID → display name ───────────────────────────────────────────────
+    // ── track ID to display name ───────────────────────────────────────────────
     private static final HashMap<Integer, String> ID_TO_NAME = new HashMap<>();
     static {
         // the "help i technically have no category" category
         ID_TO_NAME.put(NONE,              "No Music");
 
         // vanilla spd
+        // since a boss must first be on-screen to play boss music, just use the boss name as the theme name
+        // not like we spoil anything since you can instantly inspect and learn their name anyway in the same turn
         ID_TO_NAME.put(SEWERS,            "Sewers - SPD");
         ID_TO_NAME.put(SEWERS_TENSE,      "Sewers Tense - SPD");
         ID_TO_NAME.put(SEWERS_BOSS,       "Goo - SPD");
@@ -139,10 +143,10 @@ public class MusicAnnouncer {
         ID_TO_NAME.put(FINALE,            "Game Finale - SPD");
         ID_TO_NAME.put(TITLE,             "Main Theme - SPD");
 
-        // this modded version
+        // remixes and such
         ID_TO_NAME.put(ICE_CAVES_TENSE,   "Ice Caves Tense - Matt Edition");
 
-        // literally any other music
+        // music not made by me and not part of vanilla
         ID_TO_NAME.put(ICE_CAVES,          "Cold Arctic Ambient - Lux-aeterna");
     }
 
@@ -256,7 +260,7 @@ public class MusicAnnouncer {
         if (id != lastAnnouncedId) {
             lastAnnouncedId = id;
             String name = ID_TO_NAME.containsKey(id) ? ID_TO_NAME.get(id) : file;
-            pendingAnnounce = "Now playing music: " + name;
+            pendingAnnounce = "Playing music: " + name;
         }
     }
 }

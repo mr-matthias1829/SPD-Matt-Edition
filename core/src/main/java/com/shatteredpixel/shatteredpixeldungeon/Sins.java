@@ -38,7 +38,6 @@ public class Sins {
     // These sins are currently unused, originally planned to go with the other 7, but cut for time and complexity of the already big update
     //public static final int DEATH           = 128;
     //public static final int YENDOR           = 256;
-
     public static final int MAX_SINS        = 7;
     public static final int MAX_VALUE       = 511;
 

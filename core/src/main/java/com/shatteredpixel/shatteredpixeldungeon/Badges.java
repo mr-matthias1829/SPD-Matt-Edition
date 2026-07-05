@@ -242,7 +242,7 @@ public class Badges {
         STRONG (265),
         MIGHTY (267),
         POWERFUL (268),
-        OBLIVION (269),
+        OBLIVION (269, BadgeType.SECRET),
 
 
         // misc kinda badges

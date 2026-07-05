@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.He
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
 import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
@@ -114,14 +115,12 @@ public enum HeroClass {
 		Item i = new ClothArmor().identify(); // not all heroes start with armor unlike vanilla
 		//if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;
 
-
-
         // man i love cheating!
         if (SPDSettings.cheatMode()) {
             ClothArmor a = new ClothArmor();
+            MailArmor m  = new MailArmor();
             a.identify().collect();
-
-
+            m.identify().collect();
 
         /*
         SpearAmethystPiercer UW = new SpearAmethystPiercer();
