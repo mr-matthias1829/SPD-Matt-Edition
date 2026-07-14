@@ -58,6 +58,25 @@ public class Mod_Changes {
                         "This mod _tries_ to stay up to date with vanilla SPD"));
 
 
+        changes = new ChangeInfo("v1.401.0 and up", true, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(new SnatcherSprite()), "v1.401.0: fixes, small new content, and more fixes",
+                "_Changes:_\n" +
+                        "_1._ Returned all languages, as requested by someone\n" +
+                        "_2._ renamed 'darkness katana' to 'dark katana', name unchanged in code\n" +
+                        "_3._ badge 'deja vu' can now only be awarded in the proper region instead of any region, no longer spoils in badge description.\n" +
+                        "_4._ actually added loot to the gold chest in the thieves guild vault (oops), and increased overall loot reward\n" +
+                        "_5._ badges that validate based on depth no longer get rewarded if you are in the wrong branch\n" +
+                        "_6._ added 3 new badges related to the new branching paths from 1.400.0\n" +
+                        "_7._ sane thief's room now always spawns a iron key on the floor\n" +
+                        "_8._ burglar and snatcher only attack once per turn now, snatcher chance to steal equipment reduced\n" +
+                        "_9._ fixed ice caves transitions being hooked up wrong in one case\n" +
+                        "_10._ ice caves can no longer generate pitfall traps"
+        ));
+
+
         // ===== reworks (v1400) =====
         changes = new ChangeInfo("The Rework (v1.400.0)", true, null);
         changes.hardlight(Window.TITLE_COLOR);

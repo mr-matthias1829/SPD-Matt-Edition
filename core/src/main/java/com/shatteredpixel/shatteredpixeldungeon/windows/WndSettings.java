@@ -183,7 +183,7 @@ public class WndSettings extends WndTabbed {
 		langs = new LangsTab();
 		langs.setSize(width, 0);
 		height = Math.max(height, langs.height());
-		//add( langs );
+		add( langs );
 
 
 		IconTab langsTab = new IconTab(Icons.get(Icons.LANGS)){
@@ -208,7 +208,7 @@ public class WndSettings extends WndTabbed {
 			}
 
 		};
-		//add( langsTab );
+		add( langsTab );
 
 		resize(width, (int)Math.ceil(height));
 
@@ -633,7 +633,7 @@ public class WndSettings extends WndTabbed {
 			}
 			add(chkVibrate);
 
-
+            /*
 			if (DeviceCompat.isDebug()) {
 				cheatMode = new CheckBox(Messages.get(this, "cheat_mode")) {
 					@Override
@@ -645,6 +645,8 @@ public class WndSettings extends WndTabbed {
 				cheatMode.checked(SPDSettings.cheatMode());
 				add(cheatMode);
 			}
+
+             */
 
 		}
 
@@ -1287,13 +1289,13 @@ public class WndSettings extends WndTabbed {
 			sep3 = new ColorBlock(1, 1, 0xFF000000);
 			add(sep3);
 
-			txtTranifex = PixelScene.renderTextBlock(5);
-			txtTranifex.text(Messages.get(this, "transifex"));
-			add(txtTranifex);
-
             txtNote = PixelScene.renderTextBlock(5);
             txtNote .text(Messages.get(this, "translationsupport"));
             add(txtNote);
+
+			txtTranifex = PixelScene.renderTextBlock(5);
+			txtTranifex.text(Messages.get(this, "transifex"));
+			add(txtTranifex);
 
 			if (currLang != Languages.ENGLISH) {
 				String credText = Messages.titleCase(Messages.get(this, "credits"));
@@ -1417,19 +1419,19 @@ public class WndSettings extends WndTabbed {
 				btnCredits.setSize(btnCredits.reqWidth() + 2, 16);
 				btnCredits.setPos(width - btnCredits.width(), y);
 
-				txtTranifex.setPos(0, y);
-				txtTranifex.maxWidth((int)btnCredits.left());
-
-                txtNote.setPos(0, y+txtTranifex.height()+2);
+                txtNote.setPos(0, y);
                 txtNote.maxWidth((int)btnCredits.left());
+
+				txtTranifex.setPos(0, y+txtNote.height()+4);
+				txtTranifex.maxWidth((int)btnCredits.left());
 
 				height = Math.max(btnCredits.bottom(), txtNote.bottom());
 			} else {
-				txtTranifex.setPos(0, y);
-				txtTranifex.maxWidth((int)width);
-
-                txtNote.setPos(0, y+txtTranifex.height()+2);
+                txtNote.setPos(0, y);
                 txtNote.maxWidth((int)width);
+
+                txtTranifex.setPos(0, y+txtNote.height()+4);
+                txtTranifex.maxWidth((int)width);
 
 				height = txtNote.bottom();
 			}

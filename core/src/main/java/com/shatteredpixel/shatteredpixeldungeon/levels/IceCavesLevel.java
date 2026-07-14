@@ -81,7 +81,7 @@ public class IceCavesLevel extends CavesLevel {
 
     public static final int mainFloor = 14; // dynamic, so if it ever changes
     public static final int lastFloor = 18; // the floor where the optional part of ice caves ends
-                                    // you'd still need to modify it in dungeon.java
+    // you'd still need to modify it in dungeon.java
     {
         // reduced vision because... honestly no clue
         viewDistance = Math.min(5, viewDistance);
@@ -143,7 +143,12 @@ public class IceCavesLevel extends CavesLevel {
             initRooms.add(roomBranchExit = new IceCavesDeepExit());
         } else {
             // default entrance and exit rooms for non-main ice caves
-            initRooms.add(roomEntrance = EntranceRoom.createEntrance(14));
+            // first floor after main floor needs a different entrance to work correctly
+            if (Dungeon.depth == mainFloor+1) {
+                initRooms.add(roomEntrance = new IceCavesDeepEntrance());
+            } else {
+                initRooms.add(roomEntrance = EntranceRoom.createEntrance(14));
+            }
             initRooms.add(roomExit = ExitRoom.createExit(14));
         }
 
@@ -254,10 +259,10 @@ public class IceCavesLevel extends CavesLevel {
                 iceRotation.add(IceSnake.class);
                 break;
             case 2:
-                    iceRotation.add(Elemental.FrostElemental.class);
-                    iceRotation.add(FrozenSwarm.class);
-                    iceRotation.add(DM100F.class);
-                    iceRotation.add(IceSnake.class);
+                iceRotation.add(Elemental.FrostElemental.class);
+                iceRotation.add(FrozenSwarm.class);
+                iceRotation.add(DM100F.class);
+                iceRotation.add(IceSnake.class);
 
                 for (int i = 0; i < 2; i++) { // 33% of full pool
                     iceRotation.add(IceGolem.class);
@@ -373,7 +378,7 @@ public class IceCavesLevel extends CavesLevel {
         return new Class[]{
                 FrostTrap.class, ChillingTrap.class, StormTrap.class, CorrosionTrap.class,
                 GrippingTrap.class, RockfallTrap.class, GuardianTrap.class, WarpingTrap.class,
-                ConfusionTrap.class, SummoningTrap.class, PitfallTrap.class };
+                ConfusionTrap.class, SummoningTrap.class};
     }
 
     @Override
@@ -381,7 +386,7 @@ public class IceCavesLevel extends CavesLevel {
         return new float[]{
                 4, 3, 3, 3,
                 2, 2, 2, 2,
-                1, 1, 1 };
+                1, 1};
     }
 
     @Override

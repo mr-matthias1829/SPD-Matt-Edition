@@ -23,6 +23,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.MusicAnnouncer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Burglar;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snatcher;
@@ -153,6 +154,8 @@ public class ThievesGuildLevel extends PrisonLevel {
     @Override
     public void create() {
         super.create();
+
+        FriendlyThief.Quest.snapshotGoldOnEntry();
 
         // replace all chasms after generation
         for (int i = 0; i < length(); i++) {
@@ -298,5 +301,17 @@ public class ThievesGuildLevel extends PrisonLevel {
             default:
                 return super.tileDesc( tile );
         }
+    }
+
+
+    @Override
+    public boolean activateTransition(Hero hero, LevelTransition transition) {
+        if (transition.type == LevelTransition.Type.BRANCH_ENTRANCE
+                && transition.destBranch == 0
+                && !FriendlyThief.Quest.accessed()) {
+
+            FriendlyThief.Quest.markAccessed();
+        }
+        return super.activateTransition(hero, transition);
     }
 }

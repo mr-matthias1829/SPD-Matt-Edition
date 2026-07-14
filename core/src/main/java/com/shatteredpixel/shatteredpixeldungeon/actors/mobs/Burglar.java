@@ -81,8 +81,8 @@ public class Burglar extends Thief {
 
     @Override
     public float attackDelay() {
-        return super.attackDelay()*1f;
-    }
+        return super.attackDelay()*2f;
+    } // thief = 0.5, so *2 = 1
 
     @Override
     public int damageRoll() {
@@ -144,6 +144,7 @@ public class Burglar extends Thief {
 
         Item toSteal;
         // has two chances to go for equipment instead of one... oh snap
+        // 2*30%
         boolean StealEq = (Random.Int(100) > 70);
         if (!StealEq) StealEq = (Random.Int(100) > 70);
 

@@ -96,7 +96,9 @@ public class Bandit extends Thief {
 			Buff.prolong( hero, Cripple.class, 3f );
 			Dungeon.observe();
 
-            Badges.validateModProgression("dejavu");
+            if (Dungeon.depth > 15) {
+                Badges.validateModProgression("dejavu");
+            }
 
 			return true;
 		} else {

@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Greed;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -258,6 +257,12 @@ public class Badges {
         KILL_TITLE_ENEMY     ( 208 ),
         ICE_CAVE_TOURIST     ( 209 ),
         THIEF_DEJA_VU     ( 210 ),
+
+        // side-tracking misc badges
+
+        THE_THIEVES_GUILD     ( 283), // must beat tengu first
+        SUCCESSFUL_HEIST    ( 284 ), // must get thieves guild first
+        END_OF_ICE_CAVES    ( 285), // must get ice caves tourist first
 
         YENDORS_KEY         (323, BadgeType.SECRET), // unob as of now. ALOT will need to be done for this one
 
@@ -943,26 +948,50 @@ public class Badges {
 
     public static void validateDepth(){
         Badge badge = null;
-        if (Dungeon.depth == 11 && !isUnlocked(Badge.UNLOCK_ROGUE_A)) {
-            badge = Badge.UNLOCK_ROGUE_A;
-            local.add(badge);
-        }
-        if (Statistics.thrownAttacks == 0 && Dungeon.depth == 11 && !isUnlocked(Badge.UNLOCK_HUNTRESS_A)){
-            badge = Badge.UNLOCK_HUNTRESS_A;
-            local.add(badge);
-        }
-        if (Dungeon.depth == 16 && !isUnlocked(Badge.UNLOCK_CLERIC_A)){
-            badge = Badge.UNLOCK_CLERIC_A;
-            local.add(badge);
-        }
+        if (Dungeon.branch == 0) {
+            if (Dungeon.depth == 11 && !isUnlocked(Badge.UNLOCK_ROGUE_A)) {
+                badge = Badge.UNLOCK_ROGUE_A;
+                local.add(badge);
+            }
+            if (Statistics.thrownAttacks == 0 && Dungeon.depth == 11 && !isUnlocked(Badge.UNLOCK_HUNTRESS_A)) {
+                badge = Badge.UNLOCK_HUNTRESS_A;
+                local.add(badge);
+            }
+            if (Dungeon.depth == 16 && !isUnlocked(Badge.UNLOCK_CLERIC_A)) {
+                badge = Badge.UNLOCK_CLERIC_A;
+                local.add(badge);
+            }
 
-        validateAllHeroClassesUnlocked(); // safety... mostly
-        if (Dungeon.depth == 16 && Statistics.upgradesUsed == 0 && !isUnlocked(Badge.NO_UPGRADE_BOSS3)){
-            badge = Badge.NO_UPGRADE_BOSS3;
-            local.add( badge );
+            validateAllHeroClassesUnlocked(); // safety... mostly
+            if (Dungeon.depth == 16 && Statistics.upgradesUsed == 0 && !isUnlocked(Badge.NO_UPGRADE_BOSS3)) {
+                badge = Badge.NO_UPGRADE_BOSS3;
+                local.add(badge);
+            }
+
+        } else if (Dungeon.branch == 1){
+
+
+
+        } else if (Dungeon.branch == 2){
+            if (Dungeon.depth == 18 && !isUnlocked(Badge.END_OF_ICE_CAVES)){
+                badge = Badge.END_OF_ICE_CAVES;
+                local.add(badge);
+            }
+            if ((Dungeon.depth == 8 || Dungeon.depth == 9) && !isUnlocked(Badge.THE_THIEVES_GUILD)){
+                badge = Badge.THE_THIEVES_GUILD;
+                local.add(badge);
+            }
         }
 
         if (badge != null) {
+            displayBadge(badge);
+        }
+    }
+
+    public static void validateSuccessfulHeist(int goldGained) {
+        if (!isUnlocked(Badge.SUCCESSFUL_HEIST) && goldGained >= 500) {
+            Badge badge = Badge.SUCCESSFUL_HEIST;
+            local.add(badge);
             displayBadge(badge);
         }
     }
@@ -1543,7 +1572,8 @@ public class Badges {
             // technically contains spoilers, but that's alright
             // cooouullddd make the badges hidden until rewarded, since you're super likely to get them, but nah
             {Badge.KILL_TITLE_ENEMY, Badge.ICE_CAVE_TOURIST, Badge.THIEF_DEJA_VU},
-
+            {Badge.BOSS_SLAIN_2, Badge.THE_THIEVES_GUILD, Badge.SUCCESSFUL_HEIST},
+            {Badge.ICE_CAVE_TOURIST, Badge.END_OF_ICE_CAVES},
 
             // Legacy vs new hero class unlocks:
             // Warrior doesnt have a legacy unlock

@@ -26,6 +26,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Custom;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
@@ -43,8 +44,8 @@ import java.util.ArrayList;
 public class GuildVaultRoom extends StandardRoom {
     // this is a pretty large room
     // in the center is the "inner" room, which acts as the vault
-    // in the vault is gold and a special item
-    // need crystal and iron key to get to gold + gold key to get the special item
+    // in the vault is gold and a item
+    // need crystal and iron key to get to gold + gold key to get the item
 
     // we don't give too much variance in room size:
     // 1. it is already quite big
@@ -99,14 +100,22 @@ public class GuildVaultRoom extends StandardRoom {
 
         // locked chest on the south inner wall (opposite the doorway)
         // TODO: replace Gold(1) placeholder with actual special item
-        Item chestContents = new Gold(1);
+        //Item chestContents = new Gold(1);
+        Item chestContents;
+
+        if (Random.Int(3) < 2) {
+            chestContents = Generator.randomUsingDefaults(Generator.Category.WEP_T3);
+        } else {
+            chestContents = Generator.randomUsingDefaults(Generator.Category.WEP_T4);
+        }
+
         level.drop(chestContents, level.pointToCell(new Point(cx, ib)))
                 .type = com.shatteredpixel.shatteredpixeldungeon.items.Heap.Type.LOCKED_CHEST;
 
         level.addItemToSpawn(new GoldenKey(Dungeon.depth));
 
         // 3x3 = 9 tiles, minus the chest tile = 8 gold tiles
-        // total gold is ALWAYS exactly 650, distributed randomly per generation
+        // total gold is ALWAYS exactly the total variable, distributed randomly per generation
         ArrayList<Point> goldTiles = new ArrayList<>();
         for (int x = il; x <= ir; x++) {
             for (int y = it; y <= ib; y++) {
@@ -115,7 +124,7 @@ public class GuildVaultRoom extends StandardRoom {
             }
         }
 
-        int total = 650;
+        int total = Random.IntRange(650, 925);
         int n = goldTiles.size(); // 8
         int[] weights = new int[n];
         int weightSum = 0;

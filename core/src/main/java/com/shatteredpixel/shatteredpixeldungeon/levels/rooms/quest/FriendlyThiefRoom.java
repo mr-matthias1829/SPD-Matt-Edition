@@ -21,6 +21,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.FriendlyThief;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -101,6 +102,8 @@ public class FriendlyThiefRoom extends SpecialRoom {
         if (!FriendlyThief.Quest.accessed()) {
             spawnNPC(level, entranceCell);
         }
+
+        level.addItemToSpawn( new IronKey( Dungeon.depth ) );
     }
 
     private void spawnNPC(Level level, int entranceCell) {

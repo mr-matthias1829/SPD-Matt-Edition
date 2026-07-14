@@ -143,6 +143,7 @@ public class FriendlyThief extends NPC {
         static boolean entranceOpen = false;
         static boolean accessed     = false;
         static int     entranceCell = -1;
+        static int     goldOnEntry  = -1;
 
         private static boolean questRoomSpawned = false;
 
@@ -151,12 +152,14 @@ public class FriendlyThief extends NPC {
         private static final String ENTRANCE_OPEN = "entrance_open";
         private static final String ACCESSED      = "accessed";
         private static final String ENTRANCE_CELL = "entrance_cell";
+        private static final String GOLD_ON_ENTRY = "gold_on_entry";
 
         public static void reset() {
             spawned          = false;
             entranceOpen     = false;
             accessed         = false;
             entranceCell     = -1;
+            goldOnEntry      = -1;
             questRoomSpawned = false;
         }
 
@@ -166,6 +169,7 @@ public class FriendlyThief extends NPC {
             node.put(ENTRANCE_OPEN, entranceOpen);
             node.put(ACCESSED,      accessed);
             node.put(ENTRANCE_CELL, entranceCell);
+            node.put(GOLD_ON_ENTRY, goldOnEntry);
             bundle.put(NODE, node);
         }
 
@@ -176,6 +180,7 @@ public class FriendlyThief extends NPC {
                 entranceOpen = node.getBoolean(ENTRANCE_OPEN);
                 accessed     = node.getBoolean(ACCESSED);
                 entranceCell = node.getInt(ENTRANCE_CELL);
+                goldOnEntry  = node.contains(GOLD_ON_ENTRY) ? node.getInt(GOLD_ON_ENTRY) : -1;
             } else {
                 reset();
             }
@@ -189,6 +194,12 @@ public class FriendlyThief extends NPC {
 
         public static void setEntranceCell(int cell) { entranceCell = cell; }
         public static void markSpawned()             { spawned = true; }
+
+        public static void snapshotGoldOnEntry() {
+            if (goldOnEntry == -1) {
+                goldOnEntry = Dungeon.gold;
+            }
+        }
 
         public static ArrayList<Room> spawnRoom(ArrayList<Room> rooms) {
             questRoomSpawned = false;
@@ -270,6 +281,14 @@ public class FriendlyThief extends NPC {
                 Dungeon.level.map[entranceCell] = Terrain.PEDESTAL;
                 Dungeon.level.buildFlagMaps();
                 Dungeon.level.cleanWalls();
+            }
+
+            if (goldOnEntry >= 0) {
+                GLog.i("HEIST DEBUG: goldOnEntry=" + goldOnEntry + " currentGold=" + Dungeon.gold);
+                int goldGained = Dungeon.gold - goldOnEntry;
+                if (goldGained >= 500) {
+                    com.shatteredpixel.shatteredpixeldungeon.Badges.validateSuccessfulHeist(goldGained);
+                }
             }
         }
 

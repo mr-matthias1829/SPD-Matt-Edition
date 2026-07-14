@@ -263,16 +263,7 @@ public class PrisonLevel extends RegularLevel {
     // ... yeah i guess? spd is weeeirrddd man
     @Override
     public boolean activateTransition(Hero hero, LevelTransition transition) {
-        if (transition.type == LevelTransition.Type.BRANCH_EXIT
-                && transition.destBranch == 2
-                && !FriendlyThief.Quest.accessed()) {
-
-            FriendlyThief.Quest.markAccessed();
-            return super.activateTransition(hero, transition);
-
-        } else {
-            return super.activateTransition(hero, transition);
-        }
+        return super.activateTransition(hero, transition);
     }
 
 }

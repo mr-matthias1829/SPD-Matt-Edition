@@ -79,8 +79,8 @@ public class Snatcher extends Thief {
 
     @Override
     public float attackDelay() {
-        return super.attackDelay()*1f;
-    }
+        return super.attackDelay()*2f;
+    } // thief = 0.5, so *2 = 1
 
     @Override
     public String description() {
@@ -136,7 +136,7 @@ public class Snatcher extends Thief {
         stealAttempts = 0; // Succeeded, reset counter
 
         Item toSteal;
-        boolean StealEq = (Random.Int(100) > 55); // 45% chance to steal equipped item
+        boolean StealEq = (Random.Int(100) > 80); // 20% chance to steal equipped item
         if (StealEq) {
             toSteal = hero.belongings.randomEquipped();
             if (toSteal == null || toSteal.unique || toSteal.cursed) {
