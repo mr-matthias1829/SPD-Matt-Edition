@@ -1,44 +1,58 @@
-# Shattered Pixel Dungeon – Matt Edition
-> ⚠️ This mod is still in development. Balance changes and mechanics may change between updates.
+# Shattered Pixel Dungeon Matt Edition
 
 Releases can be found here:
 [https://github.com/mr-matthias1829/SPD-Matt-Edition/releases](https://github.com/mr-matthias1829/SPD-Matt-Edition/releases)
 
----
+I only make releases for windows and android, and no debug releases.
 
-## Development status
+## What's different?
 
-This mod is still a **work in progress**.
-Not all regions have been fully reworked yet.
+Most, if not all enemies, have been ever so slightly reworked to lean more towards a specific attribute, be it raw stats or a ability. 
+On top of that, the difficulty has been upped in some places to make it more risky compared to vanilla.
+And of course, new content for you to find.
+
+
+
+## Status
+
+This mod is still a work in progress technically, and will probably stay like that for another long while.
 
 Currently modified regions include:
 
 * Sewer
-* Prison (done aside from 2 of the 3 quests)
-* Caves (excluding quests)
+* Prison
+* Caves
 
-Expect many balance changes between releases.
+Other regions are planned to be modified too at one point.
 
-## Important notes
+Expect balance changes between releases.
 
-* Only the English translation is modified or extended. Other languages remain 100% vanilla.
-* Not all regions have been modified yet, which is the reason why this mod is considered unfinished.
-* Bugs and crashes may occur. Please report them on the GitHub Issues page.
+If you don't see a new commit pushed since a month, safe to assume I'm taking a break. If it's since six months... I either forgot about the mod or moved on from it.
+
+
+## Original game
 
 Vanilla SPD can be found here:
-[https://github.com/00-Evan/shattered-pixel-dungeon/releases](https://github.com/00-Evan/shattered-pixel-dungeon/releases)
+[https://github.com/00-Evan/shattered-pixel-dungeon](https://github.com/00-Evan/shattered-pixel-dungeon)
 
 All credit for the original game goes to Evan Debenham (Shattered Pixel).
 
----
 
-## Reporting Issues
+
+## Reporting issues
 
 If you encounter a bug or crash, please report it here:
 [https://github.com/mr-matthias1829/SPD-Matt-Edition/issues](https://github.com/mr-matthias1829/SPD-Matt-Edition/issues)
 
-Include:
+It would help if you could provide information like:
+* How to reproduce
+* Seed of the run (if it's relevant)
+* Error log
 
-* what happened
-* what version you are using
-* how to reproduce it if possible
+Feel free to report any problem you encounter, and I'll do my best to fix it.
+
+
+
+## Pull requests
+
+As with vanilla, I don't accept pull requests.
