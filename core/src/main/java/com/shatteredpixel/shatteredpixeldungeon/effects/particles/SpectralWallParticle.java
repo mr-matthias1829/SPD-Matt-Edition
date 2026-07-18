@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.ColorMath;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 public class SpectralWallParticle extends PixelParticle {
@@ -37,8 +38,8 @@ public class SpectralWallParticle extends PixelParticle {
         @Override
         public void emit( Emitter emitter, int index, float x, float y ) {
             //scale frequency roughly to the size of the bricks used
-            int type = 1 + Dungeon.depth/5;
-            if (type > 5) type = 5;
+			int type = 1 + (Dungeon.depth-1)/5;
+			type = (int)GameMath.gate(1, type, 5);
 
             switch (type){
                 case 1:
@@ -77,10 +78,8 @@ public class SpectralWallParticle extends PixelParticle {
     public void reset( float x, float y ) {
         revive();
 
-        type = 1 + Dungeon.depth/5;
-        if (type > 5) type = 5;
-
-
+		type = 1 + (Dungeon.depth-1)/5;
+		type = (int)GameMath.gate(1, type, 5);
 
         this.x = x;
         this.y = y;
