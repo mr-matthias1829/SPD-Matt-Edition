@@ -80,9 +80,11 @@ public class BadgeBanner extends Image {
         this.index = index;
 
         if (index < EXTRA_OFFSET) {
+            texture(Assets.Interfaces.BADGES);
             frame(atlas.get(index));
         } else {
             int localIndex = index - EXTRA_OFFSET;
+            texture(Assets.Interfaces.BADGES_EXTRA);
             frame(atlasExtra.get(localIndex));
         }
 
@@ -93,7 +95,6 @@ public class BadgeBanner extends Image {
         time = FADE_IN_TIME;
         Sample.INSTANCE.play(Assets.Sounds.BADGE);
     }
-	
 	@Override
 	public void update() {
 		super.update();
@@ -157,57 +158,63 @@ public class BadgeBanner extends Image {
 	}
 
 	//adds a shine to an appropriate pixel on a badge
-	public static void highlight( Image image, int index ) {
-		
-		PointF p = new PointF();
+    public static void highlight( Image image, int index ) {
 
-		if (highlightPositions.containsKey(index)){
-			p.x = highlightPositions.get(index).x * image.scale.x;
-			p.y = highlightPositions.get(index).y * image.scale.y;
-		} else {
+        PointF p = new PointF();
 
-			SmartTexture tx = TextureCache.get(Assets.Interfaces.BADGES);
+        if (highlightPositions.containsKey(index)){
+            p.x = highlightPositions.get(index).x * image.scale.x;
+            p.y = highlightPositions.get(index).y * image.scale.y;
+        } else {
 
-			int size = 16;
+            SmartTexture tx;
+            int localIndex = index;
+            if (index < EXTRA_OFFSET) {
+                tx = TextureCache.get(Assets.Interfaces.BADGES);
+            } else {
+                tx = TextureCache.get(Assets.Interfaces.BADGES_EXTRA);
+                localIndex = index - EXTRA_OFFSET;
+            }
 
-			int cols = tx.width / size;
-			int row = index / cols;
-			int col = index % cols;
+            int size = 16;
+            int cols = tx.width / size;
+            int row = localIndex / cols;
+            int col = localIndex % cols;
 
-			int x = 3;
-			int y = 4;
-			int bgColor = tx.getPixel(col * size + x, row * size + y);
-			int curColor = 0;
+            int x = 3;
+            int y = 4;
+            int bgColor = tx.getPixel(col * size + x, row * size + y);
+            int curColor = 0;
 
-			for (x = 3; x <= 12; x++) {
-				curColor = tx.getPixel(col * size + x, row * size + y);
-				if (curColor != bgColor) break;
-			}
+            for (x = 3; x <= 12; x++) {
+                curColor = tx.getPixel(col * size + x, row * size + y);
+                if (curColor != bgColor) break;
+            }
 
-			if (curColor == bgColor) {
-				y++;
-				for (x = 3; x <= 12; x++) {
-					curColor = tx.getPixel(col * size + x, row * size + y);
-					if (curColor != bgColor) break;
-				}
-			}
+            if (curColor == bgColor) {
+                y++;
+                for (x = 3; x <= 12; x++) {
+                    curColor = tx.getPixel(col * size + x, row * size + y);
+                    if (curColor != bgColor) break;
+                }
+            }
 
-			p.x = x * image.scale.x;
-			p.y = y * image.scale.y;
+            p.x = x * image.scale.x;
+            p.y = y * image.scale.y;
 
-			highlightPositions.put(index, new Point(x, y));
-		}
+            highlightPositions.put(index, new Point(x, y)); // keep full index as cache key, that part's fine
+        }
 
-		p.offset(
-			-image.origin.x * (image.scale.x - 1),
-			-image.origin.y * (image.scale.y - 1) );
-		p.offset( image.point() );
-		
-		Speck star = new Speck();
-		star.reset( 0, p.x, p.y, Speck.DISCOVER );
-		star.camera = image.camera();
-		image.parent.add( star );
-	}
+        p.offset(
+                -image.origin.x * (image.scale.x - 1),
+                -image.origin.y * (image.scale.y - 1) );
+        p.offset( image.point() );
+
+        Speck star = new Speck();
+        star.reset( 0, p.x, p.y, Speck.DISCOVER );
+        star.camera = image.camera();
+        image.parent.add( star );
+    }
 	
 	public static BadgeBanner show( int image ) {
 		BadgeBanner banner = new BadgeBanner(image);

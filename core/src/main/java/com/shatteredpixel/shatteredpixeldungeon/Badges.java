@@ -74,11 +74,11 @@ public class Badges {
 
 		//bronze
         UNLOCK_WARRIOR_A                ( 0 ),
-        UNLOCK_MAGE_A                 ( 1 ),
-        UNLOCK_ROGUE_A                ( 2 ),
-        UNLOCK_HUNTRESS_A             ( 3 ),
-        UNLOCK_DUELIST_A              ( 4 ),
-        UNLOCK_CLERIC_A               ( 5 ),
+        UNLOCK_MAGE_A                 ( 201 ),
+        UNLOCK_ROGUE_A                ( 202 ),
+        UNLOCK_HUNTRESS_A             ( 203 ),
+        UNLOCK_DUELIST_A              ( 204 ),
+        UNLOCK_CLERIC_A               ( 205 ),
 
 		UNLOCK_MAGE                 ( 1 ),
 		UNLOCK_ROGUE                ( 2 ),
@@ -264,7 +264,7 @@ public class Badges {
         SUCCESSFUL_HEIST    ( 284 ), // must get thieves guild first
         END_OF_ICE_CAVES    ( 285), // must get ice caves tourist first
 
-        YENDORS_KEY         (323, BadgeType.SECRET), // unob as of now. ALOT will need to be done for this one
+        YENDORS_KEY         (323, BadgeType.SECRET), // unob as of now.
 
 
         // impossible badge, used for some debug testing
@@ -1251,6 +1251,12 @@ public class Badges {
             displayBadge( badge );
         }
 
+        if (Dungeon.hero.heroClass == HeroClass.PEASANT){
+            badge = Badge.AGAINST_ALL_ODDS;
+            local.add( badge );
+            displayBadge( badge );
+        }
+
 
         badge = victoryClassBadges.get(Dungeon.hero.heroClass);
         if (badge == null) return;
@@ -1306,13 +1312,6 @@ public class Badges {
 	
 	public static void validateGamesPlayed() {
 		Badge badge = null;
-        if (Rankings.INSTANCE.totalNumber >= 5) {
-            badge = Badge.UNLOCK_WARRIOR_A;
-            validateAllHeroClassesUnlocked();
-        }
-        unlock(badge);
-        validateAllHeroClassesUnlocked();  // now it's safe to check
-
 		if (Rankings.INSTANCE.totalNumber >= 10 || Rankings.INSTANCE.wonNumber >= 1) {
 			badge = Badge.GAMES_PLAYED_1;
 		}
@@ -1332,6 +1331,15 @@ public class Badges {
 			unlock(badge);
 			badge = Badge.GAMES_PLAYED_5;
 		}
+        if (Rankings.INSTANCE.totalNumber >= 5 && !Badges.isUnlocked(Badge.UNLOCK_WARRIOR_A)) {
+            if (badge != null) { // safety
+                unlock(badge);
+            }
+
+            badge = Badge.UNLOCK_WARRIOR_A;
+            unlock(badge); // might not be needed, but do it anyway
+            validateAllHeroClassesUnlocked();
+        }
 		
 		displayBadge( badge );
 	}
@@ -1402,11 +1410,6 @@ public class Badges {
 
 	public static void validateChampion( int challenges, int sins ) {
         Badge badge = null;
-
-        if (Dungeon.hero.heroClass == HeroClass.PEASANT && challenges >= 3){
-            badge = Badge.AGAINST_ALL_ODDS;
-            unlock(badge);
-        }
 
 		if (challenges == 0) return;
 
@@ -1572,7 +1575,7 @@ public class Badges {
             // technically contains spoilers, but that's alright
             // cooouullddd make the badges hidden until rewarded, since you're super likely to get them, but nah
             {Badge.KILL_TITLE_ENEMY, Badge.ICE_CAVE_TOURIST, Badge.THIEF_DEJA_VU},
-            {Badge.BOSS_SLAIN_2, Badge.THE_THIEVES_GUILD, Badge.SUCCESSFUL_HEIST},
+            {Badge.THE_THIEVES_GUILD, Badge.SUCCESSFUL_HEIST},
             {Badge.ICE_CAVE_TOURIST, Badge.END_OF_ICE_CAVES},
 
             // Legacy vs new hero class unlocks:
@@ -1595,15 +1598,20 @@ public class Badges {
 			{Badge.VICTORY,      Badge.BOSS_CHALLENGE_5},
 			{Badge.HAPPY_END,    Badge.PACIFIST_ASCENT},
 			{Badge.VICTORY,      Badge.TAKING_THE_MICK},
-            {Badge.VICTORY,      Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge? idk
 
+            {Badge.VICTORY,      Badge.VICTORY_RANDOM}, // Added this myself since Evan didn't, could have been a wrong merge? idk
+            {Badge.VICTORY,      Badge.VICTORY_ALL_CLASSES},
 
             // evan might not be strict, i sure as hell am
-            {Badge.BOSS_CHALLENGE_3, Badge.NO_UPGRADE_BOSS3},
+            {Badge.VICTORY, Badge.NO_UPGRADE_BOSS3},
             {Badge.VICTORY, Badge.TO_HELL_AND_BACK},
             {Badge.VICTORY, Badge.HAPPY_END},
             {Badge.HAPPY_END, Badge.HAPPY_END_REMAINS},
-            {Badge.VICTORY, Badge.AGAINST_ALL_ODDS}
+            {Badge.VICTORY, Badge.AGAINST_ALL_ODDS},
+
+            {Badge.BOSS_SLAIN_2, Badge.THE_THIEVES_GUILD, Badge.SUCCESSFUL_HEIST},
+            //{Badge.THE_THIEVES_GUILD, Badge.SUCCESSFUL_HEIST},
+            {Badge.ICE_CAVE_TOURIST, Badge.END_OF_ICE_CAVES},
 	};
 
 	//If the summary badge is unlocked, don't show the component badges

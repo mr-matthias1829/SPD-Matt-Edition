@@ -62,6 +62,16 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(Icons.get(Icons.BADGES), "v1.401.5: crashing hotfix",
+                "_Changes:_\n" +
+                        "_1._ fixed a very common crash case where the game would crash directly after a game over\n" +
+                        "_2._ fixed badge 'against all odds', no longer requiring enabled challenges to be achieved (oops)\n" +
+                        "_3._ fixed badges displayed when achieved for the first time displaying the wrong sprite (was only a visual bug)\n" +
+                        "_4._ badge 'unlocked warrior' no longer gets achieved every game over after already having unlocked it\n" +
+                        "_5._ fixed badges added in 1.401.0 showing up too early\n" +
+                        "_6._ updated the hero unlock badges to better reflect their rarity\n"
+        ));
+
         changes.addButton(new ChangeButton(new Image(new SnatcherSprite()), "v1.401.0: fixes, small new content, and more fixes",
                 "_Changes:_\n" +
                         "_1._ Returned all languages, as requested by someone\n" +

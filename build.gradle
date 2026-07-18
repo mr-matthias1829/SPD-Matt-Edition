@@ -5,9 +5,7 @@ buildscript {
     }
     dependencies {
         //classpath 'com.android.tools.build:gradle:9.1.0'
-        // tbh it should be fair for me to stay at this lower version
-        // in my opinion its actual bs how i'd need to reinstall the whole android studio IDE as
-        //if i haven't installed it before because they decided to not make a updater for the IDE
+        // the current in-use gradle is outdated
         // future me: this is gonna cause merge conflicts and definitely update gradle/android at one point to prevent issues
         classpath "com.android.tools.build:gradle:8.3.2"
     }
@@ -19,8 +17,8 @@ allprojects {
         appName = 'SPD Matt Edition'
         appPackageName = 'com.DumMatt.ShatteredPixelDungeonMattEdition'
 
-        appVersionCode = 959 // 877 was starting
-        appVersionName = 'SPD-ME-v1.401.0'
+        appVersionCode = 961 // 877 was starting
+        appVersionName = 'SPD-ME-v1.401.5'
 
         appJavaCompatibility = JavaVersion.VERSION_11
 
