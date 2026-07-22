@@ -36,32 +36,38 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 
 public class DM100Sprite extends MobSprite {
-	
+
 	public DM100Sprite () {
 		super();
 		
 		texture( Assets.Sprites.DM100 );
 		
 		TextureFilm frames = new TextureFilm( texture, 16, 14 );
+
+        int c = texOffset();
+
+		idle = new Animation( 1, true );
+		idle.frames( frames, 0+c, 1+c );
+
+		run = new Animation( 12, true );
+		run.frames( frames, 6+c, 7+c, 8+c, 9+c );
 		
-		idle = createAnimation("idle", 1, true);
-		idle.frames( frames, 0, 1 );
+		attack = new Animation( 12, false );
+		attack.frames( frames, 2+c, 3+c, 4+c, 0+c );
 
-		run = createAnimation("run", 12, true);
-		run.frames( frames, 6, 7, 8, 9 );
-		
-		attack = createAnimation("attack", 12, false);
-		attack.frames( frames, 2, 3, 4, 0 );
+		zap = new Animation( 8, false );
+		zap.frames( frames, 5+c, 5+c, 1+c );
 
-		zap = createAnimation("zap", 8, false);
-		zap.frames( frames, 5, 5, 1 );
-
-		die = createAnimation("die", 12, false);
-		die.frames( frames, 10, 11, 12, 13, 14, 15 );
+		die = new Animation( 12, false );
+		die.frames( frames, 10+c, 11+c, 12+c, 13+c, 14+c, 15+c );
 		
 		play( idle );
 	}
-	
+
+	protected int texOffset() {
+		return 0;
+	}
+
 	public void zap( int pos ) {
 
 		Char enemy = Actor.findChar(pos);
@@ -119,5 +125,14 @@ public class DM100Sprite extends MobSprite {
 	@Override
 	public int blood() {
 		return 0xFFFFFF88;
+	}
+
+	public static class Vault extends DM100Sprite {
+
+		@Override
+		protected int texOffset() {
+			return 16;
+		}
+
 	}
 }
