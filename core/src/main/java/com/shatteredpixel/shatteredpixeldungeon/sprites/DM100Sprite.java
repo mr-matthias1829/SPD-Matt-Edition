@@ -46,19 +46,19 @@ public class DM100Sprite extends MobSprite {
 
         int c = texOffset();
 
-		idle = new Animation( 1, true );
+        idle = createAnimation("idle", 1, true);
 		idle.frames( frames, 0+c, 1+c );
 
-		run = new Animation( 12, true );
+        run = createAnimation("run", 12, true);
 		run.frames( frames, 6+c, 7+c, 8+c, 9+c );
-		
-		attack = new Animation( 12, false );
+
+        attack = createAnimation("attack", 12, false);
 		attack.frames( frames, 2+c, 3+c, 4+c, 0+c );
 
-		zap = new Animation( 8, false );
+        zap = createAnimation("zap", 8, false);
 		zap.frames( frames, 5+c, 5+c, 1+c );
 
-		die = new Animation( 12, false );
+        die = createAnimation("die", 12, false);
 		die.frames( frames, 10+c, 11+c, 12+c, 13+c, 14+c, 15+c );
 		
 		play( idle );
