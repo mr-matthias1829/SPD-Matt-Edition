@@ -198,7 +198,8 @@ public enum Bestiary {
 
 		QUEST.addEntities(GreatCrab.class,
 				Elemental.NewbornFireElemental.class, RotLasher.class, RotHeart.class,
-				CrystalWisp.class, CrystalGuardian.class, CrystalSpire.class, GnollGuard.class, GnollSapper.class, GnollGeomancer.class);
+				CrystalWisp.class, CrystalGuardian.class, CrystalSpire.class, GnollGuard.class, GnollSapper.class, GnollGeomancer.class,
+				VaultSkeleton.class, VaultDM100.class, VaultShaman.class, VaultDM200.class, VaultSentry.class, VaultLaser.class, VaultBossElemental.class);
 
 		NEUTRAL.addEntities(Ghost.class, RatKing.class, Shopkeeper.class, Wandmaker.class, FriendlyThief.class, Blacksmith.class, Imp.class, Sheep.class, Bee.class);
 
@@ -226,22 +227,28 @@ public enum Bestiary {
 	//some mobs and traps have different internal classes in some cases, so need to convert here
 	private static final HashMap<Class<?>, Class<?>> classConversions = new HashMap<>();
 	static {
-		classConversions.put(CorpseDust.DustWraith.class,      Wraith.class);
+		classConversions.put(CorpseDust.DustWraith.class,       Wraith.class);
 
-		classConversions.put(Necromancer.NecroSkeleton.class,  Skeleton.class);
+		classConversions.put(Necromancer.NecroSkeleton.class,   Skeleton.class);
         classConversions.put(SpiritNecromancer.NecroGhoul.class,  Ghoul.class);
 
-		classConversions.put(TenguDartTrap.class,              PoisonDartTrap.class);
-		classConversions.put(GnollRockfallTrap.class,          RockfallTrap.class);
+		classConversions.put(TenguDartTrap.class,               PoisonDartTrap.class);
+		classConversions.put(GnollRockfallTrap.class,           RockfallTrap.class);
 
-		classConversions.put(DwarfKing.DKGhoul.class,          Ghoul.class);
-		classConversions.put(DwarfKing.DKWarlock.class,        Warlock.class);
-		classConversions.put(DwarfKing.DKMonk.class,           Monk.class);
-		classConversions.put(DwarfKing.DKGolem.class,          Golem.class);
+		classConversions.put(VaultGhoul.class,                  Ghoul.class);
+		classConversions.put(VaultElemental.Fire.class,         Elemental.FireElemental.class);
+		classConversions.put(VaultElemental.Frost.class,        Elemental.FrostElemental.class);
+		classConversions.put(VaultElemental.Shock.class,        Elemental.ShockElemental.class);
+		classConversions.put(VaultGolem.class,                  Golem.class);
 
-		classConversions.put(YogDzewa.YogRipper.class,         RipperDemon.class);
-		classConversions.put(YogDzewa.YogEye.class,            Eye.class);
-		classConversions.put(YogDzewa.YogScorpio.class,        Scorpio.class);
+		classConversions.put(DwarfKing.DKGhoul.class,           Ghoul.class);
+		classConversions.put(DwarfKing.DKWarlock.class,         Warlock.class);
+		classConversions.put(DwarfKing.DKMonk.class,            Monk.class);
+		classConversions.put(DwarfKing.DKGolem.class,           Golem.class);
+
+		classConversions.put(YogDzewa.YogRipper.class,          RipperDemon.class);
+		classConversions.put(YogDzewa.YogEye.class,             Eye.class);
+		classConversions.put(YogDzewa.YogScorpio.class,         Scorpio.class);
 	}
 
 	public static boolean isSeen(Class<?> cls){
