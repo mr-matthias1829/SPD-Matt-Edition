@@ -28,6 +28,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasu
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultLaser;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
@@ -164,7 +165,7 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom {
 		do {
 			treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
 		} while (level.heaps.get(treasurePos) != null);
-		level.drop(treasureItem, treasurePos);
+		level.drop(new DwarfToken(), treasurePos);
 
 	}
 }
