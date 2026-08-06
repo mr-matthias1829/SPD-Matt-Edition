@@ -49,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -989,11 +990,7 @@ public class Hero extends Char {
 				actResult = false;
 			}
 		}
-		
-		if(hasTalent(Talent.BARKSKIN) && Dungeon.level.map[pos] == Terrain.FURROWED_GRASS){
-			Barkskin.conditionallyAppend(this, (lvl*pointsInTalent(Talent.BARKSKIN))/2, 1 );
-		}
-		
+
 		return actResult;
 	}
 	
@@ -1535,7 +1532,9 @@ public class Hero extends Char {
 	public void rest( boolean fullRest ) {
 		spendAndNextConstant( TIME_TO_REST );
 		if (hasTalent(Talent.HOLD_FAST)){
-			Buff.affect(this, HoldFast.class).pos = pos;
+			if (heroClass != HeroClass.WARRIOR || buff(BrokenSeal.WarriorShield.class) != null) {
+				Buff.affect(this, HoldFast.class).pos = pos;
+			}
 		}
 		if (hasTalent(Talent.PATIENT_STRIKE)){
 			Buff.affect(Dungeon.hero, Talent.PatientStrikeTracker.class).pos = Dungeon.hero.pos;
