@@ -25,6 +25,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -43,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultSke
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
@@ -576,6 +578,21 @@ public class VaultLevel extends CityLevel {
 				losBlocking[cell] = false;
 			}
 		}
+
+		//also generate 2 torches if into darkness is enabled. Separate seed to avoid affecting other parts of levelgen
+		if (Dungeon.isChallenged(Challenges.DARKNESS)){
+			Random.pushGenerator(Random.Long());
+			for (int i = 0; i < 2; i++){
+				int cell = randomDropCell();
+				drop( new Torch(), cell ).type = Heap.Type.HEAP;
+				if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
+					map[cell] = Terrain.GRASS;
+					losBlocking[cell] = false;
+				}
+			}
+			Random.popGenerator();
+		}
+
 	}
 
 	@Override
