@@ -318,7 +318,7 @@ public class Imp extends NPC {
 					((Artifact)artif.identify(false)).transferUpgrade(5);
 				} else {
 					artif = Generator.random(Generator.Category.RING);
-					artif.levelKnown = artif.cursedKnown = true;
+					//we delay the ID on rings until the boss is defeated
 					artif.upgrade(Random.IntRange(2, 4));
 				}
 				rewardOptions.add(artif);
@@ -327,7 +327,7 @@ public class Imp extends NPC {
 				do {
 					ring = Generator.random(Generator.Category.RING);
 				} while (ring.getClass() == artif.getClass()); //rare cases of the same kind of ring twice
-				ring.levelKnown = ring.cursedKnown = true;
+				//we delay the ID on rings until the boss is defeated
 				ring.upgrade(Random.IntRange(2, 4));
 				rewardOptions.add(ring);
 
