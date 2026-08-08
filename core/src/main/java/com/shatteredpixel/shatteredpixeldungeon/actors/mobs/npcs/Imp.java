@@ -220,6 +220,7 @@ public class Imp extends NPC {
 		//variacles exclusive to new quest
 		public static ArrayList<Item> rewardOptions = new ArrayList<>();
 		public static int hazardFreebies; //player gets two free hits from hazards before they start penalizing score
+		public static boolean mirrorUsed = false;
 		private static int score; //Not the score used in rankings! This score has no penalty applied
 
         public static void reset() {
@@ -229,6 +230,7 @@ public class Imp extends NPC {
 
             reward = null;
 			hazardFreebies = 2;
+			mirrorUsed = false;
 			score = 0;
         }
 
@@ -246,6 +248,7 @@ public class Imp extends NPC {
 		private static final String HAZRD_FREEBIES = "hazard_freebies";
 		private static final String SCORE       = "score";
 		private static final String REWARD_OPTIONS = "reward_options";
+		private static final String MIRROR_USED = "mirror_used";
 
 
         public static void storeInBundle( Bundle bundle ) {
@@ -265,6 +268,7 @@ public class Imp extends NPC {
 				node.put( HAZRD_FREEBIES, hazardFreebies );
 				node.put( SCORE, score );
 				node.put( REWARD_OPTIONS, rewardOptions );
+				node.put( MIRROR_USED, mirrorUsed );
             }
 
             bundle.put( NODE, node );
@@ -285,9 +289,11 @@ public class Imp extends NPC {
                 alternative	= node.getBoolean( ALTERNATIVE );
 					score = 0;
 					rewardOptions.clear();
+					mirrorUsed = false;
 				} else {
 					alternative = false;
 					hazardFreebies = node.getInt( HAZRD_FREEBIES );
+					mirrorUsed = node.getBoolean( MIRROR_USED );
 					score = node.getInt( SCORE );
 					rewardOptions = new ArrayList<>((Collection<Item>) (Collection<?>) node.getCollection( REWARD_OPTIONS ));
 				}
