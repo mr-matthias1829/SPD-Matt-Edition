@@ -256,6 +256,7 @@ public class EscapeCrystal extends Item {
 				b.detach();
 			}
 		}
+		Dungeon.hero.HP = Dungeon.hero.HT; //full heal
 
 		//logic for removing Warrior's Seal or Mage's staff
 		if (preserve instanceof Armor && ((Armor) preserve).checkSeal() != null){
