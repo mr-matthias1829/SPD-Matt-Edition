@@ -25,6 +25,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -112,6 +113,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
@@ -121,6 +123,11 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class VaultLevel extends CityLevel {
+
+	@Override
+	public void playLevelMusic() {
+		Music.INSTANCE.play(Assets.Music.CITY_TENSE, true);
+	}
 
 	@Override
 	protected boolean build() {
