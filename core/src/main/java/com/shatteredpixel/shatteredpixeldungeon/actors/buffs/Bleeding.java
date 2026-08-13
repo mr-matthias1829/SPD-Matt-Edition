@@ -86,7 +86,7 @@ public class Bleeding extends Buff implements Buff.DOTbuff {
 			this.level = Math.max(this.level, level);
 			this.source = source;
 		}
-		target.needsIncomingDOTUpdate = true;
+		if (target != null) target.needsIncomingDOTUpdate = true;
 	}
 
 	public void extend( float amount ) {

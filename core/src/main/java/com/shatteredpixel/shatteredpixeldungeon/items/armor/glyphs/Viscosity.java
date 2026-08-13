@@ -133,7 +133,7 @@ public class Viscosity extends Glyph {
 				postpone(TICK);
 			}
 			this.damage += damage;
-			target.needsIncomingDOTUpdate = true;
+			if (target != null) target.needsIncomingDOTUpdate = true;
 		}
 		
 		@Override
