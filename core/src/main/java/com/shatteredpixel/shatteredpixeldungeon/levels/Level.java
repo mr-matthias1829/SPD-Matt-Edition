@@ -66,6 +66,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultMirror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultTokenDoor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
@@ -1541,18 +1543,11 @@ public abstract class Level implements Bundlable {
             }
 
             Dungeon.hero.mindVisionEnemies.clear();
-            if (c.buff( MindVision.class ) != null) {
-                for (Mob mob : mobs) {
-                    if (mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL&& ((Mimic) mob).stealthy()){
-                        continue;
-                    }
-                    for (int i : PathFinder.NEIGHBOURS9) {
-                        heroMindFov[mob.pos + i] = true;
-                    }
-                }
-            } else {
 
-                int mindVisRange = 0;
+			int mindVisRange = 0;
+            if (c.buff( MindVision.class ) != null) {
+				mindVisRange = Integer.MAX_VALUE;
+            } else {
                 if (((Hero) c).hasTalent(Talent.HEIGHTENED_SENSES)){
                     mindVisRange = 1+((Hero) c).pointsInTalent(Talent.HEIGHTENED_SENSES);
                 }
@@ -1564,6 +1559,9 @@ public abstract class Level implements Bundlable {
                     }
                 }
                 mindVisRange = Math.max(mindVisRange, EyeOfNewt.mindVisionRange());
+			}
+
+			if (mindVisRange >= 1) {
 
                 //power of many's life link spell allows allies to get divine sense
                 Char ally = PowerOfMany.getPoweredAlly();
@@ -1571,9 +1569,10 @@ public abstract class Level implements Bundlable {
                     ally = null;
                 }
 
-                if (mindVisRange >= 1) {
                     for (Mob mob : mobs) {
-                        if (mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL && ((Mimic) mob).stealthy()){
+					//TODO maybe add a mob property for this
+					if ((mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL && ((Mimic) mob).stealthy())
+						|| mob instanceof VaultTokenDoor || mob instanceof VaultMirror){
                             continue;
                         }
                         int p = mob.pos;
@@ -1584,7 +1583,6 @@ public abstract class Level implements Bundlable {
                         }
                     }
                 }
-            }
 
             if (c.buff( Awareness.class ) != null) {
                 for (Heap heap : heaps.valueList()) {
