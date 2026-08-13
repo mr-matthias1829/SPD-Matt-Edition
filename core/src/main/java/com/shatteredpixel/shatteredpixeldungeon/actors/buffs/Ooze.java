@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class Ooze extends Buff implements Buff.DOTbuff {
 
@@ -125,6 +124,12 @@ public class Ooze extends Buff implements Buff.DOTbuff {
 		}
 		target.needsIncomingDOTUpdate = true;
 		return true;
+	}
+
+	@Override
+	public void detach() {
+		target.needsIncomingDOTUpdate = true;
+		super.detach();
 	}
 
 	@Override
