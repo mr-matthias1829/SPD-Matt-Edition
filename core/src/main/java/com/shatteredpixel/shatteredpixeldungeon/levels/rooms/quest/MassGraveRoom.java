@@ -129,7 +129,7 @@ public class MassGraveRoom extends SpecialRoom {
 
 	@Override
 	public boolean canConnect(int direction) {
-		return direction == BOTTOM;
+		return super.canConnect(direction) && direction == BOTTOM;
 	}
 
 	@Override
