@@ -659,11 +659,6 @@ public class VaultLevel extends CityLevel {
 		});
 	}
 
-	@Override
-	public int randomRespawnCell( Char ch ) {
-		return entrance();
-	}
-
 	public static class VaultFlameTrap extends Trap {
 
 		{
