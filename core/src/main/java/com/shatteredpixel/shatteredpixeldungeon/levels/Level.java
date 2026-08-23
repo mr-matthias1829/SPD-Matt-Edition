@@ -66,8 +66,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultMirror;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultTokenDoor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
@@ -1571,9 +1569,8 @@ public abstract class Level implements Bundlable {
                 }
 
                     for (Mob mob : mobs) {
-					//TODO maybe add a mob property for this
 					if ((mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL && ((Mimic) mob).stealthy())
-						|| mob instanceof VaultTokenDoor || mob instanceof VaultMirror){
+						|| Char.hasProp(mob, Char.Property.OBJECT)){
                             continue;
                         }
                         int p = mob.pos;
@@ -1594,7 +1591,7 @@ public abstract class Level implements Bundlable {
 
             for (TalismanOfForesight.CharAwareness a : c.buffs(TalismanOfForesight.CharAwareness.class)){
                 Char ch = (Char) Actor.findById(a.charID);
-                if (ch == null || !ch.isAlive()) {
+				if (ch == null || !ch.isAlive() || Char.hasProp(ch, Char.Property.OBJECT)) {
                     continue;
                 }
                 int p = ch.pos;

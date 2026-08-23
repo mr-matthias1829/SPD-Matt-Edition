@@ -558,7 +558,7 @@ public abstract class Char extends Actor {
 			
 			return true;
 			
-		} else {
+		} else if (!Char.hasProp(enemy, Property.OBJECT)) {
 
 			if (enemy.sprite != null){
 				if (hitMissIcon != -1){
@@ -585,6 +585,8 @@ public abstract class Char extends Actor {
 
 			return false;
 			
+		} else {
+			return false;
 		}
 
 	}
@@ -1448,6 +1450,9 @@ public abstract class Char extends Actor {
 		LARGE,
 		IMMOVABLE ( new HashSet<Class>(),
 				new HashSet<Class>( Arrays.asList(Vertigo.class) )),
+		//A character that is functionally an interactable object or piece of scenery
+		// (or a mimic that is effectively pretending to be one with the help of a mimic tooth)
+		OBJECT,
 		//A character that acts in an unchanging manner. immune to AI state debuffs or stuns/slows
 		STATIC( new HashSet<Class>(),
 				new HashSet<Class>( Arrays.asList(AllyBuff.class, Dread.class, Terror.class, Amok.class, Charm.class, Sleep.class,
