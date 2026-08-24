@@ -38,10 +38,9 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.ui.Component;
+import com.watabou.utils.Point;
 
 import java.util.ArrayList;
-
-import javax.swing.Icon;
 
 public class RightClickMenu extends Component {
 
@@ -57,6 +56,9 @@ public class RightClickMenu extends Component {
 	private RedButton[] buttons;
 
 	private Item item;
+
+	//if a window is made from this right click menu, it gets this offset
+	private Point childOffset;
 
 	public RightClickMenu(Item item){
 		ArrayList<String> actions = item.actions(Dungeon.hero);
@@ -124,6 +126,9 @@ public class RightClickMenu extends Component {
 				@Override
 				protected void onClick() {
 					super.onClick();
+					if (childOffset != null){
+						GameScene.nextWndOffset(childOffset);
+					}
 					if (item != null){
 						item.execute(Dungeon.hero, options[finalI]);
 
@@ -145,6 +150,10 @@ public class RightClickMenu extends Component {
 			add(buttons[i]);
 		}
 
+	}
+
+	public void setChildWindowOffset(Point offset){
+		childOffset = offset;
 	}
 
 	public void onSelect(int index){}
