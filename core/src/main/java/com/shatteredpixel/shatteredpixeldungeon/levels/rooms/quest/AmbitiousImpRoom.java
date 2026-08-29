@@ -154,7 +154,7 @@ public class AmbitiousImpRoom extends SpecialRoom {
             tileW = tileH = 5;
         }
 
-        final int TEX_WIDTH = 128;
+		final int TEX_WIDTH = 256;
 
         @Override
         public Tilemap create() {
@@ -193,9 +193,9 @@ public class AmbitiousImpRoom extends SpecialRoom {
 			tileH = 3;
 		}
 
-		private final int BANNER_1 = 40;
-		private final int BANNER_2 = 41;
-		private final int BANNER__BOTTOM = 42;
+		private final int BANNER_1 = 80;
+		private final int BANNER_2 = 81;
+		private final int BANNER__BOTTOM = 82;
 
 		@Override
 		public void pos(int pos) {
@@ -255,7 +255,7 @@ public class AmbitiousImpRoom extends SpecialRoom {
             tileW = tileH = 3;
         }
 
-        final int TEX_WIDTH = 128;
+		final int TEX_WIDTH = 256;
 
         @Override
         public Tilemap create() {
