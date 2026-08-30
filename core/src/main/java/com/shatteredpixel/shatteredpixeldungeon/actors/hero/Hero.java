@@ -1071,7 +1071,7 @@ public class Hero extends Char {
 			
 		} else {
 			
-			if (fieldOfView[ch.pos] && getCloser( ch.pos )) {
+			if ((fieldOfView[ch.pos] || Char.hasProp(ch, Property.OBJECT)) && getCloser( ch.pos )) {
 
 				return true;
 
@@ -2006,7 +2006,7 @@ public class Hero extends Char {
 			
 			curAction = new HeroAction.Alchemy( cell );
 			
-		} else if (fieldOfView[cell] && ch instanceof Mob) {
+		} else if (ch instanceof Mob && (fieldOfView[cell] || Char.hasProp(ch, Property.OBJECT))) {
 
 			if (((Mob) ch).heroShouldInteract()) {
 				curAction = new HeroAction.Interact( ch );
