@@ -40,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ImpShopRoo
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.tiles.RaisedTerrainTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
@@ -492,8 +491,6 @@ public class CityBossLevel extends Level {
 
 				//skull piles
 				} else if (map[i] == Terrain.STATUE) {
-					RaisedTerrainTilemap.skipCells.add(i);
-					GameScene.updateMap(i);
 					data[i] = 15*8 + 5;
 
 				//ground tiles
@@ -553,13 +550,9 @@ public class CityBossLevel extends Level {
 						//facing left
 						if (i%tileW > 7) {
 							data[i] = 10 * 8 + 7;
-							RaisedTerrainTilemap.skipCells.add(i);
-							GameScene.updateMap(i);
 
 							i++;
 							data[i] = 11 * 8 + 7;
-							RaisedTerrainTilemap.skipCells.add(i);
-							GameScene.updateMap(i);
 
 						} else {
 							data[i] = 8 * 8 + 7;
@@ -571,8 +564,6 @@ public class CityBossLevel extends Level {
 						//regular statues facing left
 						if (i % tileW > 7) {
 							data[i] = 15 * 8 + 4;
-							RaisedTerrainTilemap.skipCells.add(i);
-							GameScene.updateMap(i);
 						} else {
 							data[i] = -1;
 						}

@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TorchHalo;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.tiles.RaisedTerrainTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
@@ -116,10 +115,6 @@ public abstract class CrystalWispSprite extends MobSprite {
 		if (light != null){
 			light.putOut();
 		}
-		if (ch != null && visible){
-			RaisedTerrainTilemap.skipCells.remove(ch.pos);
-			GameScene.updateMap(ch.pos);
-		}
 	}
 
 	@Override
@@ -154,19 +149,6 @@ public abstract class CrystalWispSprite extends MobSprite {
 	}
 
 	@Override
-	public void move(int from, int to) {
-		super.move(from, to);
-		if (visible){
-			RaisedTerrainTilemap.skipCells.add(to);
-			GameScene.updateMap(to);
-			RaisedTerrainTilemap.skipCells.remove(from);
-			GameScene.updateMap(from);
-		}
-	}
-
-	boolean wasVisible = false;
-
-	@Override
 	public void update() {
 		super.update();
 
@@ -180,16 +162,6 @@ public abstract class CrystalWispSprite extends MobSprite {
 			light.visible = visible;
 			light.point(center());
 
-		}
-
-		if (curAnim != die && ch != null && visible != wasVisible){
-			if (visible){
-				RaisedTerrainTilemap.skipCells.add(ch.pos);
-			} else {
-				RaisedTerrainTilemap.skipCells.remove(ch.pos);
-			}
-			GameScene.updateMap(ch.pos);
-			wasVisible = visible;
 		}
 	}
 
