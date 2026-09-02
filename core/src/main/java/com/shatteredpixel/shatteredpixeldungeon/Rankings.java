@@ -104,6 +104,7 @@ public enum Rankings {
 			crystal.detachAll(Dungeon.hero.belongings.backpack);
 			tempStore.storeHeroBelongings(Dungeon.hero);
 			crystal.restoreHeroBelongings(Dungeon.hero, null);
+			tempStore.collect();
 		}
 
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
@@ -292,7 +293,9 @@ public enum Rankings {
 					}
 				}
 			}
-			if (!(item instanceof Trinket) && !Dungeon.quickslot.contains(item)) {
+			if (!(item instanceof Trinket)
+					&& !(item instanceof EscapeCrystal)
+					&& !Dungeon.quickslot.contains(item)) {
 				belongings.backpack.items.remove(item);
 			}
 		}
