@@ -35,13 +35,13 @@ public class VaultMirrorSprite extends MobSprite {
 
 		texture( Assets.Sprites.VAULT_MIRROR );
 
-		TextureFilm frames = new TextureFilm( texture, 16, 18 );
+		TextureFilm frames = new TextureFilm( texture, 16, 23 );
 
-		idle = createAnimation("idle", 12, true, false );
+		idle = createAnimation("idle", 15, true, false );
 		//4 seconds of nothing, then shine animation
 		idle.frames( frames, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				1, 2, 3, 4, 5, 6, 7 );
+				1, 2, 3, 4, 5, 6, 7, 8, 9 );
 
 		run = idle.clone();
 
