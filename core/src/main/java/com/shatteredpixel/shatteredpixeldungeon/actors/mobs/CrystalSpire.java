@@ -39,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
-import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -51,6 +50,8 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrystalSpireSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Game;
+import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -345,6 +346,19 @@ public class CrystalSpire extends Mob {
 						Sample.INSTANCE.playDelayed(Assets.Sounds.ROCKS, 0.1f);
 						PixelScene.shake( 3, 0.7f );
 						Blacksmith.Quest.beatBoss();
+
+						GameScene.bossSlain();
+						Game.runOnRenderThread(new Callback() {
+							@Override
+							public void call() {
+								Music.INSTANCE.fadeOut(5f, new Callback() {
+									@Override
+									public void call() {
+										Music.INSTANCE.end();
+									}
+								});
+							}
+						});
 
 						Bestiary.setSeen(CrystalSpire.class);
 						Bestiary.countEncounter(CrystalSpire.class);
