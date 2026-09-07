@@ -670,6 +670,9 @@ public class ItemSpriteSheet {
         for (int i = BREWS; i < BREWS+16; i++)
             assignItemRect(i, 12, 14);
 
+		assignItemRect(BREW_INFERNAL,   11, 13);
+		assignItemRect(BREW_BLIZZARD,   11, 13);
+		assignItemRect(BREW_UNSTABLE,   11, 13);
         assignItemRect(BREW_AQUA, 9, 11);
     }
 
@@ -699,9 +702,9 @@ public class ItemSpriteSheet {
 		assignItemRect(CURSE_INFUSE,    10, 16);
 		assignItemRect(MAGIC_INFUSE,    10, 14);
 		assignItemRect(ALCHEMIZE,       12, 12);
-		assignItemRect(RECYCLE,         10, 16);
+		assignItemRect(RECYCLE,         12, 13);
 
-		assignItemRect(RECLAIM_TRAP,    10, 16);
+		assignItemRect(RECLAIM_TRAP,    14, 11);
 		assignItemRect(RETURN_BEACON,    8, 16);
         assignItemRect(SUMMON_ELE,       8, 16);
 		assignItemRect(SUMMON_ELE_FIRE,  8, 16);
