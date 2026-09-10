@@ -1023,7 +1023,7 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton(new Image(new SentryRoom.SentrySprite()), "v1.145: All About Vanity",
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SENTRY), "v1.145: All About Vanity",
                 "_ROOMS:_\n" +
                         "1. sentry in sentry room now has more accuracy (20+[depth*2] -> 25+[depth*3]), ad deals more BASE damage (2,4 -> 3,6)\n" +
                         "2. fetid rat accuracy and damage now scales with other stats\n" +

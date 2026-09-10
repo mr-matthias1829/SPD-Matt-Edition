@@ -294,8 +294,8 @@ public class Ghoul extends Mob {
 					}
 				}
 
-                float hpPercent = Math.max (0.05f, 0.33f - (timesDowned*0.06f));
-				ghoul.HP = Math.round(ghoul.HT/hpPercent);
+                float hpPercent = Math.max(0.05f, 0.33f - (timesDowned * 0.06f));
+                ghoul.HP = Math.round(ghoul.HT * hpPercent);
 
 				ghoul.beingLifeLinked = false;
 				Actor.add(ghoul);

@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Shad
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.SmokeBomb;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
