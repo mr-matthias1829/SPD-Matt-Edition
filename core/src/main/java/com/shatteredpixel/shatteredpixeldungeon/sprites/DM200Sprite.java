@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM200;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultDM200;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -44,23 +43,28 @@ public class DM200Sprite extends MobSprite {
 		texture( Assets.Sprites.DM200 );
 
 		TextureFilm frames = new TextureFilm( texture, 21, 18 );
+        int c = texOffset();
 
 		idle = createAnimation("idle", 10, true);
-		idle.frames( frames, 0, 1 );
+        idle.frames( frames, c+0, c+1 );
 
 		run = createAnimation("run", 10, true);
-		run.frames( frames, 2, 3 );
+        run.frames( frames, c+2, c+3 );
 
 		attack = createAnimation("attack", 15, false);
-		attack.frames( frames, 4, 5, 6 );
+        attack.frames( frames, c+4, c+5, c+6 );
 
 		zap = createAnimation("zap", 15, false);
-		zap.frames( frames, 7, 8, 8, 7 );
+        zap.frames( frames, c+7, c+8, c+8, c+7 );
 
 		die = createAnimation("die", 8, false);
-		die.frames( frames, 9, 10, 11 );
+        die.frames( frames, c+9, c+10, c+11 );
 
 		play( idle );
+	}
+
+	protected int texOffset(){
+		return 0;
 	}
 
 	public void zap( int cell ) {
@@ -104,6 +108,14 @@ public class DM200Sprite extends MobSprite {
 	@Override
 	public int blood() {
 		return 0xFFFFFF88;
+	}
+
+	public static class Vault extends DM200Sprite {
+
+		@Override
+		protected int texOffset() {
+			return 24;
+		}
 	}
 
 }

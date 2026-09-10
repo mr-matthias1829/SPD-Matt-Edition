@@ -41,16 +41,16 @@ public class SkeletonSprite extends MobSprite {
 
 		int c = texOffset();
 
-		idle = new Animation( 12, true );
+		idle = createAnimation("idle", 12, true );
         idle.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 2+c, 3+c );
 
-        run = new Animation( 15, true );
+        run = createAnimation("run",15, true );
 		run.frames( frames, 4+c, 5+c, 6+c, 7+c, 8+c, 9+c );
 
-		attack = new Animation( 15, false );
+		attack = createAnimation("attack",15, false );
 		attack.frames( frames, 14+c, 15+c, 16+c );
 
-		die = new Animation( 12, false );
+        die = createAnimation("die", 12, false);
 		die.frames( frames, 10+c, 11+c, 12+c, 13+c );
 		
 		play( idle );

@@ -129,9 +129,8 @@ public abstract class ShamanSprite extends MobSprite {
 		}
 
 		@Override
-		//TODO
 		protected int texOffset() {
-			return 42;
+			return 63;
 		}
 	}
 
