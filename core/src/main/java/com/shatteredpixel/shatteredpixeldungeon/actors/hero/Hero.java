@@ -1272,11 +1272,14 @@ public class Hero extends Char {
 			if (heap != null && (heap.type != Type.HEAP && heap.type != Type.FOR_SALE)) {
 
 				boolean noKey = false;
-				if (heap.type == Type.LOCKED_CHEST){
-					noKey = Dungeon.branch != 0 || Notes.keyCount(new GoldenKey(Dungeon.depth)) < 1;
-				} else if (heap.type == Type.CRYSTAL_CHEST){
-					noKey = Dungeon.branch != 0 || Notes.keyCount(new CrystalKey(Dungeon.depth)) < 1;
-				}
+                if ((heap.type == Type.LOCKED_CHEST && Notes.keyCount(new GoldenKey(Dungeon.depth)) < 1)
+                        || (heap.type == Type.CRYSTAL_CHEST && Notes.keyCount(new CrystalKey(Dungeon.depth)) < 1)){
+
+                    GLog.w( Messages.get(this, "locked_chest") );
+                    ready();
+                    return false;
+
+                }
 
 				if (noKey){
 
@@ -1320,21 +1323,16 @@ public class Hero extends Char {
 		int doorCell = action.dst;
 		if (Dungeon.level.adjacent( pos, doorCell )) {
 			path = null;
-			
-			boolean hasKey = false;
-			int door = Dungeon.level.map[doorCell];
-			
-			if (Dungeon.branch != 0) {
 
-				//keys currently do not apply to sub-floors
-				hasKey = false;
+            boolean hasKey = false;
+            int door = Dungeon.level.map[doorCell];
 
-			} else if (door == Terrain.LOCKED_DOOR
-					&& Notes.keyCount(new IronKey(Dungeon.depth)) > 0) {
-				
-				hasKey = true;
+            if (door == Terrain.LOCKED_DOOR
+                    && Notes.keyCount(new IronKey(Dungeon.depth)) > 0) {
 
-			} else if (door == Terrain.HERO_LKD_DR){
+                hasKey = true;
+
+            } else if (door == Terrain.HERO_LKD_DR){
 
 				if (belongings.getItem(SkeletonKey.class) != null
 						&& !belongings.getItem(SkeletonKey.class).cursed){
@@ -2524,11 +2522,9 @@ public class Hero extends Char {
 				GLog.n(Messages.get(this, "key_distracted"));
 				spendAndNext(2*Key.TIME_TO_UNLOCK);
 				Buff.affect(this, Hunger.class).affectHunger(-4);
-			} else if (Dungeon.level.distance(pos, doorCell) <= 1) {
-				boolean hasKey = true;
-				if (Dungeon.branch != 0){
-					hasKey = false; //keys currently do not work in sub-floors
-				} else if (door == Terrain.LOCKED_DOOR) {
+            } else if (Dungeon.level.distance(pos, doorCell) <= 1) {
+                boolean hasKey = true;
+                if (door == Terrain.LOCKED_DOOR) {
 					hasKey = Notes.remove(new IronKey(Dungeon.depth));
 					if (hasKey) {
 						if (keyUseTrack != null){
@@ -2575,17 +2571,15 @@ public class Hero extends Char {
                 if (heap.type == Type.SKELETON || heap.type == Type.REMAINS) {
                     Sample.INSTANCE.play( Assets.Sounds.BONES );
                 } else if (heap.type == Type.LOCKED_CHEST){
-					//keys currently do not work in sub-floors
-					hasKey = Dungeon.branch == 0 && Notes.remove(new GoldenKey(Dungeon.depth));
-					if (hasKey && keyUseTrack != null){
-						keyUseTrack.processGoldLockOpened();
-					}
+                    hasKey = Notes.remove(new GoldenKey(Dungeon.depth));
+                    if (hasKey && keyUseTrack != null){
+                        keyUseTrack.processGoldLockOpened();
+                    }
                 } else if (heap.type == Type.CRYSTAL_CHEST){
-					//keys currently do not work in sub-floors
-					hasKey = Dungeon.branch == 0 && Notes.remove(new CrystalKey(Dungeon.depth));
-					if (hasKey && keyUseTrack != null){
-						keyUseTrack.processCrystalLockOpened();
-					}
+                    hasKey = Notes.remove(new CrystalKey(Dungeon.depth));
+                    if (hasKey && keyUseTrack != null){
+                        keyUseTrack.processCrystalLockOpened();
+                    }
                 }
 
                 if (hasKey) {

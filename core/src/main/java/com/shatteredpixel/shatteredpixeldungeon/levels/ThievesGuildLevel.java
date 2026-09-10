@@ -272,6 +272,10 @@ public class ThievesGuildLevel extends PrisonLevel {
         return Assets.Environment.WATER_PRISON;
     }
 
+    public int featuresRow() {
+        return 1;
+    }
+
 
     @Override
     public String tileName( int tile ) {

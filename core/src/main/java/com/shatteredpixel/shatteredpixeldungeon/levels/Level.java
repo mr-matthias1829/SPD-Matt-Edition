@@ -365,6 +365,14 @@ public abstract class Level implements Bundlable {
         Random.popGenerator();
     }
 
+
+
+    public int featuresRow() {
+        return -1;
+    }
+
+
+
     public void setSize(int w, int h){
 
         width = w;

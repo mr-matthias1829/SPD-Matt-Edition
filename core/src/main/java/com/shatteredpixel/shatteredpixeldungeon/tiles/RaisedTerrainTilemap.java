@@ -43,7 +43,7 @@ public class RaisedTerrainTilemap extends DungeonTilemap {
 
 	@Override
 	protected int getTileVisual(int pos, int tile, boolean flat) {
-		
+		/*
 		if (flat) return -1;
 
 		if (skipCells.contains(pos)){
@@ -66,6 +66,7 @@ public class RaisedTerrainTilemap extends DungeonTilemap {
 				return regionOffset + 1;
 			}
 		}
+		 */
 		
 		return -1;
 	}

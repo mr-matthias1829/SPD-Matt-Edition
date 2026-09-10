@@ -62,6 +62,19 @@ public class Mod_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes.addButton(new ChangeButton(new Image(new ImpSprite()), "v1.404.0: Shattered 4.0.0",
+                "_Changes:_\n" +
+                        "_1._ updated to Shattered Pixel Dungeon 4.0.0\n" +
+                        "_2._ fixed a bug where ghouls would gain increasingly more hp each revive, even beyond max hp\n" +
+                        "_3._ fixed keys of the same depth being usable on other branches (i think?)\n" +
+                        "_4._ fixed some bugs caused by merging with 4.0.0\n" +
+                        "_5._ updated some sprites to work with some of 4.0.0 new systems\n" +
+
+                        "\n_notes:_\n" +
+                        "_1._ i am fairly certain that many bugs are still present\n" +
+                        "_2._ this version will not have a release\n"
+        ));
+
         changes.addButton(new ChangeButton(Icons.get(Icons.BADGES), "v1.401.5: crashing hotfix",
                 "_Changes:_\n" +
                         "_1._ fixed a very common crash case where the game would crash directly after a game over\n" +

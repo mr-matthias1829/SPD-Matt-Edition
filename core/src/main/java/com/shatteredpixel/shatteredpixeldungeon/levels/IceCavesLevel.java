@@ -372,6 +372,11 @@ public class IceCavesLevel extends CavesLevel {
         return Assets.Environment.WATER_CAVES;
     }
 
+    public int featuresRow() {
+        return 0;
+    }
+
+
     @Override
     protected Class<?>[] trapClasses() {
         // Ice caves has more frost/cold themed traps

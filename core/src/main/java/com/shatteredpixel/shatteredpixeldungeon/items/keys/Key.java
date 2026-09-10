@@ -49,10 +49,17 @@ public abstract class Key extends Item {
 	public int depth;
     public int branch;
 
+    /*
 	@Override
 	public boolean isSimilar( Item item ) {
 		return super.isSimilar(item) && ((Key)item).depth == depth;
 	}
+     */
+
+    @Override
+    public boolean isSimilar( Item item ) {
+        return super.isSimilar(item) && ((Key)item).depth == depth && ((Key)item).branch == branch;
+    }
 
 	@Override
 	public boolean doPickUp(Hero hero, int pos) {
