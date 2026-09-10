@@ -57,8 +57,8 @@ public class WndInfoCell extends Window {
 		for (CustomTilemap i : Dungeon.level.customTiles){
 			if ((x >= i.tileX && x < i.tileX+i.tileW) &&
 					(y >= i.tileY && y < i.tileY+i.tileH)){
-				if ((customImage = i.image(x - i.tileX, y - i.tileY)) != null) {
-					break;
+				if (i.image(x - i.tileX, y - i.tileY) != null) {
+					customImage = i.image(x - i.tileX, y - i.tileY);
 				}
 			}
 		}
@@ -86,12 +86,13 @@ public class WndInfoCell extends Window {
 			if ((x >= i.tileX && x < i.tileX+i.tileW) &&
 					(y >= i.tileY && y < i.tileY+i.tileH)){
 				if (i.image(x - i.tileX, y - i.tileY) != null) {
-					x -= i.tileX;
-					y -= i.tileY;
 					customTile = i;
-					break;
 				}
 			}
+		}
+		if (customTile != null){
+			x -= customTile.tileX;
+			y -= customTile.tileY;
 		}
 
 		if (customTile != null && customTile.name(x, y) != null){
@@ -112,14 +113,14 @@ public class WndInfoCell extends Window {
 			if ((x >= i.tileX && x < i.tileX+i.tileW) &&
 					(y >= i.tileY && y < i.tileY+i.tileH)){
 				if (i.image(x - i.tileX, y - i.tileY) != null) {
-					x -= i.tileX;
-					y -= i.tileY;
 					customTile = i;
-					break;
 				}
 			}
 		}
-
+		if (customTile != null){
+			x -= customTile.tileX;
+			y -= customTile.tileY;
+		}
 
 		String desc = "";
 
